@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <a:documentation>default namespace = "http://www.purl.org/obo/obd/schema/obd-generic"</a:documentation>
+    <a:documentation>Can be viewed as alternate serialisation of RDF
+ Rationale:
+  - ease of use with XML processors
+  - directly realisation of RDFS and OWL properties in classes in the XML schema
+  - ease of use with nested/structured data field
+    (general rule: annotation properties to non-literals get nested in the xml)
+  - built-in support for reification, which is required for science
+    (eg publication X states that gene A has_function B)
+    can also be used for qualified, contextual links (eg time)
+  - simpler layering of OWL class-level relations that is more akin
+    to the OBO relations model, the oboedit model and databases like Chado
+  - the need to identify and name different graphs
+    see also: http://www.w3.org/2004/03/trix/Overview.html
+</a:documentation>
+    <choice>
+      <ref name="Graph"/>
+      <ref name="Node"/>
+      <ref name="Nodes"/>
+      <ref name="Statement"/>
+      <ref name="Statements"/>
+    </choice>
+  </start>
+  <define name="Graph">
+    <element name="Graph">
+      <interleave>
+        <zeroOrMore>
+          <ref name="Node"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="Statement"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="Nodes">
+    <element name="Nodes">
+      <zeroOrMore>
+        <ref name="Node"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Statements">
+    <element name="Statements">
+      <zeroOrMore>
+        <ref name="Statement"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Statement">
+    <choice>
+      <ref name="LinkStatement"/>
+      <ref name="LiteralStatement"/>
+      <ref name="UnaryPropertyStatement"/>
+    </choice>
+  </define>
+  <define name="Statement_Attrs">
+    <a:documentation>corresponds to an RDF triple, or in some cases, a bundle of triples
+-- more accurately, corresponds to an OWL axiom, or fact</a:documentation>
+    <interleave>
+      <optional>
+        <attribute name="id">
+          <ref name="identifier_Type"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="isInferred">
+          <a:documentation>by default, links are asserted rather than inferred
+example of inferred link: X is_a Z, inferred from X is_a Y, Y is_a Z</a:documentation>
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="is_object_reified">
+          <a:documentation>most links are between nodes (default)
+a link can also point to another link - in this
+case we say the object is a reified link, in
+accordance with RDF terminology</a:documentation>
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="is_complement">
+          <a:documentation>link provides an *equivalent class*, or a *class definition*</a:documentation>
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="appliesToAllInstancesOf">
+          <a:documentation>true if the node is a class, and the statements is
+true for ALL instances of this class</a:documentation>
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="hasIntersectionSemantics">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="hasUnionSemantics">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <element name="instanceQuantifier">
+          <interleave>
+            <optional>
+              <attribute name="isExistential">
+                <data type="boolean"/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="isUniversal">
+                <data type="boolean"/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="minCardinality">
+                <data type="int"/>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="maxCardinality">
+                <data type="int"/>
+              </attribute>
+            </optional>
+          </interleave>
+        </element>
+      </optional>
+    </interleave>
+  </define>
+  <define name="Statement_Elts">
+    <optional>
+      <!-- subject node -->
+      <element name="node">
+        <ref name="linkref"/>
+      </element>
+    </optional>
+    <!-- predicate is the relationship type -->
+    <element name="relation">
+      <ref name="linkref"/>
+    </element>
+    <optional>
+      <!-- for annotation links -->
+      <element name="positedBy">
+        <ref name="linkref"/>
+      </element>
+    </optional>
+    <optional>
+      <!-- where the statement comes from -->
+      <element name="source">
+        <ref name="linkref"/>
+      </element>
+    </optional>
+    <optional>
+      <element name="context">
+        <ref name="linkref"/>
+      </element>
+    </optional>
+    <zeroOrMore>
+      <ref name="Statement"/>
+    </zeroOrMore>
+  </define>
+  <define name="LinkStatement">
+    <element name="LinkStatement">
+      <a:documentation>A </a:documentation>
+      <interleave>
+        <optional>
+          <attribute name="isEquivalentTo">
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+        <ref name="Statement_Attrs"/>
+        <ref name="Statement_Elts"/>
+        <!-- TARGET -->
+        <element name="target">
+          <ref name="linkref"/>
+        </element>
+      </interleave>
+    </element>
+  </define>
+  <define name="LiteralStatement">
+    <element name="LiteralStatement">
+      <interleave>
+        <optional>
+          <attribute name="isAlias">
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+        <ref name="Statement_Attrs"/>
+        <ref name="Statement_Elts"/>
+        <element name="value">
+          <ref name="literal"/>
+        </element>
+      </interleave>
+    </element>
+  </define>
+  <define name="UnaryPropertyStatement">
+    <element name="LiteralStatement">
+      <interleave>
+        <optional>
+          <attribute name="isTransitive">
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+        <ref name="Statement_Attrs"/>
+        <ref name="Statement_Elts"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="linkref">
+    <attribute name="about">
+      <ref name="identifier_Type"/>
+    </attribute>
+    <optional>
+      <!-- the node can optionally be embedded. is this too much freedom? -->
+      <ref name="Node"/>
+    </optional>
+  </define>
+  <define name="Node">
+    <element name="Node">
+      <a:documentation>equivalent to an RDF resource. can represent instances, relations/slots and universals</a:documentation>
+      <interleave>
+        <attribute name="id">
+          <ref name="identifier_Type"/>
+        </attribute>
+        <optional>
+          <attribute name="metatype">
+            <a:documentation>Change to enum? </a:documentation>
+            <choice>
+              <value>class</value>
+              <value>relation</value>
+              <value>instance</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="is_anonymous">
+            <a:documentation>corresponds to rdf bNode</a:documentation>
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="is_transitive">
+            <a:documentation>relations only. corresponds to owl:TransitiveProperty</a:documentation>
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+        <optional>
+          <element name="label">
+            <a:documentation>corresponds to rdfs:label</a:documentation>
+            <ref name="literal"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="source">
+            <a:documentation>if this node is from an ontology, the id of the ontology
+if the node is from a dataset, the id/name of the dataset</a:documentation>
+            <ref name="linkref"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="compositionalDescription">
+            <ref name="linkref"/>
+          </element>
+        </optional>
+        <zeroOrMore>
+          <ref name="Statement">
+            <a:documentation>axiom style - can embed statements</a:documentation>
+          </ref>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="CompositionalDescription">
+    <element name="CompositionalDescription">
+      <interleave>
+        <optional>
+          <attribute name="about">
+            <ref name="linkref"/>
+          </attribute>
+        </optional>
+        <attribute name="predicate">
+          <choice>
+            <value>INTERSECTION</value>
+            <value>UNION</value>
+            <value>COMPLEMENT</value>
+            <value>RESTRICTION</value>
+            <value>ATOM</value>
+          </choice>
+        </attribute>
+        <optional>
+          <element name="label">
+            <ref name="literal"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="restriction">
+            <ref name="Statement"/>
+          </element>
+        </optional>
+        <zeroOrMore>
+          <ref name="CompositionalDescription"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="literal">
+    <optional>
+      <attribute name="id">
+        <a:documentation>rare - for referencing the *occurrence* of this literal</a:documentation>
+        <ref name="identifier_Type"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="datatype">
+        <a:documentation>eg xsd:string</a:documentation>
+        <ref name="identifier_Type"/>
+      </attribute>
+    </optional>
+    <data type="string">
+      <a:documentation>the literal itself</a:documentation>
+    </data>
+  </define>
+  <define name="identifier_Type">
+    <data type="string"/>
+  </define>
+  <define name="label_Type">
+    <data type="string"/>
+  </define>
+</grammar>

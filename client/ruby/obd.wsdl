@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://util.java/xsd" xmlns:ns1="http://ws.obd.org" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns3="http://model.obd.org/xsd" xmlns:ns2="http://stats.model.obd.org/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://ws.obd.org">
+    <wsdl:documentation>OBDQueryService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ax24="http://util.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.java/xsd">
+            <xs:complexType name="Collection">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="empty" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ns="http://ws.obd.org" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws.obd.org">
+            <xs:element name="getIDResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAnnotationGraphAroundNode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="entailment" nillable="true" type="ns3:Shard$EntailmentUse"/>
+                        <xs:element minOccurs="0" name="gea" nillable="true" type="ns3:Shard$GraphExpansionAlgorithm"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAnnotationGraphAroundNodeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns3:Graph"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getGraphResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns3:Graph"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getNode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getNodeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns3:Node"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getNodesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Node"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getNodesWithSource">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="sourceId" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getNodesWithSourceResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Node"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSourceNodesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Node"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatement">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForNode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForNodeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForNodeWithSource">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="sourceId" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForNodeWithSourceResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForTarget">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForTargetResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Exception">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="Exception" nillable="true" type="ns:Exception"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForTargetWithSource">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="sourceId" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsForTargetWithSourceResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsWithSource">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="sourceId" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getStatementsWithSourceResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSubjectStatements">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="subjectId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="subjectRelationId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="targetRelationId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="nodeId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="targetId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="subjectSourceId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="nodeSourceId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="useImplied" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="isReified" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSubjectStatementsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ns3:Statement"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSummaryStatisticsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns2:AggregateStatisticCollection"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax25="http://util.java/xsd" xmlns:ax23="http://stats.model.obd.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://stats.model.obd.org/xsd">
+            <xs:import namespace="http://util.java/xsd"/>
+            <xs:complexType name="AggregateStatisticCollection">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stats" nillable="true" type="ax25:Collection"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax22="http://model.obd.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://model.obd.org/xsd">
+            <xs:complexType name="Shard$EntailmentUse">
+                <xs:complexContent>
+                    <xs:extension base="xs:Enum">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="FULL_TRANSITIVE_CLOSURE" nillable="true" type="ax22:Shard$EntailmentUse"/>
+                            <xs:element minOccurs="0" name="USE_ASSERTED" nillable="true" type="ax22:Shard$EntailmentUse"/>
+                            <xs:element minOccurs="0" name="USE_IMPLIED" nillable="true" type="ax22:Shard$EntailmentUse"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="Shard$GraphExpansionAlgorithm">
+                <xs:complexContent>
+                    <xs:extension base="xs:Enum">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="INCLUDE_SUBGRAPH" nillable="true" type="ax22:Shard$GraphExpansionAlgorithm"/>
+                            <xs:element minOccurs="0" name="MINIMAL" nillable="true" type="ax22:Shard$GraphExpansionAlgorithm"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="Graph">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="allStatements" nillable="true" type="ax22:Statement"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="nodes" nillable="true" type="ax22:Node"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="referencedNodeIds" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="statements" nillable="true" type="ax22:Statement"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Node">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="anonymous" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="id" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="intersectionStatements" nillable="true" type="ax22:LinkStatement"/>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="sourceId" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="statements" nillable="true" type="ax22:Statement"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Statement">
+                <xs:complexContent>
+                    <xs:extension base="ax22:Node">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="implied" type="xs:boolean"/>
+                            <xs:element minOccurs="0" name="nodeId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="positedByNodeId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="relationId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="targetId" nillable="true" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="LinkStatement">
+                <xs:complexContent>
+                    <xs:extension base="ax22:Statement">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="appliesToAllInstancesOf" type="xs:boolean"/>
+                            <xs:element minOccurs="0" name="existential" type="xs:boolean"/>
+                            <xs:element minOccurs="0" name="hasIntersectionSemantics" type="xs:boolean"/>
+                            <xs:element minOccurs="0" name="hasUnionSemantics" type="xs:boolean"/>
+                            <xs:element minOccurs="0" name="universal" type="xs:boolean"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="Statement">
+                <xs:complexContent>
+                    <xs:extension base="ax22:Node">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="implied" type="xs:boolean"/>
+                            <xs:element minOccurs="0" name="nodeId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="positedByNodeId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="relationId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="targetId" nillable="true" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getIDRequest"/>
+    <wsdl:message name="getIDResponse">
+        <wsdl:part name="parameters" element="ns1:getIDResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForTargetRequest">
+        <wsdl:part name="parameters" element="ns1:getStatementsForTarget"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForTargetResponse">
+        <wsdl:part name="parameters" element="ns1:getStatementsForTargetResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getAnnotationGraphAroundNodeRequest">
+        <wsdl:part name="parameters" element="ns1:getAnnotationGraphAroundNode"/>
+    </wsdl:message>
+    <wsdl:message name="getAnnotationGraphAroundNodeResponse">
+        <wsdl:part name="parameters" element="ns1:getAnnotationGraphAroundNodeResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getNodesRequest"/>
+    <wsdl:message name="getNodesResponse">
+        <wsdl:part name="parameters" element="ns1:getNodesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getNodesWithSourceRequest">
+        <wsdl:part name="parameters" element="ns1:getNodesWithSource"/>
+    </wsdl:message>
+    <wsdl:message name="getNodesWithSourceResponse">
+        <wsdl:part name="parameters" element="ns1:getNodesWithSourceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForNodeRequest">
+        <wsdl:part name="parameters" element="ns1:getStatementsForNode"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForNodeResponse">
+        <wsdl:part name="parameters" element="ns1:getStatementsForNodeResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForTargetWithSourceRequest">
+        <wsdl:part name="parameters" element="ns1:getStatementsForTargetWithSource"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForTargetWithSourceResponse">
+        <wsdl:part name="parameters" element="ns1:getStatementsForTargetWithSourceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Exception">
+        <wsdl:part name="parameters" element="ns1:Exception"/>
+    </wsdl:message>
+    <wsdl:message name="getNodeRequest">
+        <wsdl:part name="parameters" element="ns1:getNode"/>
+    </wsdl:message>
+    <wsdl:message name="getNodeResponse">
+        <wsdl:part name="parameters" element="ns1:getNodeResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getSourceNodesRequest"/>
+    <wsdl:message name="getSourceNodesResponse">
+        <wsdl:part name="parameters" element="ns1:getSourceNodesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForNodeWithSourceRequest">
+        <wsdl:part name="parameters" element="ns1:getStatementsForNodeWithSource"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsForNodeWithSourceResponse">
+        <wsdl:part name="parameters" element="ns1:getStatementsForNodeWithSourceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementRequest">
+        <wsdl:part name="parameters" element="ns1:getStatement"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementResponse">
+        <wsdl:part name="parameters" element="ns1:getStatementResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getSubjectStatementsRequest">
+        <wsdl:part name="parameters" element="ns1:getSubjectStatements"/>
+    </wsdl:message>
+    <wsdl:message name="getSubjectStatementsResponse">
+        <wsdl:part name="parameters" element="ns1:getSubjectStatementsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getGraphRequest"/>
+    <wsdl:message name="getGraphResponse">
+        <wsdl:part name="parameters" element="ns1:getGraphResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getSummaryStatisticsRequest"/>
+    <wsdl:message name="getSummaryStatisticsResponse">
+        <wsdl:part name="parameters" element="ns1:getSummaryStatisticsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsWithSourceRequest">
+        <wsdl:part name="parameters" element="ns1:getStatementsWithSource"/>
+    </wsdl:message>
+    <wsdl:message name="getStatementsWithSourceResponse">
+        <wsdl:part name="parameters" element="ns1:getStatementsWithSourceResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="OBDQueryServicePortType">
+        <wsdl:operation name="getID">
+            <wsdl:input message="ns1:getIDRequest" wsaw:Action="urn:getID"/>
+            <wsdl:output message="ns1:getIDResponse" wsaw:Action="urn:getIDResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTarget">
+            <wsdl:input message="ns1:getStatementsForTargetRequest" wsaw:Action="urn:getStatementsForTarget"/>
+            <wsdl:output message="ns1:getStatementsForTargetResponse" wsaw:Action="urn:getStatementsForTargetResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAnnotationGraphAroundNode">
+            <wsdl:input message="ns1:getAnnotationGraphAroundNodeRequest" wsaw:Action="urn:getAnnotationGraphAroundNode"/>
+            <wsdl:output message="ns1:getAnnotationGraphAroundNodeResponse" wsaw:Action="urn:getAnnotationGraphAroundNodeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getNodes">
+            <wsdl:input message="ns1:getNodesRequest" wsaw:Action="urn:getNodes"/>
+            <wsdl:output message="ns1:getNodesResponse" wsaw:Action="urn:getNodesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getNodesWithSource">
+            <wsdl:input message="ns1:getNodesWithSourceRequest" wsaw:Action="urn:getNodesWithSource"/>
+            <wsdl:output message="ns1:getNodesWithSourceResponse" wsaw:Action="urn:getNodesWithSourceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNode">
+            <wsdl:input message="ns1:getStatementsForNodeRequest" wsaw:Action="urn:getStatementsForNode"/>
+            <wsdl:output message="ns1:getStatementsForNodeResponse" wsaw:Action="urn:getStatementsForNodeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTargetWithSource">
+            <wsdl:input message="ns1:getStatementsForTargetWithSourceRequest" wsaw:Action="urn:getStatementsForTargetWithSource"/>
+            <wsdl:output message="ns1:getStatementsForTargetWithSourceResponse" wsaw:Action="urn:getStatementsForTargetWithSourceResponse"/>
+            <wsdl:fault message="ns1:Exception" name="Exception" wsaw:Action="urn:getStatementsForTargetWithSourceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getNode">
+            <wsdl:input message="ns1:getNodeRequest" wsaw:Action="urn:getNode"/>
+            <wsdl:output message="ns1:getNodeResponse" wsaw:Action="urn:getNodeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSourceNodes">
+            <wsdl:input message="ns1:getSourceNodesRequest" wsaw:Action="urn:getSourceNodes"/>
+            <wsdl:output message="ns1:getSourceNodesResponse" wsaw:Action="urn:getSourceNodesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNodeWithSource">
+            <wsdl:input message="ns1:getStatementsForNodeWithSourceRequest" wsaw:Action="urn:getStatementsForNodeWithSource"/>
+            <wsdl:output message="ns1:getStatementsForNodeWithSourceResponse" wsaw:Action="urn:getStatementsForNodeWithSourceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getStatement">
+            <wsdl:input message="ns1:getStatementRequest" wsaw:Action="urn:getStatement"/>
+            <wsdl:output message="ns1:getStatementResponse" wsaw:Action="urn:getStatementResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSubjectStatements">
+            <wsdl:input message="ns1:getSubjectStatementsRequest" wsaw:Action="urn:getSubjectStatements"/>
+            <wsdl:output message="ns1:getSubjectStatementsResponse" wsaw:Action="urn:getSubjectStatementsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getGraph">
+            <wsdl:input message="ns1:getGraphRequest" wsaw:Action="urn:getGraph"/>
+            <wsdl:output message="ns1:getGraphResponse" wsaw:Action="urn:getGraphResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSummaryStatistics">
+            <wsdl:input message="ns1:getSummaryStatisticsRequest" wsaw:Action="urn:getSummaryStatistics"/>
+            <wsdl:output message="ns1:getSummaryStatisticsResponse" wsaw:Action="urn:getSummaryStatisticsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsWithSource">
+            <wsdl:input message="ns1:getStatementsWithSourceRequest" wsaw:Action="urn:getStatementsWithSource"/>
+            <wsdl:output message="ns1:getStatementsWithSourceResponse" wsaw:Action="urn:getStatementsWithSourceResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="OBDQueryServiceSOAP11Binding" type="ns1:OBDQueryServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getID">
+            <soap:operation soapAction="urn:getID" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTarget">
+            <soap:operation soapAction="urn:getStatementsForTarget" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAnnotationGraphAroundNode">
+            <soap:operation soapAction="urn:getAnnotationGraphAroundNode" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNodes">
+            <soap:operation soapAction="urn:getNodes" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNodesWithSource">
+            <soap:operation soapAction="urn:getNodesWithSource" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNode">
+            <soap:operation soapAction="urn:getStatementsForNode" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTargetWithSource">
+            <soap:operation soapAction="urn:getStatementsForTargetWithSource" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getNode">
+            <soap:operation soapAction="urn:getNode" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSourceNodes">
+            <soap:operation soapAction="urn:getSourceNodes" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNodeWithSource">
+            <soap:operation soapAction="urn:getStatementsForNodeWithSource" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatement">
+            <soap:operation soapAction="urn:getStatement" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSubjectStatements">
+            <soap:operation soapAction="urn:getSubjectStatements" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getGraph">
+            <soap:operation soapAction="urn:getGraph" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSummaryStatistics">
+            <soap:operation soapAction="urn:getSummaryStatistics" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsWithSource">
+            <soap:operation soapAction="urn:getStatementsWithSource" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OBDQueryServiceSOAP12Binding" type="ns1:OBDQueryServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getID">
+            <soap12:operation soapAction="urn:getID" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTarget">
+            <soap12:operation soapAction="urn:getStatementsForTarget" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAnnotationGraphAroundNode">
+            <soap12:operation soapAction="urn:getAnnotationGraphAroundNode" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNodes">
+            <soap12:operation soapAction="urn:getNodes" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNodesWithSource">
+            <soap12:operation soapAction="urn:getNodesWithSource" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNode">
+            <soap12:operation soapAction="urn:getStatementsForNode" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTargetWithSource">
+            <soap12:operation soapAction="urn:getStatementsForTargetWithSource" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap12:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getNode">
+            <soap12:operation soapAction="urn:getNode" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSourceNodes">
+            <soap12:operation soapAction="urn:getSourceNodes" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNodeWithSource">
+            <soap12:operation soapAction="urn:getStatementsForNodeWithSource" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatement">
+            <soap12:operation soapAction="urn:getStatement" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSubjectStatements">
+            <soap12:operation soapAction="urn:getSubjectStatements" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getGraph">
+            <soap12:operation soapAction="urn:getGraph" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSummaryStatistics">
+            <soap12:operation soapAction="urn:getSummaryStatistics" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsWithSource">
+            <soap12:operation soapAction="urn:getStatementsWithSource" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OBDQueryServiceHttpBinding" type="ns1:OBDQueryServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getID">
+            <http:operation location="OBDQueryService/getID"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getID"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getID"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTarget">
+            <http:operation location="OBDQueryService/getStatementsForTarget"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStatementsForTarget"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStatementsForTarget"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAnnotationGraphAroundNode">
+            <http:operation location="OBDQueryService/getAnnotationGraphAroundNode"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAnnotationGraphAroundNode"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAnnotationGraphAroundNode"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNodes">
+            <http:operation location="OBDQueryService/getNodes"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getNodes"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getNodes"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNodesWithSource">
+            <http:operation location="OBDQueryService/getNodesWithSource"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getNodesWithSource"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getNodesWithSource"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNode">
+            <http:operation location="OBDQueryService/getStatementsForNode"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStatementsForNode"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStatementsForNode"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForTargetWithSource">
+            <http:operation location="OBDQueryService/getStatementsForTargetWithSource"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStatementsForTargetWithSource"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStatementsForTargetWithSource"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNode">
+            <http:operation location="OBDQueryService/getNode"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getNode"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getNode"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSourceNodes">
+            <http:operation location="OBDQueryService/getSourceNodes"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getSourceNodes"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getSourceNodes"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsForNodeWithSource">
+            <http:operation location="OBDQueryService/getStatementsForNodeWithSource"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStatementsForNodeWithSource"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStatementsForNodeWithSource"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatement">
+            <http:operation location="OBDQueryService/getStatement"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStatement"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStatement"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSubjectStatements">
+            <http:operation location="OBDQueryService/getSubjectStatements"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getSubjectStatements"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getSubjectStatements"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getGraph">
+            <http:operation location="OBDQueryService/getGraph"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getGraph"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getGraph"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSummaryStatistics">
+            <http:operation location="OBDQueryService/getSummaryStatistics"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getSummaryStatistics"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getSummaryStatistics"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getStatementsWithSource">
+            <http:operation location="OBDQueryService/getStatementsWithSource"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getStatementsWithSource"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getStatementsWithSource"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="OBDQueryService">
+        <wsdl:port name="OBDQueryServiceSOAP11port_http" binding="ns1:OBDQueryServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/OBDQueryService"/>
+        </wsdl:port>
+        <wsdl:port name="OBDQueryServiceSOAP12port_http" binding="ns1:OBDQueryServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/OBDQueryService"/>
+        </wsdl:port>
+        <wsdl:port name="OBDQueryServiceHttpport" binding="ns1:OBDQueryServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/OBDQueryService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

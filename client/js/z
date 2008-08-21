@@ -1,0 +1,283 @@
+connecting to jdbc:postgresql://localhost:9999/obd_phenotype_200805
+NODE: FMA:52748 "Mandible" src:
+Statements about this node:
+[
+   FMA:52748
+   OBO_REL:is_a
+   FMA:7477
+   
+]
+[
+   FMA:52748
+   OBO_REL:is_a
+   UBERON:FMA_52748-MA_0001487
+   
+]
+[
+   FMA:52748
+   OBO_REL:is_a
+   UBERON:FMA_52748-MA_0001487
+   
+]
+[
+   FMA:52748
+   constitutional_part_of
+   FMA:54398
+   
+]
+[
+   FMA:52748
+   OBO_REL:is_a
+   FMA:7477
+   
+]
+[
+   FMA:52748
+   regional_part_of
+   FMA:53673
+   
+]
+[
+   FMA:52748
+   systemic_part_of
+   FMA:53673
+   
+]
+[
+   FMA:52748
+   regional_part_of
+   FMA:61670
+   
+]
+[
+   FMA:52748
+   systemic_part_of
+   FMA:71223
+   
+]
+[
+   FMA:52748
+   systemic_part_of
+   FMA:61670
+   
+]
+[
+   FMA:52748
+   regional_part_of
+   FMA:71223
+   
+]
+[
+   FMA:52748
+   OBO_REL:is_a
+   UBERON:FMA_52748-MA_0001487
+   
+]
+Statements to this node:
+[
+   FMA:52827
+   part_of
+   FMA:52748
+   
+]
+[
+   FMA:52829
+   part_of
+   FMA:52748
+   
+]
+[
+   FMA:52830
+   part_of
+   FMA:52748
+   
+]
+[
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)^qualifier(PATO:0000460)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)^qualifier(PATO:0000460)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)^qualifier(PATO:0000460)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)
+   OBO_REL:inheres_in
+   FMA:52748
+   
+]
+[
+   FBbt:00001846
+   OBO_REL:homologous_to
+   FMA:52748
+   
+]
+[
+   MA:0001487
+   OBO_REL:homologous_to
+   FMA:52748
+   
+]
+[
+   ZFA:0001273
+   OBO_REL:homologous_to
+   FMA:52748
+   
+]
+[
+   UBERON:FMA_52748-MA_0001487
+   oboInOwl:hasDbXref
+   FMA:52748
+   
+]
+[
+   FMA:259729
+   constitutional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:259848
+   constitutional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:52827
+   regional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:52829
+   regional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:52830
+   regional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:57092
+   constitutional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:57095
+   constitutional_part_of
+   FMA:52748
+   
+]
+[
+   FMA:57558
+   bounds
+   FMA:52748
+   
+]
+[
+   UBERON:FMA_52748-MA_0001487
+   oboInOwl:hasDbXref
+   FMA:52748
+   
+]
+ANNOTATIONS
+Annotations (to this node):
+[
+   OMIM:601653.0015
+   OBO_REL:influences
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   
+]
+[
+   OMIM:601653.0015
+   OBO_REL:influences
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   
+]
+[
+   OMIM:601653.0015
+   OBO_REL:influences
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)^qualifier(PATO:0000460)
+   
+]
+[
+   NCBI_Gene:2138
+   OBO_REL:influences
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   [IMPLIED]
+]
+[
+   NCBI_Gene:2138
+   OBO_REL:influences
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)^qualifier(PATO:0000460)
+   [IMPLIED]
+]
+[
+   NCBI_Gene:2138
+   OBO_REL:influences
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)
+   [IMPLIED]
+]
+[
+   NCBI_Gene:2138
+   OBO_REL:influences
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   [IMPLIED]
+]
+[
+   NCBI_Gene:2138
+   OBO_REL:influences
+   PATO:0000140^OBO_REL:inheres_in(FMA:52748)^qualifier(PATO:0000460)
+   [IMPLIED]
+]
+[
+   NCBI_Gene:2138
+   OBO_REL:influences
+   PATO:0001032^OBO_REL:inheres_in(FMA:52748)
+   [IMPLIED]
+]
+Annotations (about this node):

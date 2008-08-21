@@ -1,0 +1,1984 @@
+package org.obd.query.impl;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import org.bbop.rdbms.FromClause;
+import org.bbop.rdbms.GroupByClause;
+import org.bbop.rdbms.RelationalQuery;
+import org.bbop.rdbms.SelectClause;
+import org.bbop.rdbms.WhereClause;
+import org.bbop.rdbms.impl.SqlQueryImpl;
+import org.bbop.rdbms.impl.SqlSelectClauseImpl;
+import org.bbop.rdbms.impl.SqlWhereClauseImpl;
+import org.obd.model.CompositionalDescription;
+import org.obd.model.Graph;
+import org.obd.model.LinkStatement;
+import org.obd.model.LiteralStatement;
+import org.obd.model.Node;
+import org.obd.model.NodeAlias;
+import org.obd.model.Statement;
+import org.obd.model.bridge.OBOBridge;
+import org.obd.model.rule.InferenceRule;
+import org.obd.model.rule.RelationCompositionRule;
+import org.obd.model.stats.AggregateStatisticCollection;
+import org.obd.model.stats.ScoredNode;
+import org.obd.model.stats.AggregateStatistic.AggregateType;
+import org.obd.model.vocabulary.TermVocabulary;
+import org.obd.query.AnnotationLinkQueryTerm;
+import org.obd.query.AtomicQueryTerm;
+import org.obd.query.BooleanQueryTerm;
+import org.obd.query.CoAnnotatedQueryTerm;
+import org.obd.query.ComparisonQueryTerm;
+import org.obd.query.CompositionalDescriptionQueryTerm;
+import org.obd.query.ExistentialQueryTerm;
+import org.obd.query.GraphQuery;
+import org.obd.query.LabelQueryTerm;
+import org.obd.query.LinkQueryTerm;
+import org.obd.query.LiteralQueryTerm;
+import org.obd.query.NodeSetQueryTerm;
+import org.obd.query.QueryTerm;
+import org.obd.query.RootQueryTerm;
+import org.obd.query.Shard;
+import org.obd.query.SourceQueryTerm;
+import org.obd.query.SubsetQueryTerm;
+import org.obd.query.BooleanQueryTerm.BooleanOperator;
+import org.obd.query.ComparisonQueryTerm.Operator;
+import org.obd.query.LabelQueryTerm.AliasType;
+import org.obd.query.QueryTerm.Aspect;
+import org.obd.query.Shard.EntailmentUse;
+import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.exception.ShardExecutionException;
+import org.obo.dataadapter.OBDSQLDatabaseAdapter;
+import org.obo.dataadapter.OBDSQLDatabaseAdapter.OBDSQLDatabaseAdapterConfiguration;
+import org.obo.datamodel.IdentifiedObject;
+import org.obo.datamodel.Link;
+import org.obo.datamodel.LinkedObject;
+import org.obo.datamodel.OBOSession;
+import org.obo.datamodel.SynonymCategory;
+import org.obo.datamodel.impl.OBOSessionImpl;
+import org.purl.obo.vocab.RelationVocabulary;
+
+/**
+ * Implements a Shard by wrapping a relational database using the OBD-SQL
+ * Schema. <a
+ * href="http://www.bioontology.org/wiki/index.php/OBD:OBD-SQL-Schema">Schema
+ * docs</a>
+ * 
+ * @author cjm
+ * 
+ */
+public class OBDSQLShard extends AbstractSQLShard implements Shard {
+
+	Logger logger = Logger.getLogger("org.obd.shard.OBDSQLShard");
+
+	// TODO - enums/constants for DDL
+	protected String NODE_TABLE = "node";
+	protected String LINK_TABLE = "link";
+	protected String LITERAL_TABLE = "node_literal_with_pred";
+	protected String NODE_INTERNAL_ID_COLUMN = "node_id";
+	protected String NODE_EXPOSED_ID_COLUMN = "uid";
+	protected String NODE_SOURCE_INTERNAL_ID_COLUMN = "source_id";
+	protected String NODE_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
+
+	protected String LITERAL_VALUE_COLUMN = "val";
+
+	protected String LINK_NODE_EXPOSED_ID_COLUMN = "node_uid";
+	protected String LINK_TARGET_EXPOSED_ID_COLUMN = "object_uid";
+	protected String LINK_RELATION_EXPOSED_ID_COLUMN = "predicate_uid";
+	protected String LINK_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
+	protected String LINK_REIF_EXPOSED_ID_COLUMN = "reiflink_node_uid";
+
+	protected String LINK_NODE_INTERNAL_ID_COLUMN = "node_id";
+	protected String LINK_TARGET_INTERNAL_ID_COLUMN = "object_id";
+	protected String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
+	protected String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
+	protected String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
+
+	protected String APPLIES_TO_ALL = "applies_to_all";
+	protected String SUBJECT_NODE_ALIAS = "snode";
+	protected String TARGET_NODE_ALIAS = "tnode";
+	protected String RELATION_NODE_ALIAS = "rnode";
+	protected String REIF_NODE_ALIAS = "anode";
+	protected String SOURCE_NODE_ALIAS = "srcnode";
+	protected String IMPLIED_ANNOTATION_LINK_ALIAS = "implied_annotation_link";
+
+	private RelationVocabulary rvocab = new RelationVocabulary();
+	private TermVocabulary tvocab = new TermVocabulary();
+
+	protected OBOSession session = new OBOSessionImpl(); // TODO: remove? need
+	// it for tracking
+	// namespaces etc
+
+	HashMap<Integer, String> iid2nodeId = new HashMap<Integer, String>();
+
+	public OBDSQLShard() throws SQLException, ClassNotFoundException {
+	}
+
+
+
+	public String getID() {
+		return "OBD-Query-Service"; // TODO: introspect metadata
+	}
+
+	public Integer getNodeInternalId(String id) {
+		RelationalQuery rq = translateQueryForNode(new LabelQueryTerm(
+				AliasType.ID, id));
+		try {
+			ResultSet rs = execute(rq);
+			if (rs.next()) {
+				return rs.getInt(NODE_INTERNAL_ID_COLUMN);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids,
+			EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+		return getNodesBelowNodeSet(ids, entailment, gea, "link_to_node");
+	}
+
+	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids,
+			EntailmentUse entailment, GraphExpansionAlgorithm gea,
+			String linkTable) {
+		RelationalQuery q = new SqlQueryImpl();
+		WhereClause whereClause = new SqlWhereClauseImpl();
+		q.addTable("node_with_source", NODE_TABLE);
+		int num = 0;
+		for (String id : ids) {
+			String alias = LINK_TABLE + num;
+			q.addTable(linkTable, alias);
+			num++;
+			whereClause.addEqualityConstraint(tblCol(alias, LINK_TARGET_EXPOSED_ID_COLUMN), id);
+			whereClause.addConstraint(tblCol(alias, LINK_NODE_EXPOSED_ID_COLUMN) + " = " + tblCol(NODE_TABLE, NODE_INTERNAL_ID_COLUMN));
+			q.setWhereClause(whereClause);
+		}
+		q.getSelectClause().addColumn(tblCol(NODE_TABLE, "*"));
+		q.getSelectClause().setDistinct(true);
+		return getNodesByQuery(q);
+	}
+
+
+	public Collection<Node> getSourceNodes() {
+		Collection<Node> nodes = new LinkedList<Node>();
+		RelationalQuery q = new SqlQueryImpl();
+		q.addTable("source_node");
+		q.setSelectClause("*, NULL as "+LINK_SOURCE_EXPOSED_ID_COLUMN);
+		return getNodesByQuery(q);
+	}
+
+	public Collection<Node> getLinkStatementSourceNodes() {
+		Collection<Node> nodes = new LinkedList<Node>();
+		RelationalQuery subQuery = new SqlQueryImpl();
+		subQuery.addTable(LINK_TABLE);
+		subQuery.setSelectClause("distinct "+LINK_SOURCE_INTERNAL_ID_COLUMN);
+
+		RelationalQuery nodeQuery = new SqlQueryImpl();
+		nodeQuery.addTable(NODE_TABLE);
+		nodeQuery.setSelectClause("*, NULL as "+LINK_SOURCE_EXPOSED_ID_COLUMN);
+
+		WhereClause wc = new SqlWhereClauseImpl();
+		wc.addInConstraint(NODE_INTERNAL_ID_COLUMN, subQuery);
+
+		nodeQuery.setWhereClause(wc);
+
+		try {
+			ResultSet rs = execute(nodeQuery);
+			while (rs.next()) {
+				IdentifiedObject io = obd.fetchObject(session, rs);
+				nodes.add(OBOBridge.obj2node(io));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return nodes;
+	}
+
+	public Collection<Node> getNodeSourceNodes() {
+		Collection<Node> nodes = new LinkedList<Node>();
+		RelationalQuery subQuery = new SqlQueryImpl();
+		subQuery.addTable(NODE_TABLE);
+		subQuery.setSelectClause("distinct "+NODE_SOURCE_INTERNAL_ID_COLUMN);
+
+		RelationalQuery nodeQuery = new SqlQueryImpl();
+		nodeQuery.addTable(NODE_TABLE);
+		nodeQuery.setSelectClause("*, NULL AS "+NODE_SOURCE_EXPOSED_ID_COLUMN);
+
+		WhereClause wc = new SqlWhereClauseImpl();
+		wc.addInConstraint(NODE_INTERNAL_ID_COLUMN, subQuery);
+
+		nodeQuery.setWhereClause(wc);
+
+		try {
+			ResultSet rs = execute(nodeQuery);
+			while (rs.next()) {
+				IdentifiedObject io = obd.fetchObject(session, rs);
+				nodes.add(OBOBridge.obj2node(io));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return nodes;
+	}
+
+	public Collection<Statement> getStatements(WhereClause whereClause) {
+		HashSet<Statement> statements = new HashSet<Statement>();
+		try {
+			RelationalQuery q = new SqlQueryImpl();
+			q.addTable("node_link_node_with_pred_and_source");
+			q.setWhereClause(whereClause);
+			ResultSet rs = execute(q);
+
+			OBOSession tempSession = new OBOSessionImpl();
+			HashMap<String, Link> positsMap = new HashMap<String, Link>();
+			while (rs.next()) {
+				obd.includeLinkResultSetInSession(tempSession, rs, positsMap);
+			}
+			HashSet<Link> links = new HashSet<Link>();
+			for (IdentifiedObject io : tempSession.getObjects()) {
+				if (io instanceof LinkedObject && !io.isBuiltIn())
+					links.addAll(((LinkedObject) io).getParents());
+			}
+			HashMap<String, Statement> statementMap = new HashMap<String, Statement>();
+			for (Link link : links) {
+				Statement s = OBOBridge.link2statement(link);
+				statements.add(s);
+				statementMap.put(s.toString(), s);
+			}
+			// slightly convoluted way of making reverse links, from
+			// posited link to positing (annotation) node
+			for (IdentifiedObject io : tempSession.getObjects()) {
+				String nodeId = io.getID();
+				if (positsMap.containsKey(nodeId)) {
+					Statement sKey = OBOBridge.link2statement(positsMap.get(io
+							.getID()));
+					Statement s = statementMap.get(sKey.toString());
+					if (s != null)
+						s.setPositedByNodeId(nodeId);
+					else
+						System.err.println("no stmt: " + sKey);
+				}
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return statements;
+
+	}
+
+
+	public Collection<Statement> getStatements(String nodeId,
+			String relationId, String targetId, String sourceId,
+			Boolean useImplied, Boolean isReified) {
+		WhereClause whereClause = new SqlWhereClauseImpl();
+		if (nodeId != null)
+			whereClause.addEqualityConstraint(LINK_NODE_EXPOSED_ID_COLUMN, nodeId);
+		if (relationId != null)
+			whereClause.addEqualityConstraint(LINK_RELATION_EXPOSED_ID_COLUMN, relationId);
+		if (targetId != null)
+			whereClause.addEqualityConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, targetId);
+		if (sourceId != null)
+			whereClause.addEqualityConstraint(LINK_SOURCE_EXPOSED_ID_COLUMN, sourceId);
+		if (useImplied != null)
+			whereClause.addEqualityConstraint("is_inferred", useImplied);
+		if (isReified)
+			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+" IS NOT NULL");
+		return getStatements(whereClause);
+	}
+
+
+
+	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
+			Collection<String> ids, EntailmentUse entailment,
+			GraphExpansionAlgorithm gea) {
+		return getNodesBelowNodeSet(ids, entailment, gea,
+		"implied_annotation_link_to_node");
+	}
+
+
+	public AggregateStatisticCollection getSummaryStatistics() {
+		AggregateStatisticCollection sc = new AggregateStatisticCollection();
+
+		RelationalQuery q = new SqlQueryImpl();
+		q.addTable("source_summary");
+		ResultSet rs;
+		try {
+			rs = execute(q);
+			while (rs.next()) {
+				String src = rs.getString(NODE_EXPOSED_ID_COLUMN);
+				Integer nc = rs.getInt("node_count");
+				sc.setCount(NODE_TABLE, src, nc);
+				Integer lc = rs.getInt("link_count");
+				sc.setCount(LINK_TABLE, src, lc);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sc;
+	}
+
+	public Double getInformationContentByAnnotations(String classNodeId) {
+		// String sql =
+		// "SELECT shannon_information FROM class_node_entropy_by_evidence WHERE node_id = "
+		// +getNodeInternalId(classNodeId);
+		try {
+			// caching is implemented in the database
+			// we need to use the REAL type with Pg, not FLOAT
+			CallableStatement cs = executeSqlFunc("get_information_content",
+					Types.REAL, getNodeInternalId(classNodeId));
+			float f = cs.getFloat(1);
+			return (double) f;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySourceId) {
+		return getSimilarNodes(nodeId, ontologySourceId, null);
+	}
+
+	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySourceId, QueryTerm hitNodeFilter) {
+
+		/*
+		 * what kind of thing is nodeId? We want to compare like with like; eg gene with gene,
+		 * genotype with genotype.
+		 * At this time this query is hardcoded to use the asserted is_a. It doesn't take things
+		 * such as the SO hierarchy into account for example. Also it will not work for instances, just
+		 * classes
+		 */
+		LinkQueryTerm isaQt = new LinkQueryTerm(nodeId, rvocab.is_a(), null);
+		isaQt.setInferred(false);
+		isaQt.setAspect(Aspect.TARGET);
+		Collection<Node> isas = this.getNodesByQuery(isaQt);
+		Integer isaIid = null;
+		for (Node isa : isas) {
+			isaIid = this.getNodeInternalId(isa.getId());
+			break;
+		}
+		Integer sourceIid = null;
+		if (ontologySourceId != null) {
+			sourceIid = this.getNodeInternalId(ontologySourceId);
+		}
+
+		/*
+		 * first of all find some bait with which to hook comparable node ids -
+		 * we must take the inferred graph into account. we want to find similar
+		 * nodes that share inferred annotations, but all nodes will share
+		 * annotations to the root. as an approximation, we only include
+		 * inferred annotations to reasonably informative nodes: nodes near the
+		 * root will have high numbers of annotations
+		 */
+		Integer MAX_TOTAL_ANNOTS = 1000; // TODO
+		int MAX_HOOKS = 200;
+		RelationalQuery baitRq = new SqlQueryImpl();
+		int iid = this.getNodeInternalId(nodeId);
+		String ialAlias = "ial";
+		baitRq.addTable("implied_annotation_link_with_total", ialAlias); // may be materialized
+		WhereClause wc = baitRq.getWhereClause();
+		if (sourceIid != null) {
+			String srcAlias = "src";
+			baitRq.addTable(NODE_TABLE, srcAlias);
+			wc.addJoinConstraint(tblCol(srcAlias,NODE_INTERNAL_ID_COLUMN), 
+					tblCol(ialAlias,LINK_TARGET_INTERNAL_ID_COLUMN));
+			wc.addEqualityConstraint(tblCol(srcAlias,NODE_SOURCE_INTERNAL_ID_COLUMN), sourceIid);
+		}
+		wc.addEqualityConstraint(tblCol(ialAlias,LINK_NODE_INTERNAL_ID_COLUMN), iid);
+		wc.addConstraint("total < " + MAX_TOTAL_ANNOTS); // only choose informative nodes
+
+		if (hitNodeFilter != null) {
+			this.translateQuery(hitNodeFilter, baitRq, ialAlias);
+		}
+
+		baitRq.setOrderByClause("total"); // most informative first
+
+		// find annotations for this node, then use this to fetch scores
+		Collection<Integer> ids = new HashSet<Integer>();
+		ResultSet rs;
+		int i = 0;
+		try {
+			rs = this.execute(baitRq);
+			while (rs.next()) {
+				ids.add(rs.getInt(LINK_TARGET_INTERNAL_ID_COLUMN));
+				i++;
+				if (i > MAX_HOOKS)
+					break;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		/*
+		 * 
+		 */
+		RelationalQuery fetchRq = new SqlQueryImpl();
+		fetchRq.addTable("implied_annotation_link",ialAlias);
+		fetchRq.addTable(NODE_TABLE);
+		wc = fetchRq.getWhereClause();
+		wc.addJoinConstraint("node.node_id", "ial.node_id");
+		wc.addInConstraint("ial.object_id", ids);
+		if (isaIid != null) {
+			fetchRq.addTable(LINK_TABLE,"isalink");
+			wc.addJoinConstraint("node.node_id", "isalink.node_id");
+			wc.addEqualityConstraint("isalink.predicate_id", this.getNodeInternalId(rvocab.is_a()));
+			wc.addEqualityConstraint("isalink.object_id", isaIid);	
+		}
+		fetchRq.setSelectClause("DISTINCT node.node_id, node.uid");
+		List<ScoredNode> sns = new LinkedList<ScoredNode>();
+		Connection conn = obd.getConnection();
+		try {
+			PreparedStatement prep = conn.prepareStatement("SELECT basic_score FROM node_pair_annotation_similarity_score WHERE node1_id= " + iid + " AND node2_id=?");
+			rs = this.execute(fetchRq);
+			while (rs.next()) {
+				String uid = rs.getString(NODE_EXPOSED_ID_COLUMN);
+				prep.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));
+				ResultSet rs2 =  prep.executeQuery();
+				rs2.next();
+				ScoredNode sn = new ScoredNode(uid, - rs2.getFloat("basic_score"));
+				sns.add(sn);
+				//System.out.println(":: "+sn);
+			}
+		} catch (SQLException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Collections.sort(sns);
+
+
+		return sns;
+
+	}
+
+	public Collection<ScoredNode> getCoAnnotatedClasses(String n1id)
+	throws ShardExecutionException {
+		AnnotationLinkQueryTerm aqt = new AnnotationLinkQueryTerm(n1id);
+		Integer numEntities1 = this.getNodeAggregateQueryResults(aqt, null);
+		int iid = getNodeInternalId(n1id);
+		SqlQueryImpl rq = new SqlQueryImpl();
+		rq.addTable("co_annotated_to_pair_with_score");
+		WhereClause wc = rq.getWhereClause();
+		wc.addEqualityConstraint("object1_id", iid);
+		rq.getOrderByClause().addColumn("object2_score DESC");
+		ResultSet rs;
+		List<ScoredNode> sns = new LinkedList<ScoredNode>();
+		try {
+			rs = execute(rq);
+			int sampleSize = 10000;
+			while (rs.next()) {
+				int n2iid = rs.getInt("object2_id");
+				Node n2 = getNodeByInternalId(n2iid);
+				ScoredNode sn = new ScoredNode();
+				sns.add(sn);
+				sn.setNodeId(n2.getId());
+				int numBoth = rs.getInt("total_entities_annotated_to_both");
+				sn.setCount(numBoth);
+				int numEntities2 = rs.getInt("annotated_entity_count");
+				double pBoth = (numEntities1 / (double) sampleSize)
+				* (numEntities2 / (double) sampleSize);
+				double qBoth = 1 - pBoth;
+				double score = 1 - Math.pow(qBoth, numEntities1);
+				double expectedBoth = (numEntities1 * numEntities2)
+				/ (double) sampleSize;
+				sn.setScore(score);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Collections.sort(sns);
+		return sns;
+	}
+
+
+
+	public Collection<CongruentPair> getAnnotationSourceCongruenceForAnnotatedEntity(
+			String nid) throws SQLException {
+		SqlQueryImpl rq = new SqlQueryImpl();
+		int iid = this.getNodeInternalId(nid);
+		String tbl = "annotated_entity_congruence_between_annotsrc_pair";
+		rq.addTable(tbl);
+		WhereClause wc = rq.getWhereClause();
+		wc.addEqualityConstraint("annotated_entity_id", iid);
+		ResultSet rs = this.execute(rq);
+		Collection<CongruentPair> cps = new LinkedList<CongruentPair>();
+		while (rs.next()) {
+			CongruentPair cp = new CongruentPair();
+			cp.setBaseNode(getNodeByInternalId(rs.getInt("base_source_id")));
+			cp
+			.setTargetNode(getNodeByInternalId(rs
+					.getInt("target_source_id")));
+			if (cp.getBaseNode().equals(cp.getTargetNode()))
+				continue;
+			cp.setTotalNodes(rs.getInt("total_annotation_nodes"));
+			cp.setTotalNodesInCommon(rs.getInt("total_nodes_in_common"));
+			cp.setCongruence(rs.getDouble("congruence"));
+			cps.add(cp);
+		}
+		return cps;
+	}
+
+
+	@Override
+	public Map<Node, Integer> getAnnotatedEntityCountBySubset(
+			AnnotationLinkQueryTerm aqt, String subsetId)
+			throws ShardExecutionException {
+		// Create a query object that filters class nodes based on
+		// membership of a subset. This will later by used in conjunction
+		// with the annotation query to find all matching annotations to
+		// subset classes
+		SubsetQueryTerm sqt = new SubsetQueryTerm(subsetId);
+		sqt.setQueryAlias("in_subset");
+		return getAnnotatedEntityCountByMapping(aqt, sqt);
+	}
+
+	public Map<Node, Integer> getAnnotatedEntityCountByMapping(
+			AnnotationLinkQueryTerm aqt, QueryTerm targetQt)
+			throws ShardExecutionException {
+
+		// if no query specified, create an empty annotation query object,
+		// this will perform the count for all annotations in
+		// the database
+		if (aqt == null)
+			aqt = new AnnotationLinkQueryTerm();
+
+		Map<Node, Integer> countByNode = new HashMap<Node, Integer>();
+
+		// constrain the annotation query
+		aqt.setTarget(targetQt);
+
+		// Translate the annotation query to SQL
+		RelationalQuery rq = new SqlQueryImpl();
+		aqt.setQueryAlias("annot");
+		translateQuery(aqt, rq, null);
+
+		// The default query will retrieve the surrogate database IDs;
+		// we need to do an extra join on the node table to be able to
+		// populate a Node object
+		WhereClause wc = rq.getWhereClause();
+		rq.addTable(NODE_TABLE, SUBJECT_NODE_ALIAS);
+		wc.addConstraint("snode.node_id = in_subset.node_id");
+		rq
+		.setSelectClause("snode.uid AS uid, snode.label AS label, COUNT(DISTINCT annot.node_id) AS c");
+		rq.setGroupByClause("snode.uid, snode.label");
+
+		ResultSet rs;
+		try {
+			rs = execute(rq);
+			while (rs.next()) {
+				String id = rs.getString(NODE_EXPOSED_ID_COLUMN); // TODO: use enums
+				Node n = new Node(id);
+				n.setLabel(rs.getString("label"));
+				countByNode.put(n, rs.getInt("c"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ShardExecutionException("Error executing: " + rq.toSQL());
+		}
+		return countByNode;
+	}
+
+
+	/**
+	 * perform an aggregate query; e.g. count all nodes; avg all nodes;
+	 * optionally partitioned; eg by source of node
+	 * 
+	 * @param queryTerm
+	 * @return
+	 */
+	public Integer getNodeAggregateQueryResults(QueryTerm queryTerm,
+			AggregateType aggType) {
+		RelationalQuery rq = new SqlQueryImpl();
+		String tbl = translateQuery(queryTerm, rq, null);
+		rq.setSelectClause(aggType + "(DISTINCT " + tbl + ".node_id) AS agg");
+
+		Integer num = null;
+		try {
+			ResultSet rs = execute(rq);
+			if (rs.next()) {
+				num = rs.getInt("agg");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return num;
+	}
+
+	/**
+	 * perform an aggregate query; e.g. count all nodes; avg all nodes;
+	 * optionally partitioned; eg by source of node
+	 * 
+	 * Example: gnaqr(null, COUNT, {LinkQueryTerm()/SOURCE}
+	 * 
+	 * @param queryTerm
+	 * @return
+	 */
+	public Integer getNodeAggregateQueryResults(QueryTerm queryTerm,
+			AggregateType aggType, Collection<QueryTerm> groupByQueryTerms) {
+		RelationalQuery rq = new SqlQueryImpl();
+		String tbl = translateQuery(queryTerm, rq, null);
+
+		// GROUP BY a,b,c
+		// group by term can be a link eg to source
+		GroupByClause groupByClause = rq.getGroupByClause();
+		for (QueryTerm groupBy : groupByQueryTerms) {
+			String groupByTbl = translateQuery(groupBy, rq, tbl + ".node_id");
+			groupByClause.addColumn(groupByTbl + ".uid");
+		}
+
+		if (aggType.equals(AggregateType.COUNT))
+			rq.setSelectClause("COUNT(DISTINCT " + tbl + ".node_id) AS agg");
+		else if (aggType.equals(AggregateType.AVERAGE))
+			rq.setSelectClause("AVG(" + tbl + ".node_id) AS agg");
+		else
+			rq.setSelectClause(aggType + "(" + tbl + ".node_id) AS agg");
+
+		Integer num = null;
+		try {
+			ResultSet rs = execute(rq);
+			if (rs.next()) {
+				num = rs.getInt("agg");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return num;
+	}
+
+	/**
+	 * perform an aggregate query; e.g. count all nodes; avg all nodes;
+	 * optionally partitioned; eg by source of node
+	 * 
+	 * @param queryTerm
+	 * @return
+	 */
+	public Integer getLinkAggregateQueryResults(QueryTerm queryTerm,
+			AggregateType aggType) {
+		// TODO: DRY
+		if (!(queryTerm instanceof LinkQueryTerm)) {
+			// it only makes sense to return links for link queries;
+			// a query to for example LiteralQuery("apoptosis") should
+			// be wrapped such that links with this node are returned
+			LinkQueryTerm outerq = new LinkQueryTerm();
+			outerq.setNode(queryTerm);
+			return getLinkAggregateQueryResults(outerq, aggType);
+		}
+
+		RelationalQuery rq = new SqlQueryImpl();
+		String tbl = translateQuery(queryTerm, rq, null);
+		rq.setSelectClause(aggType + "(DISTINCT " + tbl + ".link_id) AS agg");
+
+		Integer num = null;
+		try {
+			ResultSet rs = execute(rq);
+			if (rs.next()) {
+				num = rs.getInt("agg");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return num;
+	}
+
+	public Collection<Statement> getStatementsByQuery(QueryTerm queryTerm) {
+		Collection<Statement> stmts = new LinkedList<Statement>();
+
+		if (queryTerm instanceof LinkQueryTerm) {
+			stmts.addAll(getLinkStatementsByQuery(queryTerm));
+		} else if (queryTerm instanceof LiteralQueryTerm) {
+			stmts.addAll(getLiteralStatementsByQuery(queryTerm));
+		} else {
+			stmts.addAll(getLiteralStatementsByQuery(queryTerm));
+			stmts.addAll(getLinkStatementsByQuery(queryTerm));
+		}
+		return stmts;
+	}
+
+	public Map<String, Collection<LinkStatement>> getAnnotationStatementMapByQuery(
+			QueryTerm queryTerm) {
+		AnnotationLinkQueryTerm aqt;
+		if (queryTerm instanceof AnnotationLinkQueryTerm)
+			aqt = (AnnotationLinkQueryTerm) queryTerm;
+		else
+			aqt = new AnnotationLinkQueryTerm(queryTerm);
+		aqt.setQueryAlias("annot");
+		RelationalQuery rq = translateQueryForLinkStatement(aqt);
+		String inodeTblAlias = rq.addAutoAliasedTable(NODE_TABLE);
+		rq.getWhereClause().addJoinConstraint(
+				tblCol(inodeTblAlias, NODE_INTERNAL_ID_COLUMN), tblCol(IMPLIED_ANNOTATION_LINK_ALIAS,
+						LINK_TARGET_INTERNAL_ID_COLUMN));
+		rq.getSelectClause().addColumn(inodeTblAlias + ".uid AS inode_uid");
+		rq.getSelectClause().addColumn(inodeTblAlias + ".label AS inode_label");
+		Collection<LinkStatement> statements = new LinkedList<LinkStatement>();
+		Map<String, Collection<LinkStatement>> annotsByMappedId = new HashMap<String, Collection<LinkStatement>>();
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LinkStatement s = createLinkStatementFromResultSet(rs);
+				statements.add(s);
+				String inodeId = rs.getString("inode_uid");
+				if (!annotsByMappedId.containsKey(inodeId))
+					annotsByMappedId.put(inodeId, new HashSet<LinkStatement>());
+				annotsByMappedId.get(inodeId).add(s);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return annotsByMappedId;
+	}
+
+	public Node createNodeFromResultSet(ResultSet rs) throws SQLException {
+		Node n = new Node(rs.getString(NODE_EXPOSED_ID_COLUMN));
+		n.setMetatype(rs.getString("metatype"));
+		n.setLabel(rs.getString("label"));
+		setSourceId(n, rs.getInt(NODE_SOURCE_INTERNAL_ID_COLUMN));
+		return n;
+	}
+
+	public LinkStatement createLinkStatementFromResultSet(ResultSet rs)
+	throws SQLException {
+		LinkStatement s = new LinkStatement();
+		s.setNodeId(rs.getString(LINK_NODE_EXPOSED_ID_COLUMN));
+		s.setRelationId(rs.getString(LINK_RELATION_EXPOSED_ID_COLUMN));
+		s.setTargetId(rs.getString(LINK_TARGET_EXPOSED_ID_COLUMN));
+		String positedById = rs.getString(LINK_REIF_EXPOSED_ID_COLUMN);
+		if (positedById != null) {
+			// TODO: make more efficient, use internal IDs.
+			s.setPositedByNodeId(positedById);
+			Collection<Statement> subStatements = getStatementsForNode(positedById);
+			s.setSubStatements(subStatements);
+		}
+
+		// if this is a reified link (annotation), fetch all metadata
+		// attached to the link; e.g. provenance, evidence etc
+		Integer reiflinkNodeInternalId = rs.getInt(LINK_REIF_INTERNAL_ID_COLUMN);
+		if (reiflinkNodeInternalId != null && reiflinkNodeInternalId != 0) {
+			// TODO: redundant with the above
+			// s.setPositedByNodeId(positedById);
+
+			// TODO - make this more efficient. Currently we assume the
+			// only metadata is links and tagval literals
+			// TODO - we don't need node.uid
+			LabelQueryTerm linkMetadataDataQt = new LabelQueryTerm(
+					AliasType.INTERNAL_ID, reiflinkNodeInternalId);
+			for (Statement ss : getLinkStatementsByQuery(linkMetadataDataQt))
+				s.addSubStatement(ss);
+			for (Statement ss : getLiteralStatementsByQuery(linkMetadataDataQt,
+			"tagval"))
+				s.addSubStatement(ss);
+		}
+		s.setAppliesToAllInstancesOf(rs.getBoolean(APPLIES_TO_ALL));
+		s.setExistential(rs.getBoolean("object_quantifier_some"));
+		s.setUniversal(rs.getBoolean("object_quantifier_only"));
+		s.setInferred(rs.getBoolean("is_inferred"));
+		setSourceId(s, rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN)); // may invoke another query
+		s.setExistential(rs.getBoolean("object_quantifier_some"));
+		s.setUniversal(rs.getBoolean("object_quantifier_only"));
+
+		String comb = rs.getString("combinator");
+		if (comb.equals("I"))
+			s.setIntersectionSemantics(true);
+		else if (comb.equals("U"))
+			s.setUnionSemantics(true);
+		return s;
+	}
+
+	public LiteralStatement createLiteralStatementFromResultSet(String tbl, ResultSet rs)
+	throws SQLException {
+
+		LiteralStatement s = new LiteralStatement();
+		s.setNodeId(rs.getString(LINK_NODE_EXPOSED_ID_COLUMN));
+		s.setRelationId(rs.getString(LINK_RELATION_EXPOSED_ID_COLUMN));
+		String valCol = "val";
+		if (!tbl.equals("tagval")) {
+			valCol = "label";
+		}
+		s.setValue(rs.getString(valCol));
+		// TODO setSourceId(s,rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN));
+		return s;
+	}
+
+	public Collection<LinkStatement> getLinkStatementsByQuery(
+			QueryTerm queryTerm) {
+
+		RelationalQuery rq = translateQueryForLinkStatement(queryTerm);
+		Collection<LinkStatement> statements = new LinkedList<LinkStatement>();
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LinkStatement s = createLinkStatementFromResultSet(rs);
+				statements.add(s);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error in SQL: " + rq.toSQL());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return statements;
+	}
+
+	public Collection<LinkStatement> getImpliedLinkStatementsByQuery(
+			QueryTerm queryTerm, String rel, String innerLinkAlias) {
+
+		RelationalQuery rq = translateQueryForLinkStatement(queryTerm,
+				innerLinkAlias);
+		Collection<LinkStatement> statements = new LinkedList<LinkStatement>();
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LinkStatement s = new LinkStatement();
+				s.setNodeId(rs.getString(LINK_NODE_EXPOSED_ID_COLUMN));
+				s.setRelationId(rs.getString(rel));
+				s.setTargetId(rs.getString(innerLinkAlias + ".object_uid"));
+
+				statements.add(s);
+			}
+		} catch (SQLException e) {
+			System.err.println("uh-oh");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return statements;
+	}
+
+	public Collection<LiteralStatement> getLiteralStatementsByQuery(
+			QueryTerm queryTerm) {
+		if (queryTerm instanceof LiteralQueryTerm
+				&& ((LiteralQueryTerm) queryTerm).isAlias()) {
+			// optimization: only need to query one table if we want aliases
+			return getLiteralStatementsByQuery(queryTerm, "alias");
+		} else {
+			Collection<LiteralStatement> statements = getLiteralStatementsByQuery(
+					queryTerm, "tagval");
+			statements.addAll(getLiteralStatementsByQuery(queryTerm, "alias"));
+			statements.addAll(getLiteralStatementsByQuery(queryTerm,
+			"description"));
+			return statements;
+		}
+	}
+
+	@Override
+	public Collection<LiteralStatement> getLiteralStatementsByNode(
+			String nodeID, String relationID) {
+
+		System.out
+		.println("WARNING: getLiteralStatementsByNode is hacky and fully implemeneted.");
+
+		Collection<LiteralStatement> statements = new LinkedList<LiteralStatement>();
+
+		RelationalQuery rq = new SqlQueryImpl();
+		rq.addTable("node_literal", "nl");
+		rq.addTable(NODE_TABLE, "n");
+		rq.addTable(NODE_TABLE, "p");
+
+		rq
+		.setSelectClause("n.uid as node_uid,p.uid as predicate_uid,nl.val as val");
+
+		WhereClause wc = new SqlWhereClauseImpl();
+		wc.addJoinConstraint("nl.node_id", "n.node_id");
+		wc.addJoinConstraint("nl.predicate_id", "p.node_id");
+		wc.addEqualityConstraint("n.uid", nodeID);
+		if (relationID != null) {
+			wc.addEqualityConstraint("p.uid", relationID);
+		}
+
+		rq.setWhereClause(wc);
+
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LiteralStatement s = new LiteralStatement();
+				s.setNodeId(rs.getString(LINK_NODE_EXPOSED_ID_COLUMN));
+				s.setRelationId(rs.getString(LINK_RELATION_EXPOSED_ID_COLUMN));
+				s.setValue(rs.getString("val"));
+				statements.add(s);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error fetching literal statements: "
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+
+		return statements;
+
+	}
+
+	protected Collection<LiteralStatement> getLiteralStatementsByQuery(
+			QueryTerm queryTerm, String tbl) {
+
+		Collection<LiteralStatement> statements = new LinkedList<LiteralStatement>();
+		if (queryTerm instanceof LinkQueryTerm) {
+			// cannot return anything by definition
+			return statements;
+		}
+		boolean join = tbl.equals("tagval");
+		RelationalQuery rq = translateQueryForLiteral(queryTerm, tbl, join);
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LiteralStatement s = createLiteralStatementFromResultSet(tbl, rs);
+				// TODO setSourceId(s,rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN));
+
+				statements.add(s);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return statements;
+	}
+
+	public RelationalQuery translateQueryForNode(QueryTerm qt) {
+		RelationalQuery rq = new SqlQueryImpl();
+		String rel = rq.addAutoAliasedTable(NODE_TABLE, "query_node");
+
+		translateQuery(qt, rq, tblCol(rel, NODE_INTERNAL_ID_COLUMN));
+
+		if (qt instanceof LinkQueryTerm) {
+			// rq.addTable(NODE_TABLE);
+			// rq.getWhereClause().addJoinConstraint("node.node_id",
+			// rel+".node_id"); // TODO - aspect
+			// rel = NODE_TABLE;
+		}
+
+		rq.setSelectClause(rel + ".*");
+
+		rq.getSelectClause().setDistinct(true);
+		return rq;
+	}
+
+	protected RelationalQuery translateQueryForLiteral(QueryTerm qt, String tbl,
+			boolean joinRelationNode) {
+		RelationalQuery rq = new SqlQueryImpl();
+		WhereClause wc = rq.getWhereClause();
+
+		rq.addTable(tbl);
+		translateQuery(qt, rq, tblCol(tbl, LINK_NODE_INTERNAL_ID_COLUMN));
+
+		rq.addTable(NODE_TABLE, SUBJECT_NODE_ALIAS);
+		wc.addJoinConstraint(tblCol(SUBJECT_NODE_ALIAS,NODE_INTERNAL_ID_COLUMN),
+				tblCol(tbl,NODE_INTERNAL_ID_COLUMN));
+		SelectClause selectClause = rq.getSelectClause();
+		selectClause.setDistinct(true);
+		selectClause.addColumn(tbl + ".*");
+		selectClause.addColumn(tblCol(SUBJECT_NODE_ALIAS,NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
+
+		if (joinRelationNode) {
+			rq.addTable(NODE_TABLE, RELATION_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(RELATION_NODE_ALIAS,NODE_INTERNAL_ID_COLUMN), 
+					tblCol(tbl, "tag_id"));
+			selectClause.addColumn(tblCol(RELATION_NODE_ALIAS, NODE_EXPOSED_ID_COLUMN),
+					LINK_RELATION_EXPOSED_ID_COLUMN);
+		} else {
+			String pred = tvocab.HAS_SYNONYM();
+			if (tbl.equals("description"))
+				pred = tvocab.HAS_DEFINITION();
+			selectClause.addColumn("CAST('" + pred
+					+ "' AS VARCHAR) AS predicate_uid");
+		}
+
+		return rq;
+
+	}
+
+	public RelationalQuery translateQueryForLiteral(QueryTerm qt) {
+		RelationalQuery rq = new SqlQueryImpl();
+		WhereClause wc = rq.getWhereClause();
+
+		rq.addTable(LITERAL_TABLE);
+		translateQuery(qt, rq, tblCol(LITERAL_TABLE,LINK_NODE_INTERNAL_ID_COLUMN));
+		rq.addTable(NODE_TABLE, "snode");
+		wc.addJoinConstraint(tblCol("snode",LINK_NODE_INTERNAL_ID_COLUMN), tblCol(LITERAL_TABLE,LINK_NODE_INTERNAL_ID_COLUMN));
+		SelectClause selectClause = rq.getSelectClause();
+		selectClause.setDistinct(true);
+		selectClause.addColumn(tblCol(LITERAL_TABLE,"*"));
+		selectClause.addColumn(tblCol("snode", NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN );
+		return rq;
+	}
+
+	public RelationalQuery translateQueryForLinkStatement(QueryTerm qt) {
+		return translateQueryForLinkStatement(qt, null);
+	}
+
+	public RelationalQuery translateQueryForLinkStatement(QueryTerm qt,
+			String targetLinkAlias) {
+		RelationalQuery rq = new SqlQueryImpl();
+
+		if (!(qt instanceof LinkQueryTerm)) {
+			// it only makes sense to return links for link queries;
+			// a query to for example LiteralQuery("apoptosis") should
+			// be wrapped such that links with this node are returned
+			LinkQueryTerm outerq = new LinkQueryTerm();
+			outerq.setNode(qt);
+			return translateQueryForLinkStatement(outerq, targetLinkAlias);
+		}
+		String linkTableAlias = translateQuery(qt, rq, null);
+		SelectClause selectClause = rq.getSelectClause();
+		selectClause.setDistinct(true);
+		selectClause.addColumn(linkTableAlias + ".*");
+		WhereClause wc = rq.getWhereClause();
+
+		// The basic query translation leaves us surrogate keys hanging off
+		// link.
+		// we can join using an extra node table alias;
+		// however, the appropriate table may already have been joined.
+
+		String subjectJoinCol = tblCol(linkTableAlias, NODE_INTERNAL_ID_COLUMN);
+		String subjectNodeTable = rq.getTableAliasReferencedInJoin(
+				subjectJoinCol, NODE_TABLE);
+		if (subjectNodeTable == null) {
+			// add a new alias
+			rq.addTable(NODE_TABLE, SUBJECT_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(SUBJECT_NODE_ALIAS,
+					NODE_INTERNAL_ID_COLUMN), subjectJoinCol);
+			selectClause.addColumn(tblCol(SUBJECT_NODE_ALIAS,
+					NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
+		} else {
+			// we have already joined the subject node table. Use the alias
+			// given
+			selectClause.addColumn(tblCol(subjectNodeTable,
+					NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
+
+		}
+
+		String relationJoinCol = tblCol(linkTableAlias, LINK_RELATION_INTERNAL_ID_COLUMN);
+		String relationNodeTable = rq.getTableAliasReferencedInJoin(
+				relationJoinCol, NODE_TABLE);
+		if (relationNodeTable == null) {
+			// add a new alias
+			rq.addTable(NODE_TABLE, RELATION_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(RELATION_NODE_ALIAS,
+					NODE_INTERNAL_ID_COLUMN), relationJoinCol);
+			selectClause.addColumn(tblCol(RELATION_NODE_ALIAS,
+					NODE_EXPOSED_ID_COLUMN), LINK_RELATION_EXPOSED_ID_COLUMN);
+		} else {
+			// we have already joined the relation node table. Use the alias
+			// given
+			selectClause.addColumn(tblCol(relationNodeTable,
+					NODE_EXPOSED_ID_COLUMN), LINK_RELATION_EXPOSED_ID_COLUMN);
+
+		}
+
+		if (targetLinkAlias == null) {
+			targetLinkAlias = linkTableAlias;
+		}
+
+		String targetJoinCol = tblCol(targetLinkAlias, LINK_TARGET_INTERNAL_ID_COLUMN);
+		String targetNodeTable = rq.getTableAliasReferencedInJoin(
+				targetJoinCol, NODE_TABLE);
+		if (targetNodeTable == null) {
+			// add a new alias
+			rq.addTable(NODE_TABLE, TARGET_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(TARGET_NODE_ALIAS,
+					NODE_INTERNAL_ID_COLUMN), targetJoinCol);
+			selectClause.addColumn(tblCol(TARGET_NODE_ALIAS,
+					NODE_EXPOSED_ID_COLUMN), LINK_TARGET_EXPOSED_ID_COLUMN);
+		} else {
+			// we have already joined the target node table. Use the alias given
+			selectClause.addColumn(tblCol(targetNodeTable,
+					NODE_EXPOSED_ID_COLUMN), LINK_TARGET_EXPOSED_ID_COLUMN);
+
+		}
+
+		selectClause.addColumn(tblCol(linkTableAlias,LINK_REIF_INTERNAL_ID_COLUMN), LINK_REIF_INTERNAL_ID_COLUMN);
+		// TODO: do this for all link queries
+		if (qt instanceof AnnotationLinkQueryTerm) {
+			rq.addTable(NODE_TABLE, REIF_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(REIF_NODE_ALIAS, NODE_INTERNAL_ID_COLUMN),
+					tblCol(linkTableAlias,LINK_REIF_INTERNAL_ID_COLUMN));
+			selectClause.addColumn(tblCol(REIF_NODE_ALIAS, NODE_EXPOSED_ID_COLUMN), LINK_REIF_EXPOSED_ID_COLUMN);
+		} else {
+			selectClause.addColumn("NULL", LINK_REIF_EXPOSED_ID_COLUMN);
+		}
+
+		// rq.addTable(NODE_TABLE);
+		return rq;
+	}
+
+	/**
+	 * @param qt
+	 *            - OBD Query to be translated
+	 * @param rq
+	 *            - constructed Relation SQL Query
+	 * @param subjCol
+	 *            - column to use in where constraint. Can be null
+	 * @return tableName
+	 * 
+	 *         Recursively translates a query or part of a query to SQL.
+	 * 
+	 *         Examples:
+	 * 
+	 *         Link(parent) => link(X,R,Y) where Y=parent Link(rel,parent) =>
+	 *         link(X,R,Y) where Y=parent, R=rel Link(Link(gparent)) =>
+	 *         link(X,R1,Z),link(Z,R2,Y) where Y=gparent Link(node=child) =>
+	 *         link(X,R,Y) where X=child
+	 * 
+	 *         Link(Label(ID,Equals(parent))) => link(X,R,Y) where Y=parent
+	 *         Link(Label(LABEL,Equals(pl))) => link(X,R,Y),label(Y,L) where
+	 *         L=pl Link(Label(SYNONYM,StartsWith(match))) =>
+	 *         link(X,R,Y),synonym(Y,L) where L like match%
+	 * 
+	 *         As this method recurses into the QueryTerm tree, a forward record
+	 *         is kept of what column should be used in the match/join
+	 *         (subjCol). For example, in Link(Link(gp)) we start off with the
+	 *         outer Link, generate a FROM clause involving the link table:
+	 *         link(X,R1,Y) X is used in the SELECT. When we traverse to the
+	 *         inner link, passing Y as the value for subjCol. we generate a new
+	 *         link in the FROM clause link(A,R2,B) And then use the subjCol to
+	 *         join on Y(subjCol)=A We can simplify the relational notation by
+	 *         unifying variable and writing: link(X,R1,Y),link(Y,R2,B)
+	 * 
+	 *         The same principle applies to other QueryTerm clauses; eg
+	 *         Link(Label(StartsWith(LABEL,label)))
+	 * 
+	 */
+	public String translateQuery(QueryTerm qt, RelationalQuery rq,
+			String subjCol) {
+		WhereClause wc = rq.getWhereClause();
+
+		String aspectCol = null;
+		if (subjCol != null && qt != null) {
+			aspectCol = NODE_INTERNAL_ID_COLUMN;
+			Aspect aspect = qt.getAspect();
+			if (aspect.equals(Aspect.TARGET))
+				aspectCol = LINK_TARGET_INTERNAL_ID_COLUMN;
+			else if (aspect.equals(Aspect.RELATION))
+				aspectCol = LINK_RELATION_INTERNAL_ID_COLUMN;
+			else if (aspect.equals(Aspect.SOURCE))
+				aspectCol = LINK_SOURCE_INTERNAL_ID_COLUMN;
+			else if (aspect.equals(Aspect.POSITED_BY))
+				aspectCol = LINK_REIF_INTERNAL_ID_COLUMN;
+		}
+
+		if (qt instanceof AtomicQueryTerm) { // DEPRECATED: Atomicity is tested
+			// in container
+			String val = ((AtomicQueryTerm) qt).getSValue();
+			if (subjCol == null) {
+			} else {
+				Class<?> dt = ((AtomicQueryTerm) qt).getDatatype();
+				if (dt.equals(Integer.class)) {
+					// TODO: this is a temp hack for dealing with integer IDs
+					wc.addConstraint("subjCol=" + val);
+				} else {
+					setNodeIdEqualityClause(wc, subjCol, val);
+				}
+				// wc.addEqualityConstraint(subjCol,val);
+			}
+			// note: this is the only time we return a value and not a table
+			// should use generics here?
+			return val;
+		} else if (qt instanceof ExistentialQueryTerm) {
+			if (subjCol == null) {
+			} else {
+				wc.addConstraint(subjCol + " IS NOT NULL");
+			}
+			return subjCol;
+		} else if (qt instanceof NodeSetQueryTerm) {
+			NodeSetQueryTerm cqt = (NodeSetQueryTerm) qt;
+			SqlQueryImpl subRq = new SqlQueryImpl();
+			subRq.addTable(NODE_TABLE);
+			String inCol = NODE_EXPOSED_ID_COLUMN;
+			if (cqt.isInternalIdentifiers())
+				inCol = NODE_INTERNAL_ID_COLUMN;
+			subRq.getWhereClause().addInConstraint(inCol, cqt.getNodeIds());
+			subRq.setSelectClause(NODE_INTERNAL_ID_COLUMN);
+			wc.addInConstraint(subjCol, subRq);
+			return subjCol;
+		} else if (qt instanceof BooleanQueryTerm) {
+			BooleanQueryTerm cqt = (BooleanQueryTerm) qt;
+			WhereClause booleanWhereClause = wc;
+			String rel = "";
+			// if (subjCol == null) {
+			// rq.addTable(NODE_TABLE);
+			// rel = NODE_TABLE;
+			// subjCol = "node.node_id";
+			// }
+
+			// constraints are conjunctive by default.
+			// if a disjunctive query is required we add a sub-clause
+			if (cqt.getOperator().equals(BooleanOperator.OR)) {
+				booleanWhereClause = new SqlWhereClauseImpl();
+			}
+			for (QueryTerm subquery : cqt.getQueryTerms()) {
+				RelationalQuery subrq = new SqlQueryImpl();
+				// translateQuery(subquery, subrq, "link.node_id");
+				String subTbl = translateQuery(subquery, subrq, null);
+				subrq.setSelectClause(subTbl + ".node_id");
+				booleanWhereClause.addInConstraint(subjCol, subrq);
+			}
+
+			// make sure placeholders go in the right order..
+			if (cqt.getOperator().equals(BooleanOperator.OR)) {
+				wc.addDisjunctiveConstraints(booleanWhereClause);
+			}
+			return rel;
+		} else if (qt instanceof ComparisonQueryTerm) {
+			ComparisonQueryTerm cqt = (ComparisonQueryTerm) qt;
+			Operator op = cqt.getOperator();
+			QueryTerm comparedToQt = cqt.getValue();
+			if (comparedToQt instanceof AtomicQueryTerm) {
+				AtomicQueryTerm atomQt = (AtomicQueryTerm) comparedToQt;
+				Class datatypeClass = atomQt.getDatatype();
+				Object atom = atomQt.getValue();
+
+				if (subjCol != null) {
+					if (op.equals(Operator.STARTS_WITH)) {
+						wc.addOperatorConstraint("LIKE", subjCol, atom + "%");
+					} else if (op.equals(Operator.CONTAINS)) {
+						wc.addOperatorConstraint("LIKE", subjCol, "%" + atom
+								+ "%");
+					} else if (op.equals(Operator.MATCHES)) {
+						wc.addOperatorConstraint("~", subjCol, atom);
+					} else if (op.equals(Operator.EQUAL_TO)) {
+						wc.addOperatorConstraint("=", subjCol, atom);
+					} else if (op.equals(Operator.CONTAINS_ALL)) {
+						wc.addContainsAllConstraint(subjCol, atom.toString());
+					} else if (op.equals(Operator.CONTAINS_ANY)) {
+						wc.addContainsAnyConstraint(subjCol, atom.toString());
+					} else {
+						wc.addOperatorConstraint(cqt.getOperator().toString(),
+								subjCol, atom);
+					}
+				}
+			} else {
+
+			}
+			return "";
+		} else if (qt instanceof LiteralQueryTerm
+				&& ((LiteralQueryTerm) qt).isAlias()) { // OLD
+			LiteralQueryTerm cqt = (LiteralQueryTerm) qt;
+			String tbl = "node_literal";
+			String tblAlias = rq.addAutoAliasedTable(tbl);
+			if (subjCol != null)
+				wc.addJoinConstraint(tblCol(tblAlias,LINK_NODE_INTERNAL_ID_COLUMN), subjCol);
+			if (cqt.isInferred() != null)
+				wc.addEqualityConstraint(tblAlias + ".is_inferred", cqt
+						.isInferred());
+			translateQuery(cqt.getValue(), rq, "lower(" + tblCol(tblAlias,"val")+")");
+			translateQuery(cqt.getNode(), rq, tblCol(tblAlias, LINK_NODE_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getRelation(), rq, tblCol(tblAlias, LINK_RELATION_INTERNAL_ID_COLUMN));
+			// String valTbl = translateQuery(cqt.getValue()), rq,
+			// tblAlias+".object_id");
+			translateQuery(cqt.getPositedBy(), rq, tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN));
+			// returns the name of the link table alias used in this query
+			return tblAlias;
+		} else if (qt instanceof LabelQueryTerm) { // TODO: merge with Literal?
+			// Example: Label(NAME,Comparison(CONTAINS,"x")) => label like
+			// '%x%';
+			// Example: Label(SYNONYM,Comparison(STARTS_WITH,"x")) => label =
+			// 'x%';
+			// Example: Label(ID,Comparison(EQUALS_TO,"x")) => uid = 'x';
+			LabelQueryTerm cqt = (LabelQueryTerm) qt;
+			AliasType alias = cqt.getAliasType();
+
+			// Special case for restricting by the source of the node
+			QueryTerm nsq = qt.getNodeSource();
+			String rel = null;
+			if (nsq != null) {
+				// note: this may turn out to be wasteful if we are at the root
+				// of the QueryTerm tree
+				// and are querying for nodes
+				String srel = rq.addAutoAliasedTable(NODE_TABLE, SOURCE_NODE_ALIAS);
+				if (subjCol != null)
+					wc.addJoinConstraint(tblCol(srel,aspectCol),subjCol);
+				translateQuery(nsq, rq, tblCol(srel,NODE_SOURCE_INTERNAL_ID_COLUMN));
+			}
+			if (subjCol != null && subjCol.equals(tblCol("query_node",NODE_INTERNAL_ID_COLUMN)) 
+					&& aspectCol.equals(NODE_INTERNAL_ID_COLUMN)) {
+				// OPT: if this is the top query, no need to self-join
+				// TODO: generalize
+				rel = "query_node";
+			}
+			/*
+			 * we may have to join an additional table, depending on what is
+			 * being compared
+			 */
+			if (alias.equals(AliasType.ID)) {
+				if (rel == null)
+					rel = rq.addAutoAliasedTable(NODE_TABLE);
+				translateQuery(cqt.getValue(), rq, tblCol(rel , NODE_EXPOSED_ID_COLUMN));
+				translateQuery(qt.getNodeSource(), rq, tblCol(rel , NODE_SOURCE_INTERNAL_ID_COLUMN));
+				if (subjCol != null)
+					wc.addJoinConstraint(tblCol(rel,aspectCol),subjCol);
+				return rel;
+			} else if (alias.equals(AliasType.INTERNAL_ID)) {
+				if (rel == null)
+					rel = rq.addAutoAliasedTable(NODE_TABLE); // required? just use
+				// subjCol?
+				translateQuery(cqt.getValue(), rq, rel + ".node_id");
+				if (subjCol != null)
+					wc.addConstraint(rel + "." + aspectCol + " = " + subjCol);
+				return rel;
+			} else if (alias.equals(AliasType.ANY_LABEL)) {
+				String tbl = "node_label"; // TODO: table alias
+				// TODO: node.label
+				rel = rq.addAutoAliasedTable(tbl);
+				if (subjCol != null)
+					wc.addJoinConstraint(tblCol(rel , LINK_NODE_INTERNAL_ID_COLUMN), subjCol);
+				// e.g. Contains("x") => tbl.label like 'x%'
+				translateQuery(cqt.getValue(), rq, rel + ".label");
+				return rel;
+			} else if (alias.equals(AliasType.ANY_LITERAL)) {
+				// note: so far this does NOT search labels!
+				String tbl = "node_literal"; // TODO: table alias
+				// TODO: node.label
+				rel = rq.addAutoAliasedTable(tbl);
+				if (subjCol != null)
+					wc.addJoinConstraint(tblCol(rel , LINK_NODE_INTERNAL_ID_COLUMN), subjCol);
+				// e.g. Contains("x") => tbl.label like 'x%'
+				translateQuery(cqt.getValue(), rq, rel + ".val");
+				return rel;
+			} else if (alias.equals(AliasType.ALTERNATE_LABEL)) {
+				String tbl = "alias"; // TODO: table alias
+				// TODO: node.label
+				rel = rq.addAutoAliasedTable(tbl);
+				if (subjCol != null)
+					wc.addJoinConstraint(tblCol(rel , LINK_NODE_INTERNAL_ID_COLUMN), subjCol);
+				// e.g. Contains("x") => tbl.label like 'x%'
+				translateQuery(cqt.getValue(), rq, rel + ".label");
+				return rel;
+			} else { // primarily PRIMARY_NAME - this is the default
+				if (rel == null)
+					rel = rq.addAutoAliasedTable(NODE_TABLE);
+				translateQuery(cqt.getValue(), rq, rel + ".label");
+				if (subjCol != null)
+					wc.addJoinConstraint(tblCol(rel , LINK_NODE_INTERNAL_ID_COLUMN), subjCol);
+				return rel;
+			}
+		} else if (qt instanceof AnnotationLinkQueryTerm) {
+			AnnotationLinkQueryTerm origAnnotQt = (AnnotationLinkQueryTerm) qt;
+
+			/*
+			 * We want to return annotations of R(X,Y) if R'(Y,Z), where Z is
+			 * the class of interest and X is the annotated entity. R(X,Y) is
+			 * asserted. We do this with a nested link query newqt =
+			 * Link(inf=f,positedBy=NOT_NULL,target=Link(target=COI))
+			 */
+			LinkQueryTerm ontolQt = new LinkQueryTerm(origAnnotQt.getTarget());
+			LinkQueryTerm transformedAnnotQt = new LinkQueryTerm(ontolQt);
+
+			transformedAnnotQt.setSource(origAnnotQt.getSource());
+			transformedAnnotQt.setNode(origAnnotQt.getNode());
+			transformedAnnotQt.setRelation(origAnnotQt.getRelation()); // R
+			ontolQt.setRelation(origAnnotQt.getOntologyRelation()); // R'
+
+			ontolQt.setQueryAlias(IMPLIED_ANNOTATION_LINK_ALIAS);
+			transformedAnnotQt.setQueryAlias(origAnnotQt.getQueryAlias());
+			transformedAnnotQt.setPositedBy(new ExistentialQueryTerm());
+			// transformedAnnotQt.setInferred(false);
+			Logger.getLogger("org.obd").fine(
+					"annotq=" + transformedAnnotQt.toString());
+			return translateQuery(transformedAnnotQt, rq, subjCol);
+		} else if (qt instanceof CoAnnotatedQueryTerm) {
+			CoAnnotatedQueryTerm cqt = (CoAnnotatedQueryTerm) qt;
+			// TODO: allow inner link query to have a relation
+			String tbl = "co_annotated_to_pair";
+			if (cqt.isInferred() != null && !cqt.isInferred())
+				tbl = "co_annotated_to_pair_asserted";
+			String tblAlias = rq.addAutoAliasedTable(tbl);
+			rq.getSelectClause().addColumn(tblAlias + ".node_count");
+			if (subjCol != null)
+				wc.addConstraint(tblAlias + ".node_id = " + subjCol);
+			String nodeTbl = translateQuery(cqt.getNode(), rq, tblAlias
+					+ ".object1_id");
+			String targetTbl = translateQuery(cqt.getTarget(), rq, tblAlias
+					+ ".object2_id");
+			// returns the name of the link table alias used in this query
+			return tblAlias;
+		} else if (qt instanceof LinkQueryTerm) {
+
+			// Example: LQ(partOf,x) => link * node[r]{po} * node[p]{x}
+			LinkQueryTerm cqt = (LinkQueryTerm) qt;
+			String tbl = LINK_TABLE;
+			String tblAlias = rq.addAutoAliasedTable(tbl, qt.getQueryAlias());
+			if (subjCol != null) {
+				wc.addConstraint(tblAlias + "." + aspectCol + " = " + subjCol);
+			}
+
+			if (cqt.isInferred() != null)
+				wc.addEqualityConstraint(tblAlias + ".is_inferred", cqt
+						.isInferred());
+			if (cqt.isDescriptionLink())
+				wc.addConstraint(tblAlias + ".combinator != ''");
+			translateQuery(cqt.getNode(), rq, tblCol(tblAlias, LINK_NODE_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getRelation(), rq, tblCol(tblAlias, LINK_RELATION_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getTarget(), rq, tblCol(tblAlias, LINK_TARGET_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getSource(), rq, tblCol(tblAlias, LINK_SOURCE_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getPositedBy(), rq, tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN));
+			/*
+			translateQuery(cqt.getNode(), rq, tblAlias+ ".node_id");
+			translateQuery(cqt.getRelation(), rq, tblAlias+ ".predicate_id");
+			translateQuery(cqt.getTarget(), rq, tblAlias+ ".object_id");
+			translateQuery(cqt.getSource(), rq, tblAlias+ ".source_id");
+			translateQuery(cqt.getPositedBy(), rq,tblAlias + ".reiflink_node_id");
+			 */
+			// returns the name of the link table alias used in this query
+			if (qt.getIsAnnotation() != null) {
+				String isNullConstr = qt.getIsAnnotation() ? "IS NOT NULL"
+						: "IS NULL";
+				wc.addConstraint(tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN)
+						+ isNullConstr);
+			}
+			return tblAlias;
+		} else if (qt instanceof RootQueryTerm) { // TODO: DRY
+			RootQueryTerm rqt = (RootQueryTerm) qt;
+			SourceQueryTerm sq = new SourceQueryTerm(rqt.getRootSource());
+			String tbl = translateQuery(sq, rq, subjCol);
+			if (subjCol != null) {
+				SqlQueryImpl subrq = new SqlQueryImpl();
+				subrq.addTable(LINK_TABLE);
+				subrq.getWhereClause().addConstraint("is_inferred='f'");
+				subrq.setSelectClause(NODE_INTERNAL_ID_COLUMN);
+				String relTbl = translateQuery(rqt.getRelation(), subrq,
+				"link.predicate_id");
+				wc.addNotInConstraint(subjCol, subrq);
+				// String tblAlias = rq.addAutoAliasedTable(NODE_TABLE,
+				// "source_node");
+				// translateQuery(sq,rq,tblAlias+".node_id");
+			}
+			return tbl;
+		}
+		/*
+		 * else if (qt instanceof RootQueryTerm) { // TODO: DRY RootQueryTerm
+		 * rqt = (RootQueryTerm)qt; String tbl = "graph_root_id_by_relation";
+		 * String tblAlias = rq.addAutoAliasedTable(tbl); if (subjCol != null)
+		 * wc.addConstraint(tblAlias+".node_id = " + subjCol); String relTbl =
+		 * translateQuery(rqt.getRelation(), rq, tblAlias+".predicate_id");
+		 * String rootSrcTbl = translateQuery(rqt.getRootSource(), rq,
+		 * tblAlias+".node_id"); return tblAlias; }
+		 */
+		else if (qt instanceof SourceQueryTerm) { // Source Query
+			SourceQueryTerm cqt = (SourceQueryTerm) qt;
+
+			String tblAlias = rq.addAutoAliasedTable(NODE_TABLE, "source_node");
+			if (subjCol != null)
+				wc.addJoinConstraint(tblCol(tblAlias, NODE_INTERNAL_ID_COLUMN),subjCol);
+
+			String nodeTbl = translateQuery(cqt.getNode(), rq, tblAlias
+					+ ".node_id");
+			String targetTbl = translateQuery(cqt.getTarget(), rq, tblAlias
+					+ ".source_id");
+			return tblAlias;
+		} else if (qt instanceof CompositionalDescriptionQueryTerm) { // Source
+			// Query
+			CompositionalDescriptionQueryTerm cqt = (CompositionalDescriptionQueryTerm) qt;
+			try {
+				return translateQuery(cqt.translateToQueryTerm(), rq, subjCol);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		} else
+			return null; // TODO _ throw
+	}
+
+
+	public int getAnnotatedNodeCount() {
+		RelationalQuery q = new SqlQueryImpl();
+		q.addTable("annotated_entity");
+		q.setSelectClause("count(node_id) AS c");
+		ResultSet rs;
+		int n = 0;
+		try {
+			rs = execute(q);
+			if (rs.next()) {
+				n = rs.getInt("c");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return n;
+	}
+
+	/*
+	 * DATA MANIPULATION 
+	 */
+
+	public void removeMatchingStatements(String su, String rel, String ob)
+	throws ShardExecutionException {
+		System.err.println("OBDSQL shard; removing " + su + " " + rel + " "
+				+ ob);
+		int sui = this.getNodeInternalId(su);
+		int reli = this.getNodeInternalId(rel);
+		int obi = this.getNodeInternalId(ob);
+
+		String sql = "DELETE FROM link WHERE node_id = " + sui
+		+ " AND predicate_id = " + reli + " AND object_id = " + obi;
+		System.err.println("SQL: " + sql);
+		logger.fine("sql=" + sql);
+		try {
+			obd.getConnection().prepareStatement(sql).execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ShardExecutionException(sql);
+		}
+	}
+
+	public void removeSource(String src) {
+		Integer srcId = this.getNodeInternalId(src);
+		String[] tbls = {LINK_TABLE,NODE_TABLE};
+
+		// expensive operation, cannot generally do in a transaction
+		for (String tbl : tbls) {
+			RelationalQuery q = new SqlQueryImpl();
+			q.addTable(tbl);
+			String col = tbl+"_id";
+			q.setSelectClause(col);
+			q.getWhereClause().addEqualityConstraint("source_id", srcId);
+			ResultSet rs;
+			int iid = 0;
+			try {
+				String sql = "DELETE FROM "+tbl+" WHERE " + col +" = ?";
+				PreparedStatement ps = obd.getConnection().prepareStatement(sql);
+				rs = execute(q);
+				while (rs.next()) {
+					iid = rs.getInt(col);
+					ps.setInt(1, iid);
+					ps.execute();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public void removeNode(String nid) throws ShardExecutionException {
+		try {
+			String sql = "DELETE FROM node WHERE uid = ?";
+			PreparedStatement ps = obd.getConnection().prepareStatement(sql);
+			ps.setString(1, nid);
+			ps.execute();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ShardExecutionException("Error deleting " + nid);
+		}
+	}
+
+	public void putStatement(Statement s) {
+
+		String srcId = s.getSourceId();
+		if (srcId == null)
+			srcId = "";
+		try {
+			String comb = "";
+			if (s.isIntersectionSemantics()) {
+				comb = "I";
+			} else if (s.isUnionSemantics()) {
+				comb = "U";
+			}
+			if (s instanceof LinkStatement) {
+				LinkStatement ls = (LinkStatement) s;
+				int reiflinkNodeInternalId;
+				if (s.getSubStatements().size() > 0) {
+					reiflinkNodeInternalId = callSqlFunc("store_annotation", s
+							.getNodeId(), s.getRelationId(), s.getTargetId(),
+							srcId, s.isNegated());
+					for (Statement ss : s.getSubStatements()) {
+						if (ss instanceof LiteralStatement) {
+							String dt = ((LiteralStatement) ss).getDatatype();
+							if (dt == null)
+								dt = "xsd:string";
+							callSqlFunc("store_tagval_i",
+									reiflinkNodeInternalId, ss.getRelationId(),
+									((LiteralStatement) ss).getValue(), dt,
+									srcId);
+						} else {
+							callSqlFunc("store_link_si",
+									reiflinkNodeInternalId, ss.getRelationId(),
+									ss.getTargetId(), comb, false, srcId);
+						}
+					}
+				} else {
+					reiflinkNodeInternalId = callSqlFunc("store_link", s
+							.getNodeId(), s.getRelationId(), s.getTargetId(),
+							comb, false, srcId);
+				}
+			} else if (s instanceof NodeAlias) {
+				NodeAlias a = (NodeAlias) s;
+				int iid = callSqlFunc("store_node", s.getNodeId());
+				callSqlFunc("store_node_synonym_i", iid, a.getScope(), null, a
+						.getValue());
+			} else if (s instanceof LiteralStatement) {
+				callSqlFunc("store_tagval", s.getNodeId(), s.getRelationId(),
+						((LiteralStatement) s).getValue(), srcId);
+			} else {
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void putNode(Node n) {
+		try {
+			callSqlFunc("store_node", n.getId(), n.getLabel(), n.getSourceId(),
+			"I");
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (Statement s : n.getStatements()) {
+			putStatement(s);
+		}
+	}
+
+	public void realizeRule(InferenceRule rule) {
+		if (rule instanceof RelationCompositionRule) {
+			RelationCompositionRule rcr = (RelationCompositionRule) rule;
+			realizeLinkChain(rcr.getImpliedRelation(), rcr.getLeftRelation(),
+					rcr.getRightRelation(), rcr.isLeftInverted(), rcr
+					.isRightInverted());
+		} else {
+			super.realizeRule(rule);
+		}
+	}
+
+	/**
+	 * realize the rule: newRel < rel1 o rel2
+	 * 
+	 * directionality of sub-rule can be inverted
+	 * 
+	 * e.g. influences < inv(variant_of) o influences G influences P :- A
+	 * variant_of G, A influences P
+	 * 
+	 * @param newRel
+	 * @param rel1
+	 * @param rel2
+	 * @param isRel1Inverted
+	 * @param isRel2Inverted
+	 */
+	public void realizeLinkChain(String newRel, String rel1, String rel2,
+			boolean isRel1Inverted, boolean isRel2Inverted) {
+		int rel1iid = getNodeInternalId(rel1);
+		int rel2iid = getNodeInternalId(rel2);
+		int newReliid = getNodeInternalId(newRel);
+		RelationalQuery rq = new SqlQueryImpl();
+		rq.addTable(LINK_TABLE, "link1");
+		rq.addTable(LINK_TABLE, "link2");
+		SelectClause sc = rq.getSelectClause();
+		String j1;
+		String j2;
+		String c1;
+		String c2;
+
+		if (isRel1Inverted) {
+			sc.addColumn("link1.object_id AS node_id");
+			j1 = "link1.node_id";
+			c1 = "link1.object_id";
+		} else {
+			sc.addColumn("link1.node_id AS node_id");
+			j1 = "link1.object_id";
+			c1 = "link1.node_id";
+		}
+		if (isRel2Inverted) {
+			sc.addColumn("link2.node_id AS object_id");
+			j2 = "link2.object_id";
+			c2 = "link2.node_id";
+		} else {
+			sc.addColumn("link2.object_id AS object_id");
+			j2 = "link2.node_id";
+			c2 = "link2.object_id";
+		}
+		sc.addColumn("link1.reiflink_node_id AS reiflink1_node_id");
+		sc.addColumn("link2.reiflink_node_id AS reiflink2_node_id");
+		sc.addColumn("link2.source_id AS source_id"); // link2 is always the
+		// source
+
+		WhereClause wc = rq.getWhereClause();
+		wc.addJoinConstraint(j1, j2);
+		wc.addEqualityConstraint("link1.predicate_id", rel1iid);
+		wc.addEqualityConstraint("link2.predicate_id", rel2iid);
+
+		// no dupes
+		wc.addConstraint("NOT EXISTS (SELECT * FROM link WHERE link.node_id="+c1+" AND link.predicate_id="+
+				newReliid+" AND link.object_id="+c2+")");
+
+
+		try {
+			Connection conn = obd.getConnection();
+			ResultSet rs = execute(rq);
+			// TODO - link provenance
+			String insertSql = "INSERT INTO link (node_id,predicate_id,object_id,reiflink_node_id,source_id,is_inferred) VALUES (?,?,?,?,?,'t')";
+			PreparedStatement sqlStmt = conn.prepareStatement(insertSql);
+			while (rs.next()) {
+				int nid = rs.getInt(NODE_INTERNAL_ID_COLUMN);
+				int tid = rs.getInt(LINK_TARGET_INTERNAL_ID_COLUMN);
+				Integer sourceId = rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN);
+				Integer reiflink1NodeId = rs.getInt("reiflink1_node_id");
+				Integer reiflink2NodeId = rs.getInt("reiflink2_node_id");
+				// if either is an annotation, carry annotation metadata forward
+				Integer reiflinkNodeId = (reiflink2NodeId == null) ? reiflink1NodeId
+						: reiflink2NodeId;
+				// System.out.println(nid+" "+tid+" :: "+reiflinkNodeId+" "+
+				// reiflink1NodeId+" "+reiflink2NodeId);
+				sqlStmt.setInt(1, nid);
+				sqlStmt.setInt(2, newReliid);
+				sqlStmt.setInt(3, tid);
+				if (reiflinkNodeId != null && reiflinkNodeId != 0)
+					sqlStmt.setInt(4, reiflinkNodeId);
+				if (sourceId != null && sourceId != 0)
+					sqlStmt.setInt(5, sourceId);
+				sqlStmt.execute();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void mergeIdentifierByIDSpaces(String fromIdSpace, String toIdSpace)
+	throws ShardExecutionException {
+		LinkQueryTerm lq = new LinkQueryTerm();
+		lq.setNode(new LabelQueryTerm(AliasType.ID, fromIdSpace + ":",
+				Operator.STARTS_WITH)); // eg NCBI_Gene
+		lq.setTarget(new LabelQueryTerm(AliasType.ID, toIdSpace + ":",
+				Operator.STARTS_WITH)); // eg ZFIN
+		lq.setRelation(tvocab.HAS_DBXREF());
+		lq.setQueryAlias(LINK_TABLE);
+		RelationalQuery rq = this.translateQueryForLinkStatement(lq);
+		rq.setSelectClause("link.node_id,link.object_id");
+		ResultSet rs;
+		try {
+			rs = this.execute(rq);
+
+			Connection conn = obd.getConnection();
+			PreparedStatement updateFromLinkSqlStmt = conn
+			.prepareStatement("UPDATE link SET node_id=? WHERE node_id=?");
+			PreparedStatement updateToLinkSqlStmt = conn
+			.prepareStatement("UPDATE link SET object_id=? WHERE object_id=?");
+			PreparedStatement updateAliasSqlStmt = conn
+			.prepareStatement("UPDATE alias SET node_id=? WHERE node_id=?");
+			PreparedStatement updateDescriptionSqlStmt = conn
+			.prepareStatement("UPDATE description SET node_id=? WHERE node_id=?");
+			PreparedStatement updateTagValSqlStmt = conn
+			.prepareStatement("UPDATE tagval SET node_id=? WHERE node_id=?");
+			//			PreparedStatement updateNameSqlStmt = conn
+			//			.prepareStatement("UPDATE node SET label=(SELECT label FROM node WHERE node_id=?) WHERE node_id=?");
+			while (rs.next()) {
+				int fromId = rs.getInt(NODE_INTERNAL_ID_COLUMN); // eg NCBI
+				int toId = rs.getInt(LINK_TARGET_INTERNAL_ID_COLUMN); // eg ZFIN
+
+				updateFromLinkSqlStmt.setInt(1, toId);
+				updateFromLinkSqlStmt.setInt(2, fromId);
+				updateFromLinkSqlStmt.execute();
+
+				updateToLinkSqlStmt.setInt(1, toId);
+				updateToLinkSqlStmt.setInt(2, fromId);
+				updateToLinkSqlStmt.execute();
+
+				updateAliasSqlStmt.setInt(1, toId);
+				updateAliasSqlStmt.setInt(2, fromId);
+				updateAliasSqlStmt.execute();
+
+				updateDescriptionSqlStmt.setInt(1, toId);
+				updateDescriptionSqlStmt.setInt(2, fromId);
+				updateDescriptionSqlStmt.execute();
+
+				updateTagValSqlStmt.setInt(1, toId);
+				updateTagValSqlStmt.setInt(2, fromId);
+				updateTagValSqlStmt.execute();
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ShardExecutionException("Error executing sql");
+
+		}
+
+	}
+
+	// can be overridden in adapters for other schemas
+	public void setNodeIdEqualityClause(WhereClause whereClause, String id,
+			boolean direct) {
+		if (direct)
+			whereClause.addEqualityConstraint(NODE_EXPOSED_ID_COLUMN, id);
+		else
+			whereClause.addEqualityConstraint(LINK_NODE_EXPOSED_ID_COLUMN, id);
+
+	}
+
+	// can be overridden in adapters for other schemas
+	public void setNodeIdEqualityClause(WhereClause whereClause, String col,
+			String id) {
+		whereClause.addEqualityConstraint(col, id);
+	}
+
+	public void renameIdentifierSpace(String from, String to) {
+		SqlQueryImpl rq = new SqlQueryImpl("node_id, uid", NODE_TABLE, "uid like '"
+				+ from + ":%'");
+		Map<String, Integer> uid2iid = new HashMap<String, Integer>();
+		try {
+			ResultSet rs = this.execute(rq);
+			while (rs.next()) {
+				int iid = rs.getInt(NODE_INTERNAL_ID_COLUMN);
+				String uid = rs.getString(NODE_EXPOSED_ID_COLUMN);
+				uid2iid.put(uid, iid);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String sql = "UPDATE node SET uid=? WHERE node_id=?";
+		try {
+			PreparedStatement ps = obd.getConnection().prepareStatement(sql);
+			for (String uid : uid2iid.keySet()) {
+				int iid = uid2iid.get(uid);
+				String newUid = uid.replace(from + ":", to + ":");
+				ps.setString(1, newUid);
+				ps.setInt(2, iid);
+				ps.execute();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void switchRelationIdGlobally(String from, String to) {
+		try {
+			int fromId = getNodeInternalId(from);
+			int toId = getNodeInternalId(to);
+
+			String sql = "SELECT link_id FROM link WHERE predicate_id= "
+				+ fromId;
+			ResultSet rs = obd.getConnection().prepareStatement(sql)
+			.executeQuery();
+			Collection<Integer> ids = new HashSet<Integer>();
+			while (rs.next()) {
+				ids.add(rs.getInt("link_id"));
+			}
+			String usql = "UPDATE link SET predicate_id=? WHERE link_id=?";
+			PreparedStatement ps = obd.getConnection().prepareStatement(usql);
+			for (int link_id : ids) {
+				ps.setInt(1, toId);
+				ps.setInt(2, link_id);
+				ps.execute();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void unsetLinkAppliesToAllForRelation(String rel) {
+		try {
+
+			String sql = "SELECT link_id FROM link INNER JOIN node AS rel ON (rel.node_id=link.predicate_id) WHERE applies_to_all='t' AND rel.uid LIKE '"
+				+ rel + "'";
+			ResultSet rs = obd.getConnection().prepareStatement(sql)
+			.executeQuery();
+			Collection<Integer> ids = new HashSet<Integer>();
+			while (rs.next()) {
+				ids.add(rs.getInt("link_id"));
+			}
+			String usql = "UPDATE link SET applies_to_all='f', object_quantifier_some='f' WHERE link_id=?";
+			PreparedStatement ps = obd.getConnection().prepareStatement(usql);
+			for (int link_id : ids) {
+				ps.setInt(1, link_id);
+				ps.execute();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void unsetLinkAppliesToAllForMetadataRelations() {
+		try {
+
+			String sql = "SELECT link_id FROM link INNER JOIN node AS rel ON (rel.node_id=link.predicate_id) WHERE applies_to_all='t' AND rel.is_metadata='t'";
+			ResultSet rs = obd.getConnection().prepareStatement(sql)
+			.executeQuery();
+			Collection<Integer> ids = new HashSet<Integer>();
+			while (rs.next()) {
+				ids.add(rs.getInt("link_id"));
+			}
+
+			String usql = "UPDATE link SET applies_to_all='f', object_quantifier_some='f' WHERE link_id=?";
+			PreparedStatement ps = obd.getConnection().prepareStatement(usql);
+			for (int link_id : ids) {
+				ps.setInt(1, link_id);
+				ps.execute();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void setSourceId(Node s, Integer iid) {
+		String sourceId = null;
+		if (iid == null)
+			return;
+		if (iid == 0)
+			return;
+		if (iid2nodeId.containsKey(iid)) {
+			sourceId = iid2nodeId.get(iid);
+		} else {
+			// TODO: make this more general
+			RelationalQuery rq = new SqlQueryImpl();
+			rq.addTable(NODE_TABLE);
+			rq.setSelectClause(NODE_EXPOSED_ID_COLUMN);
+			rq.getWhereClause().addEqualityConstraint(NODE_INTERNAL_ID_COLUMN, iid);
+			ResultSet rs;
+			try {
+				rs = execute(rq);
+				if (rs.next()) {
+					sourceId = rs.getString(NODE_EXPOSED_ID_COLUMN);
+					iid2nodeId.put(iid, sourceId);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (sourceId != null)
+			s.setSourceId(sourceId);
+	}
+
+}

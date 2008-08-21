@@ -1,0 +1,162 @@
+-- CREATE SCHEMA obd_relation_views;
+-- SET search_path TO obd_relation_views,public;
+
+CREATE TYPE idstruct AS (
+  db VARCHAR,
+  local_id VARCHAR
+);
+
+CREATE OR REPLACE FUNCTION parse_id (VARCHAR) 
+  RETURNS idstruct AS 
+$$
+DECLARE
+   v_id                ALIAS FOR $1;
+
+   v_result                idstruct%ROWTYPE;
+   v_dbname                VARCHAR;
+   v_accession             VARCHAR;
+   i                       INTEGER;
+ BEGIN
+   i=1;
+   -- defaults
+   v_dbname := '_';
+   v_accession := v_id;
+   -- split dbxrefstr on ":"
+   WHILE i <= length(v_id) LOOP
+     IF (substring(v_id,i,1) = ':') THEN
+       v_dbname = substr(v_id,1,i-1);
+       v_accession = substr(v_id,i+1);
+       i = length(v_id);
+     END IF;
+     i := i+1;
+   END loop;
+   v_result.db := v_dbname;
+   v_result.local_id := v_accession;
+   RETURN v_result;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_relation_i (INTEGER) 
+  RETURNS VOID AS 
+$$
+DECLARE
+
+   v_pred_id               ALIAS FOR $1;
+   v_pred                  VARCHAR;
+   v_local_id              VARCHAR;
+   v_schema                VARCHAR;
+   v_db                    VARCHAR;
+   v_cmd                   VARCHAR;
+ BEGIN
+    SELECT INTO v_pred uid FROM node WHERE node_id=$1;
+    SELECT INTO v_db,v_local_id db,local_id FROM parse_id(v_pred);
+    RAISE NOTICE 'v % % %', v_pred_id, v_db, v_local_id;
+
+    SELECT INTO v_schema nspname FROM pg_namespace WHERE lower(v_db) = lower(nspname);
+    IF NOT FOUND THEN
+      EXECUTE 'CREATE SCHEMA ' || v_db;
+    END IF;
+
+    SELECT INTO v_schema nspname FROM pg_namespace WHERE lower('asserted_' || v_db) = lower(nspname);
+    IF NOT FOUND THEN
+      EXECUTE 'CREATE SCHEMA asserted_' || v_db;
+    END IF;
+    v_cmd :=  'CREATE OR REPLACE VIEW asserted_' || v_db || '.' || v_local_id || ' AS SELECT * FROM link WHERE predicate_id=' || v_pred_id  || ' AND is_inferred=''f''';
+    RAISE NOTICE 'sql % ', v_cmd;
+    EXECUTE v_cmd;
+    EXECUTE 'CREATE OR REPLACE VIEW ' || v_db || '.' || v_local_id || ' AS SELECT * FROM link WHERE predicate_id=' || v_pred_id;
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_relation (VARCHAR) 
+  RETURNS VOID AS 
+$$
+DECLARE
+  v_pred_id             INTEGER;
+
+ BEGIN
+    SELECT INTO v_pred_id node_id FROM node WHERE uid=$1;
+    PERFORM realize_relation_i(v_pred_id);
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_all_relations () 
+  RETURNS VOID AS
+$$
+DECLARE
+   v_link               RECORD;
+ BEGIN
+    FOR v_link IN SELECT DISTINCT predicate_id FROM link LOOP
+      PERFORM realize_relation_i(v_link.predicate_id);
+    END LOOP;
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_class_i (INTEGER) 
+  RETURNS VOID AS 
+$$
+DECLARE
+
+   v_class_id               ALIAS FOR $1;
+   v_class                  VARCHAR;
+   v_local_id              VARCHAR;
+   v_schema                VARCHAR;
+   v_db                    VARCHAR;
+   v_cmd                   VARCHAR;
+   v_instance_of_id        INTEGER;
+ BEGIN
+    SELECT INTO v_class uid FROM node WHERE node_id=$1;
+    SELECT INTO v_instance_of_id node_id FROM node WHERE uid='OBO_REL:instance_of';
+    IF NOT FOUND THEN
+      SELECT INTO v_instance_of_id store_relation_node('OBO_REL:instance_of');
+    END IF;
+    SELECT INTO v_db,v_local_id db,local_id FROM parse_id(v_class);
+    RAISE NOTICE 'v % % %', v_class_id, v_db, v_local_id;
+
+    SELECT INTO v_schema nspname FROM pg_namespace WHERE lower(v_db) = lower(nspname);
+    IF NOT FOUND THEN
+      EXECUTE 'CREATE SCHEMA ' || v_db;
+    END IF;
+    SELECT INTO v_schema nspname FROM pg_namespace WHERE lower('asserted_' || v_db) = lower(nspname);
+    IF NOT FOUND THEN
+      EXECUTE 'CREATE SCHEMA asserted_' || v_db;
+    END IF;
+
+    v_cmd :=  'CREATE OR REPLACE VIEW ' || v_db || '.' || quote_ident(v_local_id) || ' AS SELECT DISTINCT node.* FROM node INNER JOIN link USING (node_id) WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id;
+    RAISE NOTICE 'sql % ', v_cmd;
+    EXECUTE v_cmd;
+    EXECUTE  'CREATE OR REPLACE VIEW asserted_' || v_db || '.' || quote_ident(v_local_id) || ' AS SELECT DISTINCT node.* FROM node INNER JOIN link USING (node_id) WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id || ' AND is_inferred=''f''';
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_class (VARCHAR) 
+  RETURNS VOID AS 
+$$
+DECLARE
+  v_class_id             INTEGER;
+
+ BEGIN
+    SELECT INTO v_class_id node_id FROM node WHERE uid=$1;
+    PERFORM realize_class_i(v_class_id);
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_all_classes () 
+  RETURNS VOID AS
+$$
+DECLARE
+   v_node               RECORD;
+ BEGIN
+    FOR v_node IN SELECT DISTINCT node_id FROM node WHERE metatype='C' LOOP
+      PERFORM realize_class_i(v_node.node_id);
+    END LOOP;
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+

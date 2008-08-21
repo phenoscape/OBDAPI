@@ -1,0 +1,471 @@
+<Statements>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Hps1&amp;lt;ep&amp;gt;/Hps1&amp;lt;ep&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_51440"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Ednrb&amp;lt;tm1Ywa&amp;gt;/Ednrb&amp;lt;tm1Ywa&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_72493"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Pldn&amp;lt;pa&amp;gt;/Pldn&amp;lt;pa&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_47505"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Bcl2&amp;lt;tm1Tsu&amp;gt;/Bcl2&amp;lt;tm1Tsu&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_675"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Gpr143&amp;lt;tm1Inc&amp;gt;/Y"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_98994"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;/Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_295"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Krt14&amp;lt;tm1(cre)Wbm&amp;gt;/Krt14&amp;lt;+&amp;gt;,Zbtb17&amp;lt;tm1Cksn&amp;gt;/Zbtb17&amp;lt;tm1Cksn&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_56737"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Tg(KRT14-Edn3)1Takk/?"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_75157"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Bcl2&amp;lt;tm1Dlo&amp;gt;/Bcl2&amp;lt;tm1Dlo&amp;gt;,Bcl2l11&amp;lt;tm1.1Ast&amp;gt;/Bcl2l11&amp;lt;+&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_57255"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Tyrp1&amp;lt;B-lt&amp;gt;/Tyrp1&amp;lt;B-lt&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_94551"/>
+  <target about="MP:0004367"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Slc26a4&amp;lt;tm1Egr&amp;gt;/Slc26a4&amp;lt;tm1Egr&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_34572"/>
+  <target about="MP:0004367"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Ap3b1&amp;lt;tm1Sms&amp;gt;/Ap3b1&amp;lt;tm1Sms&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_67689"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Kit&amp;lt;W-v&amp;gt;/Kit&amp;lt;W-v&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_36841"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg-grey&amp;gt;/Lyst&amp;lt;bg-grey&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_91022"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Eda&amp;lt;Ta&amp;gt;/Eda&amp;lt;+&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_55709"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg-grey&amp;gt;/Lyst&amp;lt;bg-grey&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_35401"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg-grey&amp;gt;/Lyst&amp;lt;bg-grey&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_99445"/>
+  <target about="MP:0005071"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Ednrb&amp;lt;WS4&amp;gt;/Ednrb&amp;lt;WS4&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_93023"/>
+  <target about="MP:0006010"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Hps4&amp;lt;le&amp;gt;/Hps4&amp;lt;le&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_47137"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Edn3&amp;lt;ls&amp;gt;/Edn3&amp;lt;ls&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_62388"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Krt17&amp;lt;tm1Cou&amp;gt;/Krt17&amp;lt;tm1Cou&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_47169"/>
+  <target about="MP:0005072"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Mitf&amp;lt;mi-vit&amp;gt;/Mitf&amp;lt;mi-vit&amp;gt;,Tg(KRT14-Edn3)1Takk/?"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_78485"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Rab27a&amp;lt;ash&amp;gt;/Rab27a&amp;lt;ash&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_3618"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Gata3&amp;lt;tm3Gsv&amp;gt;/Gata3&amp;lt;tm3Gsv&amp;gt;,Tg(KRT14-cre)8Brn/0"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_21099"/>
+  <target about="MP:0005072"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;/Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_289"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Elovl3&amp;lt;tm1Jaco&amp;gt;/Elovl3&amp;lt;tm1Jaco&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_72060"/>
+  <target about="MP:0005072"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Bcl2&amp;lt;tm1Dlo&amp;gt;/Bcl2&amp;lt;tm1Dlo&amp;gt;,Bcl2l11&amp;lt;tm1.1Ast&amp;gt;/Bcl2l11&amp;lt;+&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_98083"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="wn/wn"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_26325"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Kit&amp;lt;W-v&amp;gt;/Kit&amp;lt;W-v&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_16411"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Kit&amp;lt;W-v&amp;gt;/Kit&amp;lt;W-v&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_48655"/>
+  <target about="MP:0006010"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Hps3&amp;lt;coa&amp;gt;/Hps3&amp;lt;coa&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_95786"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Tyr&amp;lt;c-2J&amp;gt;/Tyr&amp;lt;c-2J&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_49462"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Hps1&amp;lt;ep&amp;gt;/Hps1&amp;lt;ep&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_56824"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Mitf&amp;lt;mi-vit&amp;gt;/Mitf&amp;lt;mi-vit&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_92912"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;/Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_39469"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;/Sox10&amp;lt;tm3(Sox8)Weg&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_87265"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Kit&amp;lt;Wads&amp;gt;/Kit&amp;lt;Wads&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_88222"/>
+  <target about="MP:0006010"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Fas&amp;lt;lpr&amp;gt;/Fas&amp;lt;lpr&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_5466"/>
+  <target about="MP:0004367"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Edn3&amp;lt;ls&amp;gt;/Edn3&amp;lt;ls&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_80355"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Mpzl3&amp;lt;rc&amp;gt;/Mpzl3&amp;lt;rc&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_15579"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Edg5&amp;lt;tm1Rlp&amp;gt;/Edg5&amp;lt;tm1Rlp&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_24554"/>
+  <target about="MP:0004367"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg-grey&amp;gt;/Lyst&amp;lt;bg-grey&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_1500"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lef1&amp;lt;tm1Rug&amp;gt;/Lef1&amp;lt;tm1Rug&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_2690"/>
+  <target about="MP:0000394"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Bloc1s3&amp;lt;rp&amp;gt;/Bloc1s3&amp;lt;rp&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_40097"/>
+  <target about="MP:0005072"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg-grey&amp;gt;/Lyst&amp;lt;bg-grey&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_69280"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="skc31/skc31"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_24738"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Eda&amp;lt;Ta&amp;gt;/Y"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_36408"/>
+  <target about="MP:0006370"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Rab38&amp;lt;cht&amp;gt;/Rab38&amp;lt;cht&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_95622"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Hps4&amp;lt;le&amp;gt;/Hps4&amp;lt;le&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_15270"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Bloc1s3&amp;lt;rp&amp;gt;/Bloc1s3&amp;lt;rp&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_7551"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg&amp;gt;/Lyst&amp;lt;bg&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_67859"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Trappc6a&amp;lt;mhyp&amp;gt;/Trappc6a&amp;lt;mhyp&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_56097"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Fig4&amp;lt;plt1&amp;gt;/Fig4&amp;lt;plt1&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_100033"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Hps1&amp;lt;ep&amp;gt;/Hps1&amp;lt;ep&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_38021"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Cno&amp;lt;cno&amp;gt;/Cno&amp;lt;cno&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_4020"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Tg(KRT14-Edn3)1Takk/?"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_73174"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Cno&amp;lt;cno&amp;gt;/Cno&amp;lt;cno&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_37312"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Rb1&amp;lt;tm1.1Gfk&amp;gt;/Rb1&amp;lt;tm1.1Gfk&amp;gt;,Tg(Tyr-cre)1Gfk/0"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_83091"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Muted&amp;lt;mu&amp;gt;/Muted&amp;lt;mu&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_6671"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Mitf&amp;lt;mi-bw&amp;gt;/Mitf&amp;lt;mi-bw&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_75456"/>
+  <target about="MP:0006010"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Ap3b1&amp;lt;pe&amp;gt;/Ap3b1&amp;lt;pe&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_57861"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Ndph&amp;lt;tm1Wbrg&amp;gt;/Y"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_52057"/>
+  <target about="MP:0004367"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Ece1&amp;lt;tm1Reh&amp;gt;/Ece1&amp;lt;tm1Reh&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_40204"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Lyst&amp;lt;bg&amp;gt;/Lyst&amp;lt;bg&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_83233"/>
+  <target about="MP:0005071"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="skc30/skc30"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_18980"/>
+  <target about="MP:0002877"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Adamts20&amp;lt;bt-J&amp;gt;/Adamts20&amp;lt;bt-J&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_60820"/>
+  <target about="MP:0004381"/>
+ </LinkStatement>
+ <LinkStatement>
+  <instanceQuantifier/>
+  <node about="Edn3&amp;lt;ls&amp;gt;/Edn3&amp;lt;+&amp;gt;"/>
+  <relation about="OBO_REL:occurs_with"/>
+  <positedBy about="__internal:_46810"/>
+  <target about="MP:0005075"/>
+ </LinkStatement>
+</Statements>

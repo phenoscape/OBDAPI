@@ -1,0 +1,121 @@
+-- CREATE SCHEMA obd_core_functions;
+-- SET search_path TO obd_core_functions,public;
+
+CREATE OR REPLACE FUNCTION node_label(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT
+  label
+ FROM
+  node
+ WHERE
+  node_id=$1
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION node_uid(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT
+  uid
+ FROM
+  node
+ WHERE
+  node_id=$1
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION source_uid(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT
+  src.uid
+ FROM
+  node INNER JOIN node AS src ON (node.source_id=src.node_id)
+ WHERE
+  node.node_id=$1
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION annotation_count(INT) RETURNS BIGINT
+ AS
+$$
+ SELECT
+  count(link_id)
+ FROM
+  link
+ WHERE
+  node_id=$1 AND
+  reiflink_node_id IS NULL
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION instance_of(INT) RETURNS VARCHAR
+ AS 'SELECT uid FROM instantiation_link AS l INNER JOIN node AS c ON (l.object_id=c.node_id) WHERE l.node_id=''$1''' LANGUAGE 'sql';
+
+CREATE AGGREGATE concat (
+    BASETYPE = text,
+    SFUNC = textcat,
+    STYPE = text,
+    INITCOND = '');
+
+-- TODO: eliminate circular dependency between naming and intersection
+-- minimal name
+CREATE OR REPLACE FUNCTION name_from_intersections(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT 
+  '"' || object_label || '" that ' || (SELECT concat(pred_uid || ' "' || object_label || '" & ') FROM differentium_link_to_label WHERE node_id=$1)
+ FROM
+  genus_link_to_node 
+ WHERE node_id=$1
+$$ LANGUAGE 'sql';
+
+-- TODO: recursive
+CREATE OR REPLACE FUNCTION node_auto_label(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT
+  CASE WHEN label IS NULL THEN name_from_intersections($1) ELSE label END
+ FROM
+  node
+ WHERE
+  node_id=$1
+$$ LANGUAGE 'sql';
+
+-- Example: update node set label = name_from_intersections_full(node_id) where uid like 'PATO:%^%' and label is null;
+CREATE OR REPLACE FUNCTION name_from_intersections_full(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT DISTINCT
+--  '"' || object_label || '" that ' || (SELECT concat(pred_uid || ' "' || object_label || '" & ') FROM differentium_link_to_label WHERE node_id=$1)
+  '"' || object_label || '" that ' || (SELECT concat(pred.label || ' (' || node_auto_label(object_id) || ') & ') FROM uniq_differentium_link AS dl INNER JOIN node AS pred ON (pred.node_id=predicate_id) WHERE dl.node_id=$1)
+ FROM
+  genus_link_to_node 
+ WHERE node_id=$1
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION instance_of(INT) RETURNS VARCHAR
+ AS 'SELECT uid FROM instantiation_link AS l INNER JOIN node AS c ON (l.object_id=c.node_id) WHERE l.node_id=''$1''' LANGUAGE 'sql';
+
+CREATE OR REPLACE VIEW node_to_auto_label AS SELECT node_id,node_auto_label(node_id) AS auto_label FROM node WHERE metatype='C';
+
+CREATE TABLE cache_information_content(node_id INT, ic FLOAT);
+
+CREATE OR REPLACE FUNCTION get_information_content(INT) RETURNS FLOAT
+ AS
+$$
+  SELECT shannon_information FROM class_node_entropy_by_evidence WHERE node_id = $1;
+$$ LANGUAGE 'sql';
+  
+CREATE OR REPLACE FUNCTION get_information_content_via_cache(INT) RETURNS FLOAT
+ AS
+$$
+ DECLARE
+  v_ic  FLOAT;
+ BEGIN
+  SELECT INTO v_ic ic FROM cache_information_content WHERE node_id=$1;
+  IF NOT FOUND THEN
+    SELECT INTO v_ic shannon_information FROM class_node_entropy_by_evidence WHERE node_id = $1;
+    INSERT INTO cache_information_content (node_id,ic) VALUES ($1,v_ic);
+  END IF;
+  RETURN v_ic;
+ END
+$$ LANGUAGE 'plpgsql';
+  

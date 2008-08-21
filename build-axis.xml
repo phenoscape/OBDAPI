@@ -1,0 +1,353 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<project name="obd" basedir="." default="generate.service">
+
+	<property name="runtimedir_name" value="runtime" />
+	<property name="runtimedir" location="${runtimedir_name}" />
+	<property name="librarydir" location="lib" />
+
+	<property name="dest.dir" value="build" />
+
+	<property name="dest.dir.classes" value="${dest.dir}/classes" />
+
+	<property name="dest.dir.lib" value="${dest.dir}/lib" />
+
+	   <property name="AXIS2_HOME" value="/users/cjm/src/axis"/>
+
+	<property name="projectname" value="obdapi" />
+	<property name="jarfile" location="${librarydir}/runlibs/${projectname}.jar" />
+	<property name="main_jar_manifest" location="jar_manifest" />
+	<property name="outputdir" value="classes" />
+	<property name="sourcedir" value="src" />
+	<property name="apidoc_dest" location="docs" />
+	<property name="librarydir" location="lib" />
+	<property name="releasenotes" location="CHANGES" />
+	<property name="svn_repository_url" value="https://geneontology.svn.sourceforge.net/svnroot/geneontology/java/${projectname}" />
+	<property name="tagprefix" value="${projectname}-" />
+
+
+	<property name="repository.path" value="${AXIS2_HOME}/repository/services" />
+
+ 
+    <property name="build.dir" value="build"/>
+
+	<!-- dependency information -->
+	<property name="bbop_dest" location="../BBOP" />
+	<property name="obo_dest" location="../OBO" />
+
+	<fileset dir="${librarydir}/runlibs" id="library_jars">
+		<include name="*.jar" />
+	</fileset>
+	<target name="buildbbop" if="bbop_dest">
+		<ant dir="${bbop_dest}" target="jar" inheritAll="false" />
+		<copy file="${bbop_dest}/bbop.jar" todir="${librarydir}/runlibs" />
+	</target>
+	<target name="buildobo" if="obo_dest">
+		<ant dir="${obo_dest}" target="jar" inheritAll="false" />
+		<copy file="${obo_dest}/obo.jar" todir="${librarydir}/runlibs" />
+	</target>
+	<target name="library_jars" depends="buildbbop, buildobo">
+		<mkdir dir="${runtimedir}" />
+		<sync todir="${runtimedir}">
+			<fileset refid="library_jars" />
+		</sync>
+	</target>
+
+	<path id="classpath">
+		<fileset refid="library_jars" />
+		<fileset dir="${librarydir}/runlibs">
+        		<include name="*.jar" />
+		</fileset>
+		<fileset dir="${librarydir}/buildlibs">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	
+    <path id="axis2.classpath">
+
+        <fileset dir="${AXIS2_HOME}/lib">
+            <include name="*.jar"/>
+        </fileset>
+	<fileset dir="${librarydir}/runlibs">
+		<include name="*.jar" />
+	</fileset>
+	<fileset dir="${librarydir}/buildlibs">
+		<include name="*.jar" />
+	</fileset>
+	
+    </path>
+
+
+	<path id="build.class.path">
+		<fileset dir="${axis2.home}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="client.class.path">
+		<fileset dir="${axis2.home}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${dest.dir.lib}">
+			<include name="*.jar" />
+		</fileset>
+
+	</path>
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+		<delete dir="src" includes="org.obd.ws/stub/**"/>
+	</target>
+
+	<target name="prepare">
+
+		<mkdir dir="${dest.dir}" />
+
+		<mkdir dir="${dest.dir.classes}" />
+
+		<mkdir dir="${dest.dir.lib}" />
+
+		<mkdir dir="${dest.dir.classes}/META-INF" />
+
+	</target>
+	
+   <target name="run-server">
+   	<exec executable="${AXIS2_HOME}/bin/axis2server.sh">
+   	</exec>
+   </target>
+   <target name="deploy-jars">
+   	<exec executable="./deploy.sh">
+   	</exec>
+   </target>
+
+	
+    <target name="compile.service">
+
+        <mkdir dir="${build.dir}"/>
+
+        <mkdir dir="${build.dir}/classes"/>
+
+
+
+        <!--First let's compile the classes-->
+
+        <javac debug="on" 
+
+               fork="true"
+
+               destdir="${build.dir}/classes" 
+
+               srcdir="${basedir}/src"
+
+               classpathref="axis2.classpath">
+
+        </javac>
+
+    </target>
+
+
+    <target name="generate.wsdl" depends="compile.service">
+
+        <taskdef name="java2wsdl"
+
+                 classname="org.apache.ws.java2wsdl.Java2WSDLTask"
+
+                 classpathref="axis2.classpath"/>
+
+        <java2wsdl className="org.obd.ws.OBDQueryService"
+
+                   outputLocation="${build.dir}"
+
+                   targetNamespace="http://quickstart.samples/"
+
+                   schemaTargetNamespace="http://foo.org/xsd">
+
+            <classpath>
+
+                <pathelement path="${axis2.classpath}"/>
+
+                <pathelement location="${build.dir}/classes"/>
+
+            </classpath>
+
+        </java2wsdl>
+
+    </target>
+
+
+
+	<target name="generate.service" depends="compile.service">
+
+		<copy file="src/META-INF/services.xml" tofile="${dest.dir.classes}/META-INF/services.xml" overwrite="true" />
+
+		<javac srcdir="src" destdir="${dest.dir.classes}" includes="org.obd.ws/service/**,org.obd.ws/entry/**">
+			<classpath refid="build.class.path" />
+		</javac>
+
+		<jar basedir="${dest.dir.classes}" destfile="${dest.dir}/OBDQueryService.aar" />
+
+		<copy file="${dest.dir}/OBDQueryService.aar" tofile="${repository.path}/OBDQueryService.aar" overwrite="true" />
+
+	</target>
+
+	<target name="rpc.client" depends="clean,prepare">
+
+		<antcall target="rpc.client.compile" />
+
+		<antcall target="rpc.client.jar" />
+
+		<antcall target="rpc.client.run">
+			<param name="uri" value="${uri}"/>
+		</antcall>
+
+	</target>
+
+	<target name="rpc.client.compile">
+		<javac srcdir="src" destdir="${dest.dir.classes}" includes="org.obd.ws/rpcclient/**,org.obd.ws/entry/**">
+			<classpath refid="build.class.path" />
+		</javac>
+	</target>
+
+	<target name="rpc.client.jar">
+		<jar basedir="${dest.dir.classes}" destfile="${dest.dir.lib}/rpc-client.jar" includes="org.obd.ws/rpcclient/**,org.obd.ws/entry/**" />
+	</target>
+
+	<target name="rpc.client.run">
+		<java classname="org.obd.ws.rpcclient.OBDQueryRPCClient">
+			<classpath refid="client.class.path" />
+			<arg value="${uri}" />
+		</java>
+	</target>
+
+	<target name="check-parameters">
+		<condition property="parameters.set">
+			<and>
+				<isset property="wsdl" />
+			</and>
+		</condition>
+		<!-- This is a hack to get a if-else working in ant. Some much more "ANTy" person is welcome to improve this -->
+		<antcall target="print-usage" />
+	</target>
+
+	<target name="print-usage" unless="parameters.set">
+		<echo message="ant adb.client -Dwsdl='http://&lt;yourhost>:&lt;yourport>/axis2/services/AdressBookService?wsdl'" />
+	</target>
+
+	<target name="adb.client" depends="check-parameters" if="parameters.set">
+
+		<antcall target="clean" />
+		<antcall target="prepare" />
+		<antcall target="adb.client.codegen-stub">
+			<param name="wsdl" value="${wsdl}"/>
+		</antcall>
+
+		<antcall target="adb.client.compile" />
+
+		<antcall target="adb.client.jar" />
+
+		<antcall target="adb.client.run" />
+
+	</target>
+
+	<target name="adb.client.codegen-stub">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java">
+			<arg value="-uri" />
+			<arg value="${wsdl}" />
+			<arg value="-p" />
+			<arg value="org.obd.ws.stub" />
+			<arg value="-o" />
+			<arg value="src" />
+			<arg value="-f" />
+			<classpath refid="build.class.path" />
+		</java>
+	</target>
+
+	<target name="adb.client.compile">
+		<javac srcdir="src" destdir="${dest.dir.classes}" includes="org.obd.ws/adbclient/**,org.obd.ws/stub/**">
+			<classpath refid="build.class.path" />
+		</javac>
+	</target>
+
+	<target name="adb.client.jar">
+		<jar basedir="${dest.dir.classes}" destfile="${dest.dir.lib}/adb-client.jar" includes="org.obd.ws/adbclient/**,org.obd.ws/stub/**" />
+	</target>
+
+	<target name="adb.client.run">
+		<java classname="org.obd.ws.adbclient.OBDQueryADBClient">
+			<classpath refid="client.class.path" />
+		</java>
+	</target>
+
+
+
+	<fileset dir="${sourcedir}" id="resource_files">
+		<include name="**/resources/**" />
+	</fileset>
+	<fileset id="main_jar_contents" dir="${outputdir}" includes="**/*.class,**/resources/**" excludes="**/CVS/*" />
+	
+
+	<target name="resources">
+		<copy todir="${outputdir}">
+			<fileset refid="resource_files" />
+		</copy>
+	</target>
+
+	<target name="classes" depends="buildbbop, resources">
+		<mkdir dir="${outputdir}" />
+		<javac srcdir="${sourcedir}" destdir="${outputdir}" debug="true">
+			<classpath>
+				<path refid="classpath" />
+			</classpath>
+		</javac>
+
+	</target>
+
+	<target name="checkjar">
+		<condition property="main_jar_current">
+			<and>
+				<available file="${jarfile}" />
+				<available file="${main_jar_manifest}" />
+				<uptodate targetfile="${jarfile}">
+					<srcfiles refid="main_jar_contents" />
+				</uptodate>
+				<uptodate targetfile="${jarfile}" srcfile="${main_jar_manifest}" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="jar" depends="classes, checkjar" unless="main_jar_current" description="Generate jar file">
+		<jar destfile="${jarfile}" manifest="${main_jar_manifest}">
+			<fileset refid="main_jar_contents" />
+		</jar>
+	</target>
+
+   <target name="lib/buildlib/obd-rest-xmlbeans.jar">
+   	<exec executable="scomp xml/obd-rest.xsd">
+   	</exec>
+   </target>
+
+    <property name="conf" value="conf"/>
+    <target name="xml-beans">
+        <xmlbean schema="${conf}" destfile="${lib}/buildlib/obd-rest-xmlbeans.jar" classpath="${project.classpath3}"
+                 failonerror="true" javasource="1.5">
+        </xmlbean>
+    </target>
+
+
+</project>

@@ -1,0 +1,300 @@
+ZDB-EXP-041102-1	salinity	stable	0	mg/ml	standard, wild-type environment for Danio rerio	
+ZDB-EXP-041102-1	temperature	stable	28	deg C	standard, wild-type environment for Danio rerio	
+ZDB-EXP-050323-1	morpholino	ZDB-MRPHLNO-041110-4	1	ng		
+ZDB-EXP-050323-1	morpholino	ZDB-MRPHLNO-050322-1	1	ng		
+ZDB-EXP-050512-1	temperature	heat shock	37	deg C	Shield to Bud stage	
+ZDB-EXP-050512-4	temperature	heat shock	37	deg C	Shield stage	
+ZDB-EXP-050512-5	temperature	heat shock	37	deg C	Bud stage	
+ZDB-EXP-050512-6	temperature	heat shock	37	deg C	3-somite stage	
+ZDB-EXP-050512-8	temperature	heat shock	37	deg C	3 hpf	
+ZDB-EXP-050831-2	temperature	heat shock	37	deg C	40 minute duration	
+ZDB-EXP-050831-3	temperature	heat shock	37	deg C		
+ZDB-EXP-060105-3	morpholino	ZDB-MRPHLNO-051220-4	?	picomoles	fluorescein dye-tagged MO	
+ZDB-EXP-060207-3	chemical	PTU		N/A		
+ZDB-EXP-060609-1	temperature	heat shock	37	deg C	10 min.	
+ZDB-EXP-060628-1	temperature	heat shock	40	deg C	at Dome	
+ZDB-EXP-060628-2	temperature	heat shock	40	deg C	at 80% epiboly	
+ZDB-EXP-060825-1	temperature	heat shock	37	deg C	One hour heat shock at 16 hpf.	
+ZDB-EXP-060825-2	temperature	heat shock	37	deg C	One hour heat shock at 21.5 hpf.	
+ZDB-EXP-060825-3	temperature	heat shock	37	deg C	One hour heat shock at 25 hpf.	
+ZDB-EXP-061129-1	morpholino	ZDB-MRPHLNO-061127-5		N/A		
+ZDB-EXP-061129-4	temperature	heat shock	39.5	deg C	1 hour shock at 14 hpf.	
+ZDB-EXP-061208-1	morpholino	ZDB-MRPHLNO-061208-1	4	ng	One or both of 2 PACAP1 morpholinos used.	
+ZDB-EXP-061208-1	morpholino	ZDB-MRPHLNO-061208-2	4	ng	One or both of 2 PACAP1 morpholinos used.	
+ZDB-EXP-061208-2	morpholino	ZDB-MRPHLNO-061208-4	4	ng	One or both of 2 PACAP2 morpholinos used.	
+ZDB-EXP-061208-2	morpholino	ZDB-MRPHLNO-061208-3	4	ng	One or both of 2 PACAP2 morpholinos used.	
+ZDB-EXP-061227-2	morpholino	ZDB-MRPHLNO-060522-7	1.5	ng		
+ZDB-EXP-061227-2	morpholino	ZDB-MRPHLNO-051220-1	1.5	ng		
+ZDB-EXP-070102-4	morpholino	ZDB-MRPHLNO-061227-1	0.5	picomoles		
+ZDB-EXP-070111-4	physical	radiation	15	N/A	Gy	
+ZDB-EXP-070111-5	chemical	other	2	mM	caffeine	
+ZDB-EXP-070111-5	physical	radiation	15	N/A	Gy	
+ZDB-EXP-070111-6	morpholino	ZDB-MRPHLNO-070111-1		N/A		
+ZDB-EXP-070118-2	morpholino	ZDB-MRPHLNO-060322-3	4	ng		
+ZDB-EXP-070118-3	morpholino	ZDB-MRPHLNO-070118-1	4	ng		
+ZDB-EXP-070118-4	morpholino	ZDB-MRPHLNO-060322-3	4	ng		
+ZDB-EXP-070118-4	morpholino	ZDB-MRPHLNO-070118-1	4	ng		
+ZDB-EXP-070123-3	physiological	germ free		N/A		
+ZDB-EXP-070123-4	physiological	bacterial infection		N/A		
+ZDB-EXP-070123-4	physiological	germ free		N/A		
+ZDB-EXP-070124-1	morpholino	ZDB-MRPHLNO-070111-1		N/A		
+ZDB-EXP-070124-1	physical	radiation	15	N/A	Gy	
+ZDB-EXP-070126-1	morpholino	ZDB-MRPHLNO-050429-1	5-10	ng		
+ZDB-EXP-070126-1	morpholino	ZDB-MRPHLNO-060328-2	5-10	ng		
+ZDB-EXP-070129-2	morpholino	ZDB-MRPHLNO-050301-1		N/A		
+ZDB-EXP-070129-3	physical	light	100	%	light	
+ZDB-EXP-070129-4	physical	light	0	%	dark	
+ZDB-EXP-070130-2	morpholino	ZDB-MRPHLNO-070130-2	2-8	ng		
+ZDB-EXP-070130-2	morpholino	ZDB-MRPHLNO-070130-3	2-8	ng		
+ZDB-EXP-070130-5	morpholino	ZDB-MRPHLNO-070130-4	9	ng		
+ZDB-EXP-070130-6	morpholino	ZDB-MRPHLNO-070130-6	5	ng		
+ZDB-EXP-070130-7	morpholino	ZDB-MRPHLNO-070130-7	5	ng		
+ZDB-EXP-070130-8	morpholino	ZDB-MRPHLNO-070130-8	6	ng		
+ZDB-EXP-070130-9	morpholino	ZDB-MRPHLNO-070130-9	9	ng		
+ZDB-EXP-070202-1	morpholino	ZDB-MRPHLNO-061213-1	0.046	micromoles		
+ZDB-EXP-070202-2	morpholino	ZDB-MRPHLNO-070125-2	4.6	ng		
+ZDB-EXP-070202-2	morpholino	ZDB-MRPHLNO-070125-1	4.6	ng		
+ZDB-EXP-070205-1	physical	gravity		N/A		
+ZDB-EXP-070205-2	physical	gravity	2-3	N/A	2-3g force centrifugal spin	
+ZDB-EXP-070206-3	morpholino	ZDB-MRPHLNO-070206-2	25	ng		
+ZDB-EXP-070208-1	morpholino	ZDB-MRPHLNO-070207-1	4.3-8.6	ng		
+ZDB-EXP-070208-2	chemical	PTU	0.003	%		
+ZDB-EXP-070208-3	chemical	PTU	0.003	%		
+ZDB-EXP-070208-3	morpholino	ZDB-MRPHLNO-050930-2	4.2	ng		
+ZDB-EXP-070214-1	morpholino	ZDB-MRPHLNO-070129-2	0.2	microM	estimated final MO conc. in cytoplasm is 100-200 nM	
+ZDB-EXP-070215-3	morpholino	ZDB-MRPHLNO-070215-2	5	ng		
+ZDB-EXP-070215-3	morpholino	ZDB-MRPHLNO-070215-1	5	ng		
+ZDB-EXP-070215-3	morpholino	ZDB-MRPHLNO-070215-3	5	ng		
+ZDB-EXP-070215-4	morpholino	ZDB-MRPHLNO-070215-3	5	ng		
+ZDB-EXP-070215-5	morpholino	ZDB-MRPHLNO-070215-2	5	ng		
+ZDB-EXP-070215-6	morpholino	ZDB-MRPHLNO-070215-1	5	ng		
+ZDB-EXP-070226-5	morpholino	ZDB-MRPHLNO-070129-4	0.2	microM	estimated final MO conc. in cytoplasm is 100-200 nM	
+ZDB-EXP-070226-6	morpholino	ZDB-MRPHLNO-070129-5	0.2	microM	estimated final MO conc. in cytoplasm is 100-200 nM	
+ZDB-EXP-070226-7	morpholino	ZDB-MRPHLNO-070226-1	0.2-5.0	ng	Morpholino was injected in 1nl at the 1 cell stage.	
+ZDB-EXP-070226-8	morpholino	ZDB-MRPHLNO-070226-2	6-12.5	ng		
+ZDB-EXP-070227-1	chemical	PTU	0.003	%		
+ZDB-EXP-070227-1	morpholino	ZDB-MRPHLNO-070226-3	1.0	mM		
+ZDB-EXP-070227-2	chemical	PTU	0.003	%		
+ZDB-EXP-070227-2	morpholino	ZDB-MRPHLNO-070226-4	1.0	mM		
+ZDB-EXP-070228-1	chemical	other		N/A	28 dpf fish treated with the carcinogen MNNG (CAS:70-25-7) and sacrificed at 3, 6, or 12 months after exposure.	
+ZDB-EXP-070228-3	chemical	PTU	0.003	%		
+ZDB-EXP-070228-3	morpholino	ZDB-MRPHLNO-060317-4		N/A		
+ZDB-EXP-070228-4	chemical	other		N/A	28 dpf fish treated with the carcinogen MNNG (CAS:70-25-7) and sacrificed at 3, 6, or 12 months after exposure.	
+ZDB-EXP-070228-5	physiological	regeneration/healing		N/A	Fin tail and dorsal	
+ZDB-EXP-070301-2	morpholino	ZDB-MRPHLNO-070301-1	0.5	picomoles		
+ZDB-EXP-070301-7	morpholino	ZDB-MRPHLNO-070301-5	500	micromoles		
+ZDB-EXP-070301-8	morpholino	ZDB-MRPHLNO-070301-8	1.0	mM		
+ZDB-EXP-070304-1	morpholino	ZDB-MRPHLNO-041217-10	8	ng		
+ZDB-EXP-070304-2	morpholino	ZDB-MRPHLNO-070304-3	5	ng		
+ZDB-EXP-070304-2	morpholino	ZDB-MRPHLNO-050128-3	5	ng		
+ZDB-EXP-070305-1	morpholino	ZDB-MRPHLNO-041217-5	1-4	ng		
+ZDB-EXP-070305-2	morpholino	ZDB-MRPHLNO-041217-11	5	ng		
+ZDB-EXP-070306-1	morpholino	ZDB-MRPHLNO-050202-1	5	ng		
+ZDB-EXP-070306-2	morpholino	ZDB-MRPHLNO-050128-3	1.25	ng		
+ZDB-EXP-070306-2	morpholino	ZDB-MRPHLNO-070304-3	1.25	ng		
+ZDB-EXP-070306-2	morpholino	ZDB-MRPHLNO-041217-10	2	ng		
+ZDB-EXP-070306-3	morpholino	ZDB-MRPHLNO-041217-11	1.25	ng		
+ZDB-EXP-070306-3	morpholino	ZDB-MRPHLNO-070304-3	1.25	ng		
+ZDB-EXP-070306-3	morpholino	ZDB-MRPHLNO-050128-3	1.25	ng		
+ZDB-EXP-070306-5	morpholino	ZDB-MRPHLNO-070304-1	5	ng		
+ZDB-EXP-070307-4	morpholino	ZDB-MRPHLNO-070305-1	5	ng		
+ZDB-EXP-070308-1	morpholino	ZDB-MRPHLNO-070308-1	0.8	mM		
+ZDB-EXP-070309-1	morpholino	ZDB-MRPHLNO-070308-2	5	ng		
+ZDB-EXP-070309-2	morpholino	ZDB-MRPHLNO-070308-2	10	ng		
+ZDB-EXP-070313-1	morpholino	ZDB-MRPHLNO-070313-1	5.1	ng		
+ZDB-EXP-070314-8	morpholino	ZDB-MRPHLNO-060930-1	16.5	ng		
+ZDB-EXP-070315-1	morpholino	ZDB-MRPHLNO-070315-1	6.7	mg/ml		
+ZDB-EXP-070315-5	morpholino	ZDB-MRPHLNO-070315-2	13	mg/ml		
+ZDB-EXP-070316-1	chemical	other	10	mM	CAS:443-48-; treatment 24hrs.	
+ZDB-EXP-070321-5	morpholino	ZDB-MRPHLNO-070321-1	1	mg/ml		
+ZDB-EXP-070321-6	morpholino	ZDB-MRPHLNO-070321-2	1	mg/ml		
+ZDB-EXP-070321-7	morpholino	ZDB-MRPHLNO-070321-3	20	ng		
+ZDB-EXP-070321-8	morpholino	ZDB-MRPHLNO-070321-4	20	ng		
+ZDB-EXP-070321-9	morpholino	ZDB-MRPHLNO-070321-2	1	mg/ml		
+ZDB-EXP-070321-9	morpholino	ZDB-MRPHLNO-070321-1	1	mg/ml		
+ZDB-EXP-070327-4	morpholino	ZDB-MRPHLNO-070327-2	3	mg/ml		
+ZDB-EXP-070327-4	morpholino	ZDB-MRPHLNO-070327-1	3	mg/ml		
+ZDB-EXP-070327-5	temperature	heat shock	37	deg C	duration: 1 hour	
+ZDB-EXP-070327-6	morpholino	ZDB-MRPHLNO-070326-5	0.8	ng		
+ZDB-EXP-070327-7	morpholino	ZDB-MRPHLNO-070327-2	3	mg/ml		
+ZDB-EXP-070327-7	morpholino	ZDB-MRPHLNO-070327-1	3	mg/ml		
+ZDB-EXP-070327-7	morpholino	ZDB-MRPHLNO-050209-9	3	mg/ml		
+ZDB-EXP-070327-7	morpholino	ZDB-MRPHLNO-060822-7	3	mg/ml		
+ZDB-EXP-070328-1	morpholino	ZDB-MRPHLNO-070326-1	0.5	mg/ml		
+ZDB-EXP-070328-2	morpholino	ZDB-MRPHLNO-070326-2	0.5	mg/ml		
+ZDB-EXP-070328-3	morpholino	ZDB-MRPHLNO-070326-3	0.5	mg/ml		
+ZDB-EXP-070328-4	morpholino	ZDB-MRPHLNO-070326-4	0.5	mg/ml		
+ZDB-EXP-070328-5	morpholino	ZDB-MRPHLNO-070326-6	0.1	mg/ml		
+ZDB-EXP-070328-6	morpholino	ZDB-MRPHLNO-070326-8	0.5	mg/ml		
+ZDB-EXP-070328-7	morpholino	ZDB-MRPHLNO-070326-7	0.5	mg/ml		
+ZDB-EXP-070328-8	morpholino	ZDB-MRPHLNO-070327-3	2.5	mg/ml		
+ZDB-EXP-070329-1	morpholino	ZDB-MRPHLNO-070327-4	5	mg/ml		
+ZDB-EXP-070329-2	morpholino	ZDB-MRPHLNO-070327-5	5	mg/ml		
+ZDB-EXP-070329-3	morpholino	ZDB-MRPHLNO-070327-4	5	mg/ml		
+ZDB-EXP-070329-3	morpholino	ZDB-MRPHLNO-070327-5	5	mg/ml		
+ZDB-EXP-070329-4	morpholino	ZDB-MRPHLNO-070327-6	0.5	mg/ml		
+ZDB-EXP-070329-5	morpholino	ZDB-MRPHLNO-070327-7	0.5	mg/ml		
+ZDB-EXP-070329-6	morpholino	ZDB-MRPHLNO-070327-8	0.5	mg/ml		
+ZDB-EXP-070330-10	morpholino	ZDB-MRPHLNO-070327-16	5	mg/ml		
+ZDB-EXP-070330-12	chemical	TCDD (2,3,7,8-tetrachlorodibenzo-p-dioxin) (CAS: 1746-01-6)	0.4	ng/ml		
+ZDB-EXP-070330-13	chemical	TCDD (2,3,7,8-tetrachlorodibenzo-p-dioxin) (CAS: 1746-01-6)	0.4	ng/ml		
+ZDB-EXP-070330-13	morpholino	ZDB-MRPHLNO-050604-1		N/A		
+ZDB-EXP-070330-14	chemical	TCDD (2,3,7,8-tetrachlorodibenzo-p-dioxin) (CAS: 1746-01-6)	0.4	ng/ml		
+ZDB-EXP-070330-14	morpholino	ZDB-MRPHLNO-060126-2		N/A		
+ZDB-EXP-070330-15	chemical	TCDD (2,3,7,8-tetrachlorodibenzo-p-dioxin) (CAS: 1746-01-6)	0.4	ng/ml		
+ZDB-EXP-070330-15	morpholino	ZDB-MRPHLNO-070330-4		N/A		
+ZDB-EXP-070330-16	chemical	TCDD (2,3,7,8-tetrachlorodibenzo-p-dioxin) (CAS: 1746-01-6)	0.4	ng/ml		
+ZDB-EXP-070330-16	morpholino	ZDB-MRPHLNO-070330-3		N/A		
+ZDB-EXP-070330-17	chemical	PTU	0.003	%		
+ZDB-EXP-070330-17	morpholino	ZDB-MRPHLNO-050930-2	2.1	ng		
+ZDB-EXP-070330-2	morpholino	ZDB-MRPHLNO-070327-8	5	mg/ml		
+ZDB-EXP-070330-3	morpholino	ZDB-MRPHLNO-070327-9	5	mg/ml		
+ZDB-EXP-070330-4	morpholino	ZDB-MRPHLNO-070327-10	0.5	mg/ml		
+ZDB-EXP-070330-5	morpholino	ZDB-MRPHLNO-070327-11	0.5	mg/ml		
+ZDB-EXP-070330-6	morpholino	ZDB-MRPHLNO-070327-12	0.5	mg/ml		
+ZDB-EXP-070330-7	morpholino	ZDB-MRPHLNO-070327-13	0.5	mg/ml		
+ZDB-EXP-070330-8	morpholino	ZDB-MRPHLNO-070327-14	5	mg/ml		
+ZDB-EXP-070330-9	morpholino	ZDB-MRPHLNO-070327-15	5	mg/ml		
+ZDB-EXP-070403-1	chemical	Environmental contaminants	25	microM	CAS 129-00-0	
+ZDB-EXP-070403-2	physiological	regeneration/healing		N/A		
+ZDB-EXP-070403-4	physiological	regeneration/healing		N/A		
+ZDB-EXP-070403-4	temperature	heat shock	38	deg C		
+ZDB-EXP-070405-1	physiological	regeneration/healing		N/A	liver	
+ZDB-EXP-070406-1	physiological	regeneration/healing		N/A	caudal fin	
+ZDB-EXP-070410-1	morpholino	ZDB-MRPHLNO-070409-1	0.6	ng		
+ZDB-EXP-070410-2	morpholino	ZDB-MRPHLNO-070409-2	4	ng		
+ZDB-EXP-070410-3	morpholino	morpholino		N/A		
+ZDB-EXP-070410-4	morpholino	ZDB-MRPHLNO-051215-1		N/A		
+ZDB-EXP-070410-5	morpholino	ZDB-MRPHLNO-070410-10	7	ng		
+ZDB-EXP-070410-6	morpholino	ZDB-MRPHLNO-070319-1	1	ng		
+ZDB-EXP-070410-6	morpholino	ZDB-MRPHLNO-070319-2	1	ng		
+ZDB-EXP-070410-7	morpholino	ZDB-MRPHLNO-070319-1	0.5	ng		
+ZDB-EXP-070410-7	morpholino	ZDB-MRPHLNO-070319-2	0.5	ng		
+ZDB-EXP-070410-7	morpholino	ZDB-MRPHLNO-070410-10	5	ng		
+ZDB-EXP-070411-10	morpholino	ZDB-MRPHLNO-060215-1	2.5	ng		
+ZDB-EXP-070411-11	temperature	heat shock	39	deg C	30 minute heat shock treatment	
+ZDB-EXP-070411-12	morpholino	ZDB-MRPHLNO-050413-1	2.5	ng		
+ZDB-EXP-070411-12	morpholino	ZDB-MRPHLNO-070410-1	2.5	ng		
+ZDB-EXP-070411-13	morpholino	ZDB-MRPHLNO-050413-1	2.5	ng		
+ZDB-EXP-070411-13	morpholino	ZDB-MRPHLNO-070410-6	2.5	ng		
+ZDB-EXP-070411-14	morpholino	ZDB-MRPHLNO-050413-1	5	ng		
+ZDB-EXP-070411-15	morpholino	ZDB-MRPHLNO-070410-1	2.5	ng		
+ZDB-EXP-070411-15	morpholino	ZDB-MRPHLNO-070410-6	2.5	ng		
+ZDB-EXP-070411-2	chemical	Environmental contaminants	22	microM	CAS 56-55-3	
+ZDB-EXP-070411-3	chemical	Environmental contaminants	2-10	microM	CAS 92-24-0	
+ZDB-EXP-070411-6	morpholino	ZDB-MRPHLNO-050316-1	1	ng		
+ZDB-EXP-070411-9	morpholino	ZDB-MRPHLNO-060215-1	3.8-5	ng		
+ZDB-EXP-070412-1	morpholino	ZDB-MRPHLNO-051214-1	9	ng		
+ZDB-EXP-070412-10	morpholino	ZDB-MRPHLNO-051028-3	3	ng		
+ZDB-EXP-070412-11	morpholino	ZDB-MRPHLNO-051028-1	3	ng		
+ZDB-EXP-070412-12	morpholino	ZDB-MRPHLNO-050318-7	6	ng		
+ZDB-EXP-070412-5	morpholino	ZDB-MRPHLNO-070412-1	2.5	mg/ml		
+ZDB-EXP-070412-5	morpholino	ZDB-MRPHLNO-070412-2	2.5	mg/ml		
+ZDB-EXP-070419-1	morpholino	ZDB-MRPHLNO-070109-1	8	ng		
+ZDB-EXP-070419-3	morpholino	ZDB-MRPHLNO-070109-1	4	ng		
+ZDB-EXP-070420-1	chemical	PTU	0.003	%		
+ZDB-EXP-070420-1	morpholino	ZDB-MRPHLNO-070122-1	6	ng		
+ZDB-EXP-070420-2	chemical	PTU	0.003	%		
+ZDB-EXP-070420-2	morpholino	ZDB-MRPHLNO-070122-1	3	ng		
+ZDB-EXP-070423-1	morpholino	ZDB-MRPHLNO-060207-1		N/A		
+ZDB-EXP-070423-2	morpholino	ZDB-MRPHLNO-061127-7		N/A		
+ZDB-EXP-070423-4	morpholino	ZDB-MRPHLNO-061127-8		N/A		
+ZDB-EXP-070423-6	morpholino	ZDB-MRPHLNO-070423-1	5	ng		
+ZDB-EXP-070423-7	chemical	PTU	0.003	%		
+ZDB-EXP-070423-7	morpholino	ZDB-MRPHLNO-070423-1	5	ng		
+ZDB-EXP-070425-1	morpholino	ZDB-MRPHLNO-070424-7	6.1	ng		
+ZDB-EXP-070425-2	morpholino	ZDB-MRPHLNO-070425-1	6.0	ng		
+ZDB-EXP-070425-3	morpholino	ZDB-MRPHLNO-070424-7	0.5-0.8	ng		
+ZDB-EXP-070425-4	morpholino	ZDB-MRPHLNO-070124-1		N/A		
+ZDB-EXP-070426-1	morpholino	ZDB-MRPHLNO-070426-1	7	ng		
+ZDB-EXP-070426-2	morpholino	ZDB-MRPHLNO-070426-2	7-14	ng		
+ZDB-EXP-070426-3	morpholino	ZDB-MRPHLNO-070426-1	7-10.9	ng		
+ZDB-EXP-070427-4	morpholino	ZDB-MRPHLNO-070427-1	0.25	mM		
+ZDB-EXP-070427-4	morpholino	ZDB-MRPHLNO-051006-4	0.25	mM		
+ZDB-EXP-070430-1	morpholino	ZDB-MRPHLNO-070426-1	7	ng		
+ZDB-EXP-070430-1	temperature	heat shock	37	deg C	1.5 hour shock starting at 36.5 h.	
+ZDB-EXP-070430-12	morpholino	ZDB-MRPHLNO-041109-1	3	mg/ml		
+ZDB-EXP-070430-12	temperature	heat shock	33.0	deg C		
+ZDB-EXP-070430-13	morpholino	ZDB-MRPHLNO-061106-7	2.0	mg/ml		
+ZDB-EXP-070430-13	temperature	heat shock	33.0	deg C		
+ZDB-EXP-070430-14	morpholino	ZDB-MRPHLNO-061106-7	2.0	mg/ml		
+ZDB-EXP-070430-14	morpholino	ZDB-MRPHLNO-041109-1	3.0	mg/ml		
+ZDB-EXP-070430-14	temperature	heat shock	33.0	deg C		
+ZDB-EXP-070430-4	morpholino	ZDB-MRPHLNO-041109-1	3	mg/ml		
+ZDB-EXP-070430-5	morpholino	ZDB-MRPHLNO-061106-7	2	mg/ml		
+ZDB-EXP-070430-6	morpholino	ZDB-MRPHLNO-061106-7	2	mg/ml		
+ZDB-EXP-070430-6	morpholino	ZDB-MRPHLNO-041109-1	3	microM		
+ZDB-EXP-070430-9	temperature	heat shock	33.0	deg C		
+ZDB-EXP-070501-1	morpholino	ZDB-MRPHLNO-050324-1	1	mM		
+ZDB-EXP-070507-1	morpholino	ZDB-MRPHLNO-070507-1	5	ng		
+ZDB-EXP-070507-10	temperature	heat shock	38-39	deg C		
+ZDB-EXP-070507-15	morpholino	ZDB-MRPHLNO-070507-1	5	ng		
+ZDB-EXP-070507-15	temperature	heat shock	38-39	deg C		
+ZDB-EXP-070507-18	morpholino	ZDB-MRPHLNO-070507-6	0.06-0.3	picomoles		
+ZDB-EXP-070507-19	morpholino	ZDB-MRPHLNO-070507-7	0.06-0.3	picomoles		
+ZDB-EXP-070507-2	morpholino	ZDB-MRPHLNO-070507-4	5	ng		
+ZDB-EXP-070507-20	morpholino	ZDB-MRPHLNO-070507-5	1.25	mM		
+ZDB-EXP-070507-21	morpholino	ZDB-MRPHLNO-070507-8	1	mM		
+ZDB-EXP-070507-3	morpholino	ZDB-MRPHLNO-070507-1	5	ng		
+ZDB-EXP-070507-3	morpholino	ZDB-MRPHLNO-070507-4	5	ng		
+ZDB-EXP-070508-4	morpholino	ZDB-MRPHLNO-070508-3	1	mM		
+ZDB-EXP-070508-4	morpholino	ZDB-MRPHLNO-070508-2	0.6	mM		
+ZDB-EXP-070508-7	temperature	heat shock		deg C		
+ZDB-EXP-070508-8	morpholino	ZDB-MRPHLNO-041207-7	2.5	ng		
+ZDB-EXP-070508-8	morpholino	ZDB-MRPHLNO-041207-4	2.5	ng		
+ZDB-EXP-070509-1	morpholino	ZDB-MRPHLNO-060626-6	2.5	ng		
+ZDB-EXP-070509-2	morpholino	ZDB-MRPHLNO-060515-1	1	ng		
+ZDB-EXP-070509-3	morpholino	ZDB-MRPHLNO-060626-6	2.5	ng		
+ZDB-EXP-070509-3	morpholino	ZDB-MRPHLNO-060515-1	1	ng		
+ZDB-EXP-070509-4	morpholino	ZDB-MRPHLNO-070509-1	5	ng		
+ZDB-EXP-070509-5	morpholino	ZDB-MRPHLNO-070509-2	15	ng		
+ZDB-EXP-070511-7	morpholino	ZDB-MRPHLNO-070423-2	5-10	ng		
+ZDB-EXP-070511-8	morpholino	ZDB-MRPHLNO-070423-1	1-10	ng		
+ZDB-EXP-070514-3	morpholino	ZDB-MRPHLNO-060118-3	5	ng		
+ZDB-EXP-070514-3	morpholino	ZDB-MRPHLNO-070511-1	8	ng		
+ZDB-EXP-070514-4	morpholino	ZDB-MRPHLNO-060118-3	5	ng	Control MO also co-injected in some experiments.	
+ZDB-EXP-070516-7	chemical	other	10	mM	BrdU (CAS:59-14-3) in 1% phenol red	
+ZDB-EXP-070516-8	chemical	PTU	0.003	%		
+ZDB-EXP-070516-9	chemical	Pharmaceutical drug	40	mg/kg	CAS:119039-59-7	
+ZDB-EXP-070517-1	morpholino	ZDB-MRPHLNO-041217-6	0.15	picomoles		
+ZDB-EXP-070517-2	morpholino	ZDB-MRPHLNO-060930-5	0.36	picomoles		
+ZDB-EXP-070517-5	morpholino	ZDB-MRPHLNO-060815-1	0.45	picomoles		
+ZDB-EXP-070517-5	morpholino	ZDB-MRPHLNO-050221-6	0.18	picomoles		
+ZDB-EXP-070518-2	morpholino	ZDB-MRPHLNO-070518-1	4.5	ng		
+ZDB-EXP-070519-1	morpholino	ZDB-MRPHLNO-070519-2	2-3.4	ng		
+ZDB-EXP-070521-1	morpholino	ZDB-MRPHLNO-070519-3	5-7.5	ng		
+ZDB-EXP-070521-2	morpholino	ZDB-MRPHLNO-070519-1		N/A		
+ZDB-EXP-070522-2	temperature	heat shock	38.5	deg C	30 minute heat shock treatment	
+ZDB-EXP-070522-6	morpholino	ZDB-MRPHLNO-041109-5	2	mg/ml	2-3 nl injection	
+ZDB-EXP-070522-6	morpholino	ZDB-MRPHLNO-050818-3	0.75	mg/ml	2-3 nl injection	
+ZDB-EXP-070522-6	morpholino	ZDB-MRPHLNO-041109-6	2	mg/ml	2-3 nl injection	
+ZDB-EXP-070522-7	morpholino	ZDB-MRPHLNO-070522-4	1-2	ng		
+ZDB-EXP-070523-1	morpholino	ZDB-MRPHLNO-070522-5	10	ng		
+ZDB-EXP-070524-10	morpholino	ZDB-MRPHLNO-050513-5	0.3-3.0	ng		
+ZDB-EXP-070524-7	morpholino	ZDB-MRPHLNO-050906-3	0.3-3.0	ng		
+ZDB-EXP-070525-1	morpholino	ZDB-MRPHLNO-050513-5	0.3-3.0	ng		
+ZDB-EXP-070525-1	morpholino	ZDB-MRPHLNO-050906-3	0.3-3.0	ng		
+ZDB-EXP-070525-5	morpholino	ZDB-MRPHLNO-070525-6	2-8	ng		
+ZDB-EXP-070525-6	morpholino	ZDB-MRPHLNO-070531-1	2	ng		
+ZDB-EXP-070525-7	morpholino	ZDB-MRPHLNO-070531-1	9	ng		
+ZDB-EXP-070529-6	morpholino	ZDB-MRPHLNO-070529-1	0.5	mg/ml		
+ZDB-EXP-070529-6	morpholino	ZDB-MRPHLNO-070529-2	0.5	mg/ml		
+ZDB-EXP-070529-6	morpholino	ZDB-MRPHLNO-070529-4	0.5	mg/ml		
+ZDB-EXP-070529-6	morpholino	ZDB-MRPHLNO-070529-3	0.5	mg/ml		
+ZDB-EXP-070531-1	morpholino	ZDB-MRPHLNO-070531-2	9.2	ng		
+ZDB-EXP-070531-10	chemical	PTU	0.2	mM		
+ZDB-EXP-070531-11	chemical	other	10	mM	Metronidazole	
+ZDB-EXP-070531-5	morpholino	ZDB-MRPHLNO-070530-2	1-30	ng	1 to 30 ng of MO was used.	
+ZDB-EXP-070601-1	chemical	other	100	microM	Pyrilamine - H1 antagonist	
+ZDB-EXP-070601-2	chemical	other	100	microM	Cimetidine - H2 receptor antagonist	
+ZDB-EXP-070601-3	chemical	other	100	microM	Thioperamide - H3 receptor agonist	
+ZDB-EXP-070601-4	chemical	other	100	microM	Immepep - H3 receptor agonist	
+ZDB-EXP-070601-5	chemical	PTU		N/A		
+ZDB-EXP-070602-2	morpholino	ZDB-MRPHLNO-070602-1	1-2	mg/ml		
+ZDB-EXP-070602-3	morpholino	ZDB-MRPHLNO-070602-2	1-2	mg/ml		
+ZDB-EXP-070604-3	morpholino	ZDB-MRPHLNO-070601-1		N/A		
+ZDB-EXP-070604-4	morpholino	ZDB-MRPHLNO-070601-2		N/A		
+ZDB-EXP-070604-6	morpholino	ZDB-MRPHLNO-070604-2	0.4-2	mg/ml	One of two dkk1 morpholinos were used.	
+ZDB-EXP-070605-1	morpholino	ZDB-MRPHLNO-070604-4	2.5	ng	range 1-2.5 ng	
+ZDB-EXP-070605-1	morpholino	ZDB-MRPHLNO-070604-3	2.5	ng	range 1-2.5 ng	
+ZDB-EXP-070605-10	morpholino	ZDB-MRPHLNO-070605-4	1	ng		

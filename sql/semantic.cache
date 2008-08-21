@@ -1,0 +1,15 @@
+;; Object sql/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "sql/"
+  :tables (list 
+   (semanticdb-table "Makefile"
+    :major-mode 'makefile-bsdmake-mode
+    :tags '(("obd-sql-docs.html" function nil nil [1 153]) ("%-nm.sql" function (:arguments ("%.sql")) nil [153 209]) ("%-mv.sql" function (:arguments ("%.sql")) nil [201 247]) ("views-noschema.sql" function (:arguments ("obd-core-views.sql")) nil [247 325]))
+    :file "Makefile"
+    :pointmax 325
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre4"
+  :semanticdb-version "2.0pre4"
+  )

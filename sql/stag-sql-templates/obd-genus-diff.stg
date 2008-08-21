@@ -1,0 +1,17 @@
+:SELECT 
+  *
+:FROM
+  node
+  INNER JOIN genus_link USING (node_id)
+  INNER JOIN differentium_link USING (node_id)
+  INNER JOIN node AS genus ON (genus_link.object_id=genus.node_id)
+  INNER JOIN node AS diff ON (differentium_link.object_id=diff.node_id)
+
+:WHERE
+    [node.uid => &uid&]
+    [node.label => &label&]
+:USE NESTING (set(node(genus_link(genus))(differentium_link(diff))))
+
+//
+schema: obd
+desc: 

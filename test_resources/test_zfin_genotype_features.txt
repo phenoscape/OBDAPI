@@ -1,0 +1,165 @@
+ZDB-GENO-010426-2	shha<sup>t4/t4</sup>	t4[2,U,U]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-010427-3	shha<sup>tbq70</sup>	tbq70[U,U,U]	ZDB-ALT-010427-6	tbq70	tbq70	sequence_variant	unknown	shha	ZDB-GENE-980526-166	
+ZDB-GENO-010427-4	shha<sup>tbx392/tbx392</sup>	tbx392[2,U,U]	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-011017-10	pax2a<sup>b593</sup>	b593[U,U,U]	ZDB-ALT-011017-20	b593	b593	sequence_variant	unknown	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-011026-1	sox32<sup>s4/s4</sup>	s4[2,U,U]	ZDB-ALT-011026-2	s4	s4	point_mutation	Point Mutation	sox32	ZDB-GENE-011026-1	
+ZDB-GENO-030219-2	sox9a<sup>hi1134Tg</sup>	hi1134Tg[U,U,U]	ZDB-ALT-030219-4	hi1134Tg	hi1134Tg	transgenic_insertion	Transgenic Insertion	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-040525-2	Tg(pax6:gap43-GFP)s244t	s244t[U,U,U]	ZDB-ALT-040525-4	Tg(pax6:gap43-GFP)s244t	s244t	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-040525-3	Tg(pax6:gap43-GFP)s243t	s243t[U,U,U]	ZDB-ALT-040525-6	Tg(pax6:gap43-GFP)s243t	s243t	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-040525-4	Tg(pax6:gap43-GFP)s220t	s220t[U,U,U]	ZDB-ALT-040525-8	Tg(pax6:gap43-GFP)s220t	s220t	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-040716-6	eya1<sup>t22744/t22744</sup>	t22744[2,U,U]	ZDB-ALT-040716-12	t22744	t22744	point_mutation	Point Mutation	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-040824-3	eya1<sup>hi2933Tg</sup>	hi2933Tg[U,U,U]	ZDB-ALT-040824-6	hi2933Tg	hi2933Tg	transgenic_insertion	Transgenic Insertion	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-050131-1	sox10<sup>utr13e1</sup>	utr13e1[U,U,U]	ZDB-ALT-050131-2	utr13e1	utr13e1	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-050209-11	sox32<sup>unspecified</sup>	un_sox32[U,U,U]	ZDB-ALT-050209-22	un_sox32	un_sox32	unspecified	unspecified	sox32	ZDB-GENE-011026-1	
+ZDB-GENO-050209-24	pax2a<sup>unspecified</sup>	un_pax2a[U,U,U]	ZDB-ALT-050209-48	un_pax2a	un_pax2a	unspecified	unspecified	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-050209-30	shha<sup>unspecified</sup>	un_shha[U,U,U]	ZDB-ALT-050209-60	un_shha	un_shha	unspecified	unspecified	shha	ZDB-GENE-980526-166	
+ZDB-GENO-050209-6	eya1<sup>unspecified</sup>	un_eya1[U,U,U]	ZDB-ALT-050209-12	un_eya1	un_eya1	unspecified	unspecified	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-050322-1	Df(LG03:sox8,sox9b)b971/b971	b971[2,U,U]	ZDB-ALT-050322-2	Df(LG03:sox8,sox9b)b971	b971	deficiency	Deficiency			
+ZDB-GENO-050913-2	Tg(-4.9sox10:EGFP)ba2	ba2[U,U,U]	ZDB-ALT-050913-4	Tg(-4.9sox10:EGFP)ba2	ba2	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-051005-1	Tg(-2.4shha-ABC:GFP)sb15	sb15[U,U,U]	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060207-1	Tg(-2.7shh:GFP)t10	t10[U,U,U]	ZDB-ALT-060207-2	Tg(-2.7shh:GFP)t10	t10	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060214-1	Tg(pax2a:GFP)e1	e1[U,U,U]	ZDB-ALT-060214-2	Tg(pax2a:GFP)e1	e1	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060214-2	Tg(pax2a:lacZ)e2	e2[U,U,U]	ZDB-ALT-060214-4	Tg(pax2a:lacZ)e2	e2	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-1	Tg(pax6-DF4:gap43-CFP)q11	q11[U,U,U]	ZDB-ALT-060330-2	Tg(pax6-DF4:gap43-CFP)q11	q11	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-10	Tg(pax6-DF4:gap43-YFP)q15	q15[U,U,U]	ZDB-ALT-060330-20	Tg(pax6-DF4:gap43-YFP)q15	q15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-11	Tg(pax6-DF4:gap43-YFP)q17	q17[U,U,U]	ZDB-ALT-060330-22	Tg(pax6-DF4:gap43-YFP)q17	q17	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-2	Tg(pax6-DF4:gap43-CFP)q12	q12[U,U,U]	ZDB-ALT-060330-4	Tg(pax6-DF4:gap43-CFP)q12	q12	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-3	Tg(pax6-DF4:gap43-CFP)q07	q07[U,U,U]	ZDB-ALT-060330-6	Tg(pax6-DF4:gap43-CFP)q07	q07	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-4	Tg(pax6-DF4:gap43-CFP)q05	q05[U,U,U]	ZDB-ALT-060330-8	Tg(pax6-DF4:gap43-CFP)q05	q05	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-5	Tg(pax6-DF4:gap43-CFP)q01	q01[U,U,U]	ZDB-ALT-060330-10	Tg(pax6-DF4:gap43-CFP)q01	q01	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-6	Tg(pax6-DF4:gap43-CFP)q02	q02[U,U,U]	ZDB-ALT-060330-12	Tg(pax6-DF4:gap43-CFP)q02	q02	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-7	Tg(pax6-DF4:gap43-CFP)q03	q03[U,U,U]	ZDB-ALT-060330-14	Tg(pax6-DF4:gap43-CFP)q03	q03	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-8	Tg(pax6-DF4:gap43-YFP)q08	q08[U,U,U]	ZDB-ALT-060330-16	Tg(pax6-DF4:gap43-YFP)q08	q08	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060330-9	Tg(pax6-DF4:gap43-YFP)q14	q14[U,U,U]	ZDB-ALT-060330-18	Tg(pax6-DF4:gap43-YFP)q14	q14	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-060619-1	Tg(UAS:shha)kca7	kca7[U,U,U]	ZDB-ALT-060619-2	Tg(UAS:shha)kca7	kca7	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-061228-1	Tg(sox17:GFP)s870	s870[U,U,U]	ZDB-ALT-061228-2	Tg(sox17:GFP)s870	s870	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070131-7	sox10<sup>baz1/baz1</sup>	baz1[2,1,1]	ZDB-ALT-070131-1	baz1	baz1	point_mutation	Point Mutation	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-070131-8	sox10<sup>m618/m618</sup>	m618[2,1,1]	ZDB-ALT-980203-399	m618	m618	point_mutation	Point Mutation	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-070209-173	sox9a<sup>hi1134Tg/+</sup>	hi1134Tg[1,U,U]AB	ZDB-ALT-030219-4	hi1134Tg	hi1134Tg	transgenic_insertion	Transgenic Insertion	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070209-229	sox32<sup>ta56/+</sup>	ta56[1,U,U]AB	ZDB-ALT-980203-842	ta56	ta56	point_mutation	Point Mutation	sox32	ZDB-GENE-011026-1	
+ZDB-GENO-070209-23	eya1<sup>hi2933Tg/+</sup>	hi2933Tg[1,U,U]AB/TU	ZDB-ALT-040824-6	hi2933Tg	hi2933Tg	transgenic_insertion	Transgenic Insertion	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-070209-52	pax2a<sup>b593/+</sup>	b593[1,U,U]AB	ZDB-ALT-011017-20	b593	b593	sequence_variant	unknown	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-070209-80	shha<sup>t4/+</sup>	t4[1,U,U]AB	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070215-11	shha<sup>tbx392/tbx392</sup>	tbx392[2,1,1]	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070215-12	fgf8a<sup>ti282a/ti282a</sup>;shha<sup>tbx392/tbx392</sup>	tbx392[2,U,U] ti282a[2,U,U]	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070215-12	fgf8a<sup>ti282a/ti282a</sup>;shha<sup>tbx392/tbx392</sup>	tbx392[2,U,U] ti282a[2,U,U]	ZDB-ALT-980203-1091	ti282a	ti282a	point_mutation	Point Mutation	fgf8a	ZDB-GENE-990415-72	
+ZDB-GENO-070219-2	Df(LG03:sox8,sox9b)b971/b971;sox9a<sup>hi1134Tg/hi1134Tg</sup>	b971[2,U,U] hi1134Tg[2,U,U]	ZDB-ALT-030219-4	hi1134Tg	hi1134Tg	transgenic_insertion	Transgenic Insertion	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070219-2	Df(LG03:sox8,sox9b)b971/b971;sox9a<sup>hi1134Tg/hi1134Tg</sup>	b971[2,U,U] hi1134Tg[2,U,U]	ZDB-ALT-050322-2	Df(LG03:sox8,sox9b)b971	b971	deficiency	Deficiency			
+ZDB-GENO-070228-3	shha<sup>tbx392/tbx392</sup>	tbx392[2,1,1]AB	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070307-1	sox10<sup>m241/m241</sup>	m241[2,1,1]	ZDB-ALT-980203-563	m241	m241	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-070315-2	mitfa<sup>b692/b692</sup>;sox10<sup>t3/t3</sup>	b692[2,U,U] t3[2,U,U]	ZDB-ALT-010919-2	b692	b692	point_mutation	Point Mutation	mitfa	ZDB-GENE-990910-11	
+ZDB-GENO-070315-2	mitfa<sup>b692/b692</sup>;sox10<sup>t3/t3</sup>	b692[2,U,U] t3[2,U,U]	ZDB-ALT-980203-1827	t3	t3	insertion	Insertion	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-070320-2	sox10<sup>m241/m241</sup>	m241[2,1,1]AB	ZDB-ALT-980203-563	m241	m241	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-070321-1	sox9a<sup>unspecified/unspecified</sup>;sox9b<sup>unspecified/unspecified</sup>	un_sox9a[2,U,U] un_sox9b[2,U,U]	ZDB-ALT-070321-1	un_sox9a	un_sox9a	unspecified	unspecified	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070321-1	sox9a<sup>unspecified/unspecified</sup>;sox9b<sup>unspecified/unspecified</sup>	un_sox9a[2,U,U] un_sox9b[2,U,U]	ZDB-ALT-070321-2	un_sox9b	un_sox9b	unspecified	unspecified	sox9b	ZDB-GENE-001103-2	
+ZDB-GENO-070406-1	shha<sup>t4/t4</sup>	t4[2,1,1]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070412-1	sox9a<sup>hi1134Tg/hi1134Tg</sup>	hi1134Tg[2,1,1]	ZDB-ALT-030219-4	hi1134Tg	hi1134Tg	transgenic_insertion	Transgenic Insertion	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070412-2	sox9a<sup>hi1134Tg/+</sup>;sox9a<sup>tw37/+</sup>	hi1134Tg[1,U,U] tw37[1,U,U]	ZDB-ALT-030219-4	hi1134Tg	hi1134Tg	transgenic_insertion	Transgenic Insertion	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070412-2	sox9a<sup>hi1134Tg/+</sup>;sox9a<sup>tw37/+</sup>	hi1134Tg[1,U,U] tw37[1,U,U]	ZDB-ALT-980203-1205	tw37	tw37	sequence_variant	unknown	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070412-3	sox9a<sup>tw37/+</sup>	tw37[1,U,U]	ZDB-ALT-980203-1205	tw37	tw37	sequence_variant	unknown	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-070502-6	pax2a<sup>unspecified/unspecified</sup>	un_pax2a[2,1,1]	ZDB-ALT-050209-48	un_pax2a	un_pax2a	unspecified	unspecified	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-070529-1	pax2a<sup>b593/b593</sup>	b593[2,U,U]	ZDB-ALT-011017-20	b593	b593	sequence_variant	unknown	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-070607-2	Tg(-2.4shha:GFP)zf19	zf19[U,U,U]	ZDB-ALT-070607-2	Tg(-2.4shha:GFP)zf19	zf19	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070607-3	Tg(-2.4shha-A:GFP)sb19	sb19[U,U,U]	ZDB-ALT-070607-3	Tg(-2.4shha-A:GFP)sb19	sb19	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070607-4	Tg(-2.4shha-B:GFP)sb7	sb7[U,U,U]	ZDB-ALT-070607-4	Tg(-2.4shha-B:GFP)sb7	sb7	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070607-5	Tg(-2.4shha-C:GFP)sb17	sb17[U,U,U]	ZDB-ALT-070607-5	Tg(-2.4shha-C:GFP)sb17	sb17	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070607-6	Tg(-2.4shha-AB:GFP)sb31	sb31[U,U,U]	ZDB-ALT-070607-6	Tg(-2.4shha-AB:GFP)sb31	sb31	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070607-7	Tg(-2.4shha-AC:GFP)sb11	sb11[U,U,U]	ZDB-ALT-070607-7	Tg(-2.4shha-AC:GFP)sb11	sb11	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070607-8	Tg(-2.4shha-BC:GFP)sb8	sb8[U,U,U]	ZDB-ALT-070607-8	Tg(-2.4shha-BC:GFP)sb8	sb8	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070611-1	Tg(-2.4shha-BC:GFP)sb9	sb9[U,U,U]	ZDB-ALT-070611-1	Tg(-2.4shha-BC:GFP)sb9	sb9	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070611-2	Tg(-2.4shha-BC:GFP)sb22	sb22[U,U,U]	ZDB-ALT-070611-2	Tg(-2.4shha-BC:GFP)sb22	sb22	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070611-5	Tg(-2.4shha-ABC:GFP)sb24	sb24[U,U,U]	ZDB-ALT-070611-4	Tg(-2.4shha-ABC:GFP)sb24	sb24	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070611-6	Tg(-2.4shha-ABC:GFP)sb28	sb28[U,U,U]	ZDB-ALT-070611-5	Tg(-2.4shha-ABC:GFP)sb28	sb28	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-070712-5	ndr2<sup>tf219/tf219</sup>;shha<sup>t4/t4</sup>	t4[2,1,1] tf219[2,1,1]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070712-5	ndr2<sup>tf219/tf219</sup>;shha<sup>t4/t4</sup>	t4[2,1,1] tf219[2,1,1]	ZDB-ALT-980203-1458	tf219	tf219	sequence_variant	unknown	ndr2	ZDB-GENE-990415-181	
+ZDB-GENO-070917-2	shha<sup>t4/t4</sup>;shha<sup>tbx392/tbx392</sup>	t4[2,U,U] tbx392[2,U,U]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-070917-2	shha<sup>t4/t4</sup>;shha<sup>tbx392/tbx392</sup>	t4[2,U,U] tbx392[2,U,U]	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-071023-6	Tg(dusp6:EGFP)pt6;pax2a<sup>tu29a/tu29a</sup>	pt6[U,U,U] tu29a[2,U,U]	ZDB-ALT-071017-3	Tg(dusp6:EGFP)pt6	pt6	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-071023-6	Tg(dusp6:EGFP)pt6;pax2a<sup>tu29a/tu29a</sup>	pt6[U,U,U] tu29a[2,U,U]	ZDB-ALT-980203-1248	tu29a	tu29a	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-080228-2	Tg(-7.2sox10:EGFP)zf77	zf77[U,U,U]	ZDB-ALT-080228-1	Tg(-7.2sox10:EGFP)zf77	zf77	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080229-7	pax2a<sup>rk9</sup>	rk9[U,U,U]RW	ZDB-ALT-080229-5	rk9	rk9	sequence_variant	unknown	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-080321-3	Tg(nkx2.2a:mEGFP)vu17;Tg(sox10:mRFP)vu234	vu17[U,U,U] vu234[U,U,U]AB	ZDB-ALT-080321-1	Tg(nkx2.2a:mEGFP)vu17	vu17	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080321-3	Tg(nkx2.2a:mEGFP)vu17;Tg(sox10:mRFP)vu234	vu17[U,U,U] vu234[U,U,U]AB	ZDB-ALT-080321-3	Tg(sox10:mRFP)vu234	vu234	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080327-299	Tg(sox10:mRFP)vu234;sox10<sup>m241/m241</sup>	m241[2,1,1] vu234[U,U,U]AB	ZDB-ALT-080321-3	Tg(sox10:mRFP)vu234	vu234	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080327-299	Tg(sox10:mRFP)vu234;sox10<sup>m241/m241</sup>	m241[2,1,1] vu234[U,U,U]AB	ZDB-ALT-980203-563	m241	m241	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-080328-1	ndr2<sup>tf219/tf219</sup>;shha<sup>tbx392/tbx392</sup>	tbx392[2,1,1] tf219[2,1,1]	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080328-1	ndr2<sup>tf219/tf219</sup>;shha<sup>tbx392/tbx392</sup>	tbx392[2,1,1] tf219[2,1,1]	ZDB-ALT-980203-1458	tf219	tf219	sequence_variant	unknown	ndr2	ZDB-GENE-990415-181	
+ZDB-GENO-080402-2	Tg(nkx2.2a:mEGFP)vu17;sox10<sup>m241/m241</sup>	m241[2,1,1] vu17[U,U,U]AB	ZDB-ALT-080321-1	Tg(nkx2.2a:mEGFP)vu17	vu17	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080402-2	Tg(nkx2.2a:mEGFP)vu17;sox10<sup>m241/m241</sup>	m241[2,1,1] vu17[U,U,U]AB	ZDB-ALT-980203-563	m241	m241	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-080418-1	Tg(-2.4shha-ABC:GFP)sb15;smo<sup>b641/b641</sup>	b641[2,1,1] sb15[U,U,U]	ZDB-ALT-000821-2	b641	b641	point_mutation	Point Mutation	smo	ZDB-GENE-980526-89	
+ZDB-GENO-080418-1	Tg(-2.4shha-ABC:GFP)sb15;smo<sup>b641/b641</sup>	b641[2,1,1] sb15[U,U,U]	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080418-2	Tg(-2.4shha-ABC:GFP)sb15;shha<sup>t4/t4</sup>	sb15[U,U,U] t4[2,1,1]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080418-2	Tg(-2.4shha-ABC:GFP)sb15;shha<sup>t4/t4</sup>	sb15[U,U,U] t4[2,1,1]	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080421-1	Tg(-2.4shha-ABC:GFP)sb15;flh<sup>n1/n1</sup>	n1[2,U,U] sb15[U,U,U]	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080421-1	Tg(-2.4shha-ABC:GFP)sb15;flh<sup>n1/n1</sup>	n1[2,U,U] sb15[U,U,U]	ZDB-ALT-980203-470	n1	n1	deficiency	Deficiency	flh	ZDB-GENE-990415-75	
+ZDB-GENO-080430-1	Tg(nkx2.2a:mEGFP)vu17;sox10<sup>tw11/tw11</sup>	tw11[2,U,U] vu17[U,U,U]AB	ZDB-ALT-080321-1	Tg(nkx2.2a:mEGFP)vu17	vu17	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080430-1	Tg(nkx2.2a:mEGFP)vu17;sox10<sup>tw11/tw11</sup>	tw11[2,U,U] vu17[U,U,U]AB	ZDB-ALT-980203-1454	tw11	tw11	point_mutation	Point Mutation	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-080516-8	shha<sup>unspecified/unspecified</sup>	un_shha[2,U,U]	ZDB-ALT-050209-60	un_shha	un_shha	unspecified	unspecified	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080606-120	eya1<sup>hi2933Tg/+</sup>	hi2933Tg[1,U,U]AB	ZDB-ALT-040824-6	hi2933Tg	hi2933Tg	transgenic_insertion	Transgenic Insertion	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-080606-258	Tg(pax2a:GFP)e1/+	e1[1,U,U]AB	ZDB-ALT-060214-2	Tg(pax2a:GFP)e1	e1	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080606-406	sox10<sup>m241/+</sup>	m241[1,U,U]AB	ZDB-ALT-980203-563	m241	m241	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-080606-609	shha<sup>tq252/+</sup>	tq252[1,U,U]AB	ZDB-ALT-980413-636	tq252	tq252	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080609-2	Tg(-2.4shha-ABC:GFP)sb15;chaf1b<sup>t24412/t24412</sup>	sb15[U,U,U] t24412[2,1,1]TU	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080609-2	Tg(-2.4shha-ABC:GFP)sb15;chaf1b<sup>t24412/t24412</sup>	sb15[U,U,U] t24412[2,1,1]TU	ZDB-ALT-080609-1	t24412	t24412	point_mutation	Point Mutation	chaf1b	ZDB-GENE-040426-1947	
+ZDB-GENO-080701-2	shha<sup>t4/t4</sup>	t4[2,1,1]TU	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080711-10	Tg(-2.4shha-C:GFP)zf94	zf94[U,U,U]	ZDB-ALT-080711-9	Tg(-2.4shha-C:GFP)zf94	zf94	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-11	Tg(-2.4shha-C:GFP)zf95	zf95[U,U,U]	ZDB-ALT-080711-10	Tg(-2.4shha-C:GFP)zf95	zf95	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-12	Tg(-2.4shha-C:GFP)zf96	zf96[U,U,U]	ZDB-ALT-080711-11	Tg(-2.4shha-C:GFP)zf96	zf96	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-13	Tg(-2.4shha-AB:GFP)zf97	zf97[U,U,U]	ZDB-ALT-080711-12	Tg(-2.4shha-AB:GFP)zf97	zf97	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-14	Tg(-2.4shha-AC:GFP)zf98	zf98[U,U,U]	ZDB-ALT-080711-13	Tg(-2.4shha-AC:GFP)zf98	zf98	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-15	Tg(-2.4shha-A:GFP)unspecified	Tg(-2.4shha-A:GFP)unspecified[U,U,U]	ZDB-ALT-080711-14	Tg(-2.4shha-A:GFP)unspecified	Tg(-2.4shha-A:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-17	Tg(-2.4shha-AB:GFP)unspecified	Tg(-2.4shha-AB:GFP)unspecified[U,U,U]	ZDB-ALT-080711-15	Tg(-2.4shha-AB:GFP)unspecified	Tg(-2.4shha-AB:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-18	Tg(-2.4shha-ABC:GFP)unspecified	Tg(-2.4shha-ABC:GFP)unspecified[U,U,U]	ZDB-ALT-080711-16	Tg(-2.4shha-ABC:GFP)unspecified	Tg(-2.4shha-ABC:GFP)unspecifie	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-19	Tg(-2.4shha-AC:GFP)unspecified	Tg(-2.4shha-AC:GFP)unspecified[U,U,U]	ZDB-ALT-080711-17	Tg(-2.4shha-AC:GFP)unspecified	Tg(-2.4shha-AC:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-2	Tg(-2.4shha:GFP)zf86	zf86[U,U,U]	ZDB-ALT-080711-1	Tg(-2.4shha:GFP)zf86	zf86	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-20	Tg(-2.4shha-B:GFP)unspecified	Tg(-2.4shha-B:GFP)unspecified[U,U,U]	ZDB-ALT-080711-18	Tg(-2.4shha-B:GFP)unspecified	Tg(-2.4shha-B:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-21	Tg(-2.4shha-BC:GFP)unspecified	Tg(-2.4shha-BC:GFP)unspecified[U,U,U]	ZDB-ALT-080711-19	Tg(-2.4shha-BC:GFP)unspecified	Tg(-2.4shha-BC:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-22	Tg(-2.4shha-C:GFP)unspecified	Tg(-2.4shha-C:GFP)unspecified[U,U,U]	ZDB-ALT-080711-20	Tg(-2.4shha-C:GFP)unspecified	Tg(-2.4shha-C:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-23	Tg(-2.4shha:GFP)unspecified	Tg(-2.4shha:GFP)unspecified[U,U,U]	ZDB-ALT-080711-21	Tg(-2.4shha:GFP)unspecified	Tg(-2.4shha:GFP)unspecified	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-3	Tg(-2.4shha-A:GFP)zf87	zf87[U,U,U]	ZDB-ALT-080711-2	Tg(-2.4shha-A:GFP)zf87	zf87	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-4	Tg(-2.4shha-A:GFP)zf88	zf88[U,U,U]	ZDB-ALT-080711-3	Tg(-2.4shha-A:GFP)zf88	zf88	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-5	Tg(-2.4shha-A:GFP)zf89	zf89[U,U,U]	ZDB-ALT-080711-4	Tg(-2.4shha-A:GFP)zf89	zf89	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-6	Tg(-2.4shha-B:GFP)zf90	zf90[U,U,U]	ZDB-ALT-080711-5	Tg(-2.4shha-B:GFP)zf90	zf90	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-7	Tg(-2.4shha-B:GFP)zf91	zf91[U,U,U]	ZDB-ALT-080711-6	Tg(-2.4shha-B:GFP)zf91	zf91	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-8	Tg(-2.4shha-B:GFP)zf92	zf92[U,U,U]	ZDB-ALT-080711-7	Tg(-2.4shha-B:GFP)zf92	zf92	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080711-9	Tg(-2.4shha-C:GFP)zf93	zf93[U,U,U]	ZDB-ALT-080711-8	Tg(-2.4shha-C:GFP)zf93	zf93	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080713-1	Tg(-2.4shha-ABC:GFP)sb15;shha<sup>t4/t4</sup>	sb15[U,U,U] t4[2,U,U]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080713-1	Tg(-2.4shha-ABC:GFP)sb15;shha<sup>t4/t4</sup>	sb15[U,U,U] t4[2,U,U]	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080713-2	Tg(-2.4shha-ABC:GFP)sb15;smo<sup>b577/b577</sup>	b577[2,U,U] sb15[U,U,U]	ZDB-ALT-051005-2	Tg(-2.4shha-ABC:GFP)sb15	sb15	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080713-2	Tg(-2.4shha-ABC:GFP)sb15;smo<sup>b577/b577</sup>	b577[2,U,U] sb15[U,U,U]	ZDB-ALT-990422-78	b577	b577	point_mutation	Point Mutation	smo	ZDB-GENE-980526-89	
+ZDB-GENO-080714-2	Tg(sox17:EGFP)zf99	zf99[U,U,U]	ZDB-ALT-080714-1	Tg(sox17:EGFP)zf99	zf99	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080721-4	pax6b<sup>sa0086</sup>	sa0086[U,U,U]	ZDB-ALT-080721-4	sa0086	sa0086	point_mutation	Point Mutation	pax6b	ZDB-GENE-001031-1	
+ZDB-GENO-080729-2	shha<sup>tbq70/tbq70</sup>	tbq70[2,1,1]	ZDB-ALT-010427-6	tbq70	tbq70	sequence_variant	unknown	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080804-4	shha<sup>t4/+</sup>;shha<sup>tbx392/+</sup>	t4[1,U,U] tbx392[1,U,U]	ZDB-ALT-010426-4	t4	t4	deficiency	Deficiency	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080804-4	shha<sup>t4/+</sup>;shha<sup>tbx392/+</sup>	t4[1,U,U] tbx392[1,U,U]	ZDB-ALT-010427-8	tbx392	tbx392	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-080812-1	Tg(sox17:DsRed)s903	s903[U,U,U]	ZDB-ALT-080812-1	Tg(sox17:DsRed)s903	s903	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080812-2	Tg(sox17:DsRed)s903;smo<sup>hi1640Tg/hi1640Tg</sup>	hi1640Tg[2,U,U] s903[U,U,U]	ZDB-ALT-011018-4	hi1640Tg	hi1640Tg	transgenic_insertion	Transgenic Insertion	smo	ZDB-GENE-980526-89	
+ZDB-GENO-080812-2	Tg(sox17:DsRed)s903;smo<sup>hi1640Tg/hi1640Tg</sup>	hi1640Tg[2,U,U] s903[U,U,U]	ZDB-ALT-080812-1	Tg(sox17:DsRed)s903	s903	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080812-5	Tg(-4.0ins:GFP)zf5;Tg(sox17:DsRed)s903	s903[U,U,U] zf5[U,U,U]	ZDB-ALT-051214-2	Tg(-4.0ins:GFP)zf5	zf5	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080812-5	Tg(-4.0ins:GFP)zf5;Tg(sox17:DsRed)s903	s903[U,U,U] zf5[U,U,U]	ZDB-ALT-080812-1	Tg(sox17:DsRed)s903	s903	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080813-3	Tg(-4.0ins:GFP)zf5;Tg(sox17:DsRed)s903;flh<sup>n1/n1</sup>	n1[2,U,U] s903[U,U,U] zf5[U,U,U]	ZDB-ALT-051214-2	Tg(-4.0ins:GFP)zf5	zf5	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080813-3	Tg(-4.0ins:GFP)zf5;Tg(sox17:DsRed)s903;flh<sup>n1/n1</sup>	n1[2,U,U] s903[U,U,U] zf5[U,U,U]	ZDB-ALT-080812-1	Tg(sox17:DsRed)s903	s903	transgenic_insertion	Transgenic Insertion			
+ZDB-GENO-080813-3	Tg(-4.0ins:GFP)zf5;Tg(sox17:DsRed)s903;flh<sup>n1/n1</sup>	n1[2,U,U] s903[U,U,U] zf5[U,U,U]	ZDB-ALT-980203-470	n1	n1	deficiency	Deficiency	flh	ZDB-GENE-990415-75	
+ZDB-GENO-980202-1189	sox10<sup>tw2/tw2</sup>	tw2[2,1,1]	ZDB-ALT-980203-1453	tw2	tw2	point_mutation	Point Mutation	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-980202-1190	sox10<sup>tw11/tw11</sup>	tw11[2,1,1]	ZDB-ALT-980203-1454	tw11	tw11	point_mutation	Point Mutation	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-980202-1328	pax2a<sup>tm243a/tm243a</sup>	tm243a[2,1,1]	ZDB-ALT-980203-1590	tm243a	tm243a	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-980202-1330	pax2a<sup>th44/th44</sup>	th44[2,1,1]	ZDB-ALT-980203-1592	th44	th44	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-980202-1331	pax2a<sup>tb21/tb21</sup>	tb21[2,1,1]	ZDB-ALT-980203-1593	tb21	tb21	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-980202-1332	pax2a<sup>ty22b/ty22b</sup>	ty22b[2,1,1]	ZDB-ALT-980203-1594	ty22b	ty22b	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-980202-1334	pax2a<sup>ty31a/ty31a</sup>	ty31a[2,1,1]	ZDB-ALT-980203-1596	ty31a	ty31a	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-980202-136	sox10<sup>m618/m618</sup>	m618[2,U,U]AB	ZDB-ALT-980203-399	m618	m618	point_mutation	Point Mutation	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-980202-1531	eya1<sup>to15b/to15b</sup>	to15b[2,1,1]	ZDB-ALT-980203-1793	to15b	to15b	sequence_variant	unknown	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-980202-1547	eya1<sup>tp85b/tp85b</sup>	tp85b[2,1,1]	ZDB-ALT-980203-1809	tp85b	tp85b	point_mutation	Point Mutation	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-980202-1557	eya1<sup>tm90b/tm90b</sup>	tm90b[2,1,1]	ZDB-ALT-980203-1819	tm90b	tm90b	point_mutation	Point Mutation	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-980202-1558	eya1<sup>tc257e/tc257e</sup>	tc257e[2,1,1]	ZDB-ALT-980203-1820	tc257e	tc257e	point_mutation	Point Mutation	eya1	ZDB-GENE-990712-18	
+ZDB-GENO-980202-1565	sox10<sup>t3/t3</sup>	t3[2,1,1]	ZDB-ALT-980203-1827	t3	t3	insertion	Insertion	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-980202-198	ttna<sup>m740</sup>	m740[U,U,U]AB	ZDB-ALT-980203-464	m740	m740	sequence_variant	unknown	ttna	ZDB-GENE-030113-2	
+ZDB-GENO-980202-234	ttna<sup>m171/m171</sup>	m171[2,U,U]AB	ZDB-ALT-980203-502	m171	m171	point_mutation	Point Mutation	ttna	ZDB-GENE-030113-2	
+ZDB-GENO-980202-245	ttna<sup>m186</sup>	m186[U,U,U]AB	ZDB-ALT-980203-514	m186	m186	sequence_variant	unknown	ttna	ZDB-GENE-030113-2	
+ZDB-GENO-980202-291	sox10<sup>m241</sup>	m241[U,U,U]AB	ZDB-ALT-980203-563	m241	m241	sequence_variant	unknown	sox10	ZDB-GENE-011207-1	
+ZDB-GENO-980202-292	ttna<sup>m242</sup>	m242[U,U,U]AB	ZDB-ALT-980203-564	m242	m242	sequence_variant	unknown	ttna	ZDB-GENE-030113-2	
+ZDB-GENO-980202-572	sox32<sup>ta56/ta56</sup>	ta56[2,1,1]	ZDB-ALT-980203-842	ta56	ta56	point_mutation	Point Mutation	sox32	ZDB-GENE-011026-1	
+ZDB-GENO-980202-938	sox9a<sup>tw37/tw37</sup>	tw37[2,1,1]	ZDB-ALT-980203-1205	tw37	tw37	sequence_variant	unknown	sox9a	ZDB-GENE-001103-1	
+ZDB-GENO-980202-981	pax2a<sup>tu29a/tu29a</sup>	tu29a[2,1,1]	ZDB-ALT-980203-1248	tu29a	tu29a	point_mutation	Point Mutation	pax2a	ZDB-GENE-990415-8	
+ZDB-GENO-980410-268	shha<sup>tq252/tq252</sup>	tq252[2,1,1]	ZDB-ALT-980413-636	tq252	tq252	point_mutation	Point Mutation	shha	ZDB-GENE-980526-166	
+ZDB-GENO-991201-6	Df(LG07:ccne,eng2a,shha)b240/b240	b240[2,U,U]	ZDB-ALT-991201-10	Df(LG07:ccne,eng2a,shha)b240	b240	deficiency	Deficiency			

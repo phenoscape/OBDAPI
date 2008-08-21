@@ -1,0 +1,1 @@
+ALTER USER cjm SET search_path TO obd_statistical_view,obd_aggregate_view,obd_annotation_view,obd_prejoins_view, obd_obo_metamodel_view,obd_core_view,obd_denormalized,public;

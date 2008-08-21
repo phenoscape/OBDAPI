@@ -1,0 +1,566 @@
+-- CREATE SCHEMA obd_mutable_api;
+-- SET search_path TO obd_mutable_api,public;
+
+-- @@ store_node(UID,label,source,metatype)
+CREATE OR REPLACE FUNCTION store_node (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_uid                   ALIAS FOR $1;
+   v_label                 ALIAS FOR $2;
+   v_source                ALIAS FOR $3;
+   v_metatype              ALIAS FOR $4;
+
+   v_node_id               INTEGER;
+   v_source_id             INTEGER;
+ BEGIN
+
+    IF v_source IS NOT NULL THEN
+      SELECT INTO v_source_id store_node(v_source);
+    END IF;
+    SELECT INTO v_node_id node_id
+      FROM node
+      WHERE uid=v_uid;
+    IF NOT FOUND THEN
+      INSERT INTO node
+       (uid,label,source_id,metatype)
+         VALUES
+       (v_uid,v_label,v_source_id,v_metatype);
+       RETURN currval('node_node_id_seq');
+    ELSE
+     IF v_source IS NULL OR v_source='' THEN
+      SELECT INTO v_source_id source_id FROM node WHERE uid=v_uid;
+     END IF;
+    END IF;
+    -- we only reach the code if the node is found
+    IF v_label IS NULL THEN
+     UPDATE NODE
+      SET source_id = v_source_id, metatype = v_metatype
+      WHERE node_id = v_node_id;
+    ELSE
+     UPDATE NODE
+      SET label = v_label, source_id = v_source_id, metatype = v_metatype
+      WHERE node_id = v_node_id;
+    END IF;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_node(UID)
+CREATE OR REPLACE FUNCTION store_node (VARCHAR) RETURNS INT AS
+$$ 
+DECLARE
+   v_uid                   ALIAS FOR $1;
+   v_node_id               INTEGER;
+BEGIN
+    SELECT INTO v_node_id node_id
+      FROM node
+      WHERE uid=v_uid;
+    IF NOT FOUND THEN
+      INSERT INTO node
+       (uid)
+         VALUES
+       (v_uid);
+       RETURN currval('node_node_id_seq');
+    END IF;
+    RETURN v_node_id;
+END
+$$
+LANGUAGE 'plpgsql';
+
+-- @@ store_relation_node(UID,label,source)
+CREATE OR REPLACE FUNCTION store_relation_node (VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_node($1,$2,$3,'R') 
+$$
+LANGUAGE 'sql';
+
+-- @@ store_relation_node(UID)
+CREATE OR REPLACE FUNCTION store_relation_node (VARCHAR) RETURNS INT AS
+$$
+DECLARE
+   v_uid                   ALIAS FOR $1;
+
+   v_node_id               INTEGER;
+   v_metatype              CHAR;
+ BEGIN
+    SELECT INTO v_node_id, v_metatype node_id, metatype
+      FROM node
+      WHERE uid=v_uid;
+    IF NOT FOUND THEN
+      INSERT INTO node
+       (uid,metatype)
+         VALUES
+       (v_uid,'R');
+       RETURN currval('node_node_id_seq');
+    END IF;
+    IF v_metatype != 'R' THEN
+      UPDATE node SET metatype='R' WHERE node_id=v_node_id;
+    END IF;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_link_si (node_IID,relation,target,comb,isInferred,source) 
+CREATE OR REPLACE FUNCTION store_link_si (INTEGER,VARCHAR,VARCHAR,VARCHAR,BOOLEAN,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_su_id                 ALIAS FOR $1;
+   v_rel                   ALIAS FOR $2;
+   v_ob                    ALIAS FOR $3;
+   v_combinator            ALIAS FOR $4;
+   v_is_inferred           ALIAS FOR $5;
+   v_source                ALIAS FOR $6;
+
+   v_link_id               INTEGER;
+   v_rel_id                INTEGER;
+   v_ob_id                 INTEGER;
+   v_source_id             INTEGER;
+   v_combinator2           VARCHAR;
+ BEGIN
+    IF v_source IS NOT NULL THEN
+      SELECT INTO v_source_id store_node(v_source);
+    END IF;
+    SELECT INTO v_ob_id store_node(v_ob);
+    SELECT INTO v_rel_id store_relation_node(v_rel);
+    v_combinator2 := v_combinator;
+    IF v_combinator IS NULL THEN
+      v_combinator2 := '';
+    END IF;
+    SELECT INTO v_link_id link_id FROM link WHERE
+       node_id=v_su_id AND predicate_id=v_rel_id AND object_id=v_ob_id AND combinator=v_combinator2 AND is_inferred=v_is_inferred AND source_id=v_source_id;
+    IF v_link_id IS NULL THEN
+     INSERT INTO link
+        (node_id,predicate_id,object_id,combinator,is_inferred,source_id)
+          VALUES
+        (v_su_id,v_rel_id,v_ob_id,v_combinator2,v_is_inferred,v_source_id);
+     RETURN currval('link_link_id_seq');
+    END IF;
+    RETURN v_link_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_link_si (node_IID,relation,target,comb,isInferred) - no source 
+CREATE OR REPLACE FUNCTION store_link_si (INTEGER,VARCHAR,VARCHAR,VARCHAR,BOOLEAN) 
+  RETURNS INT AS 
+$$
+SELECT store_link_si($1,$2,$3,$4,$5,NULL);
+$$ LANGUAGE 'sql';
+
+-- @@ store_class_node(UID,label,source)
+CREATE OR REPLACE FUNCTION store_class_node (VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_node($1,$2,$3,'C') 
+$$
+LANGUAGE 'sql';
+
+-- @@ store_class_node(UID)
+CREATE OR REPLACE FUNCTION store_class_node (VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_node($1,NULL,NULL,'C') 
+$$
+LANGUAGE 'sql';
+
+-- @@ store_instance_node(UID,label,source)
+CREATE OR REPLACE FUNCTION store_instance_node (VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_node($1,$2,$3,'I') 
+$$
+LANGUAGE 'sql';
+
+-- @@ store_instance_node(UID,label,source,type)
+CREATE OR REPLACE FUNCTION store_instance_node (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_node_id               INTEGER;
+   v_rel_id                INTEGER;
+   v_class_id              INTEGER;
+ BEGIN
+    SELECT INTO v_node_id store_instance_node($1,$2,$3);
+    SELECT INTO v_rel_id store_relation_node('OBO_REL:instance_of');
+    SELECT INTO v_class_id store_class_node($4);
+    INSERT INTO link (node_id,predicate_id,object_id)
+        VALUES (v_node_id,v_rel_id,v_class_id);
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_anon_instance_node(UID,source)
+CREATE OR REPLACE FUNCTION store_anon_instance_node (VARCHAR, VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_node_id               INTEGER;
+   v_rel_id                INTEGER;
+   v_class_id                 INTEGER;
+   v_source_id                 INTEGER;
+ BEGIN
+    IF $2 IS NOT NULL THEN
+      SELECT INTO v_source_id store_node($2);
+    END IF;
+    INSERT INTO node (is_anonymous,source_id) VALUES ('t',v_source_id);
+    SELECT INTO v_node_id currval('node_node_id_seq');
+    SELECT INTO v_rel_id store_relation_node('OBO_REL:instance_of');
+    SELECT INTO v_class_id store_class_node($1);
+    INSERT INTO link (node_id,predicate_id,object_id)
+        VALUES (v_node_id,v_rel_id,v_class_id);
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_ontology_source_node(UID)
+CREATE OR REPLACE FUNCTION store_ontology_source_node (VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_node($1) 
+$$
+LANGUAGE 'sql';
+
+-- @@ remove_links_for_node (UID) 
+CREATE OR REPLACE FUNCTION remove_links_for_node (VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_node_id               INTEGER;
+ BEGIN
+    SELECT INTO v_node_id node_id FROM node WHERE uid=$1;
+    DELETE FROM link WHERE node_id=v_node_id;
+    DELETE FROM alias WHERE node_id=v_node_id;
+    DELETE FROM description WHERE node_id=v_node_id;
+    DELETE FROM link WHERE reiflink_node_id=v_node_id;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+
+-- @@ store_link (node_UID,relation,target,comb,isInferred) - no source 
+CREATE OR REPLACE FUNCTION store_link (VARCHAR,VARCHAR,VARCHAR,VARCHAR,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_su_id                 INTEGER;
+   v_link_id               INTEGER;
+ BEGIN
+    SELECT INTO v_su_id store_node($1);
+    SELECT INTO v_link_id store_link_si(v_su_id,$2,$3,$4,$5);
+    RETURN v_link_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_link (node_UID,relation,target,comb,isInferred,source)
+CREATE OR REPLACE FUNCTION store_link (VARCHAR,VARCHAR,VARCHAR,VARCHAR,BOOLEAN,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_su_id                 INTEGER;
+   v_link_id               INTEGER;
+ BEGIN
+    SELECT INTO v_su_id store_node($1);
+    SELECT INTO v_link_id store_link_si(v_su_id,$2,$3,$4,$5,$6);
+    RETURN v_link_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+
+-- @@ store_link (node_UID,relation,target,comb)
+CREATE OR REPLACE FUNCTION store_link (VARCHAR,VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_link($1,$2,$3,$4,'f') 
+$$
+LANGUAGE 'sql';
+
+-- @@ store_reif_link (node_UID,relation,target,comb,reiflink_node_IID,source_id)
+CREATE OR REPLACE FUNCTION store_reif_link (VARCHAR,VARCHAR,VARCHAR,VARCHAR,INTEGER,INTEGER,BOOLEAN) RETURNS INT AS 
+$$
+DECLARE
+   v_su                    ALIAS FOR $1;
+   v_rel                   ALIAS FOR $2;
+   v_ob                    ALIAS FOR $3;
+   v_combinator            ALIAS FOR $4;
+   v_reiflink_node_id      ALIAS FOR $5;
+   v_source_id             ALIAS FOR $6;
+   v_is_negated            ALIAS FOR $7;
+
+   v_link_id               INTEGER;
+   v_su_id                 INTEGER;
+   v_rel_id                INTEGER;
+   v_ob_id                 INTEGER;
+   v_combinator2           VARCHAR;
+ BEGIN
+    SELECT INTO v_su_id store_node(v_su);
+    SELECT INTO v_ob_id store_node(v_ob);
+    SELECT INTO v_rel_id store_relation_node(v_rel);
+    v_combinator2 := v_combinator;
+    if v_combinator IS NULL THEN
+      v_combinator2 := '';
+    END IF;
+    SELECT INTO v_link_id link_id FROM link WHERE
+       node_id=v_su_id AND predicate_id=v_rel_id AND object_id=v_ob_id AND combinator=v_combinator2 AND reiflink_node_id=v_reiflink_node_id AND source_id=v_source_id;
+    IF v_link_id IS NULL THEN
+     INSERT INTO link
+        (node_id,predicate_id,object_id,combinator,reiflink_node_id,source_id,is_negated)
+          VALUES
+        (v_su_id,v_rel_id,v_ob_id,v_combinator2,v_reiflink_node_id,v_source_id,v_is_negated);
+     RETURN currval('link_link_id_seq');
+    END IF;
+    RETURN v_link_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_reif_link (node_UID,relation,target,comb,reiflink_node_IID,source_id) -- no negated
+CREATE OR REPLACE FUNCTION store_reif_link (VARCHAR,VARCHAR,VARCHAR,VARCHAR,INTEGER,INTEGER) RETURNS INT AS
+$$
+SELECT store_reif_link($1,$2,$3,$4,$5,$6,'f')
+$$
+LANGUAGE 'sql';
+
+-- @@ store_reif_link (node_UID,relation,target,comb,reiflink_node_IID) -- no source, negated
+CREATE OR REPLACE FUNCTION store_reif_link (VARCHAR,VARCHAR,VARCHAR,VARCHAR,INTEGER) RETURNS INT AS
+$$
+SELECT store_reif_link($1,$2,$3,$4,$5,NULL)
+$$
+LANGUAGE 'sql';
+
+-- @@ store_annotation (UID,relation,target,source,isNegated) : reiflink_node_id
+CREATE OR REPLACE FUNCTION store_annotation (VARCHAR,VARCHAR,VARCHAR,VARCHAR,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_su                    ALIAS FOR $1;
+   v_rel                   ALIAS FOR $2;
+   v_ob                    ALIAS FOR $3;
+   v_source                ALIAS FOR $4;
+   v_is_negated            ALIAS FOR $5;
+
+   v_annotation_id         INTEGER;
+   v_link_id         INTEGER;
+   v_source_id         INTEGER;
+BEGIN
+    IF v_source IS NOT NULL THEN
+      SELECT INTO v_source_id store_node(v_source);
+    END IF;
+ SELECT INTO v_annotation_id store_anon_instance_node('oban:Annotation',v_source);
+ SELECT INTO v_link_id store_reif_link($1,$2,$3,CAST('' AS VARCHAR),v_annotation_id,v_source_id,v_is_negated);
+ RETURN v_annotation_id;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_annotation (UID,relation,target,source) 
+CREATE OR REPLACE FUNCTION store_annotation (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+SELECT store_annotation($1,$2,$3,$4,'f');
+$$
+LANGUAGE 'sql';
+
+
+-- @@ store_node_dbxref_i (IID, xref)
+CREATE OR REPLACE FUNCTION store_node_dbxref_i (INT,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_node_id               ALIAS FOR $1;
+   v_rel_id                INTEGER;
+   v_xref_id               INTEGER;
+ BEGIN
+    SELECT INTO v_xref_id store_node($2);
+    SELECT INTO v_rel_id store_relation_node('oboInOwl:hasDbXref');
+    INSERT INTO link (node_id,predicate_id,object_id,is_metadata)
+        VALUES (v_node_id,v_rel_id,v_xref_id,'t');
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_node_synonym_i (IID, scope, type, syn)
+-- scope = B/N/E/R
+-- type = UID for optional type
+CREATE OR REPLACE FUNCTION store_node_synonym_i (INT,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_node_id               ALIAS FOR $1;
+   v_rel_id                INTEGER;
+   v_type_id               INTEGER;
+ BEGIN
+    IF $3 IS NOT NULL THEN
+      SELECT INTO v_type_id store_instance_node($3,$3,'oboInOwl:Subset');
+    END IF;
+    INSERT INTO alias (node_id,scope,type_id,label)
+        VALUES (v_node_id,SUBSTRING($2,1,1),v_type_id,$4);
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_node_textdef_i (IID, textdef)
+CREATE OR REPLACE FUNCTION store_textdef_i (INT,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+   v_rel_id                INTEGER;
+   v_type_id               INTEGER;
+ BEGIN
+    SELECT INTO v_type_id store_relation_node('oboInOwl:hasDefinition');
+    -- only one textdef per node
+    DELETE FROM description WHERE node_id=v_node_id AND type_id=v_type_id;
+    INSERT INTO description (node_id,type_id,label)
+        VALUES (v_node_id,v_type_id,$2);
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+-- @@ store_subset(ID,Name)
+-- Example: gosubset_prok_ "GO terms of relevance to prokaryotes"
+-- TODO: source
+CREATE OR REPLACE FUNCTION store_subset (VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_subset_id               INTEGER;
+ BEGIN
+    SELECT INTO v_subset_id store_instance_node($1,$2,'subset','oboInOwl:Subset');
+    RETURN v_subset_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION store_node_subset_link_i (INT,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+   v_link_id               INTEGER;
+ BEGIN
+    SELECT INTO v_link_id store_link_si(v_node_id,'oboInOwl:inSubset',$2,'','f');
+    RETURN v_link_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_node_is_transitive_i (INT,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+ BEGIN
+    UPDATE node SET is_transitive=$2 WHERE node_id=$1;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_node_is_anonymous_i (INT,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+ BEGIN
+    UPDATE node SET is_anonymous=$2 WHERE node_id=$1;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_node_is_symmetric_i (INT,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+ BEGIN
+-- TODO
+  RETURN 1;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_node_is_obsolete_i (INT,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+ BEGIN
+    UPDATE node SET is_obsolete=$2 WHERE node_id=$1;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+
+
+-- DELETION --
+CREATE OR REPLACE FUNCTION delete_node (VARCHAR) RETURNS INT AS
+$$
+DECLARE
+ num         INTEGER;
+BEGIN
+DELETE FROM node WHERE uid=$1;
+GET DIAGNOSTICS num = ROW_COUNT;
+RETURN num;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+-- @@ store_tagval_i(node_id,rel,val,datatype,src)
+CREATE OR REPLACE FUNCTION store_tagval_i (INT,VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_su_id                 ALIAS FOR $1;
+   v_rel                   ALIAS FOR $2;
+   v_val                   ALIAS FOR $3;
+   v_datatype              ALIAS FOR $4;
+   v_source                ALIAS FOR $5;
+
+   v_source_id             INTEGER;
+   v_link_id               INTEGER;
+   v_rel_id                INTEGER;
+   v_datatype_id                INTEGER;
+ BEGIN
+    IF v_source IS NOT NULL THEN
+      SELECT INTO v_source_id store_node(v_source);
+    END IF;
+    SELECT INTO v_rel_id store_relation_node(v_rel);
+    IF v_datatype IS NULL THEN
+      SELECT INTO v_datatype_id store_node('xsd:string');
+    END IF;
+    IF v_datatype IS NOT NULL THEN
+      SELECT INTO v_datatype_id store_node(v_datatype);
+    END IF;
+    INSERT INTO tagval
+       (node_id,tag_id,val,datatype_id,source_id)
+         VALUES
+       (v_su_id,v_rel_id,v_val,v_datatype_id,v_source_id);
+    RETURN currval('tagval_tagval_id_seq');
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION store_tagval (VARCHAR,VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_su                    ALIAS FOR $1;
+   v_rel                   ALIAS FOR $2;
+   v_val                   ALIAS FOR $3;
+   v_datatype              ALIAS FOR $4;
+   v_source                ALIAS FOR $5;
+
+   v_su_id                 INTEGER;
+ BEGIN
+    SELECT INTO v_su_id store_node(v_su);
+    RETURN store_tagval_i(v_su_id,v_rel,v_val,v_datatype,v_source);
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION store_tagval_i (INT,VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_tagval_i($1,$2,$3,$4,NULL) 
+$$
+LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION store_tagval (VARCHAR,VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
+$$ 
+SELECT store_tagval($1,$2,$3,$4,NULL) 
+$$
+LANGUAGE 'sql';

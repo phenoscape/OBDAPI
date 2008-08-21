@@ -1,0 +1,131 @@
+namespace http = "http://schemas.xmlsoap.org/wsdl/http/"
+namespace mime = "http://schemas.xmlsoap.org/wsdl/mime/"
+namespace soap = "http://schemas.xmlsoap.org/wsdl/soap/"
+namespace soap12 = "http://schemas.xmlsoap.org/wsdl/soap12/"
+namespace wsaw = "http://www.w3.org/2006/05/addressing/wsdl"
+namespace wsdl = "http://schemas.xmlsoap.org/wsdl/"
+namespace xs = "http://www.w3.org/2001/XMLSchema"
+
+start =
+  element wsdl:definitions {
+    attribute targetNamespace { xsd:anyURI },
+    element wsdl:documentation { xsd:NCName },
+    element wsdl:types {
+      element xs:schema {
+        attribute attributeFormDefault { xsd:NCName },
+        attribute elementFormDefault { xsd:NCName },
+        attribute targetNamespace { xsd:anyURI },
+        element xs:import {
+          attribute namespace { xsd:anyURI }
+        }?,
+        (xs.complexType | xs.element)+
+      }+
+    },
+    element wsdl:message {
+      attribute name { xsd:NCName },
+      element wsdl:part {
+        attribute element { xsd:NMTOKEN },
+        attribute name { xsd:NCName }
+      }?
+    }+,
+    element wsdl:portType {
+      attribute name { xsd:NCName },
+      wsdl.operation+
+    },
+    element wsdl:binding {
+      attribute name { xsd:NCName },
+      attribute type { xsd:NMTOKEN },
+      (element http:binding {
+         attribute verb { xsd:NCName }
+       }
+       | element soap:binding {
+           attribute style { xsd:NCName },
+           attribute transport { xsd:anyURI }
+         }
+       | element soap12:binding {
+           attribute style { xsd:NCName },
+           attribute transport { xsd:anyURI }
+         }),
+      wsdl.operation+
+    }+,
+    element wsdl:service {
+      attribute name { xsd:NCName },
+      element wsdl:port {
+        attribute binding { xsd:NMTOKEN },
+        attribute name { xsd:NCName },
+        (element http:address {
+           attribute location { xsd:anyURI }
+         }
+         | element soap:address {
+             attribute location { xsd:anyURI }
+           }
+         | element soap12:address {
+             attribute location { xsd:anyURI }
+           })
+      }+
+    }
+  }
+xs.complexType =
+  element xs:complexType {
+    attribute name { xsd:NCName }?,
+    element xs:sequence { xs.element+ }
+  }
+xs.element =
+  element xs:element {
+    attribute minOccurs { xsd:integer }?,
+    attribute name { xsd:NCName },
+    attribute nillable { xsd:boolean }?,
+    attribute type { xsd:NMTOKEN }?,
+    xs.complexType?
+  }
+wsdl.operation =
+  element wsdl:operation {
+    attribute name { xsd:NCName },
+    (element http:operation {
+       attribute location { text }
+     }
+     | element soap:operation {
+         attribute soapAction { xsd:NMTOKEN },
+         attribute style { xsd:NCName }
+       }
+     | element soap12:operation {
+         attribute soapAction { xsd:NMTOKEN },
+         attribute style { xsd:NCName }
+       })?,
+    element wsdl:input {
+      attribute message { xsd:NMTOKEN }?,
+      attribute wsaw:Action { xsd:NMTOKEN }?,
+      (mime.content | soap.body | soap12.body)?
+    },
+    element wsdl:output {
+      attribute message { xsd:NMTOKEN }?,
+      attribute wsaw:Action { xsd:NMTOKEN }?,
+      (mime.content | soap.body | soap12.body)?
+    },
+    element wsdl:fault {
+      attribute message { xsd:NMTOKEN }?,
+      attribute name { xsd:NCName },
+      attribute wsaw:Action { xsd:anyURI }?,
+      (element soap:fault {
+         attribute name { xsd:NCName },
+         attribute use { xsd:NCName }
+       }
+       | element soap12:fault {
+           attribute name { xsd:NCName },
+           attribute use { xsd:NCName }
+         })?
+    }?
+  }
+soap12.body =
+  element soap12:body {
+    attribute use { xsd:NCName }
+  }
+soap.body =
+  element soap:body {
+    attribute use { xsd:NCName }
+  }
+mime.content =
+  element mime:content {
+    attribute part { xsd:NCName },
+    attribute type { text }
+  }

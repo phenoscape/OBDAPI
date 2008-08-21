@@ -1,0 +1,300 @@
+## default namespace = "http://www.purl.org/obo/obd/schema/obd-generic"
+
+
+## Can be viewed as alternate serialisation of RDF
+##  Rationale:
+##   - ease of use with XML processors
+##   - directly realisation of RDFS and OWL properties in classes in the XML schema
+##   - ease of use with nested/structured data field
+##     (general rule: annotation properties to non-literals get nested in the xml)
+##   - built-in support for reification, which is required for science
+##     (eg publication X states that gene A has_function B)
+##     can also be used for qualified, contextual links (eg time)
+##   - simpler layering of OWL class-level relations that is more akin
+##     to the OBO relations model, the oboedit model and databases like Chado
+##   - the need to identify and name different graphs
+##     see also: http://www.w3.org/2004/03/trix/Overview.html
+##
+
+start =
+  ## A document typically starts with a Graph within which nodes
+  ## and statements can be embedded. A node or statement can also
+  ## be at the top level.
+  
+  Graph | Node | Nodes | Statement | Statements
+
+Graph =
+   ## A graph is simply a holder for Nodes and Statements.
+   ## Nodes represent instances, types or relations, and the
+   ## edges of the graph are statements concerning these Nodes.
+   ##
+   ## Statement elements can be nested under the Graph element
+   ## or under a Node element. Semantically there is no difference
+   ## between these alternate structures.
+   element Graph {
+
+      Node* &  
+      Statement*
+   }
+
+Nodes =
+   element Nodes {
+      Node*
+   }
+
+Statements =
+   element Statements {
+      Statement*
+   }
+
+Statement = LinkStatement | LiteralStatement | UnaryPropertyStatement
+   ## A statement is some proposition, relation one or more entities via a predicate.
+   ## Examples: John loves Mary, all cell nucleus part_of cell, p53 participates_in DNA_Repair
+   ##
+   ## Within the structure of the document, 
+   ## Statements can be nested beneath the nodes which they relate, or they can be nested 
+   ## underneath the Graph node. These are semantically identical. Clients may request one
+   ## form or another from servers in order to process them more easily.
+   ## For example: if a client requests all statements pertaining to the node for "holoprosencephaly",
+   ## the server may return these statements at the top level. However, all the nodes related to
+   ## holoprosencephaly node in this statement set may have additional metadata attached as LiteralStatements
+   ## at the node level
+   ##
+   ## corresponds to an RDF triple, or in some cases, a bundle of triples
+   ## -- more accurately, corresponds to an OWL axiom, or fact
+
+Statement_Attrs =
+   attribute id {identifier_Type }?&
+
+   ## by default, links are asserted rather than inferred
+   ## example of inferred link: X is_a Z, inferred from X is_a Y, Y is_a Z
+   attribute isInferred {xsd:boolean}?&
+
+   ## most links are between nodes (default)
+   ## a link can also point to another link - in this
+   ## case we say the object is a reified link, in
+   ## accordance with RDF terminology
+   attribute is_object_reified {xsd:boolean}?&
+
+   ## if true, the statement does not hold
+   attribute isNegated {xsd:boolean}?&
+
+   ## true if the node is a class, and the statements is
+   ## true for ALL instances of this class
+   attribute appliesToAllInstancesOf {xsd:boolean}? &
+
+   ## true if this statement is one of a collection of statements for this node
+   ## that, when combined, give necessary and sufficient conditions
+   ## via intersectionOf
+   attribute hasIntersectionSemantics {xsd:boolean}? &
+
+   ## true if this statement is one of a collection of statements for this node
+   ## that, when combined, give necessary and sufficient conditions
+   ## via unionOf
+   attribute hasUnionSemantics {xsd:boolean}? &
+
+   ## EquivalentClass(node,target) - if node is a class and appliesToAllInstancesOf
+   ## EquivalentProperty(node,target) - if node is a relation
+   ## SameAs(node,target) - otherwise
+   attribute hasEquivalenceSemantics {xsd:boolean}? &
+
+   ## applicable to class nodes only: determines how this statement relates instances
+   ## of this class
+   element InstanceQuantifier {
+
+      ## if true, this link is treated as a
+      ## SubClassOf(Restriction(rel,someValuesFrom(target))) axiom
+      attribute isExistential {xsd:boolean}? &
+
+      ## if true, this link is treated as a
+      ## SubClassOf(Restriction(rel,allValuesFrom(target))) axiom
+      attribute isUniversal {xsd:boolean}? &
+
+      ## if set, this link is treated as a
+      ## SubClassOf(Restriction(rel,minCardinality(n,target))) axiom
+      attribute minCardinality {xsd:int}? &
+
+      ## if set, this link is treated as a
+      ## SubClassOf(Restriction(rel,maxCardinality(n,target))) axiom
+      attribute maxCardinality {xsd:int}? 
+   }?
+
+
+Statement_Elts =
+
+   ## subject node, to which this statement applies
+   element node {linkref}?,
+
+   ## predicate node: the relationship type
+   element relation {linkref},
+
+   ## for annotation statements: the annotation node that posits this statement
+   ## partially redundant with sub-statements, below
+   element positedBy {linkref}?,
+
+   ## where the statement comes from
+   element source {linkref}?,
+
+   ## the statement applies when the node is in this context. TODO
+   element context {linkref}?,
+
+   ## sub-statements; can be used to attach properties/metadata to the Statement
+   Statement*
+
+LinkStatement =
+   ## A statement connecting two nodes
+   ## Examples: p53 participates_in DNA_Repair
+   element LinkStatement {
+
+      ## true if the predicate is one of equivalence.
+      ## for class nodes, owl:equivalentClass
+      ## for relation nodes, owl:equivalentProperty
+      attribute isEquivalentTo {xsd:boolean}? &
+
+      # -- inherit generic statement attributes --
+      Statement_Attrs &
+
+      ## link provides an *equivalent class*, or a *class definition*
+      attribute isEquivalent {xsd:boolean}?&
+
+      attribute isXref {xsd:boolean}?&
+
+      ## true if the Node and Target are identical
+      attribute isReflexive {xsd:boolean}?&
+
+      # -- inherit generic statement elements --
+      Statement_Elts &
+
+      ## the target node to which the node is being related to
+      ## Example: p53 participates_in DNA_Repair (DNA_Repair is target)
+      element target {linkref}
+
+   }
+
+LiteralStatement =
+   ## A statement relating a node to some DatatypeProperty
+   ## Examples: comments, descriptions, aliases.
+   ## for LiteralStatemens between an class node and a literal: SubClassOf(Restriction(pred,hasValue(VALUE))
+   ## for LiteralStatemens between an instance node and a literal: fact/triple
+   element LiteralStatement {
+      attribute isAlias {xsd:boolean}? &
+      attribute isTextDefinition {xsd:boolean}? &
+      Statement_Attrs &
+      Statement_Elts &
+      element value {literal}
+   }
+
+UnaryPropertyStatement =
+   ## A zero-argument about a node.
+   ## Example: Transitive(partOf)
+   ## Example: Transitive(partOf)
+   ## combine with isNegated to state that a property does not hold
+   element LiteralStatement {
+      attribute isTransitive {xsd:boolean}? &
+      Statement_Attrs &
+      Statement_Elts 
+   }
+
+linkref = attribute about {identifier_Type},
+   # the node can optionally be embedded
+ Node?
+
+Node =
+   ## equivalent to an RDF resource. can represent instances, relations/slots and universals
+element Node {
+
+   ## A unique identifier for the Node. 
+   attribute id {identifier_Type }&
+
+   ## Change to enum? 
+   attribute metatype { "class" | "relation" | "instance" }?&
+
+   ## corresponds to rdf bNode
+   attribute isAnonymous {xsd:boolean}?&
+
+   ## true if the authority publishing this resource has retired the ID
+   attribute isObsolete {xsd:boolean}?&
+
+   ## relations only. corresponds to owl:TransitiveProperty
+   attribute isTransitive {xsd:boolean}?&
+
+   ## corresponds to rdfs:label
+   element label {literal}?&
+
+   ## if this node is from an ontology, the id of the ontology
+   ## if the node is from a dataset, the id/name of the dataset
+   element source {linkref}?&
+
+   element compositionalDescription {linkref}?&
+
+   ## axiom style - can embed statements
+   Statement*
+}
+
+CompositionalDescription =
+   ## same as a Descriptin in owl :
+   ## aka Logical Definition, cross-product, class expression.
+   ## A recursive construct for composing descriptions of entities using
+   ## logical connectives, classes and relations.
+   ## Note that this is purely a convenience class: a CompositionalDescription is 
+   ## semantically equivalent to a collection of link statements with intersection or union
+   ## semantics
+   ##
+   ## Example:
+   ## The SO class SO:0000634 polycistronic_mRNA is composed from SO:0000234 "mRNA" and
+   ## SO:0000880 "polycistonic".
+   ## This is written in OWL syntax as:
+   ## Intersection( SO:0000234 restriction(has_quality someValuesFrom( SO:0000880 )  ))
+   ## The OBDXML looks like this:
+   ##
+   ## <CompositionalDescription predicate="INTERSECTION">
+   ## <CompositionalDescription predicate="RESTRICTION">
+   ##   <restriction>
+   ##    <LinkStatement appliesToAllInstancesOf="true" hasIntersectionSemantics="true">
+   ##    <node about="SO:0000634"/>
+   ##    <relation about="has_quality"/>
+   ##    <target about="SO:0000880"/>
+   ##    <source about="sequence"/>
+   ##    </LinkStatement>
+   ##  </restriction>
+   ##    <Atom>
+   ## SO:0000880  </Atom>
+   ## </CompositionalDescription>
+   ##  <Atom>
+  ## SO:0000234 </Atom>
+  ## </CompositionalDescription>
+  ## </pre>
+element CompositionalDescription {
+   
+   attribute about {identifier_Type}? &
+   attribute predicate { "INTERSECTION" | "UNION" | "COMPLEMENT" | "RESTRICTION" | "ATOM" } &
+
+   element label {literal}?&
+
+   ## only valid if this is of predicate RESTRICTION; points to a statement that must
+   ## be true of this description
+   element restriction {Statement}?&
+
+   ## arguments
+   ## has zero arguments if this of predicate ATOM
+   CompositionalDescription*
+}
+
+literal =
+   ## Datatype value
+
+   ## Literal value type. Type should be drawn from XSD datatypes
+   ## eg xsd:string, xsd:number
+   attribute datatype {identifier_Type}?,
+
+   ## the literal value
+   ## Example: "abcd"
+   ## Example: 42
+   ## Example: 1.41
+   xsd:string
+
+identifier_Type = xsd:string
+
+label_Type = xsd:string
+
+  

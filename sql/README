@@ -1,0 +1,16 @@
+To build a database with this schema, use ../bin/obd-create.pl
+
+MATERIALIZED VIEWS:
+
+views are non-materialized to being with. To materialize selected views, use "make" to build the mv DDL. Then just pipe that in via psql.
+
+E.g.:
+   psql -a -h localhost -p 9999 obd_phenotype_200805 < obd-core-views-mv.sql >& LOG
+
+May take a while & increase db storage space an order of magnitude.
+
+To return to normal views:
+
+  psql>   SELECT drop_all_matviews();
+  shell>  psql -a -h localhost -p 9999 obd_phenotype_200805 < obd-core-views.sql
+

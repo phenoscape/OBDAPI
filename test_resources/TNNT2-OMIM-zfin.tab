@@ -1,0 +1,37 @@
+Pub	Genotype	Genetic Context ID	Genetic Context Name	Entity ID	Entity Name	Quality ID	Quality Name	Add'l Entity ID	Add'l Entity Name	Abnormal ID	Abnormal Name	Description	Date Created	
+PMID:8205619	OMIM:191045.0001/+	PM:0000003	dominant	FMA:14068	Cardiac muscle tissue	PATO:0000591	increased thickness			PATO:0000460	abnormal	Hypertrophic cardiomyopathy	Mar 18, 2008	
+PMID:8205619	OMIM:191045.0002/+	PM:0000003	dominant	FMA:14068	Cardiac muscle tissue	PATO:0000591	increased thickness			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 18, 2008	
+PMID:7981753	OMIM:191045.0003			FMA:14068	Cardiac muscle tissue	PATO:0000591	increased thickness			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 18, 2008	
+PMID:7898523	OMIM:191045.0004 			FMA:14068	Cardiac muscle tissue	PATO:0000591	increased thickness			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 18, 2008	
+PMID:7898523	OMIM:191045.0005			FMA:14068	Cardiac muscle tissue	PATO:0000591	increased thickness			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 18, 2008	
+PMID:11106718	OMIM:191045.0006			FMA:7088	Heart	PATO:0000586	increased size			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 18, 2008	
+PMID:11106718	OMIM:191045.0006			FMA:7088	Heart	PATO:0001779	decreased strength			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 18, 2008	
+PMID:8205619	OMIM:191045.0001/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	Hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:8205619	OMIM:191045.0002/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	Hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:7981753	OMIM:191045.0003			FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:7898523	OMIM:191045.0004 			FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:7898523	OMIM:191045.0005			FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0006	PM:0000019	penetrance_incomplete	FMA:20394	Body	PATO:0001768	semi-lethal (sensu genetics)			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0006			FMA:7088	Heart	PATO:0001571	dilated			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0007			FMA:7088	Heart	PATO:0000586	increased size			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0007			FMA:7088	Heart	PATO:0001779	decreased strength			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0007			FMA:7088	Heart	PATO:0001571	dilated			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0007			FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:8205619	OMIM:191045.0001/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0000584	hypertrophic			PATO:0000460	abnormal	Hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:8205619	OMIM:191045.0002/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0000584	hypertrophic			PATO:0000460	abnormal	Hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:7981753	OMIM:191045.0003			FMA:7088	Heart	PATO:0000584	hypertrophic			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:7898523	OMIM:191045.0004 			FMA:7088	Heart	PATO:0000584	hypertrophic			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:7898523	OMIM:191045.0005			FMA:7088	Heart	PATO:0000584	hypertrophic			PATO:0000460	abnormal	hypertrophic cardiomyopathy	Mar 21, 2008	
+PMID:11106718	OMIM:191045.0006			FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0008/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0000586	increased size			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0008/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001779	decreased strength			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0008/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001571	dilated			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0008/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0009/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0009/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0000586	increased size			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0009/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001779	decreased strength			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0009/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001571	dilated			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0010/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001571	dilated			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0010/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0000586	increased size			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0010/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001779	decreased strength			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
+PMID:15542288	OMIM:191045.0010/+	PM:0000003	dominant	FMA:7088	Heart	PATO:0001624	decreased functionality			PATO:0000460	abnormal	dilated cardiomyopathy	Mar 21, 2008	
