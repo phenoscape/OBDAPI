@@ -170,7 +170,6 @@ public class CompositionalDescription extends Node implements Comparable {
 		this.sourceGraph = sourceGraph;
 	}
 
-
 	public boolean isAtomic() {
 		return predicate.equals(Predicate.ATOM);
 	}
