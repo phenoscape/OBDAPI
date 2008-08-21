@@ -1,4 +1,4 @@
-package org.obd.ws;
+package org.obd.launcher;
 
 import java.sql.SQLException;
 import java.util.Collection;
