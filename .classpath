@@ -32,6 +32,15 @@
 	<classpathentry kind="lib" path="lib/buildlibs/org.restlet.ext.freemarker_2.3.jar" sourcepath="/Users/cjm/src/restlet-1.0.7/src"/>
 	<classpathentry kind="lib" path="lib/buildlibs/freemarker.jar" sourcepath="/Users/cjm/src/restlet-1.0.7/src"/>
 	<classpathentry kind="lib" path="lib/runlibs/postgresql-8.2-504.jdbc3.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/antlr-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/antlr-runtime-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/bbop.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/obdapi.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/obo.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/oboedit.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/obo-vocab.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/stringtemplate-3.1b1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BBOP"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OBO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/obo-vocab-java"/>
@@ -51,6 +60,5 @@
 	<classpathentry kind="lib" path="lib/buildlibs/arq-extra.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/arq.jar" sourcepath="/jena"/>
 	<classpathentry kind="lib" path="lib/buildlibs/antlr-2.7.5.jar"/>
-	<classpathentry kind="lib" path="runtime/antlr-runtime-3.0.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
