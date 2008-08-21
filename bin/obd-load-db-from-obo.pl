@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-use DBIx::DBStag;
 use strict;
 
 my $conf_file;
