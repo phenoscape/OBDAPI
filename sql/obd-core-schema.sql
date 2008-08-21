@@ -10,7 +10,7 @@ CREATE TABLE obd_schema_metadata (
 );
 INSERT INTO obd_schema_metadata (schema_release,schema_revision,schema_version_date) VALUES ('1.1','$Revision: 153 $','$Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008) $');
 
-CREATE TYPE t_metatype AS ENUM ('C','I','R');
+---CREATE TYPE t_metatype AS ENUM ('C','I','R');
 
 CREATE SEQUENCE node_node_uid_seq;
 CREATE TABLE node (
@@ -46,7 +46,7 @@ CREATE INDEX node_source_indx ON node(source_id);
 CREATE INDEX node_label_indx ON node(label);
 CREATE INDEX node_metatype_transitive_indx ON node(metatype,is_transitive);
 
-CREATE TYPE t_combinator AS ENUM ('','I','U');
+---CREATE TYPE t_combinator AS ENUM ('','I','U');
 
 CREATE TABLE link (
 	link_id SERIAL PRIMARY KEY,
@@ -67,7 +67,7 @@ CREATE TABLE link (
 	applies_to_all BOOLEAN NOT NULL DEFAULT 't',
         object_quantifier_some BOOLEAN NOT NULL DEFAULT 't',
         object_quantifier_only BOOLEAN NOT NULL DEFAULT 'f',
-	combina            tor CHAR(1) NOT NULL DEFAULT '',
+	combinator CHAR(1) NOT NULL DEFAULT '',
 --	combinator t_combinator NOT NULL DEFAULT '',
         source_id INTEGER REFERENCES node(node_id) ON DELETE CASCADE,
         loaded_from_id INTEGER REFERENCES node(node_id) ON DELETE CASCADE,
