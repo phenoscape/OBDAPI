@@ -174,7 +174,7 @@ public abstract class AbstractShard implements Shard {
 		return getStatementsByQuery(new SourceQueryTerm(ns));
 	}
 
-	public Collection<Statement> getStatementsForNode(String id) {
+	public Collection<Statement> getStatementsByNode(String id) {
 		LinkQueryTerm qt = new LinkQueryTerm();
 		qt.setNode(id);
 		return getStatementsByQuery(qt);
@@ -269,7 +269,7 @@ public abstract class AbstractShard implements Shard {
 
 		if (gea == null || gea.equals(GraphExpansionAlgorithm.INCLUDE_SUBGRAPH)) {
 			 Graph sg = getGraphAroundNode(id, entailment, gea);
-			 stmts = Arrays.asList(sg.getStatements());
+			 stmts = sg.getStatements();
 		}
 		else
 			stmts = new LinkedList<Statement>(); // TODO: minimal info?
@@ -278,9 +278,9 @@ public abstract class AbstractShard implements Shard {
 		Collection<Statement> annots = 
 			getAnnotationStatementsForNode(id, entailment, null);
 		Graph g = new Graph(annots);
-		String[] referencedNodeIds = g.getReferencedNodeIds();
+		Collection<String> referencedNodeIds = g.getReferencedNodeIds();
 		Logger.getLogger("org.obd").fine("fetching referenced nodes: "+id+" num="+
-				referencedNodeIds.length);
+				referencedNodeIds.size());
 		for (String nid : referencedNodeIds) {
 			Node n = getNode(nid);
 			g.addNode(n);
@@ -293,9 +293,6 @@ public abstract class AbstractShard implements Shard {
 
 	}
 	
-
-
-
 	public Collection<LinkStatement> getLinkStatementsByQuery(QueryTerm queryTerm) {
 		Collection<LinkStatement> stmts = new LinkedList<LinkStatement>();
 		for (Statement s : getStatementsByQuery(queryTerm))
@@ -697,7 +694,7 @@ public abstract class AbstractShard implements Shard {
 		// cycles should not be possible beyond this point
 		graph.addNode(getNode(seedId));
 		if (relationIds == null && reverseRelationIds == null) {
-			for (Statement s : getStatementsForNode(seedId)) {
+			for (Statement s : getStatementsByNode(seedId)) {
 				graph.addStatement(s);
 				if (s instanceof LinkStatement)
 					simpleClosureOver(graph, s.getTargetId(), relationIds, reverseRelationIds);
@@ -737,7 +734,7 @@ public abstract class AbstractShard implements Shard {
 		if (!countMode) {
 			Set<String> excludeIds = new HashSet<String>();
 			for (String mappedId : mappedIds) {
-				Collection<Statement> stmts = getStatementsForNode(mappedId);
+				Collection<Statement> stmts = getStatementsByNode(mappedId);
 				for (Statement stmt : stmts) {
 					String tid = stmt.getTargetId();
 					if (tid == null)
@@ -1054,7 +1051,7 @@ public abstract class AbstractShard implements Shard {
 	public Collection<Graph> mapGraph(Graph g, QueryTerm mapQt) {
 		Collection<Graph> mappedGraphs = new LinkedList<Graph>();
 		Map<String, String> nodeIdMap = new HashMap<String, String>();
-		String[] nids = g.getReferencedNodeIds();
+		Collection<String> nids = g.getReferencedNodeIds();
 		for (String nid : nids) {
 			// TODO
 		}

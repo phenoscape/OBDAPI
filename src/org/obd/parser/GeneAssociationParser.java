@@ -230,7 +230,7 @@ public class GeneAssociationParser extends TabularInfoParser {
 			String nid = n.getId();
 			termIndex.put(n.getLabel(), nid);
 			//System.out.println("indexing: "+n.getLabel()+" "+nid);
-			for (Statement s : shard.getStatementsForNode(nid)) {
+			for (Statement s : shard.getStatementsByNode(nid)) {
 				if (s instanceof LinkStatement) {
 					LinkStatement ls = (LinkStatement)s;
 					if (ls.isXref()) {

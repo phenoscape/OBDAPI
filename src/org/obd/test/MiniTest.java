@@ -22,8 +22,8 @@ public class MiniTest extends TestCase {
 		Graph g= new Graph();
 		g.addStatement(testStatement());
 		g.addStatement(testStatement());
-		System.out.println("Len="+g.getStatements().length);
-		assertTrue(g.getStatements().length  == 1);
+		System.out.println("Len="+g.getStatements().size());
+		assertTrue(g.getStatements().size()  == 1);
 		HashSet<Statement> set = new HashSet<Statement>();
 		set.add(testStatement());
 		set.add(testStatement());

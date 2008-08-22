@@ -82,7 +82,7 @@ public class OBDJSONBridge {
 	}
 
 	public static JSONObject toJSON(Graph g) {
-		JSONObject jsonObj = toJSON(Arrays.asList(g.getStatements()));
+		JSONObject jsonObj = toJSON(g.getStatements());
 		JSONArray a = new JSONArray();
 		for (Node n : g.getNodes()) {
 			a.put(toJSON(n));		

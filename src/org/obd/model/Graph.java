@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.obd.model.CompositionalDescription.Predicate;
+import org.obd.query.BasicRepository;
 
 /**
  * A collection of nodes and statements
@@ -28,7 +29,7 @@ import org.obd.model.CompositionalDescription.Predicate;
  * @author cjm
  *
  */
-public class Graph implements Serializable {
+public class Graph implements BasicRepository, Serializable {
 
 	protected Map<String,Node> nodeMap = new HashMap<String,Node> ();
 	protected Map<String,Collection<Statement>> statementsByNodeMap = new HashMap<String,Collection<Statement>> ();
@@ -52,8 +53,9 @@ public class Graph implements Serializable {
 		setStatements(statements);
 	}
 
-	public Node[] getNodes() {
-		return  (Node[]) nodeMap.values().toArray(new Node[0]);
+	public Collection<Node> getNodes() {
+		//return  (Node[]) nodeMap.values().toArray(new Node[0]);
+		return nodeMap.values();
 	}
 
 	public Node getNode(String id) {
@@ -71,7 +73,7 @@ public class Graph implements Serializable {
 
 
 
-	public String[] getReferencedNodeIds() {
+	public Collection<String> getReferencedNodeIds() {
 		HashSet<String> nids = new HashSet<String>();
 		for (Statement s : getAllStatements()) {
 			if (s.getNodeId() != null)
@@ -84,25 +86,28 @@ public class Graph implements Serializable {
 			//if (s.getPositedByNodeId() != null)
 			//	nids.add(s.getPositedByNodeId());
 		}
-		return (String[]) nids.toArray(new String[0]);
+		//return (String[]) nids.toArray(new String[0]);
+		return nids;
 	}
 
-	public String[] getSubjectIds() {
+	public Collection<String> getSubjectIds() {
 		HashSet<String> nids = new HashSet<String>();
 		for (Statement s : getAllStatements()) {
 			if (s.getNodeId() != null)
 				nids.add(s.getNodeId());
 		}
-		return (String[]) nids.toArray(new String[0]);
+		//return (String[]) nids.toArray(new String[0]);
+		return nids;
 	}
 
-	public String[] getTargetIds() {
+	public Collection<String> getTargetIds() {
 		HashSet<String> nids = new HashSet<String>();
 		for (Statement s : getAllStatements()) {
 			if (s.getTargetId() != null)
 				nids.add(s.getTargetId());
 		}
-		return (String[]) nids.toArray(new String[0]);
+		//return (String[]) nids.toArray(new String[0]);
+		return nids;
 	}
 
 	public void addNode(Node n) {
@@ -131,49 +136,64 @@ public class Graph implements Serializable {
 	/**
 	 * all statements not nested under nodes
 	 */
-	public Statement[] getStatements() {
-		return (Statement[])statements.toArray(new Statement[0]);
-	}
-	public Collection<Statement> getStatementCollection() {
+	//public Statement[] getStatements() {
+	//	return (Statement[])statements.toArray(new Statement[0]);
+	//}
+	public Collection<Statement> getStatements() {
 		return statements;
 	}
 
 	/**
 	 * all statements not nested under nodes that are LinkStatements
 	 */
-	public LinkStatement[] getLinkStatements() {
+	public Collection<LinkStatement> getLinkStatements() {
 		Collection<LinkStatement> stmts = new LinkedList<LinkStatement>();
 		for (Statement s : statements)
 			if (s instanceof LinkStatement)
 				stmts.add((LinkStatement)s);
-		return (LinkStatement[])stmts.toArray(new LinkStatement[0]);
+		//return (LinkStatement[])stmts.toArray(new LinkStatement[0]);
+		return stmts;
 	}
 
 	/**
 	 * all statements not nested under nodes that are LiteralStatements
 	 */
-	public LiteralStatement[] getLiteralStatements() {
+	public LiteralStatement[] getLiteralStatementsAsArr() {
 		Collection<LiteralStatement> stmts = new LinkedList<LiteralStatement>();
 		for (Statement s : statements)
 			if (s instanceof LiteralStatement)
 				stmts.add((LiteralStatement)s);
 		return (LiteralStatement[])stmts.toArray(new LiteralStatement[0]);
 	}
+	
+	/**
+	 * all statements not nested under nodes that are LiteralStatements
+	 */
+	public Collection<LiteralStatement> getLiteralStatements() {
+		Collection<LiteralStatement> stmts = new LinkedList<LiteralStatement>();
+		for (Statement s : statements)
+			if (s instanceof LiteralStatement)
+				stmts.add((LiteralStatement)s);
+		return stmts;
+	}
 
 	/**
 	 * all statements in the graph, whether or not they are nested under nodes
 	 * or not
 	 */
-	public Statement[] getAllStatements() {
+	public Collection<Statement> getAllStatements() {
 		HashSet<Statement> statements = new HashSet<Statement>();
-		statements.addAll(Arrays.asList(getStatements()));
+		statements.addAll(getStatements());
 		for (Node n : getNodes()) {
 			statements.addAll(Arrays.asList(n.getStatements()));
 		}
-		return (Statement[])statements.toArray(new Statement[0]);
+		return statements;
 	}
 
-	public Statement[] getAllStatementsForNode(String id) {
+	public Collection<Statement> getStatementsByNode(String id) {
+		return getAllStatementsForNode(id);
+	}
+	public Collection<Statement> getAllStatementsForNode(String id) {
 		/*
 		HashSet<Statement> statements = new HashSet<Statement>();
 		// TODO: index?
@@ -191,35 +211,50 @@ public class Graph implements Serializable {
 		if (n != null)
 			for (Statement s : n.getStatements())
 				statements.add(s);
-		return (Statement[])statements.toArray(new Statement[0]);
+		return statements;
 	}
-	public LinkStatement[] getAllLinkStatementsForNode(String id) {
-		HashSet<LinkStatement> statements = new HashSet<LinkStatement>();
+	public Collection<LinkStatement> getAllLinkStatementsForNode(String id) {
+		Collection<LinkStatement> statements = new HashSet<LinkStatement>();
 		for (Statement s : getAllStatementsForNode(id)) {
 			if (s instanceof LinkStatement)
 				statements.add((LinkStatement)s);
 		}
-		return (LinkStatement[])statements.toArray(new LinkStatement[0]);
+		return statements;
+		//return (LinkStatement[])statements.toArray(new LinkStatement[0]);
 		//return LinkStatement.toUniqueArray(statements);
 	}
-	public LinkStatement[] getAllLinkStatementsForTarget(String id) {
-		HashSet<LinkStatement> statements = new HashSet<LinkStatement>();
+	public Collection<Statement> getStatementsForTarget(String id) {
+		Collection<Statement> statements = new HashSet<Statement>();
 		// TODO - index
 		for (Statement s : getAllStatements()) {
 			if (s instanceof LinkStatement && s.getTargetId().equals(id))
 				statements.add((LinkStatement)s);
 		}
-		return (LinkStatement[])statements.toArray(new LinkStatement[0]);
+		return statements;
+		//return (LinkStatement[])statements.toArray(new LinkStatement[0]);
 		//return LinkStatement.toUniqueArray(statements);
 	}
-	public LiteralStatement[] getAllLiteralStatementsForNode(String id) {
-		HashSet<LiteralStatement> statements = new HashSet<LiteralStatement>();
+
+	public Collection<LinkStatement> getAllLinkStatementsForTarget(String id) {
+		Collection<LinkStatement> statements = new HashSet<LinkStatement>();
+		// TODO - index
+		for (Statement s : getAllStatements()) {
+			if (s instanceof LinkStatement && s.getTargetId().equals(id))
+				statements.add((LinkStatement)s);
+		}
+		return statements;
+		//return (LinkStatement[])statements.toArray(new LinkStatement[0]);
+		//return LinkStatement.toUniqueArray(statements);
+	}
+	public Collection<LiteralStatement> getAllLiteralStatementsForNode(String id) {
+		Collection<LiteralStatement> statements = new HashSet<LiteralStatement>();
 		// TODO: index?
 		for (Statement s : getAllStatementsForNode(id)) {
 			if (s instanceof LiteralStatement)
 				statements.add((LiteralStatement)s);
 		}
-		return (LiteralStatement[])statements.toArray(new LiteralStatement[0]);
+		return statements;
+		//return (LiteralStatement[])statements.toArray(new LiteralStatement[0]);
 	}
 
 	private void indexStatement(Statement s) {

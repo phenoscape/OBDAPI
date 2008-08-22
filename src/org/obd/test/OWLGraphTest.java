@@ -24,7 +24,7 @@ public class OWLGraphTest extends AbstractOBDTest {
 	public void testWriteOWL() {
 		
 		//Graph graph = shard.getAnnotationGraphAroundNode("CL:0000148", null, null);
-		Collection<Statement> stmts = shard.getStatementsForNode("CL:0000148");
+		Collection<Statement> stmts = shard.getStatementsByNode("CL:0000148");
 		Graph graph = new Graph(stmts);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 

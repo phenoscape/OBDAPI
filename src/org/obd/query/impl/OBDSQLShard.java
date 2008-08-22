@@ -774,7 +774,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		if (positedById != null) {
 			// TODO: make more efficient, use internal IDs.
 			s.setPositedByNodeId(positedById);
-			Collection<Statement> subStatements = getStatementsForNode(positedById);
+			Collection<Statement> subStatements = getStatementsByNode(positedById);
 			s.setSubStatements(subStatements);
 		}
 

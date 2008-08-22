@@ -126,11 +126,11 @@ public class MultiShard extends AbstractShard implements Shard {
 		return statements;
 	}
 
-	public Collection<Statement> getStatementsForNode(String id) {
+	public Collection<Statement> getStatementsByNode(String id) {
 		HashSet<Statement> statements = new HashSet<Statement>();
 		System.out.println("getting parents for="+id);
 		for (Shard s : shards) 
-			statements.addAll(s.getStatementsForNode(id));
+			statements.addAll(s.getStatementsByNode(id));
 		return statements;
 	}
 

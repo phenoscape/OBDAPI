@@ -178,7 +178,7 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 	
 
 	@Override
-	public Collection<Statement> getStatementsForNode(String id) {
+	public Collection<Statement> getStatementsByNode(String id) {
 		HashSet<Statement> statements = new HashSet<Statement>();
 		LinkedObject obj = (LinkedObject)session.getObject(id);
 		System.out.println("obj="+obj);

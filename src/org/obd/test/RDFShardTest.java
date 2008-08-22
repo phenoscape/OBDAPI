@@ -39,7 +39,7 @@ public class RDFShardTest extends AbstractOBDTest {
 	public void testWriteRDF() {
 
 		//Graph graph = shard.getAnnotationGraphAroundNode("CL:0000148", null, null);
-		Collection<Statement> stmts = shard.getStatementsForNode(NEURON);
+		Collection<Statement> stmts = shard.getStatementsByNode(NEURON);
 		Graph graph = new Graph(stmts);
 		System.out.println("** to:");
 		Collection<Statement> toStmts = shard.getStatementsForTarget(NEURON);
@@ -55,7 +55,7 @@ public class RDFShardTest extends AbstractOBDTest {
 		//executeSparql("SELECT ?x ?y {?x <http://www.w3.org/2000/01/rdf-schema#subClassOf>  ?y}",new String[] {"x","y"});
 		//executeSparql("SELECT ?x ?r ?y {?x <http://www.w3.org/2000/01/rdf-schema#subClassOf>  ?z . ?z <http://www.w3.org/2002/07/owl#onProperty> ?r . ?z <http://www.w3.org/2002/07/owl#someValuesFrom> ?y}",new String[] {"x","r","y"});
 		//executeSparql("SELECT ?x ?r ?y {?x <http://www.w3.org/2000/01/rdf-schema#subClassOf>  ?z . ?z <http://www.w3.org/2002/07/owl#onProperty> ?r . ?z <http://www.w3.org/2002/07/owl#someValuesFrom> ?y}",new String[] {"x","r","y"});
-		Collection<Statement> stmts2 = rdfShard.getStatementsForNode(MELANOCYTE);
+		Collection<Statement> stmts2 = rdfShard.getStatementsByNode(MELANOCYTE);
 		for (Statement s : stmts2) {
 			System.out.println(s);
 		}

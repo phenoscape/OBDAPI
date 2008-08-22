@@ -44,7 +44,7 @@ public class DisplayQueryTest extends QueryTest {
 				System.out.println("    "+s);
 			}	
 		}
-		assertTrue(g.getNodes().length > 0);
+		assertTrue(g.getNodes().size() > 0);
 		return g;
 	}
 	

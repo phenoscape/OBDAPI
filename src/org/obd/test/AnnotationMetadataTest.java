@@ -28,7 +28,7 @@ public class AnnotationMetadataTest extends AbstractOBDTest {
 	public void testFetchAnnotationProvenanceMetadata() {
 		
 		int n=0;
-		for (Statement s : shard.getStatementsForNode("ZFIN:ZDB-GENO-960809-7")) {
+		for (Statement s : shard.getStatementsByNode("ZFIN:ZDB-GENO-960809-7")) {
 			System.out.println(s);
 			for (Statement ss : s.getSubStatements()) {
 				n++;

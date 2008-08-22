@@ -273,7 +273,7 @@ public abstract class Parser {
 		for (Node n : shard.getNodes()) {
 			String nid = n.getId();
 			termIndex.put(n.getLabel(), nid);
-			for (Statement s : shard.getStatementsForNode(nid)) {
+			for (Statement s : shard.getStatementsByNode(nid)) {
 				if (s instanceof LinkStatement) {
 					LinkStatement ls = (LinkStatement)s;
 					if (ls.isXref()) {

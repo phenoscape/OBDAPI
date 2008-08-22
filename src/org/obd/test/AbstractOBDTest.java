@@ -93,7 +93,7 @@ public abstract class AbstractOBDTest extends TestCase {
 	}
 
 	public static void printGraph(Graph g) {
-		System.out.println("Graph num nodes: "+g.getNodes().length);
+		System.out.println("Graph num nodes: "+g.getNodes().size());
 		for (Node n : g.getNodes()) {
 			System.out.println("node="+n);
 			for (Statement s : n.getStatements()) {
@@ -102,7 +102,7 @@ public abstract class AbstractOBDTest extends TestCase {
 		}
 	}
 	public static void printNonEmptyGraph(Graph g) {
-		assertTrue(g.getNodes().length > 0);
+		assertTrue(g.getNodes().size() > 0);
 		printGraph(g);
 	}
 

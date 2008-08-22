@@ -289,7 +289,7 @@ public class CompositionalDescription extends Node implements Comparable {
 	public Collection<Statement> getDescriptionAsStatements() {
 		Graph g = new Graph();
 		g.addStatements(this);		
-		return g.getStatementCollection();
+		return g.getStatements();
 	}
 
 	public String toString() {

@@ -67,7 +67,7 @@ public class OBOSessionWrapTest extends AbstractOBDTest {
 				ok = false;
 		}
 		assertTrue(ok);
-		assertTrue(g.getStatements().length > 0);
+		assertTrue(g.getStatements().size() > 0);
 
 		assertTrue(true);
 	}

@@ -282,7 +282,7 @@ public class PutExternalAnnotationsTest extends AbstractOBDTest {
 		int n=0;
 		for (LinkStatement s : stmts) {
 			System.out.println(s);
-			for (Statement gs : shard.getStatementsForNode(s.getNodeId())) {
+			for (Statement gs : shard.getStatementsByNode(s.getNodeId())) {
 				System.out.println(gs);
 
 			}

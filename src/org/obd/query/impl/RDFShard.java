@@ -371,7 +371,7 @@ public class RDFShard extends AbstractShard implements Shard {
 		return null;
 	}
 
-	public Collection<Statement> getStatementsForNode(String id) {
+	public Collection<Statement> getStatementsByNode(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

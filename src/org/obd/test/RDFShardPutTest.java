@@ -70,7 +70,7 @@ public class RDFShardPutTest extends PutExternalAnnotationsTest {
 		//executeSparql("SELECT ?x ?y {?x <http://www.w3.org/2000/01/rdf-schema#subClassOf>  ?y}",new String[] {"x","y"});
 		//executeSparql("SELECT ?x ?r ?y {?x <http://www.w3.org/2000/01/rdf-schema#subClassOf>  ?z . ?z <http://www.w3.org/2002/07/owl#onProperty> ?r . ?z <http://www.w3.org/2002/07/owl#someValuesFrom> ?y}",new String[] {"x","r","y"});
 		//executeSparql("SELECT ?x ?r ?y {?x <http://www.w3.org/2000/01/rdf-schema#subClassOf>  ?z . ?z <http://www.w3.org/2002/07/owl#onProperty> ?r . ?z <http://www.w3.org/2002/07/owl#someValuesFrom> ?y}",new String[] {"x","r","y"});
-		Collection<Statement> stmts = shard.getStatementsForNode(sox10);
+		Collection<Statement> stmts = shard.getStatementsByNode(sox10);
 		for (Statement s : stmts) {
 			System.out.println(s);
 		}
