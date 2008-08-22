@@ -1,8 +1,7 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 use strict;
-
+use DBI;
 use FileHandle;
-use DBIx::DBStag;
 
 # TODO: replace inferred links when ontology changes (just get rid of inferences with any dependencies on updated ontology?)
 # TODO: keep other properties in inference; eg reiflink??
@@ -65,7 +64,14 @@ if ($dbhost) {
 
 my $time_started = time;
 
-my $dbh = DBIx::DBStag->connect($d);
+my $dbh;
+if ($d =~ /\@/) {
+    require 'DBIx::DBStag';
+    $dbh = DBIx::DBStag->connect($d);
+}
+else {
+    $dbh = DBI->connect("dbi:Pg:dbname=$d");
+}
 
 if ($delete) {
     delete_inferred_links();
