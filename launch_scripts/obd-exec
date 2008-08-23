@@ -1,6 +1,6 @@
 #! /bin/sh
 # Set the classname of the Java class to execute
-CLASSNAME=org.obd.ws.OBDMain
+CLASSNAME=org.obd.launcher.OBDMain
 
 
 # Give a space-separated list of classpath items RELATIVE TO THE CURRENT SCRIPT

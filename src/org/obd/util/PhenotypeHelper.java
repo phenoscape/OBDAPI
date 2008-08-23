@@ -123,7 +123,7 @@ public class PhenotypeHelper  {
 			CompositionalDescription desc = shard.getCompositionalDescription(id, false);
 			if (desc.isAtomic())
 				continue;
-			System.out.println("desc-in="+desc);
+			//System.out.println("desc-in="+desc);
 			Collection<CompositionalDescription> args = desc.getArguments();
 			for (CompositionalDescription arg : args) {
 				if (arg.getRestriction() != null && 
@@ -143,7 +143,7 @@ public class PhenotypeHelper  {
 								Collections.singleton(arg.getRestriction()));
 						String newId = newDesc.generateId();			
 						newDesc.setId(newId);
-						System.out.println("desc-new="+newDesc);
+						//System.out.println("desc-new="+newDesc);
 						shard.putCompositionalDescription(newDesc);
 					}
 				}
