@@ -32,7 +32,7 @@ public class OBDMain {
         Component component = new Component();
         component.getServers().add(Protocol.HTTP, 8182);
         component.getClients().add(Protocol.FILE);
-        String fmt = "homologene";
+        String fmt = null;
         MutableOBOSessionShard oboShard = new MutableOBOSessionShard();
         MutableOBOSessionShard metadataShard = null;
 
@@ -102,6 +102,10 @@ public class OBDMain {
 		for (String file : files) {
 			//System.out.println("Parsing "+file+" fmt: "+fmt);
 			Parser p = Parser.createParser(fmt, file);
+			if (p == null) {
+				System.err.println("could not find a parser for "+file+" fmt:"+fmt);
+				System.exit(1);
+			}
 			p.setDataShard(multiShard);
 			p.setShard(oboShard);
 			p.parse();

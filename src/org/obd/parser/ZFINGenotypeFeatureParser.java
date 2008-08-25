@@ -16,10 +16,15 @@ import org.obd.query.ComparisonQueryTerm.Operator;
  */
 public class ZFINGenotypeFeatureParser extends ZFINTabularParser {
 
-	protected String src = "ZFIN";
-	private String taxId = "NCBITaxon:7955";
+	@Override
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.contains("genotype_features.txt");
+	}
+	@Override
+	public String getDefaultURL() {
+		return "http://zfin.org/data_transfer/Downloads/genotype_features.txt";
+	}
 
-	
 	public ZFINGenotypeFeatureParser() {
 		super();
 	}
@@ -52,7 +57,7 @@ public class ZFINGenotypeFeatureParser extends ZFINTabularParser {
 		}
 
 		// genotype : variant_of gene
-		Node gtNode = addNode(gtId);
+		Node gtNode = addFeatureNode(gtId);
 		gtNode.setLabel(gtLabel);		
 		addAllSomeLink(gtId,relationVocabulary.is_a(),GENOTYPE_ID,src); // genotype
 
@@ -78,7 +83,7 @@ public class ZFINGenotypeFeatureParser extends ZFINTabularParser {
 		}
 
 		// Allele
-		Node alleleNode = addNode(alleleId);
+		Node alleleNode = addFeatureNode(alleleId);
 		alleleNode.setLabel(alleleSym);
 		addAllSomeLink(alleleId,relationVocabulary.is_a(),alleleTypeNodeId,src);
 
@@ -86,7 +91,7 @@ public class ZFINGenotypeFeatureParser extends ZFINTabularParser {
 		if (geneId != null) {
 			addAllSomeLink(alleleId,relationVocabulary.variant_of(),geneId,src);
 
-			Node geneNode = addNode(geneId);
+			Node geneNode = addFeatureNode(geneId);
 			gtNode.setMetatype(Metatype.CLASS);
 			gtNode.setSourceId(src);
 			if (geneLabel != null)
@@ -97,8 +102,8 @@ public class ZFINGenotypeFeatureParser extends ZFINTabularParser {
 		}
 	}
 	
-	public Node addNode(String id) {
-		Node node = super.addNode(id);
+	public Node addFeatureNode(String id) {
+		Node node = super.addFeatureNode(id);
 		node.setMetatype(Metatype.CLASS);
 		node.setSourceId(src);
 		this.addInOrganismLink(id, taxId, src);

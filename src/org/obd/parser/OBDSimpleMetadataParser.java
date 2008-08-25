@@ -27,7 +27,7 @@ public class OBDSimpleMetadataParser extends StanzaInfoParser {
 				System.err.println("no id: "+stanza);
 				continue;
 			}
-			Node srcNode = addNode(id);
+			Node srcNode = addFeatureNode(id);
 			srcNode.setMetatype(Metatype.INSTANCE);
 			srcNode.setSourceId(src);
 			LinkStatement instOfLink = new LinkStatement(id,"OBO_REL:instance_of","oboMetamodel:LogicalResource");
@@ -46,7 +46,7 @@ public class OBDSimpleMetadataParser extends StanzaInfoParser {
 				else {
 					String[] valParts = val.split("\\|");
 					if (valParts.length == 2) {
-						Node ref = addNode(valParts[1]);
+						Node ref = addFeatureNode(valParts[1]);
 						ref.setLabel(valParts[0]);
 						addLink(id, tag, ref.getId(), src);
 					}

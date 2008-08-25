@@ -35,9 +35,6 @@ public class CTDChemGeneInteractionsTSVFileParser extends TabularInfoParser {
 		super(path);
 	}
 
-
-
-
 	public int numCols = 9;
 
 	public void parseColVals(String[] colVals) throws Exception {
@@ -104,6 +101,7 @@ public class CTDChemGeneInteractionsTSVFileParser extends TabularInfoParser {
 		}
 		return nodes;
 	}
+
 
 
 

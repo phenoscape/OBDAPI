@@ -217,6 +217,11 @@ public class Statement extends Node implements Serializable, Cloneable {
 		}
 		return s;
 	}
+	
+	public String getSkolemId() {
+		String s = nodeId+"--"+relationId+"--"+targetId;
+		return s;
+	}
 
 	public static Statement[] toUniqueArray(Collection<Statement> statements) {
 		Set<String> names = new HashSet<String>();

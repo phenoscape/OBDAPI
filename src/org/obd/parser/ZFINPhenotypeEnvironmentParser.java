@@ -14,10 +14,7 @@ import org.obd.query.ComparisonQueryTerm.Operator;
  * @author cjm
  *
  */
-public class ZFINPhenotypeEnvironmentParser extends TabularInfoParser {
-
-	protected String src = "ZFIN";
-	private String taxId = "NCBITax:7955";
+public class ZFINPhenotypeEnvironmentParser extends ZFINTabularParser {
 
 	
 	public ZFINPhenotypeEnvironmentParser() {
@@ -28,6 +25,10 @@ public class ZFINPhenotypeEnvironmentParser extends TabularInfoParser {
 		super(path);
 	}
 	
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.contains("pheno_environment.txt");
+	}
+
 
 	public void parseColVals(String[] colVals) throws Exception {
 		if (colVals.length < 6) {
@@ -65,7 +66,7 @@ public class ZFINPhenotypeEnvironmentParser extends TabularInfoParser {
 	}
 	
 	public Node addEnvNode(String id) {
-		Node node = super.addNode(id);
+		Node node = super.addFeatureNode(id);
 		node.setMetatype(Metatype.INSTANCE);
 		node.setSourceId(src);
 		addAllSomeLink(id, "OBO_REL:in_organism",

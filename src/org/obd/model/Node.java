@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.UUID;
 
 /**
  * Fundamental unit of representation: any entity can be represented using a Node
@@ -48,6 +49,22 @@ public class Node implements Serializable, Comparable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String assignAnonymousId() {
+		id = "_:"+UUID.randomUUID().toString();
+		return id;
+	}
+	
+	public String assignUniqueId(String... args) {
+		StringBuffer sb = new StringBuffer();
+		for (String a : args) {
+			if (sb.length() > 0)
+				sb.append("--");
+			sb.append(a);
+		}
+		id = "_:"+sb.toString();
+		return id; // TODO
 	}
 
 	public String getLabel() {

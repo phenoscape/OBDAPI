@@ -52,7 +52,7 @@ public class ZFINGenotypePhenotypeParser extends ZFINTabularParser {
 		String ab = colVals[12];
 		String pubId = colVals[13];
 
-		Node gtNode = addNode(gtId);
+		Node gtNode = addFeatureNode(gtId);
 		gtNode.setLabel(gtLabel);		
 		// we should have this
 		//addLink(gtId,"OBO_REL:is_a",GENOTYPE_ID,src); // genotype
@@ -116,8 +116,8 @@ public class ZFINGenotypePhenotypeParser extends ZFINTabularParser {
 		
 	}
 	
-	public Node addNode(String id) {
-		Node node = super.addNode(id);
+	public Node addFeatureNode(String id) {
+		Node node = super.addFeatureNode(id);
 		node.setMetatype(Metatype.CLASS);
 		node.setSourceId(src);
 		addInOrganismLink(id, taxId, src);	

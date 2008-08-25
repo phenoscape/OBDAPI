@@ -37,6 +37,15 @@ public class MGIGenotypePhenotypeParser extends TabularInfoParser {
 	public MGIGenotypePhenotypeParser(String path) {
 		super(path);
 	}
+	
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.endsWith("MGI_PhenoGenoMP.rpt");
+	}
+	@Override
+	public String getDefaultURL() {
+		return "ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenoGenoMP.rpt";
+	}
+
 
 	// TODO - read existing IDs from database
 	public String createId(String label) {
@@ -82,7 +91,7 @@ public class MGIGenotypePhenotypeParser extends TabularInfoParser {
 		String gtId = createId(gtLabel);
 
 
-		Node gtNode = addNode(gtId);
+		Node gtNode = addFeatureNode(gtId);
 		gtNode.setLabel(gtLabel);		
 
 		if (mpId != null) {
@@ -125,8 +134,8 @@ public class MGIGenotypePhenotypeParser extends TabularInfoParser {
 
 	}
 
-	public Node addNode(String id) {
-		Node node = super.addNode(id);
+	public Node addFeatureNode(String id) {
+		Node node = super.addFeatureNode(id);
 		node.setMetatype(Metatype.CLASS);
 		node.setSourceId(src);
 		addInOrganismLink(id, taxId, src);	

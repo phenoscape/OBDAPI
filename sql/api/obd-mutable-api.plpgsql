@@ -564,3 +564,19 @@ $$
 SELECT store_tagval($1,$2,$3,$4,NULL) 
 $$
 LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION migrate_links_to_alt_id(VARCHAR) RETURNS INT AS
+$$
+DECLARE
+  v_idspace             ALIAS FOR $1;
+  v_alias_pred_id       INTEGER;
+  v_alias_link          link%ROWTYPE;
+ BEGIN
+  SELECT INTO v_alias_pred_id node_id FROM node WHERE uid='oboInOwl:hasDbXref';
+  FOR v_alias_link IN SELECT * FROM node_link_node WHERE predicate_id = v_alias_pred_id AND node_uid LIKE v_idspace + '%' AND object_uid LIKE v_idspace + '%' LOOP
+    
+  END LOOP;
+  RETURN 1;
+ END;
+$$
+LANGUAGE 'plpgsql';

@@ -22,6 +22,17 @@ public class NCBIGeneParser extends TabularInfoParser {
 	public NCBIGeneParser(String path) {
 		super(path);
 	}
+	
+	@Override
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.endsWith(".gene_info");
+	}
+	@Override
+	public String getDefaultURL() {
+		return "ftp://ftp.ncbi.nih.gov/gene/DATA/gene_info.gz";
+	}
+
+
 
 	public void parseColVals(String[] colVals) {
 		String taxId = ncbitaxId(colVals[0]);
@@ -32,7 +43,7 @@ public class NCBIGeneParser extends TabularInfoParser {
 		String chrom = colVals[6];
 		String mapLoc = colVals[7];
 		String desc = colVals[8];
-		Node node = addNode(id);
+		Node node = addFeatureNode(id);
 		node.setSourceId(src);
 		addIsAGeneLink(id, src);
 		addInOrganismLink(id, taxId, src);	

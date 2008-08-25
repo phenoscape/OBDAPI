@@ -16,9 +16,6 @@ import org.obd.query.ComparisonQueryTerm.Operator;
  */
 public class ZFINGeneMorpholinoParser extends ZFINTabularParser {
 
-	protected String src = "ZFIN";
-	private String taxId = "NCBITax:7955";
-
 	
 	public ZFINGeneMorpholinoParser() {
 		super();
@@ -43,7 +40,7 @@ public class ZFINGeneMorpholinoParser extends ZFINTabularParser {
 
 		
 
-		Node mNode = addNode(morphId);
+		Node mNode = addFeatureNode(morphId);
 		mNode.setLabel(morphLabel);		
 		addAllSomeLink(morphId,relationVocabulary.is_a(),"SO:0000034",src); // morpholino_oligo
 
@@ -56,8 +53,8 @@ public class ZFINGeneMorpholinoParser extends ZFINTabularParser {
 	
 	}
 	
-	public Node addNode(String id) {
-		Node node = super.addNode(id);
+	public Node addFeatureNode(String id) {
+		Node node = super.addFeatureNode(id);
 		node.setMetatype(Metatype.CLASS);
 		node.setSourceId(src);
 		addAllSomeLink(id, IN_ORGANISM,

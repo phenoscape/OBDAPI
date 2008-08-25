@@ -19,6 +19,11 @@ public class OBOFormatParser extends Parser {
 	public OBOFormatParser() {
 		super();
 	}
+	
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.endsWith(".obo");
+	}
+
 
 	public void parse() throws Exception {
 		MutableOBOSessionShard moss = new MutableOBOSessionShard();

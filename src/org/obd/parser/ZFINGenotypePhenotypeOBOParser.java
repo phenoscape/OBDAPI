@@ -17,8 +17,6 @@ import org.obd.model.Node.Metatype;
  */
 public class ZFINGenotypePhenotypeOBOParser extends ZFINTabularParser {
 
-	protected String src = "ZFIN";
-	private String taxId = "NCBITax:7955";
 	protected String defaultURL = 
 		"http://zfin.org/data_transfer/Downloads/pheno_obo.txt";
 
@@ -29,6 +27,10 @@ public class ZFINGenotypePhenotypeOBOParser extends ZFINTabularParser {
 
 	public ZFINGenotypePhenotypeOBOParser(String path) {
 		super(path);
+	}
+
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.contains("pheno_obo.txt");
 	}
 
 
@@ -50,7 +52,7 @@ public class ZFINGenotypePhenotypeOBOParser extends ZFINTabularParser {
 		String pubId = colVals[8];
 		String environmentId = createId(colVals[9]);
 
-		Node gtNode = addNode(gtId);
+		Node gtNode = addFeatureNode(gtId);
 		gtNode.setLabel(gtLabel);		
 
 		HashSet<LinkStatement> diffs = new HashSet<LinkStatement>();
@@ -140,8 +142,8 @@ public class ZFINGenotypePhenotypeOBOParser extends ZFINTabularParser {
 
 	}
 
-	public Node addNode(String id) {
-		Node node = super.addNode(id);
+	public Node addFeatureNode(String id) {
+		Node node = super.addFeatureNode(id);
 		node.setMetatype(Metatype.CLASS);
 		node.setSourceId(src);
 		addInOrganismLink(id, taxId, src);	

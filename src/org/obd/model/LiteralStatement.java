@@ -125,6 +125,12 @@ public class LiteralStatement extends Statement {
 		return s;
 	}
 	
+	public String getSkolemId() {
+		String s = nodeId+"--"+relationId+"--"+getValue();
+		return s;
+	}
+
+	
 	
 
 }

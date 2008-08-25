@@ -35,7 +35,7 @@ public class HPRDInteractionParser extends TabularInfoParser {
 		Statement s2 = addLink(proteinB, rel, proteinA, src);
 		for (String pmid : pmids.split(",")) {
 			pmid = pubmedId(pmid);
-			Node pub = this.addNode(pmid);
+			Node pub = this.addFeatureNode(pmid);
 			LinkStatement pubLink = new LinkStatement();
 			pubLink.setRelationId("oban:has_data_source");
 			pubLink.setTargetId(pmid);

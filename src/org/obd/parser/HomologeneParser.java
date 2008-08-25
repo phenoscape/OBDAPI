@@ -21,6 +21,17 @@ public class HomologeneParser extends TabularInfoParser {
 	public HomologeneParser(String path) {
 		super(path);
 	}
+	
+	@Override
+	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
+		return fileName.contains("homologene");
+	}
+	@Override
+	public String getDefaultURL() {
+		return "ftp://ftp.ncbi.nih.gov/pub/HomoloGene/current/homologene.data";
+	}
+
+
 
 	/* (non-Javadoc)
 	 * 
