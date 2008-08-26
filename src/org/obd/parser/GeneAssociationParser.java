@@ -112,7 +112,7 @@ public class GeneAssociationParser extends TabularInfoParser {
 
 	protected void parseReferenceField(Statement ann, String refField) {
 		for(String s : refField.split("\\|")) {
-			addSubStatement(ann,"oban:has_data_source", s);
+			addSubStatement(ann,annotationVocabulary.HAS_PROVENANCE(), s);
 		}
 	}
 
@@ -120,11 +120,11 @@ public class GeneAssociationParser extends TabularInfoParser {
 	protected void parseDateField(Statement ann, String dateField) {
 		if (dateField.equals(""))
 			return;
-		addSubStatementLiteral(ann,"oban:date", "xsd:string", dateField);
+		addSubStatementLiteral(ann,annotationVocabulary.HAS_DATE(), "xsd:string", dateField);
 	}
 
 	protected void parseAssignedByField(Statement ann, String abField) {
-		addSubStatement(ann,"oban:assigned_by", abField);
+		addSubStatement(ann,annotationVocabulary.ASSIGNED_BY(), abField);
 	}
 	protected void parseEvidence(Statement ann, String evCode, String withExpr, String refVal, String src) {
 		Node evInst = new Node();
@@ -134,11 +134,11 @@ public class GeneAssociationParser extends TabularInfoParser {
 		String evId;
 		evId = evInst.assignUniqueId(ann.getSkolemId(),refVal);
 		//evId = evInst.assignAnonymousId(); // TODO - use a skolem instead
-		addSubStatement(ann,"oban:has_evidence",evId);
+		addSubStatement(ann,annotationVocabulary.HAS_EVIDENCE(),evId);
 
 		String[] withVals = withExpr.split("\\|");
 		for (String s: withVals) {
-			addLink(evId,"oban:with",s,src);
+			addLink(evId,annotationVocabulary.WITH(),s,src);
 			//this.addNode(evInst);
 		}
 

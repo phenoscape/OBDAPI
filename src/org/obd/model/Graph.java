@@ -298,7 +298,17 @@ public class Graph implements BasicRepository, Serializable {
 		indexStatements(Arrays.asList(statements));
 
 	}
+	
+	public void addLiteralStatement(String nid, String relId, Object val) {
+		addStatement(new LiteralStatement(nid,relId,val));
+	}
+	public void addLiteralStatement(Node n, String relId, Object val) {
+		addStatement(new LiteralStatement(n.getId(),relId,val));
+	}
 
+	public void addLinkStatement(Node n, String relId, String tid) {
+		addStatement(new LinkStatement(n.getId(),relId,tid));
+	}
 
 	/**
 	 * removes a statement (must be nested under the graph)
@@ -546,4 +556,6 @@ public class Graph implements BasicRepository, Serializable {
 			}
 		}
 	}
+
+
 }

@@ -58,6 +58,12 @@ public class LiteralStatement extends Statement {
 		this.value = value;
 	}
 	
+	public LiteralStatement(String nid, String relId, Object val) {
+		super(nid);
+		setRelationId(relId);
+		this.datatype = null;
+		this.value = val;
+	}
 	public String getDatatype() {
 		return datatype;
 	}

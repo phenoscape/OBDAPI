@@ -19,6 +19,7 @@ import org.obd.model.LiteralStatement;
 import org.obd.model.Node;
 import org.obd.model.NodeAlias;
 import org.obd.model.Statement;
+import org.obd.model.vocabulary.AnnotationVocabulary;
 import org.obd.model.vocabulary.TermVocabulary;
 import org.obd.query.Shard;
 import org.obd.query.ComparisonQueryTerm.Operator;
@@ -44,6 +45,7 @@ public abstract class Parser {
 	protected Logger logger = Logger.getLogger("org.obd.parser");
 	protected TermVocabulary termVocabulary = new TermVocabulary();
 	protected RelationVocabulary relationVocabulary = new RelationVocabulary();
+	protected AnnotationVocabulary annotationVocabulary = new AnnotationVocabulary();
 	protected String IN_ORGANISM = "OBO_REL:in_organism";
 	protected String GENOTYPE_ID = "SO:0001027";
 	protected String GENE_ID = "SO:0000704";
