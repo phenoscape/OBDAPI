@@ -1041,6 +1041,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			outerq.setNode(qt);
 			return translateQueryForLinkStatement(outerq, targetLinkAlias);
 		}
+		
 		String linkTableAlias = translateQuery(qt, rq, null);
 		SelectClause selectClause = rq.getSelectClause();
 		selectClause.setDistinct(true);
@@ -1051,7 +1052,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		// link.
 		// we can join using an extra node table alias;
 		// however, the appropriate table may already have been joined.
-
+		
 		String subjectJoinCol = tblCol(linkTableAlias, NODE_INTERNAL_ID_COLUMN);
 		String subjectNodeTable = rq.getTableAliasReferencedInJoin(
 				subjectJoinCol, NODE_TABLE);
@@ -1069,7 +1070,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 					NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
 
 		}
-
 		String relationJoinCol = tblCol(linkTableAlias, LINK_RELATION_INTERNAL_ID_COLUMN);
 		String relationNodeTable = rq.getTableAliasReferencedInJoin(
 				relationJoinCol, NODE_TABLE);
@@ -1087,7 +1087,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 					NODE_EXPOSED_ID_COLUMN), LINK_RELATION_EXPOSED_ID_COLUMN);
 
 		}
-
+		
 		if (targetLinkAlias == null) {
 			targetLinkAlias = linkTableAlias;
 		}
@@ -1443,7 +1443,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			 */
 			// returns the name of the link table alias used in this query
 			if (qt.getIsAnnotation() != null) {
-				String isNullConstr = qt.getIsAnnotation() ? "IS NOT NULL"
+				String isNullConstr = qt.getIsAnnotation() ? " IS NOT NULL"
 						: "IS NULL";
 				wc.addConstraint(tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN)
 						+ isNullConstr);
