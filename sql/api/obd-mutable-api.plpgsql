@@ -565,16 +565,20 @@ SELECT store_tagval($1,$2,$3,$4,NULL)
 $$
 LANGUAGE 'sql';
 
+-- Example: select migrate_links_to_alt_id('quality');
 CREATE OR REPLACE FUNCTION migrate_links_to_alt_id(VARCHAR) RETURNS INT AS
 $$
 DECLARE
   v_idspace             ALIAS FOR $1;
   v_alias_pred_id       INTEGER;
+  v_source_id       INTEGER;
   v_alias_link          link%ROWTYPE;
  BEGIN
   SELECT INTO v_alias_pred_id node_id FROM node WHERE uid='oboInOwl:hasDbXref';
-  FOR v_alias_link IN SELECT * FROM node_link_node WHERE predicate_id = v_alias_pred_id AND node_uid LIKE v_idspace + '%' AND object_uid LIKE v_idspace + '%' LOOP
-    
+  SELECT INTO v_source_id node_id FROM node WHERE uid=v_idspace;
+  FOR v_alias_link IN SELECT * FROM link WHERE predicate_id = v_alias_pred_id AND node_id IN (SELECT node_id FROM node WHERE source_id=v_source_id) LOOP
+    RAISE NOTICE 'old link: %', v_alias_link;
+    UPDATE link SET object_id = v_alias_link.node_id WHERE object_id=v_alias_link.object_id AND predicate_id != v_alias_pred_id;
   END LOOP;
   RETURN 1;
  END;

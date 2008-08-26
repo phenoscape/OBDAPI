@@ -205,7 +205,7 @@ public class GeneticAssociationDatabaseTextFileParser extends TabularInfoParser 
 			try {
 				BooleanQueryTerm qt = new BooleanQueryTerm(BooleanOperator.AND,
 						new LabelQueryTerm(AliasType.ANY_LABEL,label),
-						new LinkQueryTerm("NCBITaxon:9606"));
+						new LinkQueryTerm(ncbitaxId("9606")));
 				nodes = dataShard.getNodesByQuery(qt);
 				label2node.put(label, nodes);
 			} catch (Exception e) {

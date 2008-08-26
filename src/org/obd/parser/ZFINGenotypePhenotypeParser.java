@@ -18,7 +18,7 @@ import org.obd.model.Node.Metatype;
 public class ZFINGenotypePhenotypeParser extends ZFINTabularParser {
 
 	protected String src = "ZFIN";
-	private String taxId = "NCBITax:7955";
+	private String taxId = ncbitaxId("7955");
 	
 	protected String defaultURL = 
 		"http://zfin.org/data_transfer/Downloads/phenotype.txt";

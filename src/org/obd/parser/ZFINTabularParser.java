@@ -17,8 +17,7 @@ import org.obd.query.ComparisonQueryTerm.Operator;
 public abstract class ZFINTabularParser extends TabularInfoParser {
 
 	protected String src = "ZFIN";
-	protected String taxId = "NCBITaxon:7955";
-
+	protected String taxId = ncbitaxId("7955");
 	
 	public ZFINTabularParser() {
 		super();

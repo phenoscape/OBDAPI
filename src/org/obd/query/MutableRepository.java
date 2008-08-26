@@ -38,6 +38,9 @@ public interface MutableRepository {
 
 
 	/**
+	 * Merges links to two identifiers.
+	 * It is common that there may be two IDs for the same entity, typically across ID spaces. This method merges links from
+	 * one of those ID spaces into the other.
 	 * @param fromIdSpace -- e.g. NCBI_Gene
 	 * @param toIdSpace -- e.g. ZFIN
 	 * @throws ShardExecutionException

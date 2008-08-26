@@ -84,6 +84,11 @@ public class OBDMain {
 				i++;
 				multiShard.removeSource(args[i]);
 			}
+			else if (args[i].equals("--mergeIdSpaces")) {
+				i++;
+				multiShard.mergeIdentifierByIDSpaces(args[i], args[i+1]);
+				i++;
+			}
 			else if (args[i].equals("--removeIdPrefix")) {
 				i++;
 				Collection<Node> delNodes = multiShard.getNodesBySearch(args[i], ComparisonQueryTerm.Operator.STARTS_WITH, null, AliasType.ID);

@@ -403,6 +403,14 @@ public class MultiShard extends AbstractShard implements Shard {
 			s.removeSource(srcId);
 		}
 	}
+	
+	public void mergeIdentifierByIDSpaces(String fromIdSpace, String toIdSpace) throws ShardExecutionException {
+		for (Shard s : this.shards){
+			s.mergeIdentifierByIDSpaces(fromIdSpace, toIdSpace);
+		}
+		
+	}
+
 
 	public void putNode(Node n) {
 		getWriteShard().putNode(n);	
