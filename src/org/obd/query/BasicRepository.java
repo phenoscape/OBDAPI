@@ -42,6 +42,11 @@ public interface BasicRepository {
 	 * @return
 	 */
 	public Collection<Statement> getStatementsForTarget(String targetId);
+	
+	/**
+	 * @return
+	 */
+	public Collection<Statement> getStatements();
 
 
 	

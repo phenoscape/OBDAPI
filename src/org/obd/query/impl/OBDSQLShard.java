@@ -60,7 +60,7 @@ import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.QueryTerm.Aspect;
 import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.Shard.GraphTranslation;
 import org.obd.query.exception.ShardExecutionException;
 import org.obo.dataadapter.OBDSQLDatabaseAdapter;
 import org.obo.dataadapter.OBDSQLDatabaseAdapter.OBDSQLDatabaseAdapterConfiguration;
@@ -150,12 +150,12 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	}
 
 	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids,
-			EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+			EntailmentUse entailment, GraphTranslation gea) {
 		return getNodesBelowNodeSet(ids, entailment, gea, "link_to_node");
 	}
 
 	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids,
-			EntailmentUse entailment, GraphExpansionAlgorithm gea,
+			EntailmentUse entailment, GraphTranslation gea,
 			String linkTable) {
 		RelationalQuery q = new SqlQueryImpl();
 		WhereClause whereClause = new SqlWhereClauseImpl();
@@ -312,7 +312,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,
-			GraphExpansionAlgorithm gea) {
+			GraphTranslation gea) {
 		return getNodesBelowNodeSet(ids, entailment, gea,
 		"implied_annotation_link_to_node");
 	}

@@ -12,7 +12,7 @@ import org.obd.model.stats.AggregateStatisticCollection;
 import org.obd.model.stats.ScoredNode;
 import org.obd.model.stats.SimilarityPair;
 import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.Shard.GraphTranslation;
 
 public interface AnalysisCapableRepository {
 

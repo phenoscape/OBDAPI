@@ -148,7 +148,7 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 	}
 	
 	
-	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return new HashSet<Node>();
 	}
@@ -277,7 +277,7 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 	
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids,
 			EntailmentUse entailment,
-			GraphExpansionAlgorithm gea){
+			GraphTranslation gea){
 		return new LinkedList<Node>(); // TODO
 	}
 
@@ -287,7 +287,7 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 	}
 
 	@Override
-	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphTranslation gea) {
 		Graph g = new Graph();
 		LinkFilter filter = (LinkFilter)OBOBridge.query2filter(queryTerm);
 		for (IdentifiedObject io : session.getObjects()) {

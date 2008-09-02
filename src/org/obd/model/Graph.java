@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.obd.model.CompositionalDescription.Predicate;
+import org.obd.model.Statement.StatementFilter;
 import org.obd.query.BasicRepository;
 
 /**
@@ -62,14 +63,6 @@ public class Graph implements BasicRepository, Serializable {
 		return nodeMap.containsKey(id) ? nodeMap.get(id) : null;
 	}
 
-	public Node removeNode(String id) {
-		Node n = null;
-		if (nodeMap.containsKey(id)) {
-			n = nodeMap.get(id);
-			nodeMap.remove(id);
-		}
-		return n;
-	}
 
 
 
@@ -310,6 +303,15 @@ public class Graph implements BasicRepository, Serializable {
 		addStatement(new LinkStatement(n.getId(),relId,tid));
 	}
 
+	public Node removeNode(String id) {
+		Node n = null;
+		if (nodeMap.containsKey(id)) {
+			n = nodeMap.get(id);
+			nodeMap.remove(id);
+		}
+		return n;
+	}
+
 	/**
 	 * removes a statement (must be nested under the graph)
 	 * statements nested under nodes are hidden
@@ -324,6 +326,25 @@ public class Graph implements BasicRepository, Serializable {
 		return s;
 	}
 
+	public void removeStatements(StatementFilter sf) {
+		Collection<Statement> togo = new HashSet<Statement>();
+		for (Statement s : statements) {
+			if (sf.exclude(s))
+				togo.add(s);
+		}
+		statements.removeAll(togo);
+	}
+	
+	public void removeSingletons() {
+		for (Node n : getNodes()) {
+			String nid = n.getId();
+			// TODO: annotations
+			if (this.getStatementsByNode(nid).size() == 0 && this.getStatementsForTarget(nid).size()== 0) {
+				this.removeNode(nid);
+			}
+		}
+	}
+	
 	/**
 	 * statements nested under nodes are hidden
 	 * @param s

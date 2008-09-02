@@ -1,3 +1,5 @@
+SELECT drop_all_matviews()
+
 -- CREATE SCHEMA obd_core_view;
 -- SET search_path TO obd_core_view,public;
 
@@ -17,7 +19,13 @@ CREATE OR REPLACE VIEW relation_node AS SELECT * FROM node WHERE metatype='R';
 COMMENT ON VIEW relation_node IS 'A graph node representing a Relation. Examples: OBO_REL:part_of';
 
 CREATE OR REPLACE VIEW transitive_relation_node AS SELECT * FROM node WHERE metatype='R' AND is_transitive='t';
-COMMENT ON VIEW transitive_relation_node IS 'A relation node that is transitive. Examples: part_of. Counter-examples: has_participant';
+COMMENT ON VIEW transitive_relation_node IS 'A relation node that is transitive. Examples: part_of, is_a. Counter-examples: has_participant';
+
+-- BEGIN MATERIALIZE
+SELECT create_matview('transitive_relation_node');
+CREATE INDEX transitive_relation_node_idx_node ON transitive_relation_node(node_id);
+CREATE INDEX transitive_relation_node_idx_node_uid ON transitive_relation_node(node_id,uid);
+-- END MATERIALIZE
 
 CREATE OR REPLACE VIEW instance_node AS SELECT * FROM node WHERE metatype='I';
 COMMENT ON VIEW instance_node IS 'A graph node representing a Instance. Examples: an instance of an Annotation; an instance of a Person';
@@ -156,6 +164,23 @@ CREATE INDEX is_a_link_idx_object ON is_a_link(object_id);
 CREATE INDEX is_a_link_idx_node_object ON is_a_link(node_id,object_id);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW subrelation_link AS
+ SELECT link.*
+ FROM link INNER JOIN is_a_relation ON (link.predicate_id=is_a_relation.node_id)
+  WHERE EXISTS (SELECT node.node_id FROM node WHERE node.metatype='R' AND node.node_id=link.node_id)
+   AND link.node_id != link.object_id
+   AND link.object_id NOT IN (SELECT node_id FROM node WHERE uid='OBO_REL:relationship');
+
+COMMENT ON VIEW subrelation_link IS 'A subrelation-link between two relation nodes. Example regional_part_of and part_of. Includes inferred sub-relations but not reflexive ones';
+
+-- BEGIN MATERIALIZE
+SELECT create_matview('subrelation_link');
+CREATE INDEX subrelation_link_idx_node ON subrelation_link(node_id);
+CREATE INDEX subrelation_link_idx_object ON subrelation_link(object_id);
+CREATE INDEX subrelation_link_idx_node_object ON subrelation_link(node_id,object_id);
+-- END MATERIALIZE
+
+
 
 CREATE OR REPLACE VIEW is_a_basic_link AS
  SELECT link.*
@@ -191,7 +216,7 @@ COMMENT ON VIEW non_is_a_basic_link IS 'A link of type that is not "is_a", and n
 CREATE OR REPLACE VIEW non_is_a_basic_class_link AS
  SELECT link.*
  FROM non_is_a_basic_link AS link
-  INNER JOIN node ON (link.node_id=node.node_id))
+  INNER JOIN node ON (link.node_id=node.node_id)
   INNER JOIN node AS o ON (link.object_id=o.node_id)
  WHERE node.metatype='C' AND o.metatype='C';
 
@@ -211,12 +236,13 @@ CREATE OR REPLACE VIEW axis_pair_link AS
  FROM
   is_a_link AS i
   INNER JOIN non_is_a_link AS x USING (node_id);
--- BEGIN MATERIALIZE
-SELECT create_matview('axis_pair_link');
-CREATE INDEX axis_pair_link_idx_node_id ON axis_pair_link(node_id);
-CREATE INDEX axis_pair_link_idx_node_object_id ON axis_pair_link(node_id,object_id);
-CREATE INDEX axis_pair_link_idx_node_isa_object_id ON axis_pair_link(node_id,is_a_node_id,object_id);
--- END MATERIALIZE
+
+-- **
+-- SELECT create_matview('axis_pair_link');
+-- CREATE INDEX axis_pair_link_idx_node_id ON axis_pair_link(node_id);
+-- CREATE INDEX axis_pair_link_idx_node_object_id ON axis_pair_link(node_id,object_id);
+-- CREATE INDEX axis_pair_link_idx_node_isa_object_id ON axis_pair_link(node_id,is_a_node_id,object_id);
+-- **
 
 -- todo: generalise to any irreflexive relation
 CREATE OR REPLACE VIEW implied_equivalent_class_link AS 
@@ -298,7 +324,6 @@ COMMENT ON VIEW differentium_link_to_label IS 'A differentium_link
 with a human-readable label for the link; substitutes the ID of the
 predicate and the ID of the object/relatum with their labels. Example:
 "part_of nucleus"';
-
 
 
 -- ************************************************************
@@ -464,9 +489,57 @@ COMMENT ON VIEW graph_root_id_by_relation IS 'A node that has no links
 from it of a certain edge relation type. NOTE: **this view is
 currently too slow** materialize??';
 
+CREATE OR REPLACE VIEW asserted_ancestor_link AS
+ SELECT
+  inf_link.node_id AS query_node_id,
+  inf_link.predicate_id AS query_predicate_id,
+  asserted_link.*
+ FROM
+  link AS inf_link
+  INNER JOIN link AS asserted_link ON (inf_link.object_id=asserted_link.node_id)
+ WHERE
+  asserted_link.is_inferred='f';
+
+-- Example: select node_label(node_id) AS node_label,node_uid(predicate_id) AS rel,node_label(object_id) AS obj_label from asserted_ancestor_link where query_node_id = 11695 and predicate_id=7159
+
+COMMENT ON VIEW asserted_ancestor_link IS 'An asserted link that can
+be reached via closure from query_node_id. Can also be restricted such
+that predicate_id is predicate of interest (R). In this case
+query_predicate_id should equal is_a OR R - there should always be a
+reflexive is_a relation realized for every node';
+
+
+CREATE OR REPLACE VIEW asserted_ancestor_link_plus AS
+ SELECT
+  aal.*,
+  ll.predicate_id AS ext_predicate_id,
+  ll.object_id AS ext_object_id
+ FROM
+  asserted_ancestor_link AS aal
+  INNER JOIN link AS ll ON (aal.object_id=ll.node_id);
+
+CREATE OR REPLACE VIEW asserted_ancestor_link_minus AS
+ SELECT
+  aal.*,
+  ll.predicate_id AS ext_predicate_id,
+  ll.object_id AS ext_node_id
+ FROM
+  asserted_ancestor_link AS aal
+  INNER JOIN is_a_link AS ll ON (aal.object_id=ll.object_id);
+
+-- non-redundant version. slow!
+CREATE OR REPLACE VIEW asserted_ancestor_link_nr AS
+ SELECT
+  aal.*
+ FROM
+  asserted_ancestor_link_minus AS aal
+  LEFT JOIN link AS rl ON (rl.node_id=aal.node_id AND rl.predicate_id=aal.predicate_id AND rl.object_id=aal.ext_node_id AND rl.object_id!=aal.object_id)
+ WHERE rl.link_id IS NULL;
+  
+
 
 -- ************************************************************
--- JOINS
+-- Joins
 -- ************************************************************
 -- CREATE SCHEMA obd_prejoins_view;
 -- SET search_path TO obd_prejoins_view,obd_core_view,public;
@@ -670,7 +743,7 @@ CREATE OR REPLACE VIEW tagval_d AS
 CREATE OR REPLACE VIEW node_subset_d AS
  SELECT *
  FROM node_link_node_with_pred
- WHERE pred_uid='oboMetaModel:inSubset';
+ WHERE pred_uid='oboInOwl:inSubset';
 
 
 -- ************************************************************
@@ -687,7 +760,7 @@ CREATE OR REPLACE VIEW in_subset_link AS
  FROM
   link_with_pred AS link
  WHERE
-  pred_uid='oboMetaModel:inSubset'
+  pred_uid='oboInOwl:inSubset'
   AND is_inferred='f'; -- should not be necessary
 
 COMMENT ON VIEW in_subset_link IS 'holds if node_id belongs to the subset_node_id';
@@ -700,7 +773,7 @@ CREATE OR REPLACE VIEW xref_link AS
  FROM
   link_with_pred AS link
  WHERE
-  pred_uid='oboMetaModel:xref';
+  pred_uid='oboInOwl:hasDbXref';
 
 CREATE OR REPLACE VIEW node_label AS
  SELECT
@@ -741,7 +814,7 @@ CREATE OR REPLACE VIEW node_literal_with_pred AS
  SELECT
   node_id,
   type_id AS predicate_id,
-  'oboMetamodel:synonym' AS predicate_uid,
+  'onoInOwl:hasSynonym' AS predicate_uid,
   label AS val
  FROM
   alias
@@ -749,7 +822,7 @@ CREATE OR REPLACE VIEW node_literal_with_pred AS
  SELECT
   node_id,
   type_id AS predicate_id,
-  'oboMetamodel:description' AS predicate_uid,
+  'oboInOwl:hasDefinition' AS predicate_uid,
   label AS val
  FROM
   description
@@ -786,7 +859,7 @@ CREATE OR REPLACE VIEW implied_annotation_link AS
 --  WHERE
 --   alink.is_inferred='f'; -- non-asserted annotation 
 
-COMMENT ON implied_annotation_link IS 'A link between an annotated
+COMMENT ON VIEW implied_annotation_link IS 'A link between an annotated
 entity and the closure of the node used to annotate it. The annotated
 entity (node_id) is asserted to hold some relation to
 asserted_object_id, which in turn holds some relation to object_id
@@ -817,12 +890,10 @@ CREATE OR REPLACE VIEW implied_annotation_xp AS
    reified_link AS alink
    INNER JOIN axis_pair_link AS apl ON (alink.object_id=apl.node_id);
 
-COMMENT ON implied_annotation_xp IS 'A link between an annotated
+COMMENT ON VIEW implied_annotation_xp IS 'A link between an annotated
 entity and the implied pairwise product of the annotation. E.g. if g1
 is annotated to LeftEye-small then the implied xp would be
 {small,size,morphology} x {LeftEye,Eye,SenseOrgan,..}';
-
-
 
 CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
  SELECT
@@ -832,6 +903,8 @@ CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
   implied_annotation_link
  GROUP BY
   object_id;
+
+COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a node';
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('implied_annotation_link_count_by_object');
@@ -1111,7 +1184,7 @@ CREATE OR REPLACE VIEW annotation_count_by_annotation_source_and_class_source AS
 CREATE OR REPLACE VIEW subsumed_annotation_pair AS
  SELECT
   sl.link_id AS subsumed_link_id,
-  sl.predicate_uid AS subsumed_link_predicate_id
+  sl.predicate_uid AS subsumed_link_predicate_id,
   al1.node_id AS a1_node_id,
   al2.node_id AS a2_node_id,
   al1.predicate_id AS a1_predicate_id,
@@ -1310,6 +1383,36 @@ CREATE OR REPLACE VIEW source_summary AS
   LEFT OUTER JOIN asserted_link_count_by_node_source_id AS alcn ON (alcn.source_id=source.node_id)
   LEFT OUTER JOIN reified_link_count_by_node_source_id AS rlcn ON (rlcn.source_id=source.node_id)
   LEFT OUTER JOIN annotated_entity_count_by_source_id AS aec ON (aec.source_id=source.node_id);
+
+COMMENT ON VIEW source_summary IS 'Summary statistics for all nodes and links in database:
+<pre>
+uid                                | node source identifier. Example: fma
+label                              | node source label. Often not populated.
+node_count                         | Number of nodes belonging to that source. Note that each annotation (reified) statement is counted as a node
+asserted_link_count_in_source      | Non-implied links belonging to that source. Note that links may sometimes not be attributed to the same source as the node.
+link_count_in_source               | Total links (asserted+implied). See above.
+annotation_link_count_in_source    | Number of annotation link statements. Annotation links are those with reiflink_node_id not null.
+asserted_link_count_by_node_source | Number of non-implied links that have a node from source as the subject/source. Includes cross-ontology links, annotation links.
+link_count_by_node_source          | As above, including implied links (ie all the way to the root)
+reified_link_count_by_node_source  | As above, but only counting those with reiflink_node_id not null
+annotated_entity_count             | Number of nodes from this source that have annotation link statements emanating from them
+</pre>
+Example:
+<pre>
+uid                                | ZFIN  - all nodes coming from ZFIN.org
+label                              | ""    - we should really have a label here like "zebrafish information netword database"
+node_count                         | 54622 - genes, genotypes, publications, experiments; but not classes - they go in ZFA
+asserted_link_count_in_source      | 189789 - in this case these will be a mixture of G-P annotation links, as well as genotype-gene links, annot-pub links etc
+link_count_in_source               | 235041 - above including implied links. Not much higher: we expect this to be proportionally higher for ontology sources eg ZFA
+annotation_link_count_in_source    | 80816  - here, both genotype-phenotype and promoted gene-phenotype links
+asserted_link_count_by_node_source | 228275 - non-implied links that emanate from a ZFIN node
+link_count_by_node_source          | 1003067 - includes implied
+reified_link_count_by_node_source  | 80816  - note that this matches annotatuon_link_count_in_source. only ZFIN nodes (genotypes etc) have annotations from ZFIN (contrast with OMIM)
+annotated_entity_count             | 11610 - nodes in the ZFIN IDspace that have annotations. genes + genotypes
+</pre>
+';
+
+CREATE OR REPLACE VIEW 
  
 CREATE OR REPLACE VIEW node_count_by_document_source AS 
  SELECT source.uid,source.label, count(node.node_id) AS node_count
@@ -1492,6 +1595,7 @@ CREATE OR REPLACE VIEW annotated_entity_total_annotation_nodes AS
  GROUP BY
   baselink.node_id;
 
+-- Example: SELECT node_label(is_a_node_id),node_label(object_id) from node_pair_annotation_xp_intersection where node1_id = 532850 and node2_id=239699;
 CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection AS
  SELECT DISTINCT
   iax1.node_id AS node1_id,
@@ -1501,9 +1605,57 @@ CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection AS
  FROM 
   implied_annotation_xp AS iax1 INNER JOIN
   implied_annotation_xp AS iax2 USING (is_a_node_id,object_id);
- 
 
-CREATE OR REPLACE VIEW node_pair_annotation_intersection AS
+COMMENT ON VIEW node_pair_annotation_xp_intersection IS 'Given two
+nodes (e.g. genes) node1 and node2, what are the annotation class
+nodes in common, split on an axis? Uses both N+S relations and normal
+relations. For example, if g1 is annotated to thick/cranial-nerve-VIII
+and g2 is annotated to misshapen-cranial-nerve-VII then the xp in
+common will be {shape, quality} x { cranial-nerve, nerve,
+organsim-part, ...}';
+
+
+CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection_with_total AS
+ SELECT 
+  npax.*,
+  axis1c.total AS is_a_node_total,
+  axis2c.total AS object_node_total
+ FROM
+  node_pair_annotation_xp_intersection AS npax
+  INNER JOIN implied_annotation_link_count_by_object AS axis1c ON (axis1c.node_id=npax.is_a_node_id)
+  INNER JOIN implied_annotation_link_count_by_object AS axis2c ON (axis2c.node_id=npax.object_id);
+
+COMMENT ON VIEW node_pair_annotation_xp_intersection_with_total IS 'as
+node_pair_annotation_xp_intersection but include the totals for each
+axis term (but not the totals for the combination)';
+
+CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection_with_stats1 AS
+ SELECT 
+  npaxt.*,
+  CAST(is_a_node_total AS FLOAT) / total AS is_a_node_p,
+  CAST(object_node_total AS FLOAT) / total AS object_node_p
+ FROM
+  node_pair_annotation_xp_intersection_with_total AS npaxt,
+  count_of_annotated_entity;
+
+COMMENT ON VIEW node_pair_annotation_xp_intersection_with_stats1 IS
+'intermediate view used to construct
+node_pair_annotation_xp_intersection_with_stats';
+
+CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection_with_stats AS
+ SELECT 
+  npaxt.*,
+  is_a_node_p * object_node_p AS p
+ FROM
+  node_pair_annotation_xp_intersection_with_stats1 AS npaxt;
+
+COMMENT ON VIEW node_pair_annotation_xp_intersection_with_stats IS 'As
+ node_pair_annotation_xp_intersection, but include the p values for
+ each axis, and the product of those p values. Note that the product
+ is not necessarily an accurate measure of probability, as the two
+ axes will probably not be independent';
+
+Create OR REPLACE VIEW node_pair_annotation_intersection AS
  SELECT DISTINCT
   ial1.node_id AS node1_id,
   ial2.node_id AS node2_id,
@@ -1560,7 +1712,6 @@ CREATE OR REPLACE VIEW node_pair_annotation_intersection_count AS
 COMMENT ON VIEW node_pair_annotation_intersection_count IS 'For any
 two nodes (e.g. two gene nodes), what is the total number of
 annotation nodes in common? implied_annotation_link is used here';
-
 
 CREATE OR REPLACE VIEW node_pair_annotation_union1 AS
  SELECT DISTINCT

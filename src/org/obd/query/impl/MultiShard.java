@@ -88,7 +88,7 @@ public class MultiShard extends AbstractShard implements Shard {
 		return nodes;
 	}
 	
-	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		HashSet<Node> nodes = new HashSet<Node>();
 		for (Shard s : shards) 
 			nodes.addAll(s.getNodesBelowNodeSet(ids, entailment, gea));
@@ -152,7 +152,7 @@ public class MultiShard extends AbstractShard implements Shard {
 
 
 
-	public Collection<Statement> getAnnotationStatementsForAnnotatedEntity(String id, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Statement> getAnnotationStatementsForAnnotatedEntity(String id, EntailmentUse entailment, GraphTranslation gea) {
 		HashSet<Statement> statements = new HashSet<Statement>();
 		for (Shard s : shards) 
 			statements.addAll(s.getAnnotationStatementsForAnnotatedEntity( id,
@@ -161,7 +161,7 @@ public class MultiShard extends AbstractShard implements Shard {
 		return statements;
 	}
 	
-	public Collection<Statement> getAnnotationStatementsForNode(String id, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Statement> getAnnotationStatementsForNode(String id, EntailmentUse entailment, GraphTranslation gea) {
 		HashSet<Statement> statements = new HashSet<Statement>();
 		for (Shard s : shards) 
 			statements.addAll(s.getAnnotationStatementsForNode( id,
@@ -170,7 +170,7 @@ public class MultiShard extends AbstractShard implements Shard {
 		return statements;
 	}
 
-	public Graph getAnnotationGraphAroundNode(String id, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Graph getAnnotationGraphAroundNode(String id, EntailmentUse entailment, GraphTranslation gea) {
 		Graph g = new Graph();
 		for (Shard s : shards) 
 			g.merge(s.getAnnotationGraphAroundNode(id,  entailment,  gea));
@@ -178,7 +178,7 @@ public class MultiShard extends AbstractShard implements Shard {
 		
 	}
 	
-	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		HashSet<Node> nodes = new HashSet<Node>();
 		for (Shard s : shards) 
 			nodes.addAll(s.getAnnotatedEntitiesBelowNodeSet(ids, entailment, gea));
@@ -213,7 +213,7 @@ public class MultiShard extends AbstractShard implements Shard {
 		return nodes;
 	}
 
-	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphTranslation gea) {
 		Graph g = new Graph();
 		for (Shard s : shards) 
 			g.merge(s.getGraphByQuery(queryTerm,  entailment,  gea));

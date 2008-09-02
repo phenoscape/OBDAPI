@@ -39,7 +39,7 @@ import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.QueryTerm.Aspect;
 import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.Shard.GraphTranslation;
 import org.obd.query.exception.ShardExecutionException;
 
 /**
@@ -173,6 +173,10 @@ public abstract class AbstractShard implements Shard {
 	public Collection<Statement> getStatements(String ns) {
 		return getStatementsByQuery(new SourceQueryTerm(ns));
 	}
+	
+	public Collection<Statement> getStatements() {
+		return getStatementsByQuery(new LinkQueryTerm());
+	}
 
 	public Collection<Statement> getStatementsByNode(String id) {
 		LinkQueryTerm qt = new LinkQueryTerm();
@@ -215,7 +219,7 @@ public abstract class AbstractShard implements Shard {
 		return getStatementsByQuery(new LinkQueryTerm(new LinkQueryTerm(id)));
 	}
 
-	public Collection<Statement> getAnnotationStatementsForNode(String id, EntailmentUse entailment, GraphExpansionAlgorithm strategy) {
+	public Collection<Statement> getAnnotationStatementsForNode(String id, EntailmentUse entailment, GraphTranslation strategy) {
 		Collection<Statement> stmts = new LinkedList<Statement>();
 		stmts.addAll( getLinkStatementsByQuery(new AnnotationLinkQueryTerm(id)) );
 		return stmts;
@@ -223,7 +227,7 @@ public abstract class AbstractShard implements Shard {
 
 	public Collection<Statement> getAnnotationStatementsForAnnotatedEntity(
 			String id, EntailmentUse entailment,
-			GraphExpansionAlgorithm strategy) {
+			GraphTranslation strategy) {
 
 		LinkQueryTerm qt = new LinkQueryTerm();
 		// we do not want inference up the ontology graph;
@@ -241,7 +245,7 @@ public abstract class AbstractShard implements Shard {
 	
 	public Collection<LinkStatement> getAnnotationLinkStatementsForAnnotatedEntity(
 			String id, EntailmentUse entailment,
-			GraphExpansionAlgorithm strategy) {
+			GraphTranslation strategy) {
 
 		LinkQueryTerm qt = new LinkQueryTerm();
 		qt.setInferred(false);
@@ -261,13 +265,13 @@ public abstract class AbstractShard implements Shard {
 	 * this is typically large: for all annotated entities in the graph, we
 	 * fetch all the surrounding relations, not just those in the path to COI
 	 */
-	public Graph getAnnotationGraphAroundNode(String id, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Graph getAnnotationGraphAroundNode(String id, EntailmentUse entailment, GraphTranslation gea) {
 
 		// find graph around node, outwards
 		Collection<Statement> stmts;
 		Logger.getLogger("org.obd").info("fetching subgraph: "+id);
 
-		if (gea == null || gea.equals(GraphExpansionAlgorithm.INCLUDE_SUBGRAPH)) {
+		if (gea == null || gea.isIncludeSubgraph()) {
 			 Graph sg = getGraphAroundNode(id, entailment, gea);
 			 stmts = sg.getStatements();
 		}
@@ -442,14 +446,14 @@ public abstract class AbstractShard implements Shard {
 	}
 
 	public Graph getGraphAroundNode(String nodeId, EntailmentUse entailment,
-			GraphExpansionAlgorithm gea) {
+			GraphTranslation gea) {
 		
 		LinkQueryTerm linksFromSelectedNodeQuery = new LinkQueryTerm();
 		linksFromSelectedNodeQuery.setNode(nodeId);
 		// we invert the inner query
 		// - this means we plug the target variable back in as the main
 		//   node variable in the asserted link query
-		linksFromSelectedNodeQuery.setAspect(Aspect.TARGET);
+		linksFromSelectedNodeQuery.setAspect(Aspect.TARGET); // all parents of nodeId
 		LinkQueryTerm assertedLinkQuery = 
 			new LinkQueryTerm(linksFromSelectedNodeQuery,null,null);
 		assertedLinkQuery.setInferred(false);
@@ -457,7 +461,16 @@ public abstract class AbstractShard implements Shard {
 		Logger.getLogger("org.obd").fine("subgraph q="+assertedLinkQuery.toString());
 
 		Collection<Statement> stmts = getStatementsByQuery(assertedLinkQuery);
-		Graph g = new Graph(stmts);
+		Graph g = new Graph();
+		Collection<String> nids = new HashSet<String>();
+		for (Statement s : stmts) {
+			nids.add(s.getNodeId());
+			nids.add(s.getRelationId()); // incl relation hierarchy
+			g.addStatement(s);
+		}
+		for (String nid : nids) {
+			g.addNode(getNode(nid));
+		}
 		return g;
 	}
 	
@@ -506,7 +519,7 @@ public abstract class AbstractShard implements Shard {
 	}
 	
 	
-	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphTranslation gea) {
 
 		Collection<Statement> stmts = 
 			getStatementsByQuery(queryTerm);

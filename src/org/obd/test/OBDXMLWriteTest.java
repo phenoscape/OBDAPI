@@ -7,7 +7,7 @@ import org.obd.model.Graph;
 import org.obd.model.Node;
 import org.obd.query.QueryTerm;
 import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.Shard.GraphTranslation;
 import org.obd.query.impl.OBDSQLShard;
 
 public class OBDXMLWriteTest extends AbstractOBDTest{
@@ -52,7 +52,11 @@ public class OBDXMLWriteTest extends AbstractOBDTest{
 	public Graph runGraphQuery(QueryTerm qt, String nid){
 		//RelationalQuery rq = ((OBDSQLShard)this.shard).translateQueryForNode(qt);
 		
-		Graph g = ((OBDSQLShard)this.shard).getGraphByQuery(qt, EntailmentUse.USE_IMPLIED, GraphExpansionAlgorithm.INCLUDE_SUBGRAPH);
+		GraphTranslation gt = new GraphTranslation();
+		gt.setIncludeSubgraph(true);
+		Graph g = ((OBDSQLShard)this.shard).getGraphByQuery(qt, 
+				EntailmentUse.USE_IMPLIED, 
+				gt);
 		return g;
 	}
 	

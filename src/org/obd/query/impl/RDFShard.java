@@ -265,7 +265,7 @@ public class RDFShard extends AbstractShard implements Shard {
 
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,
-			GraphExpansionAlgorithm gea) {
+			GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -276,20 +276,20 @@ public class RDFShard extends AbstractShard implements Shard {
 	}
 
 	public Graph getAnnotationGraphAroundNode(String id,
-			EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+			EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Collection<Statement> getAnnotationStatementsForAnnotatedEntity(
 			String id, EntailmentUse entailment,
-			GraphExpansionAlgorithm strategy) {
+			GraphTranslation strategy) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Collection<Statement> getAnnotationStatementsForNode(String id,
-			EntailmentUse entailment, GraphExpansionAlgorithm strategy) {
+			EntailmentUse entailment, GraphTranslation strategy) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -301,7 +301,7 @@ public class RDFShard extends AbstractShard implements Shard {
 	}
 
 	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment,
-			GraphExpansionAlgorithm gea) {
+			GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -329,7 +329,7 @@ public class RDFShard extends AbstractShard implements Shard {
 	}
 
 	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids,
-			EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+			EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}

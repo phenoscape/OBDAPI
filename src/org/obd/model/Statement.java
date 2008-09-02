@@ -40,6 +40,15 @@ public class Statement extends Node implements Serializable, Cloneable {
 	protected boolean intersectionSemantics;
 	protected boolean unionSemantics;
 	protected InstanceQuantifier instanceQuantifier;
+	
+	/**
+	 * create implementation classes for functional-style filtering
+	 * @author cjm
+	 *
+	 */
+	public interface StatementFilter { // TODO: consider replacing with QueryTerm
+		public boolean exclude(Statement s);
+	}
 
 	public Statement() {
 		super();

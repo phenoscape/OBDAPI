@@ -12,6 +12,7 @@ import org.obd.model.LiteralStatement;
 import org.obd.model.Node;
 import org.obd.model.NodeSet;
 import org.obd.model.Statement;
+import org.obd.model.Statement.StatementFilter;
 import org.obd.model.rule.InferenceRule;
 import org.obd.model.stats.AggregateStatisticCollection;
 import org.obd.model.stats.SimilarityPair;
@@ -56,9 +57,29 @@ public interface Shard extends BasicRepository,
 		USE_IMPLIED,
 		FULL_TRANSITIVE_CLOSURE
 	}
-	public enum GraphExpansionAlgorithm {
-		MINIMAL,
-		INCLUDE_SUBGRAPH
+	public class GraphTranslation {
+		
+		boolean includeSubgraph;
+		StatementFilter statementFilter;
+
+		public boolean isIncludeSubgraph() {
+			return includeSubgraph;
+		}
+
+		public void setIncludeSubgraph(boolean includeSubgraph) {
+			this.includeSubgraph = includeSubgraph;
+		}
+
+		public StatementFilter getStatementFilter() {
+			return statementFilter;
+		}
+
+		public void setStatementFilter(StatementFilter statementFilter) {
+			this.statementFilter = statementFilter;
+		}
+		
+
+		
 	}
 
 
@@ -109,7 +130,7 @@ public interface Shard extends BasicRepository,
 	 */
 	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids,
 			EntailmentUse entailment,
-			GraphExpansionAlgorithm gea);
+			GraphTranslation gea);
 
 
 

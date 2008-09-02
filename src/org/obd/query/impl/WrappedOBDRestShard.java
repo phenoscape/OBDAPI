@@ -26,7 +26,7 @@ public class WrappedOBDRestShard extends AbstractShard implements Shard {
 	public WrappedOBDRestShard() throws  ClassNotFoundException {
 	}
 
-	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -37,7 +37,7 @@ public class WrappedOBDRestShard extends AbstractShard implements Shard {
 	}
 
 
-	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}

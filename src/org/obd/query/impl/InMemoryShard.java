@@ -25,7 +25,7 @@ public class InMemoryShard extends AbstractShard implements Shard {
 		return graph.getNode(id);
 	}
 
-	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -51,7 +51,7 @@ public class InMemoryShard extends AbstractShard implements Shard {
 		return null;
 	}
 
-	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphExpansionAlgorithm gea) {
+	public Collection<Node> getNodesBelowNodeSet(Collection<String> ids, EntailmentUse entailment, GraphTranslation gea) {
 		// TODO Auto-generated method stub
 		return null;
 	}

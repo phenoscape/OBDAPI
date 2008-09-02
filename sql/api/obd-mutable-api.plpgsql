@@ -565,7 +565,7 @@ SELECT store_tagval($1,$2,$3,$4,NULL)
 $$
 LANGUAGE 'sql';
 
--- Example: select migrate_links_to_alt_id('quality');
+-- Example: select migrate_links_to_alt_id('quality');  
 CREATE OR REPLACE FUNCTION migrate_links_to_alt_id(VARCHAR) RETURNS INT AS
 $$
 DECLARE

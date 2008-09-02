@@ -8,7 +8,7 @@ import org.obd.model.Node;
 import org.obd.model.Statement;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.Shard.GraphTranslation;
 import org.obd.query.exception.ShardExecutionException;
 
 public interface AnnotationRepository {
@@ -27,7 +27,7 @@ public interface AnnotationRepository {
 	 */
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(Collection<String> ids,
 			EntailmentUse entailment,
-			GraphExpansionAlgorithm gea);
+			GraphTranslation gea);
 	
 	/**
 	 * given an annotated entity, return all annotation
@@ -42,7 +42,7 @@ public interface AnnotationRepository {
 	 * statements
 	 */
 	public Collection<Statement> getAnnotationStatementsForAnnotatedEntity(String id, 
-			EntailmentUse entailment, GraphExpansionAlgorithm strategy);
+			EntailmentUse entailment, GraphTranslation strategy);
 
 	/**
 	 * given an node, return all annotation statements
@@ -54,7 +54,7 @@ public interface AnnotationRepository {
 	 * statements
 	 */
 	public Collection<Statement> getAnnotationStatementsForNode(String id, 
-			EntailmentUse entailment, GraphExpansionAlgorithm strategy);
+			EntailmentUse entailment, GraphTranslation strategy);
 
 	/**
 	 * Given a node (eg a class in an ontology), return a graph centered
@@ -67,6 +67,6 @@ public interface AnnotationRepository {
 	 * around this node, including annotation to nodes subsumed by this node
 	 */
 	public Graph getAnnotationGraphAroundNode(String id, 
-			EntailmentUse entailment, GraphExpansionAlgorithm gea);
+			EntailmentUse entailment, GraphTranslation gea);
 
 }

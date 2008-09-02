@@ -8,7 +8,7 @@ import org.obd.model.LiteralStatement;
 import org.obd.model.Node;
 import org.obd.model.Statement;
 import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphExpansionAlgorithm;
+import org.obd.query.Shard.GraphTranslation;
 
 public interface QueryableRepository {
 
@@ -53,7 +53,7 @@ public interface QueryableRepository {
 	public Collection<LiteralStatement> getLiteralStatementsByQuery(QueryTerm queryTerm);
 	
 	public Graph getGraphByQuery(QueryTerm queryTerm, 
-			EntailmentUse entailment, GraphExpansionAlgorithm gea);
+			EntailmentUse entailment, GraphTranslation gea);
   
 
 }
