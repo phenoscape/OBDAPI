@@ -1677,8 +1677,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	 * 
 	 * directionality of sub-rule can be inverted
 	 * 
-	 * e.g. influences < inv(variant_of) o influences G influences P :- A
-	 * variant_of G, A influences P
+	 * e.g. influences < inv(variant_of) o influences G influences P IF:- 
+	 * A variant_of G, A influences P
 	 * 
 	 * @param newRel
 	 * @param rel1
