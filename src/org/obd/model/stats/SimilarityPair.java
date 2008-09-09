@@ -12,7 +12,7 @@ import org.obd.model.LinkStatement;
 import org.obd.model.Node;
 
 /**
- * This object represents a pair of comparable nodes (id1 and id2) that can have other nodes in common.
+ * This object represents a pair of comparable nodes (such as classes in ontologies) that can have other nodes in common (e.g. via annotation)
  * 
  * For example:
  * 
@@ -61,8 +61,10 @@ public class SimilarityPair {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * @return identifier of first node in pair (may be ontology class, annotation source, annotated entity, ...)
+	 * This node is associated with a set of other nodes (e.g. annotated entities)
 	 */
 	public String getId1() {
 		return id1;

@@ -13,6 +13,19 @@ CREATE OR REPLACE VIEW omim_annotation_source AS
 -- CREATE INDEX omim_annotation_source_idx_id_uid ON omim_annotation_source(node_id,uid);
 -- END MATERIALIZE
 
+CREATE VIEW inf_gt_label AS
+ SELECT 
+  node_id AS gt_node_id,
+  node_uid AS gt_uid,
+  (object_label || ' variant ' || replace(node_uid,'OMIM:','')) AS gt_label
+ FROM node_link_node_with_pred
+ WHERE pred_uid='OBO_REL:variant_of'
+  AND is_inferred='f'
+  AND node_uid like 'OMIM:%'
+  AND object_uid like 'NCBI_Gene:%';
+
+-- UPDATE node SET label=(SELECT gt_label FROM inf_gt_label WHERE gt_label.gt_node_id=node_id) WHERE node.uid LIKE 'OMIM:%';
+
 CREATE OR REPLACE VIEW omim_genotype AS
  SELECT
   *
@@ -35,22 +48,48 @@ CREATE OR REPLACE VIEW omim_genotype_annotation_summary AS
   annotated_entity_total_annotations_by_annotsrc  AS aet
   INNER JOIN omim_genotype ON (aet.annotated_entity_id = omim_genotype.node_id);
 
+CREATE OR REPLACE VIEW total_bbop AS
+ SELECT
+  aet.*
+ FROM 
+  annotated_entity_total_annotations_by_annotsrc AS aet
+  INNER JOIN omim_annotation_source AS src ON (aet.source_id = src.node_id)
+ WHERE
+  src.uid='omim_phenotype_bbop';
+
+CREATE OR REPLACE VIEW total_zfin AS
+ SELECT
+  aet.*
+ FROM 
+  annotated_entity_total_annotations_by_annotsrc AS aet
+  INNER JOIN omim_annotation_source AS src ON (aet.source_id = src.node_id)
+ WHERE
+  src.uid='omim_phenotype_zfin';
+
+CREATE OR REPLACE VIEW total_fb AS
+ SELECT
+  aet.*
+ FROM 
+  annotated_entity_total_annotations_by_annotsrc AS aet
+  INNER JOIN omim_annotation_source AS src ON (aet.source_id = src.node_id)
+ WHERE
+  src.uid='omim_phenotype_fb';
+
+
 CREATE OR REPLACE VIEW omim_genotype_annotation_summary_table AS
  SELECT
   omim_genotype.node_id, 
   omim_genotype.uid, 
-  omim_genotype.label, 
+  gt_label AS label, 
   aet_bbop.total_annotations AS bbop_annots,
   aet_zfin.total_annotations AS zfin_annots,
   aet_fb.total_annotations AS fb_annots
  FROM 
   omim_genotype
-  LEFT OUTER JOIN annotated_entity_total_annotations_by_annotsrc  AS aet_bbop  ON (aet_bbop.annotated_entity_id = omim_genotype.node_id)
-  LEFT OUTER JOIN omim_annotation_source AS bbop ON (aet_bbop.source_id = bbop.node_id AND bbop.uid='omim_phenotype_bbop')
-  LEFT OUTER JOIN annotated_entity_total_annotations_by_annotsrc  AS aet_zfin ON (aet_bbop.annotated_entity_id=aet_zfin.annotated_entity_id)
-  LEFT OUTER JOIN omim_annotation_source AS zfin ON (aet_zfin.source_id = zfin.node_id AND zfin.uid='omim_phenotype_zfin')
-  LEFT OUTER JOIN annotated_entity_total_annotations_by_annotsrc  AS aet_fb ON (aet_fb.annotated_entity_id=aet_zfin.annotated_entity_id)
-  LEFT OUTER JOIN omim_annotation_source AS fb ON (aet_fb.source_id = fb.node_id AND fb.uid='omim_phenotype_fb');
+  INNER JOIN inf_gt_label ON (omim_genotype.node_id=gt_node_id)
+  LEFT OUTER JOIN total_bbop AS aet_bbop ON (aet_bbop.annotated_entity_id=omim_genotype.node_id)
+  LEFT OUTER JOIN total_zfin AS aet_zfin ON (aet_zfin.annotated_entity_id=omim_genotype.node_id)
+  LEFT OUTER JOIN total_fb AS aet_fb ON (aet_fb.annotated_entity_id=omim_genotype.node_id);
 
 
 
