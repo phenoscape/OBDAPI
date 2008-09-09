@@ -911,6 +911,22 @@ SELECT create_matview('implied_annotation_link_count_by_object');
 CREATE INDEX implied_annotation_link_count_by_object_idx_node_total ON implied_annotation_link_count_by_object(node_id,total);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW implied_annotation_link_count_by_node AS
+ SELECT
+  node_id AS node_id,
+  COUNT(DISTINCT object_id) AS total
+ FROM
+  implied_annotation_link
+ GROUP BY
+  node_id;
+
+COMMENT ON VIEW implied_annotation_link_count_by_node IS 'number of nodes (eg classes) used to annotate a node (eg gene)';
+
+-- BEGIN MATERIALIZE
+SELECT create_matview('implied_annotation_link_count_by_node');
+CREATE INDEX implied_annotation_link_count_by_node_idx_node_total ON implied_annotation_link_count_by_object(node_id,total);
+-- END MATERIALIZE
+
 CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
  SELECT
   ial.*,
@@ -1823,6 +1839,15 @@ CREATE OR REPLACE VIEW annotated_entity_union_annotations_between_annotsrc_pair 
   baselink.source_id,
   targetlink.source_id;
 
+COMMENT ON VIEW annotated_entity_union_annotations_between_annotsrc_pair IS 
+'
+annotated_entity_union_annotations_between_annotsrc_pair(ae,s1,s2) = 
+|implied_annotations(a1,s1) UNION implied_annotations(a1,s2)|
+
+number colored nodes in union for two annotation sources and an
+annotated entity. For example, one gene and two independent sources of annotation
+on that gene
+';
 
 CREATE OR REPLACE VIEW annotated_entity_shared_annotations_between_annotsrc_pair AS
  SELECT
@@ -1844,24 +1869,14 @@ CREATE OR REPLACE VIEW annotated_entity_shared_annotations_between_annotsrc_pair
 
 COMMENT ON VIEW annotated_entity_shared_annotations_between_annotsrc_pair IS 
 '
+annotated_entity_shared_annotations_between_annotsrc_pair(ae,s1,s2) = 
+|implied_annotations(a1,s1) ^ implied_annotations(a1,s2)|
+
 number colored nodes in common for two annotation sources and an
 annotated entity. For example, one gene and two independent sources of annotation
 on that gene
 ';
 
-CREATE OR REPLACE VIEW annotated_entity_congruence_between_annotsrc_pair__OLD AS
- SELECT
-  sharednodes.annotated_entity_id,
-  base_source_id,
-  target_source_id,
-  sharednodes.total_nodes_in_common,
-  totalnodes.total_annotation_nodes,
-  CAST(total_nodes_in_common AS FLOAT) / total_annotation_nodes AS congruence
- FROM
-             annotated_entity_shared_annotations_between_annotsrc_pair    AS sharednodes
-  INNER JOIN annotated_entity_total_annotation_nodes_by_annotsrc          AS totalnodes
-   ON       (sharednodes.annotated_entity_id = totalnodes.annotated_entity_id AND
-             base_source_id=totalnodes.source_id);
 
 CREATE OR REPLACE VIEW annotated_entity_congruence_between_annotsrc_pair AS
  SELECT
@@ -1878,6 +1893,43 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_between_annotsrc_pair AS
              sharednodes.base_source_id = totalnodes.base_source_id AND 
              sharednodes.target_source_id = totalnodes.target_source_id);
 
+COMMENT ON VIEW annotated_entity_congruence_between_annotsrc_pair IS
+'congruence for an annotated_entity and two source, base (s1) and
+target (s2) is calculated as the proportion of (inferred) nodes in
+common divided by the proportion of nodes in the union of both
+annotation sets:
+
+  congruence(ae,s1,s2) = |annotnodes*(ae,s1) ^ annotnodes*(ae,s2)| / |annotnodes*(ae,s1) UNION annotnodes*(ae,s2)|
+
+Here, annotnodes*(ae,s) is the set of classes used to annotated ae by
+s, together with all classes that are inferred to be parents of those
+classes.
+
+For example, if ae is a gene, s1 may annotate {T-cell,astrocyte}, and
+s2 may annotate {lymphocyte,interneuron}. The inferred nodes in common
+are {lymphocyte,nerve cell,cell}. The inferred nodesin the union are
+{T-cell,astrocyte,glial cell,neuron,lymphocyte,nerve cell,cell}. Thus
+the congruence is 3/7.
+
+We can visualize this is graph coloring, with nodes in one set and its
+deductive closure colored one way, the other annotation set colored
+the other way, with some color mixing indicating the intersection.
+';
+
+CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
+ SELECT
+  ial.node_id AS annotated_entity_id,
+  ial.source_id,
+  CAST(total_nodes_in_common AS FLOAT) / total_nodes_in_union AS congruence
+ FROM
+             implied_annotation_link AS ial
+  INNER JOIN 
+ GROUP BY
+  ial.node_id,
+  ial.source_id;
+ 
+
+
 CREATE OR REPLACE VIEW avg_annotated_entity_congruence_between_annotsrc_pair AS
  SELECT
   base_source_id,
@@ -1891,17 +1943,13 @@ CREATE OR REPLACE VIEW avg_annotated_entity_congruence_between_annotsrc_pair AS
   target_source_id;
 
 COMMENT ON VIEW avg_annotated_entity_congruence_between_annotsrc_pair IS
-'congruence for a genotype and src-pair is measured as follows:
+'The average of @annotated_entity_congruence_between_annotsrc_pair@ across annotated entities.
 
-congruence(g,s1,s2) = |annotnodes*(g,s1)| / |annotnodes*(g,s1+s2)|
+Please see the docs for @annotated_entity_congruence_between_annotsrc_pair@. Recall that this measure is for a particular annotated entity ae:
 
-i.e. total nodes colored by s1 vs total nodes colored by both sources
+  congruence(ae,s1,s2) = |annotnodes*(ae,s1) ^ annotnodes*(ae,s2)| / |annotnodes*(ae,s1) UNION annotnodes*(ae,s2)|
 
-here "nodes colored" is intuitively the ontology graph with each term used to annotated that genotype colored, plus the deductive closure of those nodes
-
-I dont know if "congruence" is the best statistical term - note the above measure is asymmetric.  if s2 annotates identically to s1 and does more on top then then c(s1,s2) =1 and c(s2,s1) < 1.
-
-Maybe we should average the two?
+This gives the average over all annotated entities
 ';
 
 -- EXAMPLE: select node_uid(node_id),node_uid(grouping_predicate_id),node_uid(annotgroup_node_id),node_uid(object_id),node_label(object_id) from implied_annotation_link_to_annotgroup where node_uid(annotgroup_node_id) like 'entrez%'

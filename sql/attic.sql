@@ -1,3 +1,8 @@
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('reified_link');
+-- CREATE INDEX reified_link_idx_node ON transitive_relation_node(node_id);
+-- CREATE INDEX transitive_relation_node_idx_node_uid ON transitive_relation_node(node_id,uid);
+-- END MATERIALIZE
 
 CREATE OR REPLACE VIEW asserted_ancestor_link_proper AS
  SELECT
