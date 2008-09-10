@@ -65,7 +65,10 @@ if ($dbhost) {
 my $time_started = time;
 
 my $dbh;
-if ($d =~ /\@/) {
+if ($d =~ /^dbi:/) {
+    $dbh = DBI->connect($d);
+}
+elsif ($d =~ /\@/) {
     require 'DBIx::DBStag';
     $dbh = DBIx::DBStag->connect($d);
 }
