@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import org.obd.model.CompositionalDescription.Predicate;
 import org.obd.model.Statement.StatementFilter;
@@ -158,7 +159,7 @@ public class Graph implements BasicRepository, Serializable {
 				stmts.add((LiteralStatement)s);
 		return (LiteralStatement[])stmts.toArray(new LiteralStatement[0]);
 	}
-	
+
 	/**
 	 * all statements not nested under nodes that are LiteralStatements
 	 */
@@ -291,7 +292,7 @@ public class Graph implements BasicRepository, Serializable {
 		indexStatements(Arrays.asList(statements));
 
 	}
-	
+
 	public void addLiteralStatement(String nid, String relId, Object val) {
 		addStatement(new LiteralStatement(nid,relId,val));
 	}
@@ -334,7 +335,7 @@ public class Graph implements BasicRepository, Serializable {
 		}
 		statements.removeAll(togo);
 	}
-	
+
 	public void removeSingletons() {
 		for (Node n : getNodes()) {
 			String nid = n.getId();
@@ -344,7 +345,7 @@ public class Graph implements BasicRepository, Serializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * statements nested under nodes are hidden
 	 * @param s
@@ -490,6 +491,87 @@ public class Graph implements BasicRepository, Serializable {
 
 	}
 
+	public void trim() {
+		Collection<LinkStatement> togo = new HashSet<LinkStatement>();
+		for (Statement s : getAllStatements()) {
+
+			if (s instanceof LinkStatement) {
+				LinkStatement ls = (LinkStatement) s;
+				String nid = s.getNodeId();
+				if (!ls.isInferred()) 
+					continue;
+				if (ls.isReflexive()) {
+					togo.add(ls);
+					continue;
+				}
+				for (LinkStatement sib : this.getAllLinkStatementsForNode(nid)) {
+					if (sib.isReflexive())
+						continue;
+					for (LinkStatement sibx : this.getAllLinkStatementsForNode(sib.getTargetId())) {
+						if (sibx.isReflexive())
+							continue;
+						if (sibx.getTargetId().equals(ls.getTargetId())) {
+							if (sibx.getRelationId().equals(ls.getRelationId()) ||
+									sib.getRelationId().equals(ls.getRelationId())) {
+								togo.add(ls);
+								//System.err.println("removing :"+ls+" ;; redundant with:"+sibx);
+							}
+						}
+					}
+				}
+			}
+		}
+		for (LinkStatement s : togo)
+			this.removeStatement(s);
+	}
+
+	public Map<String,Set<String>> getClosureMap() {
+		Map<String,Set<String>> cmap = new HashMap<String,Set<String>>();
+		for (Statement s : getAllStatements()) {
+			if (s instanceof LinkStatement)
+				addToClosureMap(cmap,(LinkStatement) s);
+		}
+		int iterations = 0;
+		while (extendClosureMap(cmap)) {
+			iterations ++;
+		}
+
+		return cmap;
+	}
+
+	private boolean extendClosureMap(Map<String,Set<String>> cmap) {
+		boolean isChanged = false;
+		for (String nid : cmap.keySet()) {
+			Set<String> tids = cmap.get(nid);
+			Set<String> newtids = new HashSet<String>();
+			for (String tid : tids) {
+				if (!cmap.containsKey(tid)) // dead end
+					continue;
+				for (String t2id : cmap.get(tid)) {
+					if (tids.contains(t2id)) {
+
+					}
+					else {
+						isChanged = true;
+						newtids.add(t2id);
+					}
+				}
+			}
+			tids.addAll(newtids);
+		}
+		return isChanged;
+	}
+
+	private void addToClosureMap(Map<String,Set<String>> cmap, LinkStatement s) {
+		String nid = s.getNodeId();
+		if (!cmap.containsKey(nid))
+			cmap.put(nid, new HashSet<String>());
+
+		cmap.get(nid).add(s.getTargetId());
+
+	}
+
+
 	public Collection<String> simpleClosure(String seedId, int numSteps) {
 		Collection<String> tids = new HashSet<String>();
 		Collection<String> seeds = new HashSet<String>();
@@ -531,7 +613,7 @@ public class Graph implements BasicRepository, Serializable {
 				if (!sByNodeId.containsKey(nid))
 					sByNodeId.put(nid, new HashSet<LinkStatement>());
 				sByNodeId.get(nid).add(ls);
-				*/
+				 */
 			}
 		}
 		//System.out.println("keys:"+sByNodeId.keySet().size());
@@ -540,7 +622,7 @@ public class Graph implements BasicRepository, Serializable {
 			//for (String id : sByNodeId.keySet()) {
 			for (String id : seeds) {
 
-						
+
 				Collection<String> doneIds = new HashSet<String>();
 
 				Collection<LinkStatement> newStmts =
@@ -548,7 +630,7 @@ public class Graph implements BasicRepository, Serializable {
 
 				for (LinkStatement ls : getAllLinkStatementsForNode(id)) {
 					String tid = ls.getTargetId();
-					
+
 					// have we done this target on this iteration?
 					if (doneIds.contains(tid))
 						continue;

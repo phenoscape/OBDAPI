@@ -91,7 +91,7 @@ public class GraphVizWriter {
 	}
 
 	public String safeId(String id) {
-		return "node__"+id.replace(':', '_');
+		return "node__"+id.replaceAll("[:\\^\\(\\)\\-]","_");
 	}
 
 	public String quote(String txt) {

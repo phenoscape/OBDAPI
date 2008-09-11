@@ -438,7 +438,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		 * 
 		 */
 		RelationalQuery fetchRq = new SqlQueryImpl();
-		fetchRq.addTable("implied_annotation_link",ialAlias);
+		fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
 		fetchRq.addTable(NODE_TABLE);
 		wc = fetchRq.getWhereClause();
 		wc.addJoinConstraint("node.node_id", "ial.node_id");
@@ -1119,7 +1119,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		} else {
 			selectClause.addColumn("NULL", LINK_REIF_EXPOSED_ID_COLUMN);
 		}
-
 		// rq.addTable(NODE_TABLE);
 		return rq;
 	}

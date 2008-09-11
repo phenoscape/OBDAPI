@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
 import org.obd.model.Node;
 
@@ -56,11 +57,23 @@ public class SimilarityPair {
 	private Map<String,Set<String>> inverseClosureMap;
 	private List<ScoredNode> scoredNodes;
 	Map<String,Double> nodeInformationContentMap = new HashMap<String,Double>();
+	private Graph graph;
  
 	public SimilarityPair() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	public Graph getGraph() {
+		return graph;
+	}
+
+
+	public void setGraph(Graph graph) {
+		this.graph = graph;
+	}
+
 
 	/**
 	 * @return identifier of first node in pair (may be ontology class, annotation source, annotated entity, ...)

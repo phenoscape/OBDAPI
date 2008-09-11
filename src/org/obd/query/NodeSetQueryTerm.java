@@ -56,6 +56,8 @@ public class NodeSetQueryTerm extends QueryTerm {
 	}
 	
 	
-	
+	public String toString() {
+		return "[nodes: "+nodeIds.toString()+"]";
+	}
 
 }

@@ -47,6 +47,10 @@ public class LinkStatement extends Statement {
 		this.sourceId = sourceId;
 	}
 
+	public LinkStatement(LinkStatement s) {
+		super(s.getNodeId(),s.getRelationId(),s.getTargetId());
+	
+	}
 	public Node getTargetNode() {
 		return targetNode;
 	}

@@ -1,27 +1,31 @@
 package org.obd.test;
 
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.obd.model.Graph;
 import org.obd.model.Node;
 import org.obd.model.Statement;
 import org.obd.query.Shard;
 import org.obd.query.impl.OBDSQLShard;
 import org.obd.query.impl.OBDSimpleSQLShard;
+import org.obo.datamodel.impl.DefaultLinkDatabase;
+import org.obo.reasoner.impl.ForwardChainingReasoner;
 import org.purl.obo.vocab.RelationVocabulary;
 
 public abstract class AbstractOBDTest extends TestCase {
 
-	//static String jdbcPath = "jdbc:postgresql://spade.lbl.gov:5432/obd_phenotype_200805";
-	static String jdbcPath = "jdbc:postgresql://localhost:5432/obdp808";
+	static String jdbcPath = "jdbc:postgresql://localhost:9999/obdp";
+	//static String jdbcPath = "jdbc:postgresql://localhost:5432/obdp808";
 	//static String jdbcPath = "jdbc:postgresql://localhost:9999/obd_phenotype_200805";
 
-	
+
 	// Set these values if you don't want to use the environmental user / no password database connection defaults. 
 	static String dbUsername ="cjm";
 	static String dbPassword;
@@ -47,9 +51,22 @@ public abstract class AbstractOBDTest extends TestCase {
 		getShard();
 		initLogger();
 	}
-	
+
 	public void initLogger() {
-		initLogger(Level.INFO);
+		initLogger(Level.FINEST);
+		//Logger logger = Logger.getLogger(AbstractOBOTest.class); 
+		Properties props = new Properties();
+		props.setProperty("log4j.rootLogger","DEBUG, A1");
+
+		props.setProperty("log4j.appender.A1","org.apache.log4j.ConsoleAppender");
+		props.setProperty("log4j.appender.A1.layout","org.apache.log4j.PatternLayout");
+		props.setProperty("log4j.appender.A1.layout.ConversionPattern","%d [%t] %-5p %c - %m%n");
+
+		PropertyConfigurator.configure(props);
+
+
+		// SessionManager.getManager().setSession(session);
+
 	}
 
 
@@ -60,9 +77,9 @@ public abstract class AbstractOBDTest extends TestCase {
 		}
 		Logger.getLogger( "org.bbop.rdbms").setLevel(level);
 		Logger.getLogger( "org.obd").setLevel(level);
-		
+
 	}
-	
+
 	@Override
 	public void tearDown() throws Exception {
 		System.out.println("tearDown");
@@ -100,6 +117,10 @@ public abstract class AbstractOBDTest extends TestCase {
 				System.out.println("    "+s);
 			}	
 		}
+		for (Statement s : g.getStatements()) {
+			System.out.println(s);
+		}	
+
 	}
 	public static void printNonEmptyGraph(Graph g) {
 		assertTrue(g.getNodes().size() > 0);

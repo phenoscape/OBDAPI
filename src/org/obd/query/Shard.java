@@ -253,6 +253,12 @@ public interface Shard extends BasicRepository,
 	 */
 	public Graph getGraph();
 	
+	/**
+	 * @param qnids
+	 * @param extQt
+	 * @return
+	 */
+	public Graph getGraphByNodes(Collection<String> qnids, QueryTerm extQt);
 
 
 

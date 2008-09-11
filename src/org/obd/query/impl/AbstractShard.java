@@ -48,7 +48,7 @@ import org.obd.query.exception.ShardExecutionException;
  *
  */
 public abstract class AbstractShard implements Shard {
-	
+
 	public class CongruentPair {
 		private Node baseNode;
 		private Node targetNode;
@@ -123,7 +123,7 @@ public abstract class AbstractShard implements Shard {
 	public Collection<Node> getNodesBySearch(String searchTerm) throws Exception {
 		return getNodesBySearch(searchTerm, Operator.MATCHES);
 	}
-	
+
 
 
 	public Collection<Node> getNodesBySearch(String searchTerm, ComparisonQueryTerm.Operator op) throws Exception {
@@ -132,11 +132,11 @@ public abstract class AbstractShard implements Shard {
 		}
 		return getNodesBySearch(searchTerm,op,null,null);
 	}
-	
+
 	public Collection<Node> getNodes() {
 		return getNodesBySource(null);
 	}
-	
+
 	public Collection<Node> getNodesBySource(String srcId) {
 		SourceQueryTerm qt = new SourceQueryTerm(srcId);
 		return getNodesByQuery(qt);
@@ -149,7 +149,7 @@ public abstract class AbstractShard implements Shard {
 		}
 		if (at == null){
 			at = AliasType.ANY_LABEL;
-			
+
 		} 	
 		LabelQueryTerm q = new LabelQueryTerm(at, cqt);	
 		if (source != null){
@@ -169,11 +169,11 @@ public abstract class AbstractShard implements Shard {
 	public Collection<Node> getRootNodes(String sourceId) {
 		return getRootNodes(sourceId, null);
 	}
-	
+
 	public Collection<Statement> getStatements(String ns) {
 		return getStatementsByQuery(new SourceQueryTerm(ns));
 	}
-	
+
 	public Collection<Statement> getStatements() {
 		return getStatementsByQuery(new LinkQueryTerm());
 	}
@@ -209,7 +209,7 @@ public abstract class AbstractShard implements Shard {
 		qt.setSource(srcId);
 		return getStatementsByQuery(qt);
 	}
-	
+
 	/**
 	 * @param id
 	 * @return All statements whose target is subsumed by id
@@ -223,7 +223,7 @@ public abstract class AbstractShard implements Shard {
 		Collection<Statement> stmts = new LinkedList<Statement>();
 		stmts.addAll( getLinkStatementsByQuery(new AnnotationLinkQueryTerm(id)) );
 		return stmts;
- 	}
+	}
 
 	public Collection<Statement> getAnnotationStatementsForAnnotatedEntity(
 			String id, EntailmentUse entailment,
@@ -242,7 +242,7 @@ public abstract class AbstractShard implements Shard {
 		qt.setNode(id);
 		return getStatementsByQuery(qt);
 	}
-	
+
 	public Collection<LinkStatement> getAnnotationLinkStatementsForAnnotatedEntity(
 			String id, EntailmentUse entailment,
 			GraphTranslation strategy) {
@@ -254,7 +254,7 @@ public abstract class AbstractShard implements Shard {
 		qt.setNode(id);
 		return getLinkStatementsByQuery(qt);
 	}
-	
+
 	/**
 	 * for a COI, this builds the following graph:
 	 * 
@@ -272,12 +272,12 @@ public abstract class AbstractShard implements Shard {
 		Logger.getLogger("org.obd").info("fetching subgraph: "+id);
 
 		if (gea == null || gea.isIncludeSubgraph()) {
-			 Graph sg = getGraphAroundNode(id, entailment, gea);
-			 stmts = sg.getStatements();
+			Graph sg = getGraphAroundNode(id, entailment, gea);
+			stmts = sg.getStatements();
 		}
 		else
 			stmts = new LinkedList<Statement>(); // TODO: minimal info?
-		
+
 		Logger.getLogger("org.obd").fine("fetching annotation statements: "+id);
 		Collection<Statement> annots = 
 			getAnnotationStatementsForNode(id, entailment, null);
@@ -296,7 +296,7 @@ public abstract class AbstractShard implements Shard {
 		return g;
 
 	}
-	
+
 	public Collection<LinkStatement> getLinkStatementsByQuery(QueryTerm queryTerm) {
 		Collection<LinkStatement> stmts = new LinkedList<LinkStatement>();
 		for (Statement s : getStatementsByQuery(queryTerm))
@@ -334,7 +334,7 @@ public abstract class AbstractShard implements Shard {
 					getAnnotationStatementsForAnnotatedEntity(node.getId(), null, null));
 		return getSimilarNodes(stmts);
 	}
-	
+
 	public List<ScoredNode> getSimilarNodes(String nodeId) {
 		return getSimilarNodes(nodeId, null);
 	}
@@ -347,9 +347,9 @@ public abstract class AbstractShard implements Shard {
 		return getSimilarNodes(stmts);
 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * helper method for getSimilarNodes
 	 * 
@@ -417,7 +417,7 @@ public abstract class AbstractShard implements Shard {
 		return scoredNodes;
 	}
 
-	
+
 	public Collection<ScoredNode> getCoAnnotatedClasses(QueryTerm qt)
 	throws ShardExecutionException {
 		Collection<Node> nodes = getNodesByQuery(qt);
@@ -447,7 +447,7 @@ public abstract class AbstractShard implements Shard {
 
 	public Graph getGraphAroundNode(String nodeId, EntailmentUse entailment,
 			GraphTranslation gea) {
-		
+
 		LinkQueryTerm linksFromSelectedNodeQuery = new LinkQueryTerm();
 		linksFromSelectedNodeQuery.setNode(nodeId);
 		// we invert the inner query
@@ -457,7 +457,7 @@ public abstract class AbstractShard implements Shard {
 		LinkQueryTerm assertedLinkQuery = 
 			new LinkQueryTerm(linksFromSelectedNodeQuery,null,null);
 		assertedLinkQuery.setInferred(false);
-		assertedLinkQuery.setNode(linksFromSelectedNodeQuery);
+		assertedLinkQuery.setNode(linksFromSelectedNodeQuery); // redundant?
 		Logger.getLogger("org.obd").fine("subgraph q="+assertedLinkQuery.toString());
 
 		Collection<Statement> stmts = getStatementsByQuery(assertedLinkQuery);
@@ -473,52 +473,7 @@ public abstract class AbstractShard implements Shard {
 		}
 		return g;
 	}
-	
-	public CompositionalDescription getCompositionalDescription(String id, boolean traverseNamedClasses) {
 
-		Graph graph = new Graph();
-		buildDescription(id, traverseNamedClasses, graph, 0);
-		CompositionalDescription desc = graph.getCompositionalDescription(id);
-		desc.setSourceGraph(graph);
-
-		return desc;
-	}
-	
-	public void buildDescription(String id, boolean traverseNamedClasses,
-			Graph graph, int depth) {
-
-		Node node = graph.getNode(id);
-		if (graph.getNode(id) == null) {
-			// we have not encountered this node already
-			node = getNode(id);
-			if (node == null) {
-				System.err.println("cannot find node: "+id);
-			}
-			if (!node.isAnonymous() && !traverseNamedClasses && depth > 0)
-				return;
-			graph.addNode(node);
-			
-			LinkQueryTerm q = new LinkQueryTerm();
-			q.setNode(id);
-			q.setInferred(false);
-			q.setDescriptionLink(true);
-			Collection<Statement> stmts = getStatementsByQuery(q);
-			node.setStatements(stmts);
-	
-			
-			for (Statement s : stmts) {
-				if (!(s instanceof LinkStatement))
-					continue;
-				//System.out.println("recursing for desc of "+id+" s="+s);
-				String nextId = s.getTargetId();
-				if (nextId != null)
-					buildDescription(nextId, traverseNamedClasses, graph, depth+1);
-			}
-		}
-		  
-	}
-	
-	
 	public Graph getGraphByQuery(QueryTerm queryTerm, EntailmentUse entailment, GraphTranslation gea) {
 
 		Collection<Statement> stmts = 
@@ -532,6 +487,39 @@ public abstract class AbstractShard implements Shard {
 		}
 		g.addStatements(stmts);
 		g.nestStatementsUnderNodes();
+		return g;
+	}
+
+	public Graph getGraphByNodes(Collection<String> qnids, QueryTerm extQt) {
+
+		/*
+		 * relies on some kind of reflexive relation for qnids has been set..
+		 * 
+		 */
+		NodeSetQueryTerm nsqt = new NodeSetQueryTerm(qnids);
+		LinkQueryTerm lqt = new LinkQueryTerm();
+		lqt.setNode(nsqt);
+		lqt.setAspect(Aspect.TARGET);
+		LinkQueryTerm assertedLinkQuery = 
+			new LinkQueryTerm(lqt,null,null);
+		//assertedLinkQuery.setInferred(false);
+		Logger.getLogger("org.obd").fine("subgraph q="+assertedLinkQuery.toString());
+		//System.err.println("subgraph q="+assertedLinkQuery.toString());
+
+		Collection<Statement> stmts = getStatementsByQuery(assertedLinkQuery);
+		stmts.addAll(this.getStatementsByQuery(new LinkQueryTerm(nsqt,null,null)));
+		Graph g = new Graph();
+		Collection<String> nids = new HashSet<String>();
+		for (Statement s : stmts) {
+			nids.add(s.getNodeId());
+			nids.add(s.getRelationId()); // incl relation hierarchy
+			g.addStatement(s);
+		}
+		g.trim();
+		for (String nid : nids) {
+			g.addNode(getNode(nid));
+		}
+
 		return g;
 	}
 
@@ -594,112 +582,53 @@ public abstract class AbstractShard implements Shard {
 		return g;
 	}
 
-	public Collection<LinkStatement> getClosure(Collection<String> ids, String relId) {
-		LinkQueryTerm extQt = new LinkQueryTerm();
-		extQt.setRelation(relId);
-		return getClosure(ids, extQt);
+
+	public CompositionalDescription getCompositionalDescription(String id, boolean traverseNamedClasses) {
+
+		Graph graph = new Graph();
+		buildDescription(id, traverseNamedClasses, graph, 0);
+		CompositionalDescription desc = graph.getCompositionalDescription(id);
+		desc.setSourceGraph(graph);
+
+		return desc;
 	}
 
-	public Collection<LinkStatement> getClosure(Collection<String> ids, QueryTerm extQt) {
-		extQt.setNode(new NodeSetQueryTerm(ids));
-		return getLinkStatementsByQuery(extQt);
-	}
+	public void buildDescription(String id, boolean traverseNamedClasses,
+			Graph graph, int depth) {
 
-	/**
-	 * as above, but augments a map
-	 * @param ids
-	 * @param extQt
-	 * @param map
-	 * @return
-	 */
-	public Collection<LinkStatement> getClosure(Collection<String> ids, QueryTerm extQt, Map<String,Set<String>> map) {
-		// calculating the closure for a set of IDs in a database is expensive: if we have some IDs
-		// in the closure map already, we don't need to recompute
-		// this assumes the closureMap is invariant w.r.t extQt - but we can't check this, 
-		// up to the caller to be safe
-		HashSet<String> newIds = new HashSet<String>();
-		newIds.addAll(ids);
-		for (String id : map.keySet())
-			newIds.remove(id);
-		extQt.setNode(new NodeSetQueryTerm(newIds));
-		Collection<LinkStatement> stmts = getLinkStatementsByQuery(extQt);
-
-		// ids for a further iteration to get the inter-set closure; see below
-		Set<String> nextIds = new HashSet<String>();
-		// augment the map
-		for (Statement s : stmts) {
-			String nid = s.getNodeId();
-			String tid = s.getTargetId();
-			if (!map.containsKey(nid)) {
-				map.put(nid, new HashSet<String>());
+		Node node = graph.getNode(id);
+		if (graph.getNode(id) == null) {
+			// we have not encountered this node already
+			node = getNode(id);
+			if (node == null) {
+				System.err.println("cannot find node: "+id);
 			}
-			map.get(nid).add(tid);
-			// see below
-			if (!newIds.contains(tid))
-				nextIds.add(tid);
-		}
+			if (!node.isAnonymous() && !traverseNamedClasses && depth > 0)
+				return;
+			graph.addNode(node);
 
-		// there may be a more efficient way to do this...
-		// we have the closure map for the initial input set, but not the
-		// inter-set closure map;
-		// e.g. if the initial set is {a, b, c}
-		// and the closure contained a->d, b->e
-		// we don't know anything about the relation between d and e
-		extQt.setNode(new NodeSetQueryTerm(nextIds));
-		Collection<LinkStatement> nextStmts = getLinkStatementsByQuery(extQt);
-		for (Statement s : nextStmts) {
-			String nid = s.getNodeId();
-			if (!map.containsKey(nid)) {
-				map.put(nid, new HashSet<String>());
+			LinkQueryTerm q = new LinkQueryTerm();
+			q.setNode(id);
+			q.setInferred(false);
+			q.setDescriptionLink(true);
+			Collection<Statement> stmts = getStatementsByQuery(q);
+			node.setStatements(stmts);
+
+
+			for (Statement s : stmts) {
+				if (!(s instanceof LinkStatement))
+					continue;
+				//System.out.println("recursing for desc of "+id+" s="+s);
+				String nextId = s.getTargetId();
+				if (nextId != null)
+					buildDescription(nextId, traverseNamedClasses, graph, depth+1);
 			}
-			map.get(nid).add(s.getTargetId());
 		}
 
-		return stmts;
 	}
 
-	public Map<String,Set<String>> getClosureMap(Collection<String> ids, String relId) {
-		QueryTerm extQt = new LinkQueryTerm();
-		extQt.setRelation(relId);
-		return getClosureMap(ids, extQt);
-	}
-	public Map<String,Set<String>> getClosureMap(Collection<String> ids, QueryTerm extQt) {
-		Map<String,Set<String>> map = new HashMap<String,Set<String>>();
-		return getClosureMap(ids, extQt, map);
-	}
-	/**
-	 * This extends the existing closureMap. If ids contains s1,s2,...,sn
-	 * and the shard has s1->s1a,s1b,... etc
-	 * these will be added to the map
-	 * 
-	 * passing in an existing closureMap will both extend that map, and also use the map
-	 * to efficiently query the shard. This means the extQt must be invariant over multiple calls.
-	 * It is up to the caller to be safe here
-	 * @param ids
-	 * @param extQt
-	 * @param map - new keys and values will be added
-	 * @return
-	 */
-	public Map<String,Set<String>> getClosureMap(Collection<String> ids, QueryTerm extQt, Map<String,Set<String>> map) {
-		// calculating the closure for a set of IDs in a database is expensive: if we have some IDs
-		// in the closure map already, we don't need to recompute
-		// this assumes the closureMap is invariant w.r.t extQt - but we can't check this, 
-		// up to the caller to be safe
-		HashSet<String> newIds = new HashSet<String>();
-		newIds.addAll(ids);
-		for (String id : map.keySet())
-			newIds.remove(id);
-		Collection<LinkStatement> stmts = getClosure(newIds, extQt);
-		for (LinkStatement s : stmts) {
-			String nid = s.getNodeId();
-			if (!map.containsKey(nid))
-				map.put(nid, new HashSet<String>());
 
-			map.get(nid).add(s.getTargetId());
-		}
 
-		return map;
-	}
 
 	public void simpleClosureOver(Graph graph, String seedId, Collection<String> relationIds, Collection<String> reverseRelationIds) {
 		if (graph.getNode(seedId) != null) 
@@ -880,13 +809,6 @@ public abstract class AbstractShard implements Shard {
 		return null;
 	}
 
-
-
-
-
-
-
-
 	public SimilarityPair compareAnnotationsBySourcePair(String aeid, String src1, String src2) {
 		LinkQueryTerm extQt = new LinkQueryTerm();
 		return compareAnnotationsBySourcePair(aeid, src1, src2,extQt);
@@ -914,10 +836,10 @@ public abstract class AbstractShard implements Shard {
 	public SimilarityPair compareAnnotationsByAnnotatedEntityPair(String aeid1, String aeid2, LinkQueryTerm closureQueryTerm, LinkQueryTerm annotationQueryTerm) {
 		annotationQueryTerm.setIsAnnotation(true);
 
-//		annotationQueryTerm.setNode(aeid1);
-//		Collection<LinkStatement> stmts1 = getLinkStatementsByQuery(annotationQueryTerm); // TODO - optimize - do not need full stmt
-//		annotationQueryTerm.setNode(aeid2);
-//		Collection<LinkStatement> stmts2 = getLinkStatementsByQuery(annotationQueryTerm);	
+		//		annotationQueryTerm.setNode(aeid1);
+		//		Collection<LinkStatement> stmts1 = getLinkStatementsByQuery(annotationQueryTerm); // TODO - optimize - do not need full stmt
+		//		annotationQueryTerm.setNode(aeid2);
+		//		Collection<LinkStatement> stmts2 = getLinkStatementsByQuery(annotationQueryTerm);	
 		// TODO - do the extension at query time; we also can drop the annotation metadata
 		// e.g. G inf (P R P2) - fetch the (...)
 		annotationQueryTerm.setNode(aeid1);
@@ -948,12 +870,53 @@ public abstract class AbstractShard implements Shard {
 
 		SimilarityPair sp = new SimilarityPair();
 		if (extQt != null) {
+			Collection<LinkStatement> allStmts = new HashSet<LinkStatement>();
+			allStmts.addAll(stmts1);
+			allStmts.addAll(stmts2);
 			Map<String,Set<String>> closureMap = new HashMap<String,Set<String>>();
+			Map<String,Set<LinkStatement>> sMap = new HashMap<String,Set<LinkStatement>>();
+			stmts1 = extendLinksWithCache(stmts1, extQt, sMap);
+			stmts2 = extendLinksWithCache(stmts2, extQt, sMap);
+			Collection<String> seedIds = new HashSet<String>();
+			for (LinkStatement s : allStmts) {
+				seedIds.add(s.getTargetId());
+			}
+			for (String nid : sMap.keySet()) {
+				for (LinkStatement s : sMap.get(nid)) {
+					if (!closureMap.containsKey(nid))
+						closureMap.put(nid, new HashSet<String>());
+					closureMap.get(nid).add(s.getTargetId());
+				}
+			}
+			sp.setClosureMap(closureMap);
+
+			/*
+
+			//System.err.println("seeds: "+seedIds);
+			Graph g = this.getGraphByNodes(seedIds, extQt);
+			sp.setGraph(g);
+			Map<String,Set<String>> closureMap = g.getClosureMap();
+			//System.err.println("cmap: "+closureMap);
+			System.err.println("annots1: "+stmts1.size());
+			System.err.println("annots2: "+stmts2.size());
+
 			//stmts1 = extendLinks(stmts1, extQt, closureMap);
 			//stmts2 = extendLinks(stmts2, extQt, closureMap);
-			stmts1 = extendLinks(stmts1, extQt);
-			stmts2 = extendLinks(stmts2, extQt);
-			sp.setClosureMap(closureMap);
+			stmts1 = extendLinks(stmts1, closureMap);
+			stmts2 = extendLinks(stmts2, closureMap);
+			System.err.println("annots1+: "+stmts1.size());
+			System.err.println("annots2+: "+stmts2.size());
+			 */
+
+			// TODO: put this somewhere reusable
+			/*
+			for (LinkStatement s : allStmts) {
+				if (!closureMap.containsKey(s.getNodeId()))
+					closureMap.put(s.getNodeId(), new HashSet<String>());
+				closureMap.get(s.getNodeId()).add(s.getTargetId());
+				}
+			 */
+
 		}
 		Set<String> nodesInSet1 = new HashSet<String>();
 		Set<String> nodesInSet2 = new HashSet<String>();
@@ -1041,25 +1004,214 @@ public abstract class AbstractShard implements Shard {
 	public Collection<LinkStatement> extendLinks(Collection<LinkStatement> stmts, QueryTerm qt) {
 		return extendLinks(stmts,  qt, null);
 	}
+	public Collection<LinkStatement> extendLinksWithCache(Collection<LinkStatement> stmts, QueryTerm extQt, Map<String,Set<LinkStatement>> sMap) {
+		for (LinkStatement s : stmts) {
+			if (!sMap.containsKey(s.getNodeId()))
+				sMap.put(s.getNodeId(), new HashSet<LinkStatement>());
+			sMap.get(s.getNodeId()).add(s);
+		}
+		Collection<LinkStatement> elinks = new LinkedList<LinkStatement>();
+		Set<String> seedIds = new HashSet<String>();
+		Set<String> newSeedIds = new HashSet<String>();
+		for (LinkStatement s : stmts) {
+			elinks.add(s);
+			seedIds.add(s.getTargetId());
+		}
+		newSeedIds.addAll(seedIds);
+		for (String nid : sMap.keySet()) {
+			newSeedIds.remove(nid); // we've seen this
+		}
+		NodeSetQueryTerm nsqt = new NodeSetQueryTerm(newSeedIds);
+		Set<String> extSeedIds = new HashSet<String>();
+		Collection<LinkStatement> nlinks = getLinkStatementsByQuery(new LinkQueryTerm(nsqt,null,null));
+		for (LinkStatement s : nlinks) {
+			if (!sMap.containsKey(s.getNodeId()))
+				sMap.put(s.getNodeId(), new HashSet<LinkStatement>());
+			sMap.get(s.getNodeId()).add(s);
+			if (!sMap.containsKey(s.getTargetId()))
+				extSeedIds.add(s.getTargetId());
+		}
+		Collection<LinkStatement> xlinks = getLinkStatementsByQuery(new LinkQueryTerm(new NodeSetQueryTerm(extSeedIds),null,null));
+		for (LinkStatement s : xlinks) {
+			if (!sMap.containsKey(s.getNodeId()))
+				sMap.put(s.getNodeId(), new HashSet<LinkStatement>());
+			sMap.get(s.getNodeId()).add(s);
+		}
+
+		for (String nid : seedIds) {
+			elinks.addAll(sMap.get(nid));
+		}
+		return elinks;
+	}
+
 	public Collection<LinkStatement> extendLinks(Collection<LinkStatement> stmts, QueryTerm extQt, Map<String,Set<String>> closureMap) {
 		Collection<LinkStatement> nu = new LinkedList<LinkStatement>();
-		Set<String> nids = new HashSet<String>();
+		Set<String> seedIds = new HashSet<String>();
 		for (LinkStatement s : stmts) {
-			nids.add(s.getTargetId());
+			nu.add(s);
+			seedIds.add(s.getTargetId());
 		}
 		if (closureMap == null) {
 			// caller does not care about the map: do this the most efficient way
-			stmts = getClosure(nids, extQt);
+			stmts = getClosure(seedIds, extQt);
 		}
 		else {
 			// caller wants their map extended
-			stmts = getClosure(nids, extQt, closureMap);
+			stmts = getClosure(seedIds, extQt, closureMap);
+			/*
+			stmts = getClosure(seedIds, extQt);
+			for (LinkStatement s : stmts) {
+				if (!closureMap.containsKey(s.getNodeId()))
+					closureMap.put(s.getNodeId(), new HashSet<String>());
+				closureMap.get(s.getNodeId()).add(s.getTargetId());
+			}
+			 */
 		}
 		for (LinkStatement s : stmts) {
 			nu.add(s);
 		}
 		return nu;
 	}
+
+	@Deprecated
+	public Collection<LinkStatement> extendLinks(Collection<LinkStatement> stmts, Map<String,Set<String>> closureMap) {
+		Collection<LinkStatement> elinks = new LinkedList<LinkStatement>();
+		Set<String> nids = new HashSet<String>();
+		for (LinkStatement s : stmts) {
+			elinks.add(s); // reflexive
+			if (!closureMap.containsKey(s.getNodeId()))
+				continue;
+			for (String tid : closureMap.get(s.getNodeId())) {
+				LinkStatement elink = new LinkStatement(s);
+				elink.setTargetId(tid);
+				elinks.add(elink);
+			}
+		}
+		return elinks;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.obd.query.Shard#getClosure(java.util.Collection, java.lang.String)
+	 */
+	public Collection<LinkStatement> getClosure(Collection<String> ids, String relId) {
+		LinkQueryTerm extQt = new LinkQueryTerm();
+		extQt.setRelation(relId);
+		return getClosure(ids, extQt);
+	}
+
+	/**
+	 * given node ids {n : n1,n2,...}
+	 * find all statements s: [n r t] such that s matches extQt
+	 * @param ids - node identifiers
+	 * @param extQt - closure extension query
+	 * @return
+	 */
+	public Collection<LinkStatement> getClosure(Collection<String> ids, QueryTerm extQt) {
+		extQt.setNode(new NodeSetQueryTerm(ids));
+		return getLinkStatementsByQuery(extQt);
+	}
+
+	/**
+	 * as above, but augments a map
+	 * @param ids
+	 * @param extQt
+	 * @param map
+	 * @return
+	 */
+	public Collection<LinkStatement> getClosure(Collection<String> ids, QueryTerm extQt, Map<String,Set<String>> map) {
+		// calculating the closure for a set of IDs in a database is expensive: if we have some IDs
+		// in the closure map already, we don't need to recompute
+		// this assumes the closureMap is invariant w.r.t extQt - but we can't check this, 
+		// up to the caller to be safe
+		HashSet<String> newIds = new HashSet<String>();
+		newIds.addAll(ids);
+		Collection<LinkStatement> cachedStmts = new HashSet<LinkStatement>();
+		for (String id : map.keySet()) {
+			newIds.remove(id);
+			for (String tid : map.get(id))
+				cachedStmts.add(new LinkStatement(id,null,tid));
+		}
+		extQt.setNode(new NodeSetQueryTerm(newIds));
+		Collection<LinkStatement> stmts = getLinkStatementsByQuery(extQt);
+
+		// ids for a further iteration to get the inter-set closure; see below
+		Set<String> nextIds = new HashSet<String>();
+		// augment the map
+		for (Statement s : stmts) {
+			String nid = s.getNodeId();
+			String tid = s.getTargetId();
+			if (!map.containsKey(nid)) {
+				map.put(nid, new HashSet<String>());
+			}
+			map.get(nid).add(tid);
+			// see below
+			if (!newIds.contains(tid))
+				nextIds.add(tid);
+		}
+
+		// there may be a more efficient way to do this...
+		// we have the closure map for the initial input set, but not the
+		// inter-set closure map;
+		// e.g. if the initial set is {a, b, c}
+		// and the closure contained a->d, b->e
+		// we don't know anything about the relation between d and e
+		extQt.setNode(new NodeSetQueryTerm(nextIds));
+		Collection<LinkStatement> nextStmts = getLinkStatementsByQuery(extQt);
+		for (Statement s : nextStmts) {
+			String nid = s.getNodeId();
+			if (!map.containsKey(nid)) {
+				map.put(nid, new HashSet<String>());
+			}
+			map.get(nid).add(s.getTargetId());
+		}
+		stmts.addAll(cachedStmts);
+
+		return stmts;
+	}
+
+	public Map<String,Set<String>> getClosureMap(Collection<String> ids, String relId) {
+		QueryTerm extQt = new LinkQueryTerm();
+		extQt.setRelation(relId);
+		return getClosureMap(ids, extQt);
+	}
+	public Map<String,Set<String>> getClosureMap(Collection<String> ids, QueryTerm extQt) {
+		Map<String,Set<String>> map = new HashMap<String,Set<String>>();
+		return getClosureMap(ids, extQt, map);
+	}
+	/**
+	 * This extends the existing closureMap. If ids contains s1,s2,...,sn
+	 * and the shard has s1->s1a,s1b,... etc
+	 * these will be added to the map
+	 * 
+	 * passing in an existing closureMap will both extend that map, and also use the map
+	 * to efficiently query the shard. This means the extQt must be invariant over multiple calls.
+	 * It is up to the caller to be safe here
+	 * @param ids
+	 * @param extQt
+	 * @param map - new keys and values will be added
+	 * @return
+	 */
+	public Map<String,Set<String>> getClosureMap(Collection<String> ids, QueryTerm extQt, Map<String,Set<String>> map) {
+		// calculating the closure for a set of IDs in a database is expensive: if we have some IDs
+		// in the closure map already, we don't need to recompute
+		// this assumes the closureMap is invariant w.r.t extQt - but we can't check this, 
+		// up to the caller to be safe
+		HashSet<String> newIds = new HashSet<String>();
+		newIds.addAll(ids);
+		for (String id : map.keySet())
+			newIds.remove(id);
+		Collection<LinkStatement> stmts = getClosure(newIds, extQt);
+		for (LinkStatement s : stmts) {
+			String nid = s.getNodeId();
+			if (!map.containsKey(nid))
+				map.put(nid, new HashSet<String>());
+
+			map.get(nid).add(s.getTargetId());
+		}
+
+		return map;
+	}
+
 
 	public Collection<Graph> mapGraph(Graph g, QueryTerm mapQt) {
 		Collection<Graph> mappedGraphs = new LinkedList<Graph>();
@@ -1112,7 +1264,7 @@ public abstract class AbstractShard implements Shard {
 	public void removeSource(String srcId) {
 		// TODO
 	}
-	
+
 	public void realizeRules(Collection<InferenceRule> rules) {
 		for (InferenceRule rule : rules) {
 			realizeRule(rule);
@@ -1124,7 +1276,7 @@ public abstract class AbstractShard implements Shard {
 
 	public void mergeIdentifierByIDSpaces(String fromIdSpace, String toIdSpace) throws ShardExecutionException {
 	}
-	
+
 	public void putGraph(Graph graph) {
 		for (Node n : graph.getNodes()) {
 			putNode(n);
@@ -1133,6 +1285,6 @@ public abstract class AbstractShard implements Shard {
 			putStatement(s);
 		}
 	}
-	
+
 
 }
