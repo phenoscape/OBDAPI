@@ -5,7 +5,11 @@ all: all_reports_txt all_reports_html
 sync:
 	rsync -avz * sos.lbl.gov:cvs/obo-database/dumps
 
-REPORTS = source_summary link_count_by_metatype_and_source link_count_by_relation_and_node_source link_count_by_node_and_object_source
+REPORTS = source_summary link_count_by_metatype_and_source link_count_by_relation_and_node_source link_count_by_node_and_object_source\
+omim_annotator_global_congruence_by_gene \
+omim_gene_annotation_summary \
+
+
 all_reports_txt: $(patsubst %,reports/$(DB)-%.txt,$(REPORTS))
 all_reports_html: $(patsubst %,reports/$(DB)-%.html,$(REPORTS))
 

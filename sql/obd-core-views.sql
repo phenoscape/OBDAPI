@@ -870,6 +870,8 @@ asserted_object_id, which in turn holds some relation to object_id
 -- CREATE INDEX implied_annotation_link_idx_node_id ON implied_annotation_link(node_id);
 -- CREATE INDEX implied_annotation_link_idx_object_id ON implied_annotation_link(object_id);
 -- CREATE INDEX implied_annotation_link_idx_node_object_id ON implied_annotation_link(node_id,object_id);
+-- CREATE INDEX implied_annotation_link_idx_source_id ON implied_annotation_link(source_id);
+-- CREATE INDEX implied_annotation_link_idx_node_object_source_id ON implied_annotation_link(node_id,object_id,source_id);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW implied_annotation_xp AS
@@ -906,6 +908,7 @@ COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated 
 
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('implied_annotation_link_count_by_object');
+-- CREATE INDEX implied_annotation_link_count_by_object_idx_node ON implied_annotation_link_count_by_object(node_id);
 -- CREATE INDEX implied_annotation_link_count_by_object_idx_node_total ON implied_annotation_link_count_by_object(node_id,total);
 -- END MATERIALIZE
 
@@ -922,7 +925,8 @@ COMMENT ON VIEW implied_annotation_link_count_by_node IS 'number of nodes (eg cl
 
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('implied_annotation_link_count_by_node');
--- CREATE INDEX implied_annotation_link_count_by_node_idx_node_total ON implied_annotation_link_count_by_object(node_id,total);
+-- CREATE INDEX implied_annotation_link_count_by_node_idx_node ON implied_annotation_link_count_by_node(node_id);
+-- CREATE INDEX implied_annotation_link_count_by_node_idx_node_total ON implied_annotation_link_count_by_node(node_id,total);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
@@ -1946,7 +1950,9 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
   ial.source_id,
   ialc.total;
  
-
+COMMENT ON VIEW annotated_entity_congruence_by_annotsrc IS 
+'congruence for an annotated_entity and a source vs all other sources (including itself).
+Faster than comparing between pairs';
 
 CREATE OR REPLACE VIEW avg_annotated_entity_congruence_between_annotsrc_pair AS
  SELECT

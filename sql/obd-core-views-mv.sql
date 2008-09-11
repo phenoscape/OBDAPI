@@ -904,7 +904,7 @@ CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
  GROUP BY
   object_id;
 
-COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a node';
+COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a node. TODO: rename? sounds like it is counting links..';
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('implied_annotation_link_count_by_object');
@@ -1803,6 +1803,22 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
  WHERE
   total_nodes_in_intersection > 0;
 
+CREATE OR REPLACE VIEW annotated_entity_total_annotations_by_annotsrc AS
+ SELECT
+  node_id AS annotated_entity_id,
+  source_id,
+  count(DISTINCT link_id) AS total_annotations
+ FROM
+  reified_link
+ GROUP BY
+  node_id,
+  source_id;
+
+COMMENT ON VIEW
+annotated_entity_total_annotations_by_annotsrc IS
+'number of annotations for a particular annotated
+entity (eg a genotype) and annotation source (eg ZFIN).';
+
 CREATE OR REPLACE VIEW annotated_entity_total_annotation_nodes_by_annotsrc AS
  SELECT
   baselink.node_id AS annotated_entity_id,
@@ -1817,7 +1833,7 @@ CREATE OR REPLACE VIEW annotated_entity_total_annotation_nodes_by_annotsrc AS
 COMMENT ON VIEW
 annotated_entity_total_annotation_nodes_by_annotsrc IS
 'number of nodes colored by annotation for a particular annotated
-entity (eg a genotype) and annotation source (eg ZFIN)';
+entity (eg a genotype) and annotation source (eg ZFIN).';
 
 CREATE OR REPLACE VIEW annotated_entity_union_annotations_between_annotsrc_pair AS
  SELECT
@@ -1920,13 +1936,17 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
  SELECT
   ial.node_id AS annotated_entity_id,
   ial.source_id,
-  CAST(total_nodes_in_common AS FLOAT) / total_nodes_in_union AS congruence
+  COUNT(DISTINCT ial.object_id) AS total_nodes_in_src,
+  ialc.total                    AS total_nodes,
+  CAST(COUNT(DISTINCT ial.object_id) AS FLOAT) / ialc.total AS congruence
  FROM
              implied_annotation_link AS ial
-  INNER JOIN 
+  INNER JOIN implied_annotation_link_count_by_node AS ialc USING (node_id)
+
  GROUP BY
   ial.node_id,
-  ial.source_id;
+  ial.source_id,
+  ialc.total;
  
 
 

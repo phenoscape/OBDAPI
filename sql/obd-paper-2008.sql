@@ -37,6 +37,39 @@ CREATE OR REPLACE VIEW omim_genotype AS
 -- SELECT create_matview('omim_genotype');
 -- CREATE INDEX omim_genotype_idx_id ON omim_genotype(node_id);
 -- CREATE INDEX omim_genotype_idx_uid ON omim_genotype(uid);
+-- CREATE INDEX omim_genotype_idx_label ON omim_genotype(label);
+-- END MATERIALIZE
+
+CREATE OR REPLACE VIEW omim_genotype_gene AS
+ SELECT
+  og.*,
+  l2n.object_id AS gene_id,
+  l2n.object_uid AS gene_uid,
+  l2n.object_label AS gene_label
+ FROM
+  omim_genotype AS og
+  INNER JOIN link_to_node AS l2n USING (node_id)
+ WHERE
+  l2n.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:variant_of')
+  AND l2n.object_uid like 'NCBI_Gene:%';
+
+CREATE OR REPLACE VIEW omim_gene AS
+ SELECT DISTINCT
+  l2n.object_id AS node_id,
+  l2n.object_uid AS uid,
+  l2n.object_label AS label
+ FROM
+  omim_genotype AS og
+  INNER JOIN link_to_node AS l2n USING (node_id)
+ WHERE
+  l2n.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:variant_of')
+  AND l2n.object_uid like 'NCBI_Gene:%';
+
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('omim_gene');
+-- CREATE INDEX omim_gene_idx_id ON omim_gene(node_id);
+-- CREATE INDEX omim_gene_idx_uid ON omim_gene(uid);
+-- CREATE INDEX omim_gene_idx_label ON omim_gene(label);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW omim_genotype_annotation_summary AS
@@ -47,6 +80,15 @@ CREATE OR REPLACE VIEW omim_genotype_annotation_summary AS
  FROM 
   annotated_entity_total_annotations_by_annotsrc  AS aet
   INNER JOIN omim_genotype ON (aet.annotated_entity_id = omim_genotype.node_id);
+
+CREATE OR REPLACE VIEW omim_gene_annotation_summary AS
+ SELECT DISTINCT
+  ogg.gene_uid, 
+  ogg.gene_label, 
+  aet.*
+ FROM 
+  annotated_entity_total_annotations_by_annotsrc  AS aet
+  INNER JOIN omim_genotype_gene AS ogg ON (aet.annotated_entity_id = ogg.gene_id);
 
 CREATE OR REPLACE VIEW total_bbop AS
  SELECT
@@ -102,7 +144,16 @@ CREATE OR REPLACE VIEW omim_genotype_annotsrc_coverage AS
   annotated_entity_total_annotation_nodes_by_annotsrc AS aet
   INNER JOIN omim_genotype ON (aet.annotated_entity_id = omim_genotype.node_id);
 
-CREATE OR REPLACE VIEW omim_annotator_congruence_by_entity AS
+CREATE OR REPLACE VIEW omim_gene_annotsrc_coverage AS
+ SELECT DISTINCT
+  ogg.uid, 
+  ogg.label, 
+  aet.*
+ FROM 
+  annotated_entity_total_annotation_nodes_by_annotsrc AS aet
+  INNER JOIN omim_gene AS ogg ON (aet.annotated_entity_id = ogg.node_id);
+
+CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_entity AS
  SELECT
   base_src.uid AS base_src_uid,
   target_src.uid AS target_src_uid,
@@ -112,6 +163,28 @@ CREATE OR REPLACE VIEW omim_annotator_congruence_by_entity AS
   INNER JOIN omim_annotation_source AS base_src ON (base_src.node_id=aec.base_source_id)
   INNER JOIN omim_annotation_source AS target_src ON (target_src.node_id=aec.target_source_id);
 
+CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_gene AS
+ SELECT DISTINCT
+  ogg.uid, 
+  ogg.label, 
+  base_src.uid AS base_src_uid,
+  target_src.uid AS target_src_uid,
+  aec.* 
+ FROM 
+  annotated_entity_congruence_between_annotsrc_pair AS aec
+  INNER JOIN omim_gene AS ogg ON (aec.annotated_entity_id = ogg.node_id)
+  INNER JOIN omim_annotation_source AS base_src ON (base_src.node_id=aec.base_source_id)
+  INNER JOIN omim_annotation_source AS target_src ON (target_src.node_id=aec.target_source_id);
 
+ CREATE OR REPLACE VIEW omim_annotator_global_congruence_by_gene AS
+ SELECT DISTINCT
+  ogg.uid, 
+  ogg.label, 
+  src.uid AS src_uid,
+  aec.* 
+ FROM 
+  annotated_entity_congruence_by_annotsrc AS aec
+  INNER JOIN omim_gene AS ogg ON (aec.annotated_entity_id = ogg.node_id)
+  INNER JOIN omim_annotation_source AS src ON (src.node_id=aec.source_id);
 
- 
+  
