@@ -1,3 +1,19 @@
+
+--
+CREATE OR REPLACE VIEW gene_node AS
+ SELECT 
+  *
+ FROM
+  node
+ WHERE node_id IN (SELECT is_a_link.node_id FROM is_a_link INNER JOIN node AS gene_type ON (is_a_link.object_id=gene_type.node_id) WHERE gene_type.uid='SO:0000704' AND is_inferred='f');
+
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('gene_node');
+-- CREATE UNIQUE INDEX gene_node_idx_id ON gene_node(node_id);
+-- CREATE UNIQUE INDEX gene_node_idx_uid ON gene_node(uid);
+-- CREATE INDEX gene_node_idx_label ON gene_node(label);
+-- END MATERIALIZE
+
 CREATE OR REPLACE VIEW omim_annotation_source AS
  SELECT
   *
@@ -132,8 +148,6 @@ CREATE OR REPLACE VIEW omim_genotype_annotation_summary_table AS
   LEFT OUTER JOIN total_bbop AS aet_bbop ON (aet_bbop.annotated_entity_id=omim_genotype.node_id)
   LEFT OUTER JOIN total_zfin AS aet_zfin ON (aet_zfin.annotated_entity_id=omim_genotype.node_id)
   LEFT OUTER JOIN total_fb AS aet_fb ON (aet_fb.annotated_entity_id=omim_genotype.node_id);
-
-
 
 CREATE OR REPLACE VIEW omim_genotype_annotsrc_coverage AS
  SELECT

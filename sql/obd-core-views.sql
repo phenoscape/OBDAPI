@@ -936,6 +936,9 @@ CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
  FROM
   implied_annotation_link AS ial
   INNER JOIN implied_annotation_link_count_by_object AS ialc ON (ial.object_id=ialc.node_id);
+
+COMMENT ON VIEW implied_annotation_link_with_total IS
+'implied_annotation_link adorned with the total number of classes annotated to the object_id.';
  
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('implied_annotation_link_with_total');
@@ -1624,6 +1627,7 @@ CREATE OR REPLACE VIEW annotated_entity_total_annotation_nodes AS
  GROUP BY
   baselink.node_id;
 
+
 -- Example: SELECT node_label(is_a_node_id),node_label(object_id) from node_pair_annotation_xp_intersection where node1_id = 532850 and node2_id=239699;
 CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection AS
  SELECT DISTINCT
@@ -1684,7 +1688,7 @@ COMMENT ON VIEW node_pair_annotation_xp_intersection_with_stats IS 'As
  is not necessarily an accurate measure of probability, as the two
  axes will probably not be independent';
 
-Create OR REPLACE VIEW node_pair_annotation_intersection AS
+CREATE OR REPLACE VIEW node_pair_annotation_intersection AS
  SELECT DISTINCT
   ial1.node_id AS node1_id,
   ial2.node_id AS node2_id,
@@ -1740,7 +1744,7 @@ CREATE OR REPLACE VIEW node_pair_annotation_intersection_count AS
 
 COMMENT ON VIEW node_pair_annotation_intersection_count IS 'For any
 two nodes (e.g. two gene nodes), what is the total number of
-annotation nodes in common? implied_annotation_link is used here';
+annotation nodes in common? implied_annotation_link is used here.';
 
 CREATE OR REPLACE VIEW node_pair_annotation_union1 AS
  SELECT DISTINCT
@@ -2100,13 +2104,14 @@ CREATE OR REPLACE VIEW implied_annotation_link_with_entropy AS
 
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('implied_annotation_link_with_entropy');
--- CREATE INDEX implied_annotation_link_with_entropy_idx_node_id ON implied_annotation_link_with_entropy(node_id);
--- CREATE INDEX implied_annotation_link_with_entropy_idx_object_id ON implied_annotation_link_with_entropy(object_id);
--- CREATE INDEX implied_annotation_link_with_entropy_idx_node_object_id ON implied_annotation_link_with_entropy(node_id,object_id);
+-- CREATE INDEX implied_annotation_link_with_entropy_idx_node ON implied_annotation_link_with_entropy(node_id);
+-- CREATE INDEX implied_annotation_link_with_entropy_idx_object ON implied_annotation_link_with_entropy(object_id);
+-- CREATE INDEX implied_annotation_link_with_entropy_idx_node_object ON implied_annotation_link_with_entropy(node_id,object_id);
+-- CREATE INDEX implied_annotation_link_with_entropy_idx_node_object_info ON implied_annotation_link_with_entropy(shannon_information,node_id,object_id);
 -- END MATERIALIZE
 
 
-CREATE OR REPLACE VIEW node_pair_max_entropy_match AS
+CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
  SELECT
   ial1.node_id AS node1_id,
   ial2.node_id AS node2_id,
@@ -2118,6 +2123,18 @@ CREATE OR REPLACE VIEW node_pair_max_entropy_match AS
  WHERE
   e.node_id = ial1.object_id AND
   ial1.object_id = ial2.object_id -- both annotations agree
+ GROUP BY
+  ial1.node_id,
+  ial2.node_id;
+
+CREATE OR REPLACE VIEW node_pair_annotation_match_sum_entropy AS
+ SELECT
+  ial1.node_id AS node1_id,
+  ial2.node_id AS node2_id,
+  sum(DISTINCT shannon_information) AS sum_ic
+ FROM 
+  implied_annotation_link AS ial1
+  INNER JOIN implied_annotation_link_with_entropy AS ial2 USING (object_id)
  GROUP BY
   ial1.node_id,
   ial2.node_id;
