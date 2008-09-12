@@ -944,6 +944,17 @@ CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
 -- CREATE INDEX implied_annotation_link_with_total_idx_object ON implied_annotation_link_with_total(object_id);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW implied_annotation_link_with_object AS
+ SELECT
+  ial.*,
+  n.uid AS object_uid,
+  n.label AS object_label,
+  n.source_id AS object_source_id
+ FROM
+  implied_annotation_link AS ial
+  INNER JOIN node AS n ON (ial.object_id=n.node_id);
+
+
 -- link where relation=posits; from annotation to statement
 CREATE OR REPLACE VIEW posits_link AS
  SELECT pl.* 
@@ -1792,7 +1803,7 @@ and n2 (e.g. two gene nodes), what are the total number of distinct
 implied annotation nodes for either n1 or n2. Warning: large cartesian
 product unless constrained.';
 
-CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
+CREATE OR REPLACE VIEW node_pair_annotation_similarity_score_old AS
  SELECT
   nii.node1_id,
   nii.node2_id,
@@ -1804,6 +1815,25 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
   node_pair_annotation_union_count AS niu USING (node1_id,node2_id)
  WHERE
   total_nodes_in_intersection > 0;
+
+CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
+ SELECT
+  nii.node1_id,
+  nii.node2_id,
+  n1t.total_annotation_nodes AS node1_total_nodes,
+  n2t.total_annotation_nodes AS node2_total_nodes,
+  total_nodes_in_intersection,
+  CAST(total_nodes_in_intersection AS FLOAT) / ((n1t.total_annotation_nodes + n2t.total_annotation_nodes) - total_nodes_in_intersection) AS basic_score
+ FROM 
+  node_pair_annotation_intersection_count AS nii 
+  INNER JOIN annotated_entity_total_annotation_nodes AS n1t ON (nii.node1_id=n1t.annotated_entity_id)
+  INNER JOIN annotated_entity_total_annotation_nodes AS n2t ON (nii.node2_id=n2t.annotated_entity_id)
+ WHERE
+  total_nodes_in_intersection > 0;
+
+COMMENT ON VIEW node_pair_annotation_similarity_score IS
+'annotation overlap between two nodes as a ratio of intersection / union';
+
 
 CREATE OR REPLACE VIEW annotated_entity_total_annotations_by_annotsrc AS
  SELECT
