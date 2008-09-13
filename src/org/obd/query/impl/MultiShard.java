@@ -1,6 +1,8 @@
 package org.obd.query.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,6 +24,7 @@ import org.obd.query.AnnotationLinkQueryTerm;
 import org.obd.query.ComparisonQueryTerm;
 import org.obd.query.QueryTerm;
 import org.obd.query.Shard;
+import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
 import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.exception.ShardExecutionException;
@@ -204,6 +207,17 @@ public class MultiShard extends AbstractShard implements Shard {
 			}
 		}
 		return combinedStats;
+	}
+	
+	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
+		if (shards.size() == 1)
+			return shards.iterator().next().getSimilarNodes(params, nodeId);
+		List<ScoredNode> sns = new ArrayList<ScoredNode>();
+		for (Shard s : shards) {
+			sns.addAll(s.getSimilarNodes(params, nodeId));
+			Collections.sort(sns);
+		}		
+		return sns;
 	}
 
 	public Collection<Node> getNodesByQuery(QueryTerm queryTerm) {

@@ -351,6 +351,8 @@ public abstract class AbstractShard implements Shard {
 		params.hitNodeFilter = hitNodeFilter;
 		return getSimilarNodes(params, nodeId);
 	}
+	
+	// TODO: don't put this here..
 	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
 		// TODO: use ontologySrcId
 		// find annotations for this node, then use this as basis

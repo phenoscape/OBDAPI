@@ -419,13 +419,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		wc.addEqualityConstraint(tblCol(ialAlias,LINK_NODE_INTERNAL_ID_COLUMN), iid);
 		wc.addConstraint("total < " + params.search_profile_max_annotated_entities_per_class); // only choose informative nodes
 
-		if (params.in_organism != null) {
-			params.hitNodeFilter = new LinkQueryTerm("OBO_REL:in_organism",params.in_organism);
-		}
-		if (params.hitNodeFilter != null) {
-			System.err.println(baitRq.toSQL());
-			this.translateQuery(params.hitNodeFilter, baitRq, tblCol(ialAlias,"node_id"));
-		}
 
 		baitRq.setOrderByClause("total"); // most informative first
 		baitRq.setSelectClause("DISTINCT *");
@@ -495,6 +488,15 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		fetchRq.setSelectClause("ial.node_id, COUNT(DISTINCT ial.object_id) AS ovlp");
 		fetchRq.setGroupByClause("ial.node_id");
 		fetchRq.setOrderByClause("ovlp DESC");
+
+		if (params.in_organism != null) {
+			params.hitNodeFilter = new LinkQueryTerm("OBO_REL:in_organism",params.in_organism);
+		}
+		if (params.hitNodeFilter != null) {
+			System.err.println(baitRq.toSQL());
+			this.translateQuery(params.hitNodeFilter, fetchRq, tblCol(ialAlias,"node_id"));
+		}
+
 		System.err.println(fetchRq.toSQL());
 		Connection conn = obd.getConnection();
 		int rowNum = 0;
@@ -506,7 +508,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println(scoreSQL);
 			PreparedStatement scorePS = conn.prepareStatement(scoreSQL);
 			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
-			 rs = this.execute(fetchRq);
+			rs = this.execute(fetchRq);
 			while (rs.next() && rowNum < params.max_candidate_hits) {
 				// get the uid
 				nodePS.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));

@@ -75,7 +75,7 @@ public class SimilarityTest extends AbstractOBDTest {
 		RelationVocabulary rv = new RelationVocabulary();
 
 		LinkQueryTerm q = new LinkQueryTerm(rv.variant_of(), "entrezgene:30304");
-		List<ScoredNode> sns = shard.getSimilarNodes(q);
+		List<ScoredNode> sns = shard.getSimilarNodes(null,q);
 		LinkQueryTerm nq = new LinkQueryTerm();
 		nq.setRelation(rv.variant_of());
 		nq.setAspect(Aspect.TARGET);
