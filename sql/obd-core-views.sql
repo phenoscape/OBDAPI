@@ -842,7 +842,7 @@ CREATE OR REPLACE VIEW node_literal_with_pred AS
 -- reification is not propagated so we use this
 -- NOTE: currently propagates over ALL relations.. TODO fix
 CREATE OR REPLACE VIEW implied_annotation_link AS
-  SELECT
+  SELECT DISTINCT
    alink.link_id,
    alink.node_id,
    alink.predicate_id,
@@ -1627,6 +1627,11 @@ CREATE OR REPLACE VIEW annotated_entity_total_annotation_nodes AS
  GROUP BY
   baselink.node_id;
 
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('annotated_entity_total_annotation_nodes');
+-- CREATE INDEX annotated_entity_total_annotation_nodes_idx_ae ON annotated_entity_total_annotation_nodes(annotated_entity_id);
+-- CREATE INDEX annotated_entity_total_annotation_nodes_idx_ae_total ON annotated_entity_total_annotation_nodes(annotated_entity_id,total_annotation_nodes);
+-- END MATERIALIZE
 
 -- Example: SELECT node_label(is_a_node_id),node_label(object_id) from node_pair_annotation_xp_intersection where node1_id = 532850 and node2_id=239699;
 CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection AS
@@ -2092,7 +2097,6 @@ implemented';
 -- CREATE UNIQUE INDEX class_node_entropy_by_evidence_idx_node_id_info ON class_node_entropy_by_evidence(node_id,shannon_information);
 -- END MATERIALIZE
 
-
 CREATE OR REPLACE VIEW implied_annotation_link_with_entropy AS
  SELECT
   e.shannon_information,
@@ -2117,12 +2121,8 @@ CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
   ial2.node_id AS node2_id,
   max(DISTINCT shannon_information) AS max_ic
  FROM 
-  implied_annotation_link AS ial1,
-  implied_annotation_link AS ial2,
-  class_node_entropy_by_evidence AS e
- WHERE
-  e.node_id = ial1.object_id AND
-  ial1.object_id = ial2.object_id -- both annotations agree
+  implied_annotation_link AS ial1
+  INNER JOIN implied_annotation_link_with_entropy AS ial2 USING (object_id)
  GROUP BY
   ial1.node_id,
   ial2.node_id;

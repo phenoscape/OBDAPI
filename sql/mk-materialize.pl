@@ -10,3 +10,4 @@ while(<>) {
     $in = 1 if /BEGIN\s+MATERIALIZE/;
     print;
 }
+print "VACUUM FULL ANALYZE;\n\n";
