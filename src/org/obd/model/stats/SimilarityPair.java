@@ -23,16 +23,173 @@ import org.obd.model.Node;
  * <li>two classes in an ontology that potentially share ancestors
  * </ul>
  * 
+ * <h2>Getting Started</h2>
+ * 
+ * Use of this class assumes you already have two nodes you wish to compare. These might be two genotypes from the same gene - or two orthologous genes.
+ * This class will NOT perform search. For that you need  {@link org.obd.query.AnalysisCapableRepository#getSimilarNodes(String)}. This class assumes you have the pair of nodes
+ * in advance.
+ * 
+ * <h2>Basic Concepts</h2>
+ * 
+ * Nodes are deemed similar on the basis of <i>what they have in common</i>. This class is flexible with respect to what kinds of properties can be used as
+ * a basis for similarity. However, the most common case is where the two nodes are entities that are annotated (such as genes), and we are looking for
+ * similarity on the basis of <i>shared annotations</i> to classes in an ontology, or to compositional description classes (see {@link CompositionalDescription}).
+ * <p>
+ * In these cases, we used <i>inferred</i> annotations. E.g. if geneA is annotated to Leg and geneB to Wing, they have Appendage in common.
+ * 
+ * <h2>Node Sets</h2>
+ * 
+ * Scoring is typically a measure of what the nodes have in common vs what one node has that the other one does not.
+ * <p>
+ * the set of classes annotated for node1 is referred to here as nodesInSet1 (accessed via {@link #getNodesInSet1()}), and likewise for node2 the set is
+ * nodesInSet2 (accessed via {@link #getNodesInSet2()})
+ * <p>
+ * the set of classes in common to both node1 and node2 inferred annotations is called nodesInCommon (see {@link #getNodesInCommon()}).
+ * We write this as:  
+ * <pre>
+ *    nodesInSet1 &cap; nodesInSet2
+ * </pre>
+ * 
+ * The size of this set is written as:
+ * 
+ * <pre>
+ *   | nodesInSet1 &cap; nodesInSet2 |
+ * </pre>
+ * 
+ * The entire set of classes used to annotate both nodes (including inferred annotations) is called nodesInUnion (see {@link #getNodesInUnion()}).
+ * We write this as:  
+ * 
+ * <pre>
+ *    nodesInSet1 &cup; nodesInSet2
+ * </pre>
+ * 
+ * We size of this set is written as:
+ * 
+ * <pre>
+ *   | nodesInSet1 &cup; nodesInSet2 |
+ * </pre>
+ * 
+ * Note that the size of this set is not the sum | nodesInSet1 | + | nodesInSet2 |, because there are usually some nodes in common
+ * <p>
+ * For the purposes of reporting similar annotations, we want to avoid reporting redundant classes; e.g. two genes have annotations to "femur" they also
+ * have inferred annotations to "bone". There is no sense in reporting "bone", so we can access the non-redundant nodes in common via {@link #getNonRedundantNodesInCommon()}.
+ * See also {@link #getNonRedundantNodesInSet1()} and {@link #getNonRedundantNodesInSet2()}
+ * 
+ * <h2>Scoring</h2>
+ * 
+ * With these values calculated, we can assign similarity scores. One measure of similarity is simply the number of nodes in common. However,
+ * this would mean that genes with high numbers of annotations would be counted as similar by chance. We also want to penalise differences.
+ * <p>
+ * The basicSimilarityScore (aka class overlap) is the ratio of nodesInCommon to nodesInUnion
+ * <pre>
+ * | nodesInSet1 &cap; nodesInSet2 | / | nodesInSet1 &cup; nodesInSet2 |
+ * </pre>
+ * also written as:
+ * 
+ * <img src="http://www.pubmedcentral.nih.gov/picrender.fcgi?artid=2238903&blobname=gkm806um7.jpg" alt="formula for UI(p,q)"> 
+ * <p>
+ * 
+ * See {@link #getBasicSimilarityScore()}
+ * <p>
+ * Recall that this includes inferred annotations. This is desirable for two reasons: it allows approximate matching for non-exact classes, and it penalises general matches
+ * in favour of specific matches.
+ * <p>
+ * To see why this is true, consider two genes annotated to very specific classes - e.g. geneA to "permeability of ER membrane of pyramidal neuron" vs geneB to "permability
+ * of ER membrane of interneuron". Although not an exact match, they will have very many inferred classes in common, because they are so deep in the graph. Thus |nodesInCommon|
+ * will be high
+ * <p>
+ * Contrast with distant annotations: these may trivially have nodesInCommon inferred near the top of the ontology graph: {"quality", "organism", "organ"} etc. As these
+ * nodes have fewer ancestors, |nodesInCommon| will be lower.
+ * <p>
+ * This works both ways: differences between the genes may be highly specific too, resulting in a bigger penalty. This may be more pronounced across species, where
+ * species specific anatomy ontologies are used.
+ * <p>
+ * Some studies have found that class overlap metrics are sufficient; however, the graph may be a poor proxy for what constitutes an important match. For that we have to use
+ * information content
+ * 
+ * <h3>Information Content Metrics</h3>
+ * 
+ * The information content of a class is a measure of how "surprised" we are to see it in an annotation.
+ * <p>
+ * "organism" has a low IC because it occurs so frequently (taking inference into account). If we see two genes A and B annotated to this it may well be by chance, the
+ * genes are not necessarily related.
+ * <p>
+ * "permeability of ER membrane in pyramidal neuron on CA4 hippocampal region" in contrast has high IC. Two genes A and B annotated to this are less likely to occur by chance
+ * (although there is of course the possibility of annotation bias: if this was a heavily studied region we would expect to see more)
+ * <p>
+ * The IC of a term/class t is:
+ * <pre>
+ *    IC(t) = -log<SUB>2</SUB>p(t)
+ * </pre>
+ * Here p(t) is the probability of an annotated entity chosen at random being annotated (directly or via inference) with t
+ * <pre>
+ *   p(t) = | annot(t) | / total_annotated_entities
+ * </pre>
+ * Use {@link #getInformationContent(String)} to get the IC for any class in the similarity set.
+ * <p>
+ * We can use the IC of a class to improve comparison metrics. One common technique is to take the single most informative (highest IC) class for any given pair of nodes
+ * in an ontology. For this we use {@link #getMaximumInformationContentForNodesInCommon()}.
+ * -- However, this masks the kind of similarity where the two nodes share multiple different things in common.
+ * <p>
+ * Another metric is to sum IC the non-redundant nodesInCommon. See {@link #getInformationContentSumForNRNodesInCommon()}. We use non-redundant nodes to better
+ * reflect independent annotations.
+ * <p>
+ * The most sophisticated measure here is to get the ratio of IC for the nodesInCommon vs the IC for nodesInUnion. This penalises
+ * nodes that have differing annotations. We can write this as:
+ * <img src="http://www.pubmedcentral.nih.gov/picrender.fcgi?artid=2238903&blobname=gkm806um8.jpg" alt="formula for simGIC"/> 
+ * See {@link #getInformationContentRatio()}
+ * 
+ * <h2>Inferred annotations and use of the reasoner</h2>
+ * 
+ * This object makes use of pre-computed reasoner results. It relies on the object which builds the SimilarityPair object to populate a closure map, which indicates the
+ * ancestors for any given class. See {@link org.obd.query.AnalysisCapableRepository#compareAnnotationsByAnnotatedEntityPair(String, String)}.
+ * <p>
+ * The most common case is to populate the closure map using the full set of reasoner results, but ignoring the final inferred relation. Thus "cell" is treated as an ancestor of
+ * both "nucleus" and "T-cell". However, the closure map can also be built to only reflect is_a or partonomic relations, if preferred.
+ * <p>
+ * The pre-reasoned results are essential for finding nodesInCommon - annotations do not necessarily match exactly - they may match further
+ * up the graph. They are also used when calculating nonRedundantNodesInCommmon ({@link #getNonRedundantNodesInCommon()}, so we do not report or double-count
+ * nodes that subsume existing nodes. For example, if nodesInCommon = {neuron, nervous system, morphology-of-tibia, morphology-of-bone} then nonRedundantNodesInCommon =
+ * {neuron, morphology-of-tibia} because two of the nodes are redundant (assumes the closureMap treates all relations equally. If we build a closure map from is_a only, then
+ * nervous system is NOT redundant with neuron).
+ * <p>
+ * {@link org.obd.model.CompositionalDescriptions} are treated much like other classes. For example, the EQ description "shortened dendrite" is treated as an ontology-less class. It is an
+ * is_a descendant of "size of cell projection" and of "size". It is a descendant via inheres_in to "dendrite" and "cell projection". It is a descendant via inheres_in_part_of
+ * to "cell", "organism" etc. The distinctions between the relations are generally lost when the SimilarityPair object is constructed.
+ * 
+ * <h3>Important point</h3>
+ * 
+ * The reasoner will only know about ontology classes or pre-existing CompositionalDescriptions. For example, if we have annotations to both
+ * curvature-of-mouse-tibia and shape-of-human-tibia we would like to use morphology-of-uberon-tibia as the node in common.
+ * <p>
+ * However, if the composition morphology-of-uberon-tibia has not been added to the database in advance, then nothing is known about this composition! the reasoner
+ * does NOT compare all <i>potential</i> compositions as this would be too expensive. The most likely nodeInCommon in this particular case may turn out to be a pre-coordinated
+ * ontology class such as uberon-tibia.
+ * <p>
+ * This is partly a problem as far as compositional descriptions are concerned.
+ * <p>
+ * One way around this is to pre-populate the database with likely compositions. The {@link PhenotypeHelper} class does this for phenotype-specific combinations. For
+ * example, the database is pre-populated with uberon-based compositions whenever there is a species-centric anatomy ontology composition. The reasoner can then place
+ * this in the subsumption hierarchy correctly, and potentially use this as a nodeInCommon in a SimilarityPair comparison.
+ * <p>
+ * One possible future expansion is to make SimilarityPair smarter with respect to <i>potential</i> combinations such that these do not have to be pre-populated.
+ * 
+ * 
+ * 
  * <h2>References</h2>
  * The following references may be of use:
  * <ul>
  * <li>
  * <a href="http://www.pubmedcentral.nih.gov/articlerender.fcgi?tool=pubmed&pubmedid=17932054">FunSimMat: a comprehensive functional similarity database</a>
+ * </li>
+ * <li>
+ * <a href="http://www.biomedcentral.com/1471-2105/9/327">Gene Ontology term overlap as a measure of gene functional similarity</a>
+ * </li>
  * </ul>
  * 
  * @author cjm
- * @see org.obd.query.Shard#compareAnnotationsByAnnotatedEntityPair(String, String)
- * @see org.obd.query.Shard#compareAnnotationsBySourcePair(String, String, String)
+ * @see org.obd.query.AnalysisCapableRepository#compareAnnotationsByAnnotatedEntityPair(String, String)
+ * @see org.obd.query.AnalysisCapableRepository#compareAnnotationsBySourcePair(String, String, String)
  *
  */
 public class SimilarityPair {
@@ -49,22 +206,22 @@ public class SimilarityPair {
 	private int totalNodesInSet1;
 	private int totalNodesInSet2;
 	private Double congruence;
-	private Double maximumInformationContent;
-	private Double similarityByInformationContentRatio;
-	private Double similarityByInformationContentInCommonSum;
+	private Double maximumInformationContentForNodesInCommon;
+	private Double informationContentRatio;
+	private Double informationContentSumForNRNodesInCommon;
 	private String nodeWithMaximumInformationContent;
 	private Map<String,Set<String>> closureMap;
 	private Map<String,Set<String>> inverseClosureMap;
 	private List<ScoredNode> scoredNodes;
 	Map<String,Double> nodeInformationContentMap = new HashMap<String,Double>();
 	private Graph graph;
- 
+
 	public SimilarityPair() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	
+
 	public Graph getGraph() {
 		return graph;
 	}
@@ -133,7 +290,7 @@ public class SimilarityPair {
 	public void setTotalNodesInSet2(int totalNodesInSet2) {
 		this.totalNodesInSet2 = totalNodesInSet2;
 	}
-	
+
 	/**
 	 *  nodesInSet1 &cap; nodesInSet2
 	 */
@@ -146,7 +303,7 @@ public class SimilarityPair {
 	public Set<String> getNonRedundantNodesInCommon() {
 		return extractNonRedundantSet(getNodesInCommon());
 	}
-	
+
 
 	public void setNodesInCommon(Set<String> nodesInCommon) {
 		this.nodesInCommon = nodesInCommon;
@@ -160,7 +317,7 @@ public class SimilarityPair {
 	public Set<String> getNonRedundantNodesInSet1() {
 		return extractNonRedundantSet(getNodesInSet1());
 	}
-	
+
 	public void setNodesInSet1(Set<String> nodesInSet1) {
 		this.nodesInSet1 = nodesInSet1;
 	}
@@ -205,9 +362,9 @@ public class SimilarityPair {
 	public void setNodesInUnion(Set<String> nodesInUnion) {
 		this.nodesInUnion = nodesInUnion;
 	}
-	
-	
-	
+
+
+
 	public Map<String, Set<String>> getClosureMap() {
 		return closureMap;
 	}
@@ -215,10 +372,10 @@ public class SimilarityPair {
 		this.closureMap = closureMap;
 		calculateInverseClosureMap();
 	}
-	
-	
-	
-	
+
+
+
+
 	public Map<String, Set<String>> getInverseClosureMap() {
 		return inverseClosureMap;
 	}
@@ -232,7 +389,7 @@ public class SimilarityPair {
 			}
 		}
 	}
-	
+
 	private Set<String> extractNonRedundantSet(Set<String> nic) {
 		if (getInverseClosureMap() == null) {
 			return nic;
@@ -242,7 +399,7 @@ public class SimilarityPair {
 			boolean includeMe = true;
 			if (getInverseClosureMap().containsKey(n)) {
 				Set<String> cset = getInverseClosureMap().get(n);
-				
+
 				// check all parents of n : if n has a parent already in
 				// the nodes-in-common set we exclude it
 				for (String cn : cset) {
@@ -258,9 +415,9 @@ public class SimilarityPair {
 			}
 		}
 		return nric;
-		
+
 	}
-	
+
 	public void setInformationContent(String nid, Double ic) {
 		nodeInformationContentMap.put(nid, ic);
 	}
@@ -299,14 +456,14 @@ public class SimilarityPair {
 	 * note that this object can not calculate this metric by itself - it must be populated externally
 	 * @return max(IC(t) forall t in both)
 	 */
-	public Double getMaximumInformationContent() {
-		return maximumInformationContent;
+	public Double getMaximumInformationContentForNodesInCommon() {
+		return maximumInformationContentForNodesInCommon;
 	}
-	public void setMaximimumInformationContent(double maximimumInformationContent) {
-		this.maximumInformationContent = maximimumInformationContent;
+	public void setMaximimumInformationContentForNodesInCommon(double maximimumInformationContent) {
+		this.maximumInformationContentForNodesInCommon = maximimumInformationContent;
 	}
-	
-	
+
+
 	public String getNodeWithMaximumInformationContent() {
 		return nodeWithMaximumInformationContent;
 	}
@@ -314,9 +471,9 @@ public class SimilarityPair {
 			String nodeWithMaximimumInformationContent) {
 		this.nodeWithMaximumInformationContent = nodeWithMaximimumInformationContent;
 	}
-	public void setSimilarityByInformationContentRatio(
+	public void setInformationContentRatio(
 			Double similarityByInformationContentRatio) {
-		this.similarityByInformationContentRatio = similarityByInformationContentRatio;
+		this.informationContentRatio = similarityByInformationContentRatio;
 	}
 	/**
 	 * information content of intersection set divided by information content of union set
@@ -340,30 +497,27 @@ public class SimilarityPair {
 	 * @return sum(IC(t) where t in NRnodesInCommon) / sum(IC(t) where t in NRnodesInUnion)
 	 * @see org.obd.query.Shard#calculateInformationContentMetrics(SimilarityPair)
 	 */
-	public Double getSimilarityByInformationContentRatio() {
-		if ((similarityByInformationContentRatio == null) || (similarityByInformationContentRatio.isNaN())){
+	public Double getInformationContentRatio() {
+		if ((informationContentRatio == null) || (informationContentRatio.isNaN())){
 			return 0.0;
 		} else  {
-			return similarityByInformationContentRatio;
-			
+			return informationContentRatio;
+
 		}
 	}
-	public void setSimilarityByInformationContentRatio(
-			double similarityByInformationContentRatio) {
-		this.similarityByInformationContentRatio = similarityByInformationContentRatio;
-	}
-	
-	
-	
+
+
+
 	/**
-	 * @return sum( ic : forall ic in NonRedundantNodesInCommon )
+	 * &Sigma;<SUB>t &isin; nrNodesInCommon</SUB> IC(t)
+	 * @return sum( IC : forall IC in NonRedundantNodesInCommon )
 	 */
-	public Double getSimilarityByInformationContentInCommonSum() {
-		return similarityByInformationContentInCommonSum;
+	public Double getInformationContentSumForNRNodesInCommon() {
+		return informationContentSumForNRNodesInCommon;
 	}
-	public void setSimilarityByInformationContentInCommonSum(
+	public void setInformationContentSumForNRNodesInCommon(
 			Double similarityByInformationContentInCommonSum) {
-		this.similarityByInformationContentInCommonSum = similarityByInformationContentInCommonSum;
+		this.informationContentSumForNRNodesInCommon = similarityByInformationContentInCommonSum;
 	}
 	/**
 	 * Inititialize based on two sets of class nodes; calculate the set of nodes in common'
@@ -419,9 +573,9 @@ public class SimilarityPair {
 
 	public String toString() {
 		return id1 + " <-> " + id2 + " total:" + getTotalNodesInUnion() + " [" + getTotalNodesInSet1()+","+getTotalNodesInSet2()+"] in_common:" + getTotalNodesInCommon() + " sim:"+getBasicSimilarityScore() + 
-		" maxIC:"+(getMaximumInformationContent() != null ? getMaximumInformationContent() : "?") +
+		" maxIC:"+(getMaximumInformationContentForNodesInCommon() != null ? getMaximumInformationContentForNodesInCommon() : "?") +
 		" maxNodeIC:"+(getNodeWithMaximumInformationContent() != null ? getNodeWithMaximumInformationContent() : "?") +
-		" simGIC:" + (this.getSimilarityByInformationContentRatio() != null ? this.getSimilarityByInformationContentRatio() : "?")  ;
+		" simGIC:" + (this.getInformationContentRatio() != null ? this.getInformationContentRatio() : "?")  ;
 	}
 
 }

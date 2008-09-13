@@ -35,6 +35,7 @@ import org.obd.query.RootQueryTerm;
 import org.obd.query.Shard;
 import org.obd.query.SourceQueryTerm;
 import org.obd.query.SubsetQueryTerm;
+import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
 import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.QueryTerm.Aspect;
@@ -326,29 +327,52 @@ public abstract class AbstractShard implements Shard {
 		return stmts;
 	}
 
-	public List<ScoredNode> getSimilarNodes(QueryTerm nodeQueryTerm) {
+
+	public List<ScoredNode> getSimilarNodes(String nodeId) {
+		return getSimilarNodes(nodeId, null);
+	}
+	
+	public List<ScoredNode> getSimilarNodes(String nodeId, String src) {
+		SimilaritySearchParameters params = new SimilaritySearchParameters();
+		params.ontologySourceId = src;
+		return getSimilarNodes(params, nodeId);
+	}
+
+	
+	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySourceId, QueryTerm hitNodeFilter) {
+		// use defaults
+		return
+		getSimilarNodes(new SimilaritySearchParameters(), nodeId, ontologySourceId, hitNodeFilter);
+	}
+
+
+	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId, String ontologySrcId, QueryTerm hitNodeFilter) {
+		params.ontologySourceId = ontologySrcId;
+		params.hitNodeFilter = hitNodeFilter;
+		return getSimilarNodes(params, nodeId);
+	}
+	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
+		// TODO: use ontologySrcId
+		// find annotations for this node, then use this as basis
+		Collection<Statement> stmts = 
+			getAnnotationStatementsForAnnotatedEntity(nodeId, null, null);
+		return getSimilarNodes(params, stmts);
+	}
+	
+	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, QueryTerm nodeQueryTerm) {
 		Collection<Node> nodes = this.getNodesByQuery(nodeQueryTerm);
 		Collection<Statement> stmts = new LinkedList<Statement>();
 		for (Node node : nodes) 
 			stmts.addAll(
 					getAnnotationStatementsForAnnotatedEntity(node.getId(), null, null));
-		return getSimilarNodes(stmts);
-	}
-
-	public List<ScoredNode> getSimilarNodes(String nodeId) {
-		return getSimilarNodes(nodeId, null);
-	}
-
-	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySrcId) {
-		// TODO: use ontologySrcId
-		// find annotations for this node, then use this as basis
-		Collection<Statement> stmts = 
-			getAnnotationStatementsForAnnotatedEntity(nodeId, null, null);
-		return getSimilarNodes(stmts);
-
+		return getSimilarNodes(params, stmts);
 	}
 
 
+	public List<ScoredNode> getSimilarNodes(QueryTerm nodeQueryTerm) {
+		// TODO Auto-generated method stub
+		return getSimilarNodes(new SimilaritySearchParameters(), nodeQueryTerm);
+	}
 
 	/**
 	 * helper method for getSimilarNodes
@@ -359,7 +383,10 @@ public abstract class AbstractShard implements Shard {
 	 * @param stmts
 	 * @return
 	 */
-	private List<ScoredNode> getSimilarNodes(Collection<Statement> stmts) {
+	private List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, Collection<Statement> stmts) {
+
+		// TODO: use ontologySrcId and other params
+		// find annotations for this node, then use this as basis
 
 		int totalNodes = this.getAnnotatedNodeCount();
 		List<ScoredNode> scoredNodes = new LinkedList<ScoredNode>();
@@ -958,9 +985,9 @@ public abstract class AbstractShard implements Shard {
 		}
 		double avgIC = sumICinCommon / sp.getTotalNodesInCommon();
 		double simGIC = sumICinCommon / sumICinUnion;
-		sp.setMaximimumInformationContent(maxIC);
+		sp.setMaximimumInformationContentForNodesInCommon(maxIC);
 		sp.setNodeWithMaximumInformationContent(nodeWithMaxIC);
-		sp.setSimilarityByInformationContentRatio(simGIC);
+		sp.setInformationContentRatio(simGIC);
 
 	}
 
@@ -989,9 +1016,9 @@ public abstract class AbstractShard implements Shard {
 		}
 		double avgIC = sumICinCommon / sp.getTotalNodesInCommon();
 		double simGIC = sumICinCommon / sumICinUnion;
-		sp.setMaximimumInformationContent(maxIC);
+		sp.setMaximimumInformationContentForNodesInCommon(maxIC);
 		sp.setNodeWithMaximumInformationContent(nodeWithMaxIC);
-		sp.setSimilarityByInformationContentRatio(simGIC);
+		sp.setInformationContentRatio(simGIC);
 
 	}
 

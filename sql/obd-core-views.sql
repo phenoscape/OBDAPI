@@ -149,6 +149,7 @@ COMMENT ON VIEW is_a_relation IS 'relation_node for the OBO_REL relation "is_a"'
 CREATE OR REPLACE VIEW non_is_a_relation AS SELECT * FROM relation_node WHERE uid!='OBO_REL:is_a';
 COMMENT ON VIEW non_is_a_relation IS 'relation_node NOT corresponding to the OBO_REL relation "is_a"';
 
+
 CREATE OR REPLACE VIEW is_a_link AS
  SELECT link.*
  FROM link INNER JOIN is_a_relation ON (predicate_id=is_a_relation.node_id);
@@ -223,6 +224,16 @@ COMMENT ON VIEW asserted_is_a_link IS 'An is_a_link that is not inferred (ie it 
 
 CREATE OR REPLACE VIEW implied_is_a_link AS SELECT * FROM is_a_link WHERE is_inferred='t';
 COMMENT ON VIEW implied_is_a_link IS 'An is_a_link that is inferred (ie it is not directly asserted)';
+
+-- non-generic link, but still useful
+CREATE OR REPLACE VIEW in_organism_relation AS SELECT * FROM relation_node WHERE uid='OBO_REL:in_organism';
+COMMENT ON VIEW in_organism_relation IS 'relation_node for the OBO_REL relation "in_organism"';
+
+CREATE OR REPLACE VIEW in_organism_link AS
+ SELECT link.*
+ FROM link INNER JOIN in_organism_relation ON (predicate_id=in_organism_relation.node_id);
+
+COMMENT ON VIEW in_organism_link IS 'A link of type "in_organism"';
 
 CREATE OR REPLACE VIEW axis_pair_link AS
  SELECT

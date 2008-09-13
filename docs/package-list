@@ -1,5 +1,7 @@
 org.obd
 org.obd.bio
+org.obd.io
+org.obd.launcher
 org.obd.model
 org.obd.model.bridge
 org.obd.model.rule
@@ -11,4 +13,3 @@ org.obd.query.exception
 org.obd.query.impl
 org.obd.test
 org.obd.util
-org.obd.ws

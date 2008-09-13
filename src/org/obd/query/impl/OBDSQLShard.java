@@ -82,6 +82,7 @@ import org.purl.obo.vocab.RelationVocabulary;
  * 
  */
 public class OBDSQLShard extends AbstractSQLShard implements Shard {
+	
 
 	Logger logger = Logger.getLogger("org.obd.shard.OBDSQLShard");
 
@@ -107,6 +108,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	protected String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
 	protected String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
 	protected String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
+	
+	protected String IS_A_LINK_TABLE = "is_a_link";
 
 	protected String APPLIES_TO_ALL = "applies_to_all";
 	protected String SUBJECT_NODE_ALIAS = "snode";
@@ -340,6 +343,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return sc;
 	}
 
+	@Override
 	public Double getInformationContentByAnnotations(String classNodeId) {
 		// String sql =
 		// "SELECT shannon_information FROM class_node_entropy_by_evidence WHERE node_id = "
@@ -358,13 +362,12 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 	}
 
+
 	@Override
-	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySourceId) {
-		return getSimilarNodes(nodeId, ontologySourceId, null);
-	}
+	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
 
-	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySourceId, QueryTerm hitNodeFilter) {
-
+		 String ontologySourceId = params.ontologySourceId;
+		 
 		/*
 		 * what kind of thing is nodeId? We want to compare like with like; eg gene with gene,
 		 * genotype with genotype.
@@ -386,6 +389,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			sourceIid = this.getNodeInternalId(ontologySourceId);
 		}
 
+		List<ScoredNode> sns = new LinkedList<ScoredNode>();
+
 		/*
 		 * first of all find some bait with which to hook comparable node ids -
 		 * we must take the inferred graph into account. we want to find similar
@@ -394,10 +399,144 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		 * inferred annotations to reasonably informative nodes: nodes near the
 		 * root will have high numbers of annotations
 		 */
-		Integer MAX_TOTAL_ANNOTS = 1000; // TODO
-		int MAX_HOOKS = 200;
+		Collection<Integer> baitIds = new HashSet<Integer>();
+		Map<Integer,Integer> iid2srcIid = new HashMap<Integer,Integer>();
+		Map<Integer,Integer> iid2total = new HashMap<Integer,Integer>();
+		
+		int iid = this.getNodeInternalId(nodeId); // query node
+
 		RelationalQuery baitRq = new SqlQueryImpl();
-		int iid = this.getNodeInternalId(nodeId);
+		String ialAlias = "ial";
+		baitRq.addTable("implied_annotation_link_with_total", ialAlias); // may be materialized
+		WhereClause wc = baitRq.getWhereClause();
+		String srcAlias = "c";
+		baitRq.addTable(NODE_TABLE, srcAlias);
+		wc.addJoinConstraint(tblCol(srcAlias,NODE_INTERNAL_ID_COLUMN), 
+				tblCol(ialAlias,LINK_TARGET_INTERNAL_ID_COLUMN));
+		if (sourceIid != null)
+			wc.addEqualityConstraint(tblCol(srcAlias,NODE_SOURCE_INTERNAL_ID_COLUMN), sourceIid);
+
+		wc.addEqualityConstraint(tblCol(ialAlias,LINK_NODE_INTERNAL_ID_COLUMN), iid);
+		wc.addConstraint("total < " + params.search_profile_max_annotated_entities_per_class); // only choose informative nodes
+
+		if (params.in_organism != null) {
+			params.hitNodeFilter = new LinkQueryTerm("OBO_REL:in_organism",params.in_organism);
+		}
+		if (params.hitNodeFilter != null) {
+			System.err.println(baitRq.toSQL());
+			this.translateQuery(params.hitNodeFilter, baitRq, tblCol(ialAlias,"node_id"));
+		}
+
+		baitRq.setOrderByClause("total"); // most informative first
+		baitRq.setSelectClause("DISTINCT *");
+		System.err.println(baitRq.toSQL());
+		// find annotations for this node, then use this to fetch scores
+		Map<Integer,Integer> srcIid2numSelected = new HashMap<Integer,Integer>();
+		ResultSet rs;
+		int i = 0;
+		try {
+			rs = this.execute(baitRq);
+			while (rs.next()) {
+				int siid = rs.getInt("source_id");
+				int tiid = rs.getInt(LINK_TARGET_INTERNAL_ID_COLUMN);
+				iid2srcIid.put(tiid, siid);
+				int numSelectedInSrc = 0;
+				if (srcIid2numSelected.containsKey(siid)) {
+					numSelectedInSrc = srcIid2numSelected.get(siid);
+				}
+				if (numSelectedInSrc < params.search_profile_max_classes_per_source) {
+					numSelectedInSrc++;
+					srcIid2numSelected.put(siid,numSelectedInSrc);
+
+					baitIds.add(tiid);
+				}
+				else {
+				}
+
+				iid2total.put(tiid, rs.getInt("total"));
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.err.println("num bait ids = "+baitIds.size());
+		System.err.println("srcIid2numSelected = "+srcIid2numSelected);
+
+		/*
+		Integer MIN_TOTAL_ANNOTS = 1;
+		Integer MAX_TOTAL_ANNOTS = 100;
+		int MAX_HOOKS = 200;
+		while (baitIds.size() < MAX_HOOKS && MAX_TOTAL_ANNOTS < 200) {
+			System.err.println("MAX: "+MAX_TOTAL_ANNOTS);
+			System.err.println("hooks: "+baitIds.size());
+
+			baitIds.addAll(fetchQueryBaitIds(iid,sourceIid,hitNodeFilter, MIN_TOTAL_ANNOTS, MAX_TOTAL_ANNOTS, MAX_HOOKS));
+			MIN_TOTAL_ANNOTS = MAX_TOTAL_ANNOTS;
+			MAX_TOTAL_ANNOTS *= 2;
+		}
+		String ialAlias = "ial";
+*/
+		
+		/*
+		 * 
+		 */
+		RelationalQuery fetchRq = new SqlQueryImpl();
+		fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
+		 wc = fetchRq.getWhereClause();
+		wc.addInConstraint("ial.object_id", baitIds);
+		if (isaIid != null) {
+			// return AEs of the same type: e.g. if query is a gene, return genes
+			fetchRq.addTable(IS_A_LINK_TABLE);
+			wc.addJoinConstraint("ial.node_id", IS_A_LINK_TABLE+".node_id");
+			wc.addEqualityConstraint(IS_A_LINK_TABLE+".object_id", isaIid);	
+			wc.addConstraint(IS_A_LINK_TABLE+".is_inferred = 'f'");
+		}
+		fetchRq.setSelectClause("ial.node_id, COUNT(DISTINCT ial.object_id) AS ovlp");
+		fetchRq.setGroupByClause("ial.node_id");
+		fetchRq.setOrderByClause("ovlp DESC");
+		System.err.println(fetchRq.toSQL());
+		Connection conn = obd.getConnection();
+		int rowNum = 0;
+		try {
+			String metricCol = "basic_score";
+			//String metricCol = "total_nodes_in_intersection";
+			String scoreSQL = "SELECT basic_score FROM node_pair_annotation_similarity_score WHERE node1_id= " + iid + " AND node2_id=?";
+			//String scoreSQL = "SELECT total_nodes_in_intersection FROM node_pair_annotation_intersection_count WHERE node1_id= " + iid + " AND node2_id=?";
+			System.err.println(scoreSQL);
+			PreparedStatement scorePS = conn.prepareStatement(scoreSQL);
+			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
+			 rs = this.execute(fetchRq);
+			while (rs.next() && rowNum < params.max_candidate_hits) {
+				// get the uid
+				nodePS.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));
+				ResultSet nodeRS =  nodePS.executeQuery();
+				nodeRS.next();
+				String uid = nodeRS.getString(NODE_EXPOSED_ID_COLUMN);
+				// get the overlap score
+				scorePS.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));
+				ResultSet scoreRS =  scorePS.executeQuery();
+				scoreRS.next();
+				ScoredNode sn = new ScoredNode(uid, - scoreRS.getFloat(metricCol));
+				sns.add(sn);
+				System.err.println(":: "+sn);
+				rowNum++;
+			}
+		} catch (SQLException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Collections.sort(sns);
+
+		return sns;
+
+	}
+
+	@Deprecated
+	private Collection<Integer> fetchQueryBaitIds(int iid, Integer sourceIid, QueryTerm hitNodeFilter, Integer MIN_TOTAL_ANNOTS, Integer MAX_TOTAL_ANNOTS, int MAX_HOOKS) {
+		Collection<Integer> baitIds = new HashSet<Integer>();
+
+		RelationalQuery baitRq = new SqlQueryImpl();
 		String ialAlias = "ial";
 		baitRq.addTable("implied_annotation_link_with_total", ialAlias); // may be materialized
 		WhereClause wc = baitRq.getWhereClause();
@@ -410,21 +549,21 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 		wc.addEqualityConstraint(tblCol(ialAlias,LINK_NODE_INTERNAL_ID_COLUMN), iid);
 		wc.addConstraint("total < " + MAX_TOTAL_ANNOTS); // only choose informative nodes
+		wc.addConstraint("total > " + MIN_TOTAL_ANNOTS); // only choose informative nodes
 
 		if (hitNodeFilter != null) {
 			this.translateQuery(hitNodeFilter, baitRq, ialAlias);
 		}
 
 		baitRq.setOrderByClause("total"); // most informative first
-
+		System.err.println(baitRq.toSQL());
 		// find annotations for this node, then use this to fetch scores
-		Collection<Integer> ids = new HashSet<Integer>();
 		ResultSet rs;
 		int i = 0;
 		try {
 			rs = this.execute(baitRq);
 			while (rs.next()) {
-				ids.add(rs.getInt(LINK_TARGET_INTERNAL_ID_COLUMN));
+				baitIds.add(rs.getInt(LINK_TARGET_INTERNAL_ID_COLUMN));
 				i++;
 				if (i > MAX_HOOKS)
 					break;
@@ -433,46 +572,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		/*
-		 * 
-		 */
-		RelationalQuery fetchRq = new SqlQueryImpl();
-		fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
-		fetchRq.addTable(NODE_TABLE);
-		wc = fetchRq.getWhereClause();
-		wc.addJoinConstraint("node.node_id", "ial.node_id");
-		wc.addInConstraint("ial.object_id", ids);
-		if (isaIid != null) {
-			fetchRq.addTable(LINK_TABLE,"isalink");
-			wc.addJoinConstraint("node.node_id", "isalink.node_id");
-			wc.addEqualityConstraint("isalink.predicate_id", this.getNodeInternalId(rvocab.is_a()));
-			wc.addEqualityConstraint("isalink.object_id", isaIid);	
-		}
-		fetchRq.setSelectClause("DISTINCT node.node_id, node.uid");
-		List<ScoredNode> sns = new LinkedList<ScoredNode>();
-		Connection conn = obd.getConnection();
-		try {
-			PreparedStatement prep = conn.prepareStatement("SELECT basic_score FROM node_pair_annotation_similarity_score WHERE node1_id= " + iid + " AND node2_id=?");
-			rs = this.execute(fetchRq);
-			while (rs.next()) {
-				String uid = rs.getString(NODE_EXPOSED_ID_COLUMN);
-				prep.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));
-				ResultSet rs2 =  prep.executeQuery();
-				rs2.next();
-				ScoredNode sn = new ScoredNode(uid, - rs2.getFloat("basic_score"));
-				sns.add(sn);
-				//System.out.println(":: "+sn);
-			}
-		} catch (SQLException e) {
-			//TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Collections.sort(sns);
-
-
-		return sns;
-
+		return baitIds;
 	}
 
 	public Collection<ScoredNode> getCoAnnotatedClasses(String n1id)
@@ -1041,7 +1141,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			outerq.setNode(qt);
 			return translateQueryForLinkStatement(outerq, targetLinkAlias);
 		}
-		
+
 		String linkTableAlias = translateQuery(qt, rq, null);
 		SelectClause selectClause = rq.getSelectClause();
 		selectClause.setDistinct(true);
@@ -1052,7 +1152,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		// link.
 		// we can join using an extra node table alias;
 		// however, the appropriate table may already have been joined.
-		
+
 		String subjectJoinCol = tblCol(linkTableAlias, NODE_INTERNAL_ID_COLUMN);
 		String subjectNodeTable = rq.getTableAliasReferencedInJoin(
 				subjectJoinCol, NODE_TABLE);
@@ -1087,7 +1187,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 					NODE_EXPOSED_ID_COLUMN), LINK_RELATION_EXPOSED_ID_COLUMN);
 
 		}
-		
+
 		if (targetLinkAlias == null) {
 			targetLinkAlias = linkTableAlias;
 		}
@@ -1979,5 +2079,14 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		if (sourceId != null)
 			s.setSourceId(sourceId);
 	}
+
+
+
+
+
+
+
+
+
 
 }

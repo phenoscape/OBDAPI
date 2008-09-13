@@ -115,7 +115,7 @@ public class GeneAnalysis extends CommandLineTool  {
 						sp.getNonRedundantNodesInCommon().size()+"\t"+
 						sp.getPostPartitionedNonRedundantNodesInUnion().size()+"\t"+
 						sp.getBasicSimilarityScore() + "\t" +
-						sp.getSimilarityByInformationContentRatio());
+						sp.getInformationContentRatio());
 
 			}
 		}
@@ -239,7 +239,7 @@ public class GeneAnalysis extends CommandLineTool  {
 				sp.getNonRedundantNodesInCommon().size()+"\t"+
 				sp.getPostPartitionedNonRedundantNodesInUnion().size()+"\t"+
 				sp.getBasicSimilarityScore() + "\t" +
-				sp.getSimilarityByInformationContentRatio());
+				sp.getInformationContentRatio());
 	}
 
 	public String n2s(Node n) {

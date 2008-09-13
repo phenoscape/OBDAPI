@@ -45,11 +45,11 @@ public class SimilarityPairTest extends AbstractOBDTest {
 		System.out.println("sp1:"+sp.getPostPartitionedNonRedundantNodesInUnion().size());
 		System.out.println("sp2:"+sp2.getPostPartitionedNonRedundantNodesInUnion().size());
 		
-		System.out.println("sp1:"+sp.getBasicSimilarityScore() + "\t" + sp.getSimilarityByInformationContentRatio());
-		System.out.println("sp2:"+sp2.getBasicSimilarityScore() + "\t" + sp2.getSimilarityByInformationContentRatio());
+		System.out.println("sp1:"+sp.getBasicSimilarityScore() + "\t" + sp.getInformationContentRatio());
+		System.out.println("sp2:"+sp2.getBasicSimilarityScore() + "\t" + sp2.getInformationContentRatio());
 	
 		assertTrue(sp.getBasicSimilarityScore() == sp2.getBasicSimilarityScore());
-		assertTrue(sp.getSimilarityByInformationContentRatio() == sp2.getSimilarityByInformationContentRatio());
+		assertTrue(sp.getInformationContentRatio() == sp2.getInformationContentRatio());
 
 	}
 	

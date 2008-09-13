@@ -39,8 +39,8 @@ public class PhenotypeHelper  {
 
 	final String ABNORMAL = "PATO:0000460";
 	final String QUALITY = "PATO:0000001";
-	
-	
+
+
 
 	public Shard getShard() {
 		return shard;
@@ -77,7 +77,7 @@ public class PhenotypeHelper  {
 		}
 
 		PhenotypeHelper ph = new PhenotypeHelper();
-		
+
 		try {
 
 			OBDSQLShard obd = new OBDSQLShard();
@@ -96,8 +96,14 @@ public class PhenotypeHelper  {
 		else if (cmd.equals("influences")) {
 			ph.putInfluencesLinkChain();
 		}
-		else if (cmd.equals("link-uberon")) {
-			ph.linkPhenotypeDescriptionsToGenericAnatomy();
+		else if (cmd.equals("link-uberon")) {			
+			ph.linkPhenotypeDescriptionsToGenericAnatomy(false);
+		}
+		else if (cmd.equals("link-uberon-p")) {			
+			ph.linkPhenotypeDescriptionsToGenericAnatomy(true);
+		}
+		else if (cmd.equals("eq")) {			
+			ph.makeBasicEQPhenotypeStatements(false);
 		}
 		else {
 			System.out.println("wrong cmd: "+cmd);
@@ -113,7 +119,7 @@ public class PhenotypeHelper  {
 	 * use reasoner to make is_a links
 	 * @throws Exception
 	 */
-	public void linkPhenotypeDescriptionsToGenericAnatomy() throws Exception {
+	public void linkPhenotypeDescriptionsToGenericAnatomy(boolean addParts) throws Exception {
 
 		LabelQueryTerm qt = new LabelQueryTerm(AliasType.ID,
 				"PATO:",Operator.STARTS_WITH);
@@ -138,17 +144,60 @@ public class PhenotypeHelper  {
 							continue;
 						//arg.setArguments(Collections.singleton(new CompositionalDescription(n.getId())));
 						arg.getRestriction().setTargetId(n.getId());
-						
+						if (addParts) {
+							arg.getRestriction().setRelationId("OBO_REL:inheres_in_part_of");
+						}
+						if (desc.getGenus() == null)
+							continue;
 						CompositionalDescription newDesc = new CompositionalDescription(desc.getGenus().getNodeId(),
 								Collections.singleton(arg.getRestriction()));
-						String newId = newDesc.generateId();			
+						String newId = newDesc.generateId();		
+						//System.out.println(newDesc);
+
 						newDesc.setId(newId);
 						//System.out.println("desc-new="+newDesc);
 						shard.putCompositionalDescription(newDesc);
 					}
 				}
 			}
-			
+
+		}
+	}
+
+	public void makeBasicEQPhenotypeStatements(boolean addParts) throws Exception {
+
+		LabelQueryTerm qt = new LabelQueryTerm(AliasType.ID,
+				"PATO:",Operator.STARTS_WITH);
+		Collection<Node> nodes = shard.getNodesByQuery(qt);
+		for (Node node : nodes) {
+			String id = node.getId();
+			if (!id.contains("during"))
+				continue;
+			CompositionalDescription desc = shard.getCompositionalDescription(id, false);
+			if (desc.isAtomic())
+				continue;
+			//System.out.println("desc-in="+desc);
+			Collection<CompositionalDescription> args = desc.getArguments();
+			for (CompositionalDescription arg : args) {
+				if (arg.getRestriction() != null && 
+						arg.getRestriction().getRelationId().equals(relationVocabulary.inheres_in())) {
+					if (addParts) {
+						arg.getRestriction().setRelationId("inheres_in_part_of");
+					}
+					if (desc.getGenus() == null)
+						continue;
+					CompositionalDescription newDesc = new CompositionalDescription(desc.getGenus().getNodeId(),
+							Collections.singleton(arg.getRestriction()));
+					String newId = newDesc.generateId();		
+					//System.out.println(newDesc);
+
+					newDesc.setId(newId);
+					System.out.println(desc+" --> "+newDesc);
+					shard.putCompositionalDescription(newDesc);
+
+				}
+			}
+
 		}
 	}
 
@@ -233,7 +282,7 @@ public class PhenotypeHelper  {
 			ps.execute();
 			//break;
 		}
-		
+
 
 
 	}

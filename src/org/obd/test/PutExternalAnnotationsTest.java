@@ -416,7 +416,7 @@ public class PutExternalAnnotationsTest extends AbstractOBDTest {
 	public void putGenericAnatomyTest() throws Exception {
 		PhenotypeHelper ph = new PhenotypeHelper();
 		ph.setShard(shard);
-		ph.linkPhenotypeDescriptionsToGenericAnatomy();
+		ph.linkPhenotypeDescriptionsToGenericAnatomy(false);
 	}
 
 	public void putPhenotePhenotypeAnnotationsTest() throws Exception {

@@ -6,18 +6,24 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 import org.bbop.dataadapter.DataAdapterException;
 import org.obd.io.GraphVizWriter;
+import org.obd.model.CompositionalDescription;
 import org.obd.model.Graph;
+import org.obd.model.LinkStatement;
 import org.obd.model.Node;
+import org.obd.model.CompositionalDescription.Predicate;
+import org.obd.model.stats.ScoredNode;
 import org.obd.model.stats.SimilarityPair;
 import org.obd.parser.Parser;
 import org.obd.query.ComparisonQueryTerm;
 import org.obd.query.Shard;
+import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.impl.MultiShard;
 import org.obd.query.impl.MutableOBOSessionShard;
@@ -47,9 +53,9 @@ public class OBDMain {
 
 	}
 	public  void run(String[] args) throws Exception {
-		
+
 		setupLog4j();
-		
+
 		// Create a component
 		Component component = new Component();
 		component.getServers().add(Protocol.HTTP, 8182);
@@ -136,6 +142,28 @@ public class OBDMain {
 				i++;
 				compareNodes(false,nid1,nid2);
 			}
+			else if (args[i].equals("--findsim")) {
+				i++;
+				SimilaritySearchParameters ssp = new SimilaritySearchParameters();
+				boolean useIC = false;
+				while (args[i].startsWith("-")) {
+					if (args[i].equals("--ic")) {
+						useIC = true;
+						i++;
+					}
+					else if (args[i].equals("--org")) {
+						i++;
+						ssp.in_organism = args[i];
+						i++;
+					}
+					else {
+						System.err.println("IGNORING: "+args[i]);
+					}
+				}
+				String nid = args[i];
+				i++;
+				findSimilar(useIC,ssp,nid);
+			}
 			else if (args[i].equals("--store")) {
 				isStoreGraph = true;
 			}
@@ -196,27 +224,110 @@ public class OBDMain {
 		SimilarityPair sp = multiShard.compareAnnotationsByAnnotatedEntityPair(uid1,uid2);
 		if (calcIC)
 			multiShard.calculateInformationContentMetrics(sp);
+		System.out.println("BSS: "+sp.getBasicSimilarityScore());
+		if (calcIC) {
+			System.out.println("getInformationContentRatio: "+sp.getInformationContentRatio());
+			System.out.println("getInformationContentSumForNRNodesInCommon: "+sp.getInformationContentSumForNRNodesInCommon());
+		}
 		//Graph g = sp.getGraph();
 		System.out.println("NR:");
 		for (String nid : sp.getNonRedundantNodesInCommon()) {
-				System.out.println(getNode(nid));
+			System.out.println(getNodeDisp(nid));
 		}
 		System.out.println("ALL:");
 		for (String nid : sp.getNodesInCommon()) {
-			System.out.println(getNode(nid));
+			System.out.println(getNodeDisp(nid));
 		}
 		System.out.println("SET 1:");
 		for (String nid : sp.getNodesInSet1()) {
-			System.out.println(getNode(nid));
+			System.out.println(getNodeDisp(nid));
 		}
 		System.out.println("SET 2:");
 		for (String nid : sp.getNodesInSet2()) {
-			System.out.println(getNode(nid));
+			System.out.println(getNodeDisp(nid));
 		}
 
 	}
-	public String getNode(String id) {
-		return multiShard.getNode(id).toString();
+
+	public void findSimilar(boolean useIC, SimilaritySearchParameters ssp, String nid) {
+		List<ScoredNode> sns = multiShard.getSimilarNodes(ssp,nid);
+		for (ScoredNode sn : sns) {
+			String hid = sn.getNodeId();
+			Node hn = multiShard.getNode(hid);
+			if (useIC) {
+				SimilarityPair sp = multiShard.compareAnnotationsByAnnotatedEntityPair(nid, hid);
+				multiShard.calculateInformationContentMetrics(sp);
+				System.out.println(hid+"\t"+hn.getLabel()+"\t"+sn.getScore() + "\t"+
+						sp.getBasicSimilarityScore()+"\t"+sp.getInformationContentRatio()+"\t"+
+						sp.getInformationContentSumForNRNodesInCommon()+"\t"+
+						getNodeDisp(sp.getNonRedundantNodesInCommon()));
+			}
+			else {
+				System.out.println(sn.getScore() + " : "+getNodeDisp(sn.getNodeId()));
+			}
+		}
+	}
+
+	public String getNodeDispCD(CompositionalDescription cd) {
+		Predicate predicate = cd.getPredicate();
+		Collection<CompositionalDescription> arguments = cd.getArguments();
+		if (cd.isAtomic())
+			return getNodeDisp(cd.getNodeId());
+		StringBuffer sb = new StringBuffer();
+		if (cd.isGenusDifferentia()) {
+			// compact string for GD defs
+			sb.append(getNodeDisp(cd.getGenus()));
+			sb.append(" ");
+			for (CompositionalDescription d : cd.getDifferentiaArguments()) {
+				sb.append(getNodeDispCD(d));
+				sb.append(" ");
+			}			
+		}
+		else {
+			//sb.append(predicate.toString());
+			//sb.append("( ");
+			if (predicate.equals(Predicate.RESTRICTION)) {
+				LinkStatement restriction = cd.getRestriction();
+				//sb.append(cd.getRelationId());
+				//sb.append(" ");
+			}
+			for (CompositionalDescription d : arguments) {
+				sb.append(getNodeDispCD(d));
+				sb.append(" ");
+			}
+			//sb.append(")");
+		}
+		return sb.toString();
+	}
+
+
+	public String getNodeDisp(Collection<String> nids) {
+		StringBuffer sb = new StringBuffer();
+		for (String nid : nids) {
+			sb.append(" < "+getNodeDisp(nid)+" > ");
+		}
+		return sb.toString();
+	}
+
+
+
+	public String getNodeDisp(String id) {
+		Node n =  multiShard.getNode(id);
+		return getNodeDisp(n);
+	}
+	public String getNodeDisp(Node n) {
+		if (n instanceof CompositionalDescription)
+			return getNodeDispCD((CompositionalDescription)n);
+		String id = n.getId();
+		String label = n.getLabel();
+		if (label != null) {
+			return id+" "+label;
+		}
+		if (id.contains("^")) {
+			CompositionalDescription cd = multiShard.getCompositionalDescription(id, true);
+			return getNodeDispCD(cd);
+		}
+		return id;
 	}
 
 	public void setupLog4j() {
@@ -229,7 +340,7 @@ public class OBDMain {
 			System.err.println("Error: Cannot load logger configuration file log4j.properties from jar. " + e.getMessage());
 			Preferences.getPreferences().setLogfile("(Could not configure logging--log4j.properties not found)");  // there won't be a log file
 		}
-		props.setProperty("log4j.rootLogger","DEBUG, A1, A2");
+		props.setProperty("log4j.rootLogger","INFO, A1, A2");
 
 		props.setProperty("log4j.appender.A1","org.apache.log4j.ConsoleAppender");
 		props.setProperty("log4j.appender.A1.layout","org.apache.log4j.PatternLayout");
