@@ -146,9 +146,14 @@ public class OBDMain {
 				i++;
 				SimilaritySearchParameters ssp = new SimilaritySearchParameters();
 				boolean useIC = false;
+				boolean getSP = false;
 				while (args[i].startsWith("-")) {
 					if (args[i].equals("--ic")) {
 						useIC = true;
+						i++;
+					}
+					else if (args[i].equals("--sp")) {
+						getSP = true;
 						i++;
 					}
 					else if (args[i].equals("--org")) {
@@ -156,13 +161,29 @@ public class OBDMain {
 						ssp.in_organism = args[i];
 						i++;
 					}
+					else if (args[i].equals("-M") || args[i].equals("--max_annots")) {
+						i++;
+						ssp.search_profile_max_annotated_entities_per_class = Integer.parseInt(args[i]);
+						i++;
+					}
+					else if (args[i].equals("-O") || args[i].equals("--max_per_src")) {
+						i++;
+						ssp.search_profile_max_classes_per_source = Integer.parseInt(args[i]);
+						i++;
+					}
+					else if (args[i].equals("-H") || args[i].equals("--max_hits")) {
+						i++;
+						ssp.max_candidate_hits = Integer.parseInt(args[i]);
+						i++;
+					}
 					else {
 						System.err.println("IGNORING: "+args[i]);
+						i++;
 					}
 				}
 				String nid = args[i];
 				i++;
-				findSimilar(useIC,ssp,nid);
+				findSimilar(useIC,getSP,ssp,nid);
 			}
 			else if (args[i].equals("--store")) {
 				isStoreGraph = true;
@@ -249,18 +270,25 @@ public class OBDMain {
 
 	}
 
-	public void findSimilar(boolean useIC, SimilaritySearchParameters ssp, String nid) {
+	public void findSimilar(boolean useIC, boolean getSP, SimilaritySearchParameters ssp, String nid) {
 		List<ScoredNode> sns = multiShard.getSimilarNodes(ssp,nid);
+		int n = 0;
 		for (ScoredNode sn : sns) {
+			n++;
 			String hid = sn.getNodeId();
 			Node hn = multiShard.getNode(hid);
-			if (useIC) {
+			if (getSP || useIC) {
 				SimilarityPair sp = multiShard.compareAnnotationsByAnnotatedEntityPair(nid, hid);
-				multiShard.calculateInformationContentMetrics(sp);
+				if (useIC) {
+					multiShard.calculateInformationContentMetrics(sp);
+				}
 				System.out.println(hid+"\t"+hn.getLabel()+"\t"+sn.getScore() + "\t"+
 						sp.getBasicSimilarityScore()+"\t"+sp.getInformationContentRatio()+"\t"+
 						sp.getInformationContentSumForNRNodesInCommon()+"\t"+
 						getNodeDisp(sp.getNonRedundantNodesInCommon()));
+				// getSP is expensive : limited amount
+				if (n >= 20) // HARDCODE ALERT - TODO
+					break;
 			}
 			else {
 				System.out.println(sn.getScore() + " : "+getNodeDisp(sn.getNodeId()));

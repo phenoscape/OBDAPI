@@ -153,7 +153,7 @@ import org.obd.model.Node;
  * {neuron, morphology-of-tibia} because two of the nodes are redundant (assumes the closureMap treates all relations equally. If we build a closure map from is_a only, then
  * nervous system is NOT redundant with neuron).
  * <p>
- * {@link org.obd.model.CompositionalDescriptions} are treated much like other classes. For example, the EQ description "shortened dendrite" is treated as an ontology-less class. It is an
+ * {@link org.obd.model.CompositionalDescription} s are treated much like other classes. For example, the EQ description "shortened dendrite" is treated as an ontology-less class. It is an
  * is_a descendant of "size of cell projection" and of "size". It is a descendant via inheres_in to "dendrite" and "cell projection". It is a descendant via inheres_in_part_of
  * to "cell", "organism" etc. The distinctions between the relations are generally lost when the SimilarityPair object is constructed.
  * 

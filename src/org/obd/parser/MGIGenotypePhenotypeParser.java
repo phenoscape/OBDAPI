@@ -24,7 +24,7 @@ public class MGIGenotypePhenotypeParser extends TabularInfoParser {
 	protected String src = "MGI";
 	protected String defaultURL = 
 		"ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenoGenoMP.rpt";
-	private String taxId = ncbitaxId("7955");
+	private String taxId = ncbitaxId("10090");
 
 	protected Map<String,Integer> label2idnum = null;
 	int maxIdnum = 0; // current maximum local ID; next assigned will be maxIdnum+1

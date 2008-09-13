@@ -30,13 +30,17 @@ import org.obd.query.Shard.GraphTranslation;
  * 
  * <h2>Search</h2>
  * 
- * The main method is  {@link #getSimilarNodes(String)}
- * 
- * Search works as follows:
+ * The main method is {@link #getSimilarNodes(SimilaritySearchParameters, String)}, or {@link #getSimilarNodes(String)}
+ * to use default parameters.
  * <p>
- * Given a query node q, we try to find hits h1, h2,... that are of the same type as q, and are
- * similar to q in terms of their <i>annotation profile</i>, <b>A(q)</b>. The annotation profile is the set of classes used to annotate that
- * entity, and their ancestors, via some relevant relation(s).
+ * Given a query node q (for example, a gene like sox9 in Danio rerio), the search should return
+ * a set of hits h<sub>1</sub> , h<sub>2</sub>... h<sub>n</sub> such that each hit is of the same
+ * type as q (ie genes are compared with genes), and each hit bears some resemblance to the query in
+ * terms of its <i>annotation profile</i>.
+ * <h3>Annotation Profile</h3>
+ * The annotation profile is the set of classes used to annotate that
+ * entity, and their ancestors, via some relevant relation(s). We write the annotation
+ * profile for an entity x as <b>A(x)</b>
  * <pre>
  * c &isin; A(q) <i>iff</i> link(r,q,c)
  * </pre>
@@ -46,33 +50,47 @@ import org.obd.query.Shard.GraphTranslation;
  * </pre>
  * For the purpose of search we often ignore the relation, r.
  * <p>
- * Comparing q with every entity in the database is too time-consuming.
- * Instead we try to find <i>candidate hits</i> by use of an <i>search profile</i>, called <b>S(q)</b>.
+ * <h3>Search Algorithm<h3>
+ * Given a query node <b>q</b>, with annotation profile <b>A(q)</b>
+ * we try to find all h &isin; H(q) such that:
+ * <ul>
+ * <li> type(h) = type(q)
+ * <li> <b>A(h)</b> is similar to <b>A(q)</b> (i.e. they have similar annotation profiles) 
+ * </ul>
+ * Comparing q with every entity in the database is too time-consuming;
+ * Instead we try to find <i>candidate hits</i> for q, <b>H'(q)</b> 
+ * by use of a <i>search profile</i> for q, called <b>S(q)</b>.
  * 
  * <h3>Search Profile</h3>
- * The search profile S(q) is a set of classes relevant to q. It can include the classes used to directly
- * annotate q, or ancestors of those classes (pre-computed via reasoning). The search profile is always a subset
- * of the annotation profile
+ * The search profile S(q) is a set of classes relevant to q. The search profile is always a subset
+ * of the annotation profile:
  * <pre>
  * S(q) &sube; A(q)
  * </pre>
  * 
+ * <p>
  * The entire search profile is then used
  * as a disjunctive query, fetching candidate hit nodes that have at least one annotation (direct or ancestor)
  * to any class in the profile:
  * <pre>
- * h &isin; H(q) <i>iff</i> c &isin; S(q) <b>and</b> c &isin; A(h)
+ * h &isin; H'(q) <i>iff</i> c &isin; S(q) <b>and</b> c &isin; A(h)
  * </pre>
- * Each candidate h is then compared against q using the entire annotation set for h.
- * It is excluded or included from the final list of hits based on this similarity.
+ * Each candidate h is then compared against q using the entire annotation set for h, yielding
+ * a basic similarity score.
+ * It is excluded or included from the final list of hits based on this score.
+ * <p>
  * Candidate hits are prioritized according to how close they are to the profile.
- * They are ordered in descending order by | A(h) &cap; H(q) |, and the first N are chosen
- * as the final set
- * <h3>Selection of S(q)</h3>
+ * They are ordered in descending order by the number of classes in common,
+ * | A(h) &cap; H'(q) |, and the first N are chosen as the final set, H(q)
+ * 
+ * <h4>Selection of search profile</h4>
+ * Selecting an appropriate S(q) is necessary to ensure that the search is sensitive, and runs in
+ * a minimum amount of time.
+ * <p>
  * If S(q) contains a class that is too general, then we will get too many candidate hits, and the resulting search will
  * be extremely slow because we must perform individual pairwise comparisons. There is no loss of specificity - 
  * it is just less efficient. If S(q) contains only highly specific classes,
- * then we lose sensitivity. In extreme cases, only q is returned in H(q)
+ * then we lose sensitivity -- in extreme cases, only q is returned in H(q)
  * <p>
  * The basic method for selecting S(q) is to take the first N classes connected to q via an implied_annotation_link,
  * ordered by number of annotations for that class (ascending). This has the result of selecting the most specific
@@ -93,8 +111,8 @@ import org.obd.query.Shard.GraphTranslation;
  * in S(q). 
  * <h3>ensuring wide distribution of search profile</h3>
  * Ideally the search profile will consist of independent classes reflecting different aspects of the query
- * entity. For example, if A(q) includes anatomical classes including the hippocampal region, the heart and
- * the trigeminal nerve then a S(q) that is clustered around "hippocampus" but lacks classes around the
+ * entity. For example, if A(q) includes anatomical classes including the <i>hippocampal region</i>, the <i>heart</i> and
+ * the <i>trigeminal nerve</i> then a S(q) that is clustered around <i>hippocampus</i> but lacks classes around the
  * other two anatomical parts will be poor, as it may not be sensitive enough to include candidate hits
  * that are similar in these other respects
  * <p>
@@ -141,7 +159,7 @@ public interface AnalysisCapableRepository {
 		 * Setting this too high increases the time spent searching, but does not
 		 * reduce sensitivity
 		 */
-		public Integer search_profile_max_annotated_entities_per_class = 1000;
+		public Integer search_profile_max_annotated_entities_per_class = 3000;
 		
 		/**
 		 * Maximum number of hits returned. Note that these are not guaranteed to
@@ -150,13 +168,13 @@ public interface AnalysisCapableRepository {
 		 * This is the value used to truncate the selection of candidate hits, based
 		 * on querying using the search profile
 		 */
-		public Integer max_candidate_hits = 25;
+		public Integer max_candidate_hits = 50;
 		
 		/**
 		 * To ensure maximal distribution of S(q) across ontologies, we limit the maximum number
 		 * of classes in S(q) to this number per ontology
 		 */
-		public Integer search_profile_max_classes_per_source = 20;
+		public Integer search_profile_max_classes_per_source = 50;
 		
 		/**
 		 * restrict hits to be in this organism

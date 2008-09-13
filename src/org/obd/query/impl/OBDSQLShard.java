@@ -510,6 +510,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
 			rs = this.execute(fetchRq);
 			while (rs.next() && rowNum < params.max_candidate_hits) {
+				int ovlp = rs.getInt("ovlp");
 				// get the uid
 				nodePS.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));
 				ResultSet nodeRS =  nodePS.executeQuery();
@@ -521,7 +522,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 				scoreRS.next();
 				ScoredNode sn = new ScoredNode(uid, - scoreRS.getFloat(metricCol));
 				sns.add(sn);
-				System.err.println(":: "+sn);
+				System.err.println(":: "+sn+" ovlp: "+ovlp);
 				rowNum++;
 			}
 		} catch (SQLException e) {
