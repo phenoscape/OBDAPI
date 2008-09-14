@@ -421,7 +421,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 
 		baitRq.setOrderByClause("total"); // most informative first
-		baitRq.setSelectClause("DISTINCT *");
+		//baitRq.setSelectClause("DISTINCT *");
+		baitRq.setSelectClause("DISTINCT "+srcAlias+".source_id,total,"+LINK_TARGET_INTERNAL_ID_COLUMN);
 		System.err.println(baitRq.toSQL());
 		// find annotations for this node, then use this to fetch scores
 		Map<Integer,Integer> srcIid2numSelected = new HashMap<Integer,Integer>();
@@ -475,7 +476,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		 * 
 		 */
 		RelationalQuery fetchRq = new SqlQueryImpl();
-		fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
+		//fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
+		fetchRq.addTable("implied_annotation_link_with_prob",ialAlias);
 		 wc = fetchRq.getWhereClause();
 		wc.addInConstraint("ial.object_id", baitIds);
 		if (isaIid != null) {
@@ -485,7 +487,9 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addEqualityConstraint(IS_A_LINK_TABLE+".object_id", isaIid);	
 			wc.addConstraint(IS_A_LINK_TABLE+".is_inferred = 'f'");
 		}
-		fetchRq.setSelectClause("ial.node_id, COUNT(DISTINCT ial.object_id) AS ovlp");
+		//fetchRq.setSelectClause("ial.node_id, COUNT(DISTINCT ial.object_id) AS ovlp");
+		fetchRq.setSelectClause("ial.node_id, SUM(-log(p)) AS ovlp");
+		//fetchRq.setSelectClause("ial.node_id, ial.object_id");
 		fetchRq.setGroupByClause("ial.node_id");
 		fetchRq.setOrderByClause("ovlp DESC");
 
@@ -510,7 +514,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
 			rs = this.execute(fetchRq);
 			while (rs.next() && rowNum < params.max_candidate_hits) {
-				int ovlp = rs.getInt("ovlp");
+				//int ovlp = rs.getInt("ovlp");
+				float ovlp = rs.getFloat("ovlp");
 				// get the uid
 				nodePS.setInt(1, rs.getInt(NODE_INTERNAL_ID_COLUMN));
 				ResultSet nodeRS =  nodePS.executeQuery();

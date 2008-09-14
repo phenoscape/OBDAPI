@@ -906,6 +906,19 @@ entity and the implied pairwise product of the annotation. E.g. if g1
 is annotated to LeftEye-small then the implied xp would be
 {small,size,morphology} x {LeftEye,Eye,SenseOrgan,..}';
 
+CREATE OR REPLACE VIEW count_of_annotated_entity AS
+ SELECT 
+  count(DISTINCT node_id) AS total
+ FROM
+  link -- used to be asserted...
+ WHERE
+  reiflink_node_id IS NOT NULL;
+
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('count_of_annotated_entity');
+-- END MATERIALIZE
+
+
 CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
  SELECT
   object_id AS node_id,
@@ -915,7 +928,7 @@ CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
  GROUP BY
   object_id;
 
-COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a node. TODO: rename? sounds like it is counting links..';
+COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a class node. E.g. ial(femur,100) means there are 100 genes or similar objects annotated to femur. TODO: rename? sounds like it is counting links..';
 
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('implied_annotation_link_count_by_object');
@@ -943,19 +956,36 @@ COMMENT ON VIEW implied_annotation_link_count_by_node IS 'number of nodes (eg cl
 CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
  SELECT
   ial.*,
-  ialc.total AS total
+  ialc.total AS total -- total number of genes etc 
  FROM
   implied_annotation_link AS ial
   INNER JOIN implied_annotation_link_count_by_object AS ialc ON (ial.object_id=ialc.node_id);
 
 COMMENT ON VIEW implied_annotation_link_with_total IS
-'implied_annotation_link adorned with the total number of classes annotated to the object_id.';
+'implied_annotation_link adorned with the total number of annotated entities annotated to the object_id class';
  
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('implied_annotation_link_with_total');
 -- CREATE INDEX implied_annotation_link_with_total_idx_node_object_total ON implied_annotation_link_with_total(node_id,object_id,total);
 -- CREATE INDEX implied_annotation_link_with_total_idx_node_object ON implied_annotation_link_with_total(node_id,object_id);
 -- CREATE INDEX implied_annotation_link_with_total_idx_object ON implied_annotation_link_with_total(object_id);
+-- END MATERIALIZE
+
+CREATE OR REPLACE VIEW implied_annotation_link_with_prob AS
+ SELECT DISTINCT
+  ialt.*,
+  CAST(total AS FLOAT) / (SELECT total FROM count_of_annotated_entity) AS p
+ FROM
+  implied_annotation_link_with_total AS ialt;
+
+COMMENT ON VIEW implied_annotation_link_with_prob IS
+'implied_annotation_link adorned with p(c), where c is the object_id class.';
+ 
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('implied_annotation_link_with_prob');
+-- CREATE INDEX implied_annotation_link_with_total_idx_node_object_prob ON implied_annotation_link_with_prob(node_id,object_id,p);
+-- CREATE INDEX implied_annotation_link_with_prob_idx_node_object ON implied_annotation_link_with_prob(node_id,object_id);
+-- CREATE INDEX implied_annotation_link_with_prob_idx_object ON implied_annotation_link_with_prob(object_id);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW implied_annotation_link_with_object AS
@@ -1607,7 +1637,7 @@ CREATE OR REPLACE VIEW co_annotated_to_pair_with_score AS
 CREATE OR REPLACE VIEW node_p_value AS
  SELECT
   ial.object_id AS node_id,
-  count(distinct ial.node_id) / 1234567, --- todo
+  count(distinct ial.node_id) / (SELECT total FROM count_of_annotated_entity)
  FROM
   implied_annotation_link AS ial;
 
@@ -2062,17 +2092,6 @@ CREATE OR REPLACE VIEW implied_annotation_link_to_annotgroup_level2 AS
 
 COMMENT ON VIEW implied_annotation_link_to_annotgroup_level2 IS '2-level structure; for example annotations to genotypes to genes to homology groups EXAMPLE: select node_uid(node_id),node_uid(grouping_predicate_id) as p,node_uid(annotgroup_node_id),node_uid(object_id),node_label(object_id) from implied_annotation_link_to_annotgroup_level2 where node_label(object_id) = ''Kidney'' and node_uid(annotgroup1_node_id) like ''entrez%'' and node_uid(grouping_predicate_id)=''OBO_REL:descended_from''';
 
-CREATE OR REPLACE VIEW count_of_annotated_entity AS
- SELECT 
-  count(DISTINCT node_id) AS total
- FROM
-  asserted_link -- TODO : include implied?
- WHERE
-  reiflink_node_id IS NOT NULL;
-
--- BEGIN MATERIALIZE
--- SELECT create_matview('count_of_annotated_entity');
--- END MATERIALIZE
 
 CREATE OR REPLACE VIEW count_of_annotated_entity_by_class_node_and_evidence AS
  SELECT 

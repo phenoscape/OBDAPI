@@ -287,7 +287,7 @@ public class OBDMain {
 						sp.getInformationContentSumForNRNodesInCommon()+"\t"+
 						getNodeDisp(sp.getNonRedundantNodesInCommon()));
 				// getSP is expensive : limited amount
-				if (n >= 20) // HARDCODE ALERT - TODO
+				if (n >= 40) // HARDCODE ALERT - TODO
 					break;
 			}
 			else {
