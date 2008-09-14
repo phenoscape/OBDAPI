@@ -954,7 +954,7 @@ COMMENT ON VIEW implied_annotation_link_count_by_node IS 'number of nodes (eg cl
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
- SELECT
+ SELECT DISTINCT
   ial.*,
   ialc.total AS total -- total number of genes etc 
  FROM
@@ -977,6 +977,7 @@ CREATE OR REPLACE VIEW implied_annotation_link_with_prob AS
   CAST(total AS FLOAT) / (SELECT total FROM count_of_annotated_entity) AS p
  FROM
   implied_annotation_link_with_total AS ialt;
+
 
 COMMENT ON VIEW implied_annotation_link_with_prob IS
 'implied_annotation_link adorned with p(c), where c is the object_id class.';
