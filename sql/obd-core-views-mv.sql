@@ -1,4 +1,4 @@
-SELECT drop_all_matviews()
+SELECT drop_all_matviews();
 
 -- CREATE SCHEMA obd_core_view;
 -- SET search_path TO obd_core_view,public;
@@ -151,6 +151,7 @@ COMMENT ON VIEW is_a_relation IS 'relation_node for the OBO_REL relation "is_a"'
 CREATE OR REPLACE VIEW non_is_a_relation AS SELECT * FROM relation_node WHERE uid!='OBO_REL:is_a';
 COMMENT ON VIEW non_is_a_relation IS 'relation_node NOT corresponding to the OBO_REL relation "is_a"';
 
+
 CREATE OR REPLACE VIEW is_a_link AS
  SELECT link.*
  FROM link INNER JOIN is_a_relation ON (predicate_id=is_a_relation.node_id);
@@ -225,6 +226,16 @@ COMMENT ON VIEW asserted_is_a_link IS 'An is_a_link that is not inferred (ie it 
 
 CREATE OR REPLACE VIEW implied_is_a_link AS SELECT * FROM is_a_link WHERE is_inferred='t';
 COMMENT ON VIEW implied_is_a_link IS 'An is_a_link that is inferred (ie it is not directly asserted)';
+
+-- non-generic link, but still useful
+CREATE OR REPLACE VIEW in_organism_relation AS SELECT * FROM relation_node WHERE uid='OBO_REL:in_organism';
+COMMENT ON VIEW in_organism_relation IS 'relation_node for the OBO_REL relation "in_organism"';
+
+CREATE OR REPLACE VIEW in_organism_link AS
+ SELECT link.*
+ FROM link INNER JOIN in_organism_relation ON (predicate_id=in_organism_relation.node_id);
+
+COMMENT ON VIEW in_organism_link IS 'A link of type "in_organism"';
 
 CREATE OR REPLACE VIEW axis_pair_link AS
  SELECT
@@ -844,7 +855,7 @@ CREATE OR REPLACE VIEW node_literal_with_pred AS
 -- reification is not propagated so we use this
 -- NOTE: currently propagates over ALL relations.. TODO fix
 CREATE OR REPLACE VIEW implied_annotation_link AS
-  SELECT
+  SELECT DISTINCT
    alink.link_id,
    alink.node_id,
    alink.predicate_id,
@@ -872,6 +883,8 @@ SELECT create_matview('implied_annotation_link');
 CREATE INDEX implied_annotation_link_idx_node_id ON implied_annotation_link(node_id);
 CREATE INDEX implied_annotation_link_idx_object_id ON implied_annotation_link(object_id);
 CREATE INDEX implied_annotation_link_idx_node_object_id ON implied_annotation_link(node_id,object_id);
+CREATE INDEX implied_annotation_link_idx_source_id ON implied_annotation_link(source_id);
+CREATE INDEX implied_annotation_link_idx_node_object_source_id ON implied_annotation_link(node_id,object_id,source_id);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW implied_annotation_xp AS
@@ -895,6 +908,19 @@ entity and the implied pairwise product of the annotation. E.g. if g1
 is annotated to LeftEye-small then the implied xp would be
 {small,size,morphology} x {LeftEye,Eye,SenseOrgan,..}';
 
+CREATE OR REPLACE VIEW count_of_annotated_entity AS
+ SELECT 
+  count(DISTINCT node_id) AS total
+ FROM
+  link -- used to be asserted...
+ WHERE
+  reiflink_node_id IS NOT NULL;
+
+-- BEGIN MATERIALIZE
+SELECT create_matview('count_of_annotated_entity');
+-- END MATERIALIZE
+
+
 CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
  SELECT
   object_id AS node_id,
@@ -904,10 +930,11 @@ CREATE OR REPLACE VIEW implied_annotation_link_count_by_object AS
  GROUP BY
   object_id;
 
-COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a node. TODO: rename? sounds like it is counting links..';
+COMMENT ON VIEW implied_annotation_link_count_by_object IS 'number of annotated entities annotated to a class node. E.g. ial(femur,100) means there are 100 genes or similar objects annotated to femur. TODO: rename? sounds like it is counting links..';
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('implied_annotation_link_count_by_object');
+CREATE INDEX implied_annotation_link_count_by_object_idx_node ON implied_annotation_link_count_by_object(node_id);
 CREATE INDEX implied_annotation_link_count_by_object_idx_node_total ON implied_annotation_link_count_by_object(node_id,total);
 -- END MATERIALIZE
 
@@ -924,16 +951,20 @@ COMMENT ON VIEW implied_annotation_link_count_by_node IS 'number of nodes (eg cl
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('implied_annotation_link_count_by_node');
-CREATE INDEX implied_annotation_link_count_by_node_idx_node_total ON implied_annotation_link_count_by_object(node_id,total);
+CREATE INDEX implied_annotation_link_count_by_node_idx_node ON implied_annotation_link_count_by_node(node_id);
+CREATE INDEX implied_annotation_link_count_by_node_idx_node_total ON implied_annotation_link_count_by_node(node_id,total);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW implied_annotation_link_with_total AS
- SELECT
+ SELECT DISTINCT
   ial.*,
-  ialc.total AS total
+  ialc.total AS total -- total number of genes etc 
  FROM
   implied_annotation_link AS ial
   INNER JOIN implied_annotation_link_count_by_object AS ialc ON (ial.object_id=ialc.node_id);
+
+COMMENT ON VIEW implied_annotation_link_with_total IS
+'implied_annotation_link adorned with the total number of annotated entities annotated to the object_id class';
  
 -- BEGIN MATERIALIZE
 SELECT create_matview('implied_annotation_link_with_total');
@@ -941,6 +972,35 @@ CREATE INDEX implied_annotation_link_with_total_idx_node_object_total ON implied
 CREATE INDEX implied_annotation_link_with_total_idx_node_object ON implied_annotation_link_with_total(node_id,object_id);
 CREATE INDEX implied_annotation_link_with_total_idx_object ON implied_annotation_link_with_total(object_id);
 -- END MATERIALIZE
+
+CREATE OR REPLACE VIEW implied_annotation_link_with_prob AS
+ SELECT DISTINCT
+  ialt.*,
+  CAST(total AS FLOAT) / (SELECT total FROM count_of_annotated_entity) AS p
+ FROM
+  implied_annotation_link_with_total AS ialt;
+
+
+COMMENT ON VIEW implied_annotation_link_with_prob IS
+'implied_annotation_link adorned with p(c), where c is the object_id class.';
+ 
+-- BEGIN MATERIALIZE
+SELECT create_matview('implied_annotation_link_with_prob');
+CREATE INDEX implied_annotation_link_with_total_idx_node_object_prob ON implied_annotation_link_with_prob(node_id,object_id,p);
+CREATE INDEX implied_annotation_link_with_prob_idx_node_object ON implied_annotation_link_with_prob(node_id,object_id);
+CREATE INDEX implied_annotation_link_with_prob_idx_object ON implied_annotation_link_with_prob(object_id);
+-- END MATERIALIZE
+
+CREATE OR REPLACE VIEW implied_annotation_link_with_object AS
+ SELECT
+  ial.*,
+  n.uid AS object_uid,
+  n.label AS object_label,
+  n.source_id AS object_source_id
+ FROM
+  implied_annotation_link AS ial
+  INNER JOIN node AS n ON (ial.object_id=n.node_id);
+
 
 -- link where relation=posits; from annotation to statement
 CREATE OR REPLACE VIEW posits_link AS
@@ -1580,7 +1640,7 @@ CREATE OR REPLACE VIEW co_annotated_to_pair_with_score AS
 CREATE OR REPLACE VIEW node_p_value AS
  SELECT
   ial.object_id AS node_id,
-  count(distinct ial.node_id) / 1234567, --- todo
+  count(distinct ial.node_id) / (SELECT total FROM count_of_annotated_entity)
  FROM
   implied_annotation_link AS ial;
 
@@ -1610,6 +1670,12 @@ CREATE OR REPLACE VIEW annotated_entity_total_annotation_nodes AS
   implied_annotation_link AS baselink
  GROUP BY
   baselink.node_id;
+
+-- BEGIN MATERIALIZE
+SELECT create_matview('annotated_entity_total_annotation_nodes');
+CREATE INDEX annotated_entity_total_annotation_nodes_idx_ae ON annotated_entity_total_annotation_nodes(annotated_entity_id);
+CREATE INDEX annotated_entity_total_annotation_nodes_idx_ae_total ON annotated_entity_total_annotation_nodes(annotated_entity_id,total_annotation_nodes);
+-- END MATERIALIZE
 
 -- Example: SELECT node_label(is_a_node_id),node_label(object_id) from node_pair_annotation_xp_intersection where node1_id = 532850 and node2_id=239699;
 CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection AS
@@ -1671,7 +1737,7 @@ COMMENT ON VIEW node_pair_annotation_xp_intersection_with_stats IS 'As
  is not necessarily an accurate measure of probability, as the two
  axes will probably not be independent';
 
-Create OR REPLACE VIEW node_pair_annotation_intersection AS
+CREATE OR REPLACE VIEW node_pair_annotation_intersection AS
  SELECT DISTINCT
   ial1.node_id AS node1_id,
   ial2.node_id AS node2_id,
@@ -1727,7 +1793,7 @@ CREATE OR REPLACE VIEW node_pair_annotation_intersection_count AS
 
 COMMENT ON VIEW node_pair_annotation_intersection_count IS 'For any
 two nodes (e.g. two gene nodes), what is the total number of
-annotation nodes in common? implied_annotation_link is used here';
+annotation nodes in common? implied_annotation_link is used here.';
 
 CREATE OR REPLACE VIEW node_pair_annotation_union1 AS
  SELECT DISTINCT
@@ -1790,7 +1856,7 @@ and n2 (e.g. two gene nodes), what are the total number of distinct
 implied annotation nodes for either n1 or n2. Warning: large cartesian
 product unless constrained.';
 
-CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
+CREATE OR REPLACE VIEW node_pair_annotation_similarity_score_old AS
  SELECT
   nii.node1_id,
   nii.node2_id,
@@ -1802,6 +1868,25 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
   node_pair_annotation_union_count AS niu USING (node1_id,node2_id)
  WHERE
   total_nodes_in_intersection > 0;
+
+CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
+ SELECT
+  nii.node1_id,
+  nii.node2_id,
+  n1t.total_annotation_nodes AS node1_total_nodes,
+  n2t.total_annotation_nodes AS node2_total_nodes,
+  total_nodes_in_intersection,
+  CAST(total_nodes_in_intersection AS FLOAT) / ((n1t.total_annotation_nodes + n2t.total_annotation_nodes) - total_nodes_in_intersection) AS basic_score
+ FROM 
+  node_pair_annotation_intersection_count AS nii 
+  INNER JOIN annotated_entity_total_annotation_nodes AS n1t ON (nii.node1_id=n1t.annotated_entity_id)
+  INNER JOIN annotated_entity_total_annotation_nodes AS n2t ON (nii.node2_id=n2t.annotated_entity_id)
+ WHERE
+  total_nodes_in_intersection > 0;
+
+COMMENT ON VIEW node_pair_annotation_similarity_score IS
+'annotation overlap between two nodes as a ratio of intersection / union';
+
 
 CREATE OR REPLACE VIEW annotated_entity_total_annotations_by_annotsrc AS
  SELECT
@@ -1948,7 +2033,9 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
   ial.source_id,
   ialc.total;
  
-
+COMMENT ON VIEW annotated_entity_congruence_by_annotsrc IS 
+'congruence for an annotated_entity and a source vs all other sources (including itself).
+Faster than comparing between pairs';
 
 CREATE OR REPLACE VIEW avg_annotated_entity_congruence_between_annotsrc_pair AS
  SELECT
@@ -2008,17 +2095,6 @@ CREATE OR REPLACE VIEW implied_annotation_link_to_annotgroup_level2 AS
 
 COMMENT ON VIEW implied_annotation_link_to_annotgroup_level2 IS '2-level structure; for example annotations to genotypes to genes to homology groups EXAMPLE: select node_uid(node_id),node_uid(grouping_predicate_id) as p,node_uid(annotgroup_node_id),node_uid(object_id),node_label(object_id) from implied_annotation_link_to_annotgroup_level2 where node_label(object_id) = ''Kidney'' and node_uid(annotgroup1_node_id) like ''entrez%'' and node_uid(grouping_predicate_id)=''OBO_REL:descended_from''';
 
-CREATE OR REPLACE VIEW count_of_annotated_entity AS
- SELECT 
-  count(DISTINCT node_id) AS total
- FROM
-  asserted_link -- TODO : include implied?
- WHERE
-  reiflink_node_id IS NOT NULL;
-
--- BEGIN MATERIALIZE
-SELECT create_matview('count_of_annotated_entity');
--- END MATERIALIZE
 
 CREATE OR REPLACE VIEW count_of_annotated_entity_by_class_node_and_evidence AS
  SELECT 
@@ -2054,7 +2130,6 @@ CREATE INDEX class_node_entropy_by_evidence_idx_info ON class_node_entropy_by_ev
 CREATE UNIQUE INDEX class_node_entropy_by_evidence_idx_node_id_info ON class_node_entropy_by_evidence(node_id,shannon_information);
 -- END MATERIALIZE
 
-
 CREATE OR REPLACE VIEW implied_annotation_link_with_entropy AS
  SELECT
   e.shannon_information,
@@ -2066,24 +2141,33 @@ CREATE OR REPLACE VIEW implied_annotation_link_with_entropy AS
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('implied_annotation_link_with_entropy');
-CREATE INDEX implied_annotation_link_with_entropy_idx_node_id ON implied_annotation_link_with_entropy(node_id);
-CREATE INDEX implied_annotation_link_with_entropy_idx_object_id ON implied_annotation_link_with_entropy(object_id);
-CREATE INDEX implied_annotation_link_with_entropy_idx_node_object_id ON implied_annotation_link_with_entropy(node_id,object_id);
+CREATE INDEX implied_annotation_link_with_entropy_idx_node ON implied_annotation_link_with_entropy(node_id);
+CREATE INDEX implied_annotation_link_with_entropy_idx_object ON implied_annotation_link_with_entropy(object_id);
+CREATE INDEX implied_annotation_link_with_entropy_idx_node_object ON implied_annotation_link_with_entropy(node_id,object_id);
+CREATE INDEX implied_annotation_link_with_entropy_idx_node_object_info ON implied_annotation_link_with_entropy(shannon_information,node_id,object_id);
 -- END MATERIALIZE
 
 
-CREATE OR REPLACE VIEW node_pair_max_entropy_match AS
+CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
  SELECT
   ial1.node_id AS node1_id,
   ial2.node_id AS node2_id,
   max(DISTINCT shannon_information) AS max_ic
  FROM 
-  implied_annotation_link AS ial1,
-  implied_annotation_link AS ial2,
-  class_node_entropy_by_evidence AS e
- WHERE
-  e.node_id = ial1.object_id AND
-  ial1.object_id = ial2.object_id -- both annotations agree
+  implied_annotation_link AS ial1
+  INNER JOIN implied_annotation_link_with_entropy AS ial2 USING (object_id)
+ GROUP BY
+  ial1.node_id,
+  ial2.node_id;
+
+CREATE OR REPLACE VIEW node_pair_annotation_match_sum_entropy AS
+ SELECT
+  ial1.node_id AS node1_id,
+  ial2.node_id AS node2_id,
+  sum(DISTINCT shannon_information) AS sum_ic
+ FROM 
+  implied_annotation_link AS ial1
+  INNER JOIN implied_annotation_link_with_entropy AS ial2 USING (object_id)
  GROUP BY
   ial1.node_id,
   ial2.node_id;
@@ -2244,4 +2328,6 @@ CREATE OR REPLACE VIEW node_max_loadtime_by_source AS
  FROM node LEFT OUTER JOIN node AS source ON (node.source_id=source.node_id)
   INNER JOIN node_audit ON (node.node_id=node_audit.node_id)
  GROUP BY source.uid,source.label;
+
+VACUUM FULL ANALYZE;
 
