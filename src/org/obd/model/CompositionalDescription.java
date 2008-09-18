@@ -127,6 +127,11 @@ public class CompositionalDescription extends Node implements Comparable {
 			arguments = new HashSet<CompositionalDescription>();
 		arguments.add(argument);
 	}
+	public void addArgument(String id) {
+		CompositionalDescription d = new CompositionalDescription(Predicate.ATOM);
+		d.setNodeId(id);
+		addArgument(d);
+	}
 	
 	/**
 	 * treated as an existential restriction by default
@@ -142,12 +147,22 @@ public class CompositionalDescription extends Node implements Comparable {
 		restr.setRestriction(link);
 		addArgument(restr);
 	}
-
-	public void addArgument(String id) {
-		CompositionalDescription d = new CompositionalDescription(Predicate.ATOM);
-		d.setNodeId(id);
-		addArgument(d);
+	/**
+	 * treated as an existential restriction by default
+	 * @param relationId
+	 * @param targetId
+	 */
+	public void addArgument(String relationId, CompositionalDescription target) {
+		CompositionalDescription restr = new CompositionalDescription(Predicate.RESTRICTION);
+		LinkStatement link = new LinkStatement(null,relationId,target.getId());
+		restr.addArgument( target );
+		link.setAppliesToAllInstancesOf(true);
+		link.setExistential(true);
+		restr.setRestriction(link);
+		addArgument(restr);
 	}
+
+
 	public void removeArgument(CompositionalDescription argument) {
 		arguments.remove(argument);
 	}
