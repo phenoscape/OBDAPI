@@ -44,7 +44,8 @@ CREATE VIEW inf_gt_label AS
 
 CREATE OR REPLACE VIEW omim_genotype AS
  SELECT
-  *
+  *,
+  split_part(uid,'/',1) AS allele
  FROM
   node
  WHERE uid like 'OMIM:%';
@@ -55,6 +56,18 @@ CREATE OR REPLACE VIEW omim_genotype AS
 -- CREATE INDEX omim_genotype_idx_uid ON omim_genotype(uid);
 -- CREATE INDEX omim_genotype_idx_label ON omim_genotype(label);
 -- END MATERIALIZE
+
+CREATE OR REPLACE VIEW omim_allele AS
+ SELECT
+  omim_genotype.node_id,
+  allele,
+  concat(gt_label || ' ') AS gt_labels
+ FROM
+  omim_genotype
+  INNER JOIN inf_gt_label ON (node_id=gt_node_id)
+ GROUP BY omim_genotype.node_id,allele;
+
+
 
 CREATE OR REPLACE VIEW omim_genotype_gene AS
  SELECT
@@ -148,6 +161,23 @@ CREATE OR REPLACE VIEW omim_genotype_annotation_summary_table AS
   LEFT OUTER JOIN total_bbop AS aet_bbop ON (aet_bbop.annotated_entity_id=omim_genotype.node_id)
   LEFT OUTER JOIN total_zfin AS aet_zfin ON (aet_zfin.annotated_entity_id=omim_genotype.node_id)
   LEFT OUTER JOIN total_fb AS aet_fb ON (aet_fb.annotated_entity_id=omim_genotype.node_id);
+
+CREATE OR REPLACE VIEW omim_genotype_annotation_summary_by_allele_table AS
+ SELECT
+  omim_allele.allele, 
+  gt_labels,
+  SUM(aet_bbop.total_annotations) AS bbop_annots,
+  SUM(aet_zfin.total_annotations) AS zfin_annots,
+  SUM(aet_fb.total_annotations) AS fb_annots
+ FROM 
+  omim_allele
+  LEFT OUTER JOIN total_bbop AS aet_bbop ON (aet_bbop.annotated_entity_id=omim_allele.node_id)
+  LEFT OUTER JOIN total_zfin AS aet_zfin ON (aet_zfin.annotated_entity_id=omim_allele.node_id)
+  LEFT OUTER JOIN total_fb AS aet_fb ON (aet_fb.annotated_entity_id=omim_allele.node_id)
+ GROUP BY
+  omim_allele.allele, 
+  gt_labels;
+  
 
 CREATE OR REPLACE VIEW omim_genotype_annotsrc_coverage AS
  SELECT
