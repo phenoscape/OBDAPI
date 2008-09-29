@@ -57,6 +57,7 @@ CREATE AGGREGATE concat (
 
 -- TODO: eliminate circular dependency between naming and intersection
 -- minimal name
+-- Example: update node set label = name_from_intersections(node_id) where uid like 'PATO:%^%' and label like '% & %';
 CREATE OR REPLACE FUNCTION name_from_intersections(INT) RETURNS VARCHAR
  AS
 $$

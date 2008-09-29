@@ -77,7 +77,9 @@ my $dir = `dirname $0`;
 chomp $dir;
 my $sqldir = "$dir/../sql";
 printf STDERR "psql args: $args\n";
-run("dropdb $args") if $drop;
+run("dropdb $args", 
+    sub { print STDERR "DID NOT DROP BECAUSE $db DID NOT EXIST\n" }) 
+    if $drop;
 run("createdb $args");
 run("psql $args < $sqldir/obd-core-schema.sql ");
 #run("psql $args < $sqldir/obd-core-views.sql ");
@@ -144,19 +146,29 @@ sub useddl {
 
 sub run {
     my $cmd = shift;
+    my $onfail = shift;
     print STDERR "CMD: $cmd\n";
-    if (system($cmd)) {
-        print STDERR "Error in: $cmd\n";
-        exit(1);
+    my $err = system($cmd);
+    if ($err) {
+        if ($onfail) {
+            $onfail->($err);
+        }
+        else {
+            print STDERR "Error $err in: $cmd\n";
+            exit(1);
+        }
     }
 }
 
 sub printusage {
     print <<EOM
-obd-create-db.pl [-h <HOST>] -d <DBNAME> [-c <CONF-FILE>] [OBO_FILE...]
+obd-create-db.pl [-h <HOST>] -d <DBNAME> [-c <CONF-FILE>] [--reasoner perl] [OBO_FILE...]
 
 Creates a Pg database with the OBD schema, views and functions
-Optionally loads additional sources
+Optionally loads additional sources.
+
+The conf file consits of newline separated resource IDs. You dont need to specify obo files
+on the command line if you use a conf file. See the conf/ directory for examples
 
 EOM
 ;

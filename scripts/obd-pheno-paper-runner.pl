@@ -16,8 +16,23 @@ print STDERR "Done!\n";
 sub run {
     my $g = shift;
     my $t = shift;
-    my $cmd = "obd-exec -d $jdbc --findsim --ic -M 8000 -O 50 --org $t $g > $g-vs-$t-IC.sim";
-    print STDERR "Cmd: $cmd\n";
-    print `$cmd`;
+    my $outf = "$g-vs-$t-IC.sim";
+    if (-f $outf) {
+        print STDERR "Already have: $outf\n";
+        return 0;
+    }
+    else {
+        my $time = time;
+        my $cmd = "(obd-exec -d $jdbc --findsim --ic -M 8000 -O 50 --org $t $g > $outf) >& $outf.err";
+        print STDERR "Cmd: $cmd\n";
+        #print `$cmd`;
+        my $err = system($cmd);
+        print STDERR "STATUS: $err\n";
+        my $t2 = time;
+        my $td = $t2-$time;
+        print STDERR "Completed in: $td\n";
+        return 1;
+    }
+    
 }
 

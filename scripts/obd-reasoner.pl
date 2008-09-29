@@ -197,7 +197,7 @@ unless ($skip{chain}) {
     my @relation_chains = 
         (
          ['OBO_REL:inheres_in_part_of','OBO_REL:inheres_in','OBO_REL:part_of'],
-    ['OBO_REL:inheres_in_part_of','OBO_REL:inheres_in','part_of'],
+         ['OBO_REL:inheres_in_part_of','OBO_REL:inheres_in','part_of'],
         );
 
    foreach my $rule (@relation_chains) {

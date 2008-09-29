@@ -1033,6 +1033,12 @@ public abstract class AbstractShard implements Shard {
 	public Collection<LinkStatement> extendLinks(Collection<LinkStatement> stmts, QueryTerm qt) {
 		return extendLinks(stmts,  qt, null);
 	}
+	/**
+	 * @param stmts
+	 * @param extQt
+	 * @param sMap - maps node identifiers to LinkStatements in which the node is subject
+	 * @return
+	 */
 	public Collection<LinkStatement> extendLinksWithCache(Collection<LinkStatement> stmts, QueryTerm extQt, Map<String,Set<LinkStatement>> sMap) {
 		for (LinkStatement s : stmts) {
 			if (!sMap.containsKey(s.getNodeId()))
@@ -1068,7 +1074,11 @@ public abstract class AbstractShard implements Shard {
 		}
 
 		for (String nid : seedIds) {
-			elinks.addAll(sMap.get(nid));
+			if (sMap.containsKey(nid))
+				elinks.addAll(sMap.get(nid));
+			else {
+				System.err.println("PROBLEM: no links for "+nid+ " -- perhaps annotations use IDs not in ontology?"); // TODO
+			}
 		}
 		return elinks;
 	}
