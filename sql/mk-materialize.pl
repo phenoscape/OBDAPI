@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-print "SELECT drop_all_matviews();\n\n";
+print "-- SELECT drop_all_matviews();\n\n";
 $in = 0;
 while(<>) {
     $in = 0 if /END\s+MATERIALIZE/;
