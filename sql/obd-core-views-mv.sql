@@ -1,4 +1,4 @@
-SELECT drop_all_matviews();
+-- SELECT drop_all_matviews();
 
 -- CREATE SCHEMA obd_core_view;
 -- SET search_path TO obd_core_view,public;
@@ -2035,7 +2035,10 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
  
 COMMENT ON VIEW annotated_entity_congruence_by_annotsrc IS 
 'congruence for an annotated_entity and a source vs all other sources (including itself).
-Faster than comparing between pairs';
+Faster than comparing between pairs. 
+
+  congruence(ae,s) = |annotnodes*(ae,s)| / |annotnodes*(ae)|
+';
 
 CREATE OR REPLACE VIEW avg_annotated_entity_congruence_between_annotsrc_pair AS
  SELECT
@@ -2107,6 +2110,8 @@ CREATE OR REPLACE VIEW count_of_annotated_entity_by_class_node_and_evidence AS
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('count_of_annotated_entity_by_class_node_and_evidence');
+CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_node_id ON count_of_annotated_entity_by_class_node_and_evidence(node_id);
+CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_node_count ON count_of_annotated_entity_by_class_node_and_evidence(node_id,count);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW class_node_entropy_by_evidence AS

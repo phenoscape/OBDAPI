@@ -137,10 +137,18 @@ public class OBDMain {
 					draw(args[i]);
 			}
 			else if (args[i].equals("--compare")) {
-				String nid1 = args[++i];
-				String nid2 = args[++i];
 				i++;
-				compareNodes(false,nid1,nid2);
+				boolean calcIC = false;
+				if (args[i].equals("--ic")) {
+					i++;
+					calcIC = true;
+				}
+					
+					String nid1 = args[i];
+				i++;
+				String nid2 = args[i];
+				i++;
+				compareNodes(calcIC,nid1,nid2);
 			}
 			else if (args[i].equals("--findsim")) {
 				i++;

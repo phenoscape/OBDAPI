@@ -975,7 +975,7 @@ public abstract class AbstractShard implements Shard {
 			Double ic = getInformationContentByAnnotations(nid);
 			sp.setInformationContent(nid, ic);
 			sumICinUnion += ic;
-			//System.out.println(nid + " IC:"+ic);
+			//System.out.println("UNION: "+nid + " IC:"+ic);
 		}	
 		for (String nid : sp.getNonRedundantNodesInCommon()) {
 			Double ic = sp.getInformationContent(nid);
@@ -984,6 +984,7 @@ public abstract class AbstractShard implements Shard {
 				nodeWithMaxIC = nid;
 			}
 			sumICinCommon += ic;
+			//System.out.println("COMMON: "+nid + " IC:"+ic);
 		}
 		double avgIC = sumICinCommon / sp.getTotalNodesInCommon();
 		double simGIC = sumICinCommon / sumICinUnion;
