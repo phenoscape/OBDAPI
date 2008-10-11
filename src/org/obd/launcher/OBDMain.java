@@ -21,14 +21,20 @@ import org.obd.model.CompositionalDescription.Predicate;
 import org.obd.model.stats.ScoredNode;
 import org.obd.model.stats.SimilarityPair;
 import org.obd.parser.Parser;
+import org.obd.query.AnnotationLinkQueryTerm;
+import org.obd.query.LabelQueryTerm;
 import org.obd.query.ComparisonQueryTerm;
+import org.obd.query.LinkQueryTerm;
+import org.obd.query.QueryTerm;
 import org.obd.query.Shard;
 import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
+import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.impl.MultiShard;
 import org.obd.query.impl.MutableOBOSessionShard;
 import org.obd.query.impl.OBDSQLShard;
 import org.oboedit.gui.Preferences;
+import org.purl.obo.vocab.RelationVocabulary;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 
@@ -40,7 +46,9 @@ import org.restlet.data.Protocol;
 public class OBDMain {
 
 	static String defaultJdbcPath = "jdbc:postgresql://localhost:5432/obd_phenotype_all";
+	RelationVocabulary rv = new RelationVocabulary();
 	MutableOBOSessionShard oboShard = new MutableOBOSessionShard();
+	OBDSQLShard obdsql;
 	MutableOBOSessionShard metadataShard = null;
 	MultiShard multiShard = new MultiShard();
 	String fmt = null;
@@ -77,9 +85,9 @@ public class OBDMain {
 				i++;
 				jdbcPath = args[i];
 				try {
-					OBDSQLShard obd = new OBDSQLShard();
-					obd.connect(jdbcPath);
-					multiShard.addShard(obd);
+					obdsql = new OBDSQLShard();
+					obdsql.connect(jdbcPath);
+					multiShard.addShard(obdsql);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -136,6 +144,20 @@ public class OBDMain {
 				else
 					draw(args[i]);
 			}
+			else if (args[i].equals("--cacheall")) {
+				i++;
+				cacheAllSimilarityScores();
+			}
+			else if (args[i].equals("--cache")) {
+				i++;
+				cacheSimilarityScores(args[i], args[++i]);
+				i++;
+			}
+			else if (args[i].equals("--cachegene")) {
+				i++;
+				cacheSimilarityScoresByGene(args[i], args[++i]);
+				i++;
+			}
 			else if (args[i].equals("--compare")) {
 				i++;
 				boolean calcIC = false;
@@ -162,6 +184,10 @@ public class OBDMain {
 					}
 					else if (args[i].equals("--sp")) {
 						getSP = true;
+						i++;
+					}
+					else if (args[i].equals("--exhaustive") || args[i].equals("-x")) {
+						ssp.isExhaustive = true;
 						i++;
 					}
 					else if (args[i].equals("--org")) {
@@ -279,6 +305,9 @@ public class OBDMain {
 	}
 
 	public void findSimilar(boolean useIC, boolean getSP, SimilaritySearchParameters ssp, String nid) {
+		Node qn = multiShard.getNode(nid);
+		System.out.println("Query: "+qn);
+		System.out.println("Params: "+ssp);
 		List<ScoredNode> sns = multiShard.getSimilarNodes(ssp,nid);
 		int n = 0;
 		for (ScoredNode sn : sns) {
@@ -302,6 +331,39 @@ public class OBDMain {
 				System.out.println(sn.getScore() + " : "+getNodeDisp(sn.getNodeId()));
 			}
 		}
+	}
+	
+	public void cacheSimilarityScoresByGene(String geneId, String taxId) {
+		QueryTerm qt1 = 
+			new LabelQueryTerm(AliasType.ID,
+					geneId,
+					Operator.EQUAL_TO);
+		QueryTerm qt2 = 
+			new LinkQueryTerm(
+					"OBO_REL:in_organism",taxId);
+		qt2.setQueryAlias("in_organism_link");
+		LinkQueryTerm gqt = new LinkQueryTerm(rv.is_a(), "SO:0000704");
+		gqt.setQueryAlias("isa_gene_link");
+		qt2.setNode(gqt);
+		obdsql.cacheSimilarityScores(qt1, qt2);	
+	}
+
+	
+	public void cacheSimilarityScores(String ns1, String ns2) {
+		QueryTerm qt1 = 
+			new LabelQueryTerm(AliasType.ID,
+					ns1,
+					Operator.STARTS_WITH);
+		QueryTerm qt2 = 
+			new LabelQueryTerm(AliasType.ID,
+					ns2,
+					Operator.STARTS_WITH);
+		obdsql.cacheSimilarityScores(qt1, qt2);
+		
+	}
+	public void cacheAllSimilarityScores() {
+		obdsql.cacheSimilarityScores(null); //all
+		
 	}
 
 	public String getNodeDispCD(CompositionalDescription cd) {

@@ -188,6 +188,15 @@ public interface AnalysisCapableRepository {
 		
 		public String ontologySourceId;
 		
+		/**
+		 *  experimental: if true tests query against all target nodes
+		 */
+		public boolean isExhaustive = false;
+		
+		public String toString() {
+			return (isExhaustive ? "X" : "") + "org:"+in_organism;
+		}
+		
 	}
 
 
@@ -296,10 +305,19 @@ public interface AnalysisCapableRepository {
 	public SimilarityPair compareAnnotationsByAnnotatedEntityPair(String aeid1, String aeid2);
 
 	/**
+	 * @param aeid1
+	 * @param aeid2
+	 * @return
+	 */
+	public Double getBasicSimilarityScore(String aeid1, String aeid2);
+
+	
+	/**
 	 * This must be called in order to populate various fields in the SimilarityPair object
 	 * (the Shard must be queried to find IC for nodes)
 	 * @param sp
 	 */
 	public void calculateInformationContentMetrics(SimilarityPair sp);
 
+	
 }

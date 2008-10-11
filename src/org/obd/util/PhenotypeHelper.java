@@ -41,7 +41,6 @@ public class PhenotypeHelper  {
 	final String QUALITY = "PATO:0000001";
 
 
-
 	public Shard getShard() {
 		return shard;
 	}
@@ -129,7 +128,7 @@ public class PhenotypeHelper  {
 			CompositionalDescription desc = shard.getCompositionalDescription(id, false);
 			if (desc.isAtomic())
 				continue;
-			//System.out.println("desc-in="+desc);
+			System.out.println("desc-in="+desc);
 			Collection<CompositionalDescription> args = desc.getArguments();
 			for (CompositionalDescription arg : args) {
 				if (arg.getRestriction() != null && 
@@ -152,7 +151,7 @@ public class PhenotypeHelper  {
 						CompositionalDescription newDesc = new CompositionalDescription(desc.getGenus().getNodeId(),
 								Collections.singleton(arg.getRestriction()));
 						String newId = newDesc.generateId();		
-						//System.out.println(newDesc);
+						System.out.println(newDesc);
 
 						newDesc.setId(newId);
 						//System.out.println("desc-new="+newDesc);
@@ -212,6 +211,7 @@ public class PhenotypeHelper  {
 		qt.setRelation(relationVocabulary.has_qualifier());
 		qt.setDescriptionLink(true);
 		qt.setInferred(false);
+
 		Collection<Node> nodes = shard.getNodesByQuery(qt);
 		for (Node node : nodes) {
 			String id = node.getId();

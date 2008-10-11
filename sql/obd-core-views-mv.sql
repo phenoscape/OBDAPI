@@ -86,13 +86,13 @@ COMMENT ON VIEW revlink IS 'A link in the reverse direction. Example_of_use:
 SELECT * FROM node INNER JOIN revlink USING (node_id). May be useful
 for inverse DAG traversal. Has no real-world semantics';
 
-CREATE OR REPLACE VIEW implied_link AS SELECT * FROM link WHERE is_inferred='t';
-COMMENT ON VIEW implied_link IS 'A link that has been inferred;
+CREATE OR REPLACE VIEW inferred_link AS SELECT * FROM link WHERE is_inferred='t';
+COMMENT ON VIEW inferred_link IS 'A link that has been inferred;
 inferred links are created by deductive reasoning. Examples: X part_of
 Z because X is_a Y and Y part_of Z';
 
 CREATE OR REPLACE VIEW asserted_link AS SELECT * FROM link WHERE is_inferred='f';
-COMMENT ON VIEW asserted_link IS 'A link that has been asserted; converse of implied_link';
+COMMENT ON VIEW asserted_link IS 'A link that has been asserted; converse of inferred_link';
 
 CREATE OR REPLACE VIEW intersection_link AS SELECT * FROM link WHERE combinator='I';
 COMMENT ON VIEW intersection_link IS 'A link that forms part of an
@@ -358,7 +358,7 @@ CREATE OR REPLACE VIEW consecutive_link_pair AS
 
 COMMENT ON VIEW consecutive_link_pair IS 'A pair of links in which the
 object of one matches the node of another. For example, X is_a Y + Y
-part_of Z';
+part_of Z. May include reflexive links';
 
 CREATE OR REPLACE VIEW sibling_link_pair AS
  SELECT
@@ -866,7 +866,9 @@ CREATE OR REPLACE VIEW implied_annotation_link AS
    ilink.object_id
   FROM
    reified_link AS alink
-   INNER JOIN link AS ilink ON (alink.object_id=ilink.node_id);
+   INNER JOIN link AS ilink ON (alink.object_id=ilink.node_id)
+  WHERE
+   ilink.is_metadata='f';
 --  WHERE
 --   alink.is_inferred='f'; -- non-asserted annotation 
 
@@ -2110,8 +2112,8 @@ CREATE OR REPLACE VIEW count_of_annotated_entity_by_class_node_and_evidence AS
 
 -- BEGIN MATERIALIZE
 SELECT create_matview('count_of_annotated_entity_by_class_node_and_evidence');
-CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_node_id ON count_of_annotated_entity_by_class_node_and_evidence(node_id);
-CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_node_count ON count_of_annotated_entity_by_class_node_and_evidence(node_id,count);
+CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_1 ON count_of_annotated_entity_by_class_node_and_evidence(node_id);
+CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_2 ON count_of_annotated_entity_by_class_node_and_evidence(node_id,count);
 -- END MATERIALIZE
 
 CREATE OR REPLACE VIEW class_node_entropy_by_evidence AS
@@ -2261,7 +2263,24 @@ CREATE OR REPLACE VIEW avg_annotation_information_content_by_annotation_source A
   annotation_with_information_content AS ai
   INNER JOIN node AS source ON (ai.source_id=source.node_id)
  GROUP BY source.uid,source.label;
-  
+
+-- ************************************************************
+-- REASONER VIEWS
+-- ************************************************************
+CREATE OR REPLACE VIEW inferred_nr_subclass AS
+ SELECT
+  *
+ FROM
+  inferred_link AS il
+ WHERE
+  NOT EXISTS (SELECT *
+              FROM consecutive_link_pair AS clp
+              WHERE
+               il.node_id=clp.node_id AND
+               il.object_id=clp.next_object_id AND
+               clp.via_node_id != clp.node_id AND
+               clp.via_node_id != clp.next_object_id);
+
 -- ************************************************************
 -- OWL
 -- ************************************************************

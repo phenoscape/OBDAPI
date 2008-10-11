@@ -119,4 +119,27 @@ $$
   RETURN v_ic;
  END
 $$ LANGUAGE 'plpgsql';
+
+CREATE TABLE cache_basic_similarity_score(node1_id INT, node2_id INT, basic_score FLOAT);
+CREATE INDEX cache_basic_similarity_score_ix1 ON cache_basic_similarity_score(node1_id);
+CREATE INDEX cache_basic_similarity_score_ix2 ON cache_basic_similarity_score(node2_id);
+CREATE UNIQUE INDEX cache_basic_similarity_score_ix3 ON cache_basic_similarity_score(node1_id,node2_id);
+  
+CREATE OR REPLACE FUNCTION get_basic_similarity_score(INT,INT) RETURNS FLOAT
+ AS
+$$
+ DECLARE
+  v_bss  FLOAT;
+ BEGIN
+  SELECT INTO v_bss basic_score FROM cache_basic_similarity_score WHERE node1_id=$1 AND node2_id=$2;
+  IF NOT FOUND THEN
+    SELECT INTO v_bss basic_score FROM cache_basic_similarity_score WHERE node1_id=$2 AND node2_id=$1;     -- symmetric
+    IF NOT FOUND THEN
+      SELECT INTO v_bss basic_score FROM node_pair_annotation_similarity_score WHERE node1_id = $1 AND node2_id = $2;
+      INSERT INTO cache_basic_similarity_score (node1_id,node2_id,basic_score) VALUES ($1,$2,v_bss);
+    END IF;
+  END IF;
+  RETURN v_bss;
+ END
+$$ LANGUAGE 'plpgsql';
   

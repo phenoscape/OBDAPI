@@ -6,10 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ import org.obd.model.rule.InferenceRule;
 import org.obd.model.rule.RelationCompositionRule;
 import org.obd.model.stats.AggregateStatisticCollection;
 import org.obd.model.stats.ScoredNode;
+import org.obd.model.stats.SimilarityPair;
 import org.obd.model.stats.AggregateStatistic.AggregateType;
 import org.obd.model.vocabulary.TermVocabulary;
 import org.obd.query.AnnotationLinkQueryTerm;
@@ -55,6 +59,7 @@ import org.obd.query.RootQueryTerm;
 import org.obd.query.Shard;
 import org.obd.query.SourceQueryTerm;
 import org.obd.query.SubsetQueryTerm;
+import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
 import org.obd.query.BooleanQueryTerm.BooleanOperator;
 import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
@@ -82,7 +87,7 @@ import org.purl.obo.vocab.RelationVocabulary;
  * 
  */
 public class OBDSQLShard extends AbstractSQLShard implements Shard {
-	
+
 
 	Logger logger = Logger.getLogger("org.obd.shard.OBDSQLShard");
 
@@ -108,8 +113,9 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	protected String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
 	protected String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
 	protected String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
-	
+
 	protected String IS_A_LINK_TABLE = "is_a_link";
+	protected String REIFIED_LINK_TABLE = "reified_link";
 
 	protected String APPLIES_TO_ALL = "applies_to_all";
 	protected String SUBJECT_NODE_ALIAS = "snode";
@@ -343,6 +349,99 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return sc;
 	}
 
+	private Double getBasicSimilarityScore(int iid1, int iid2) {
+		try {
+			CallableStatement cs = executeSqlFunc("get_basic_similarity_score",
+					Types.REAL, iid1, iid2);
+			float f = cs.getFloat(1);
+			return (double) f;
+			//return (float) this.callSqlFunc("get_basic_similarity_score", iid1, iid2);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		/*
+		RelationalQuery q = new SqlQueryImpl();
+		q.addTable("node_pair_annotation_similarity_score");
+		WhereClause wc = q.getWhereClause();
+		wc.addEqualityConstraint("node1_id", iid1);
+		wc.addEqualityConstraint("node2_id", iid2);
+
+		ResultSet rs;
+		try {
+			rs = execute(q);
+			if (rs.next()) {
+				Double bss = rs.getDouble("basic_similarity_score");
+				return bss;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		 */
+	}
+
+	public Double getBasicSimilarityScore(String aeid1, String aeid2) {
+		int iid1 = this.getNodeInternalId(aeid1);
+		int iid2 = this.getNodeInternalId(aeid2);
+		return getBasicSimilarityScore(iid1, iid2);
+	}
+
+	public void cacheSimilarityScores(QueryTerm qt) {
+		cacheSimilarityScores(qt,null);
+	}
+	public void cacheSimilarityScores(QueryTerm qt, QueryTerm qt2) {
+		Collection<Integer> iids = new ArrayList<Integer>();
+		Collection<Integer> iids2 = new ArrayList<Integer>();
+		String alias = "query_node";
+		ResultSet rs;
+		try {
+			RelationalQuery rq;
+			if (qt == null) {
+				// all annotations
+				rq = new SqlQueryImpl();
+				rq.addTable(REIFIED_LINK_TABLE);
+				alias = REIFIED_LINK_TABLE;
+			}
+			else {
+				rq = translateQueryForNode(qt);
+			}
+			rq.setSelectClause(tblCol(alias,NODE_INTERNAL_ID_COLUMN));
+			rq.getSelectClause().setDistinct(true);
+			System.out.println(rq.toString());
+			rs = this.execute(rq);
+			while (rs.next()) {
+				iids.add(rs.getInt(NODE_INTERNAL_ID_COLUMN));
+			}
+			if (qt2 == null) {
+				iids2 = iids;
+			}
+			else {
+				RelationalQuery rq2 = translateQueryForNode(qt2);
+				rq2.setSelectClause(tblCol(alias,NODE_INTERNAL_ID_COLUMN));
+				rq.getSelectClause().setDistinct(true);
+				System.out.println(rq2.toString());
+				rs = this.execute(rq2);
+				while (rs.next()) {
+					iids2.add(rs.getInt(NODE_INTERNAL_ID_COLUMN));
+				}
+			}
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (int iid1 : iids) {
+			System.out.println(" caching Q:"+iid1);
+			for (int iid2 : iids2) {
+				double bss = 1;
+				bss = getBasicSimilarityScore(iid1, iid2);
+			}
+		}
+	}
+
+
 	@Override
 	public Double getInformationContentByAnnotations(String classNodeId) {
 		// String sql =
@@ -363,11 +462,9 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	}
 
 
-	@Override
-	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
+	private List<ScoredNode> getSimilarNodesExhaustive(SimilaritySearchParameters params, String nodeId) {
+		String ontologySourceId = params.ontologySourceId;
 
-		 String ontologySourceId = params.ontologySourceId;
-		 
 		/*
 		 * what kind of thing is nodeId? We want to compare like with like; eg gene with gene,
 		 * genotype with genotype.
@@ -389,7 +486,118 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			sourceIid = this.getNodeInternalId(ontologySourceId);
 		}
 
+		RelationalQuery fetchRq = new SqlQueryImpl();
+		//fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
+		String nodeAlias = "hit_node";
+		fetchRq.addTable("node", nodeAlias);
+		WhereClause wc = fetchRq.getWhereClause();
+		if (isaIid != null) {
+			String isaLinkAlias = "isa_link";
+			// return AEs of the same type: e.g. if query is a gene, return genes
+			fetchRq.addTable(IS_A_LINK_TABLE,isaLinkAlias);
+			wc.addJoinConstraint(tblCol(nodeAlias,NODE_INTERNAL_ID_COLUMN),
+					tblCol(isaLinkAlias,NODE_INTERNAL_ID_COLUMN));
+			wc.addEqualityConstraint(tblCol(isaLinkAlias,LINK_TARGET_INTERNAL_ID_COLUMN), isaIid);	
+			wc.addConstraint(isaLinkAlias+".is_inferred = 'f'");
+		}
+
+		// must have at least 1 annotation
+		fetchRq.addTable(REIFIED_LINK_TABLE);
+		wc.addJoinConstraint(tblCol(nodeAlias,NODE_INTERNAL_ID_COLUMN),
+				tblCol(REIFIED_LINK_TABLE,NODE_INTERNAL_ID_COLUMN));
+
+		if (params.in_organism != null) {
+			params.hitNodeFilter = new LinkQueryTerm("OBO_REL:in_organism",params.in_organism);
+			params.hitNodeFilter.setQueryAlias("in_organism_link");
+		}
+		if (params.hitNodeFilter != null) {
+			this.translateQuery(params.hitNodeFilter, fetchRq, tblCol(nodeAlias,"node_id"));
+		}
+
+		fetchRq.setSelectClause(tblCol(nodeAlias,NODE_INTERNAL_ID_COLUMN));
+		fetchRq.getSelectClause().setDistinct(true);
+
+		int iid1 = this.getNodeInternalId(nodeId); // query node
+
+		Collection<Integer> iids = new ArrayList<Integer>();
+		HashMap<Integer,Double> iid2score = new HashMap<Integer,Double>();
+		try {
+			System.err.println("  exhaustive hit list q: "+fetchRq.toString());
+			ResultSet rs = this.execute(fetchRq);
+			while (rs.next()) {
+				int iid2 = rs.getInt(NODE_INTERNAL_ID_COLUMN);
+				iids.add(iid2);
+				Double bss = this.getBasicSimilarityScore(iid1, iid2);
+				iid2score.put(iid2, bss);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.err.println("got hit list; size="+iids.size());
+		LinkedHashMap<Integer,Double> shm = sortHashMapByValuesD(iid2score, true);
+		System.err.println("shm; size="+shm.size());
 		List<ScoredNode> sns = new LinkedList<ScoredNode>();
+		Connection conn = obd.getConnection();
+		int rowNum = 0;
+		try {
+			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
+
+			for (int iid2 : shm.keySet()) {
+				
+				if (rowNum > params.max_candidate_hits) {
+					System.err.println("got "+rowNum+" hits");
+					break;
+				}
+				rowNum++;
+				double score = shm.get(iid2);
+				nodePS.setInt(1, iid2);
+				ResultSet nodeRS =  nodePS.executeQuery();
+				nodeRS.next();
+				String uid = nodeRS.getString(NODE_EXPOSED_ID_COLUMN);
+				ScoredNode sn = new ScoredNode(uid, score);
+				sns.add(sn);
+				System.err.println(" ::"+sn);
+			}
+		}
+		catch (SQLException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Collections.sort(sns);
+		return sns;
+	}
+
+	@Override
+	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
+
+		if (params.isExhaustive) {
+			return getSimilarNodesExhaustive(params, nodeId);
+		}
+		String ontologySourceId = params.ontologySourceId;
+
+		/*
+		 * what kind of thing is nodeId? We want to compare like with like; eg gene with gene,
+		 * genotype with genotype.
+		 * At this time this query is hardcoded to use the asserted is_a. It doesn't take things
+		 * such as the SO hierarchy into account for example. Also it will not work for instances, just
+		 * classes
+		 */
+		LinkQueryTerm isaQt = new LinkQueryTerm(nodeId, rvocab.is_a(), null);
+		isaQt.setInferred(false);
+		isaQt.setAspect(Aspect.TARGET);
+		Collection<Node> isas = this.getNodesByQuery(isaQt);
+		Integer isaIid = null;
+		for (Node isa : isas) {
+			isaIid = this.getNodeInternalId(isa.getId());
+			break;
+		}
+		Integer sourceIid = null;
+		if (ontologySourceId != null) {
+			sourceIid = this.getNodeInternalId(ontologySourceId);
+		}
+
 
 		/*
 		 * first of all find some bait with which to hook comparable node ids -
@@ -402,13 +610,15 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		Collection<Integer> baitIds = new HashSet<Integer>();
 		Map<Integer,Integer> iid2srcIid = new HashMap<Integer,Integer>();
 		Map<Integer,Integer> iid2total = new HashMap<Integer,Integer>();
-		
+
 		int iid = this.getNodeInternalId(nodeId); // query node
 
-		RelationalQuery baitRq = new SqlQueryImpl();
 		String ialAlias = "ial";
+		WhereClause  wc;
+
+		RelationalQuery baitRq = new SqlQueryImpl();
 		baitRq.addTable("implied_annotation_link_with_total", ialAlias); // may be materialized
-		WhereClause wc = baitRq.getWhereClause();
+		wc = baitRq.getWhereClause();
 		String srcAlias = "c";
 		baitRq.addTable(NODE_TABLE, srcAlias);
 		wc.addJoinConstraint(tblCol(srcAlias,NODE_INTERNAL_ID_COLUMN), 
@@ -470,15 +680,15 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			MAX_TOTAL_ANNOTS *= 2;
 		}
 		String ialAlias = "ial";
-*/
-		
+		 */
+
 		/*
 		 * 
 		 */
 		RelationalQuery fetchRq = new SqlQueryImpl();
 		//fetchRq.addTable(IMPLIED_ANNOTATION_LINK_ALIAS,ialAlias);
 		fetchRq.addTable("implied_annotation_link_with_prob",ialAlias);
-		 wc = fetchRq.getWhereClause();
+		wc = fetchRq.getWhereClause();
 		wc.addInConstraint("ial.object_id", baitIds);
 		if (isaIid != null) {
 			// return AEs of the same type: e.g. if query is a gene, return genes
@@ -502,6 +712,23 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 
 		System.err.println(fetchRq.toSQL());
+		return getSimilarNodes(fetchRq,iid,params);
+	}
+
+
+	/**
+	 * given a relational query to pull nodes, executes query and iterates through results
+	 * building up a ScoredNode for each
+	 * 
+	 * @param fetchRq
+	 * @param iid
+	 * @param params
+	 * @return
+	 */
+	private List<ScoredNode> getSimilarNodes(RelationalQuery fetchRq, Integer iid, SimilaritySearchParameters params) {
+
+		List<ScoredNode> sns = new LinkedList<ScoredNode>();
+
 		Connection conn = obd.getConnection();
 		int rowNum = 0;
 		try {
@@ -512,7 +739,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println(scoreSQL);
 			PreparedStatement scorePS = conn.prepareStatement(scoreSQL);
 			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
-			rs = this.execute(fetchRq);
+			ResultSet rs = this.execute(fetchRq);
 			while (rs.next() && rowNum < params.max_candidate_hits) {
 				//int ovlp = rs.getInt("ovlp");
 				float ovlp = rs.getFloat("ovlp");
@@ -1066,8 +1293,12 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	}
 
 	public RelationalQuery translateQueryForNode(QueryTerm qt) {
+		return translateQueryForNode(qt,"query_node");
+
+	}
+	public RelationalQuery translateQueryForNode(QueryTerm qt, String nodeAlias) {
 		RelationalQuery rq = new SqlQueryImpl();
-		String rel = rq.addAutoAliasedTable(NODE_TABLE, "query_node");
+		String rel = rq.addAutoAliasedTable(NODE_TABLE, nodeAlias);
 
 		translateQuery(qt, rq, tblCol(rel, NODE_INTERNAL_ID_COLUMN));
 
@@ -1713,7 +1944,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 				LinkStatement ls = (LinkStatement) s;
 				int reiflinkNodeInternalId;
 				if (s.getSubStatements().size() > 0) {
-					reiflinkNodeInternalId = callSqlFunc("store_annotation", s
+					reiflinkNodeInternalId = (Integer) callSqlFunc("store_annotation", s
 							.getNodeId(), s.getRelationId(), s.getTargetId(),
 							srcId, s.isNegated());
 					for (Statement ss : s.getSubStatements()) {
@@ -1732,13 +1963,13 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 						}
 					}
 				} else {
-					reiflinkNodeInternalId = callSqlFunc("store_link", s
+					reiflinkNodeInternalId = (Integer)callSqlFunc("store_link", s
 							.getNodeId(), s.getRelationId(), s.getTargetId(),
 							comb, false, srcId);
 				}
 			} else if (s instanceof NodeAlias) {
 				NodeAlias a = (NodeAlias) s;
-				int iid = callSqlFunc("store_node", s.getNodeId());
+				int iid =  (Integer)callSqlFunc("store_node", s.getNodeId());
 				callSqlFunc("store_node_synonym_i", iid, a.getScope(), null, a
 						.getValue());
 			} else if (s instanceof LiteralStatement) {
@@ -2088,13 +2319,41 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			s.setSourceId(sourceId);
 	}
 
+	// from: http://www.lampos.net/?q=node/171
+	public LinkedHashMap sortHashMapByValuesD(HashMap passedMap, boolean isReverse) {
+		List mapKeys = new ArrayList(passedMap.keySet());
+		List mapValues = new ArrayList(passedMap.values());
+		Collections.sort(mapValues);
+		if (isReverse)
+			Collections.reverse(mapValues);
+		Collections.sort(mapKeys);
 
+		LinkedHashMap sortedMap = 
+			new LinkedHashMap();
 
+		Iterator valueIt = mapValues.iterator();
+		while (valueIt.hasNext()) {
+			Object val = valueIt.next();
+			Iterator keyIt = mapKeys.iterator();
 
+			while (keyIt.hasNext()) {
+				Object key = keyIt.next();
+				String comp1 = passedMap.get(key).toString();
+				String comp2 = val.toString();
 
+				if (comp1.equals(comp2)){
+					passedMap.remove(key);
+					mapKeys.remove(key);
+					//sortedMap.put((String)key, (Double)val);
+					sortedMap.put(key, val);
+					break;
+				}
 
+			}
 
-
+		}
+		return sortedMap;
+	}
 
 
 }

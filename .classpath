@@ -38,7 +38,7 @@
 	<classpathentry kind="lib" path="lib/runlibs/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/obo.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/oboedit.jar"/>
-	<classpathentry kind="lib" path="lib/runlibs/obo-vocab.jar"/>
+	<classpathentry kind="lib" path="lib/runlibs/obo-vocab.jar" sourcepath="/obo-vocab-java"/>
 	<classpathentry kind="lib" path="lib/runlibs/stringtemplate-3.1b1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BBOP"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OBO"/>

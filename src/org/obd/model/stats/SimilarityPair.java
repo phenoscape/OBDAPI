@@ -128,8 +128,12 @@ import org.obd.model.Node;
  * Use {@link #getInformationContent(String)} to get the IC for any class in the similarity set.
  * <p>
  * We can use the IC of a class to improve comparison metrics. One common technique is to take the single most informative (highest IC) class for any given pair of nodes
- * in an ontology. For this we use {@link #getMaximumInformationContentForNodesInCommon()}.
- * -- However, this masks the kind of similarity where the two nodes share multiple different things in common.
+ * in an ontology. For this we use {@link #getMaximumInformationContentForNodesInCommon()}. This is the same metric used by Lord et al in <a href="http://bioinformatics.oxfordjournals.org/cgi/reprint/19/10/1275">Investigating semantic similarity measures 
+across the Gene Ontology: the relationship 
+between sequence and annotation</a>.
+ * <p>
+ * This approach masks the kind of similarity where the two nodes share multiple different things in common. For example,
+ * if two genes are co-annotated to the same 3 distinct brain regions then only the max would be taken into account.
  * <p>
  * Another metric is to sum IC the non-redundant nodesInCommon. See {@link #getInformationContentSumForNRNodesInCommon()}. We use non-redundant nodes to better
  * reflect independent annotations.
@@ -453,7 +457,10 @@ public class SimilarityPair {
 	/**
 	 * the maximum shannon information of all nodes in intersection set.
 	 * <p>
-	 * note that this object can not calculate this metric by itself - it must be populated externally
+	 * note that this object can not calculate this metric by itself - it must be populated externally.
+	 * This is the same metric used by Lord et al in <a href="http://bioinformatics.oxfordjournals.org/cgi/reprint/19/10/1275">
+	 * Investigating semantic similarity measures  across the Gene Ontology: the relationship between sequence and annotation</a>.
+	 * 
 	 * @return max(IC(t) forall t in both)
 	 */
 	public Double getMaximumInformationContentForNodesInCommon() {

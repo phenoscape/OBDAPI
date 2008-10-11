@@ -133,7 +133,7 @@ public abstract class AbstractSQLShard extends AbstractShard implements Shard {
 	}
 
 	// TODO: move to generic place
-	protected int callSqlFunc(String func, Object... args) throws SQLException {
+	protected Object callSqlFunc(String func, Object... args) throws SQLException {
 		StringBuffer sql = new StringBuffer();
 		sql.append("{?= call " + func + "(");
 		boolean isFirst = true;

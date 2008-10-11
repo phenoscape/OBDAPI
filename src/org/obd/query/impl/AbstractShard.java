@@ -856,6 +856,12 @@ public abstract class AbstractShard implements Shard {
 		sp.setId2(src2);
 		return sp;
 	}
+	
+	public Double getBasicSimilarityScore(String aeid1, String aeid2) {
+		SimilarityPair sp = compareAnnotationsByAnnotatedEntityPair(aeid1, aeid2);
+		return sp.getBasicSimilarityScore();
+	}
+
 
 	public SimilarityPair compareAnnotationsByAnnotatedEntityPair(String aeid1, String aeid2) {
 		LinkQueryTerm extQt = new LinkQueryTerm(); // by default,follow all links

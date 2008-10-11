@@ -19,6 +19,7 @@ my $source;
 my %skip = ();
 my $verbose = 0;
 my %ruleconf = ();
+my $test_intersection;
 while (@ARGV && $ARGV[0] =~ /^\-/) {
     my $opt = shift @ARGV;
     if ($opt eq '-d' || $opt eq '--database') {
@@ -41,6 +42,9 @@ while (@ARGV && $ARGV[0] =~ /^\-/) {
     }
     elsif ($opt eq '--split') {
         $split = shift @ARGV;
+    }
+    elsif ($opt eq '--test-intersection') {
+        $test_intersection = shift @ARGV;
     }
     elsif ($opt eq '--source') {
         $source = shift @ARGV;
@@ -159,7 +163,7 @@ my @views =
   $is_a                 AS predicate_id,
   node.node_id          AS object_id
  FROM node
-  LEFT JOIN  link AS existing_link
+  LEFT JOIN  inheritable_link AS existing_link
         ON (node.node_id=existing_link.node_id AND
             $is_a=existing_link.predicate_id AND
             node.node_id=existing_link.object_id)
@@ -175,7 +179,7 @@ my @views =
   subrel.object_id               AS predicate_id,
   x.object_id        AS object_id
  FROM subrelation_link AS subrel
-  INNER JOIN  link AS x
+  INNER JOIN  inheritable_link AS x
         ON (subrel.node_id=x.predicate_id)
   LEFT JOIN  link AS existing_link
         ON (x.node_id=existing_link.node_id AND
@@ -234,6 +238,9 @@ my $sth_store = $dbh->prepare_cached("INSERT INTO link (node_id,predicate_id,obj
 
 my $i_by_node_id = get_intersections();
 foreach my $node_id (keys %$i_by_node_id) {
+    if ($test_intersection && $node_id != $test_intersection) {
+        next;
+    }
     my $intersection_h = $i_by_node_id->{$node_id};
     my $sql = intersection_to_query($node_id,$intersection_h);
     #print STDERR "$sql\n";
