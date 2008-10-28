@@ -285,19 +285,19 @@ public class OBDMain {
 			System.out.println("getInformationContentSumForNRNodesInCommon: "+sp.getInformationContentSumForNRNodesInCommon());
 		}
 		//Graph g = sp.getGraph();
-		System.out.println("NR:");
+		System.out.println("\n** NR:");
 		for (String nid : sp.getNonRedundantNodesInCommon()) {
 			System.out.println(getNodeDisp(nid));
 		}
-		System.out.println("ALL:");
+		System.out.println("\n** ALL NODES IN COMMON:");
 		for (String nid : sp.getNodesInCommon()) {
 			System.out.println(getNodeDisp(nid));
 		}
-		System.out.println("SET 1:");
+		System.out.println("\nSET 1 (all):");
 		for (String nid : sp.getNodesInSet1()) {
 			System.out.println(getNodeDisp(nid));
 		}
-		System.out.println("SET 2:");
+		System.out.println("\nSET 2 (all):");
 		for (String nid : sp.getNodesInSet2()) {
 			System.out.println(getNodeDisp(nid));
 		}
@@ -322,6 +322,7 @@ public class OBDMain {
 				System.out.println(hid+"\t"+hn.getLabel()+"\t"+sn.getScore() + "\t"+
 						sp.getBasicSimilarityScore()+"\t"+sp.getInformationContentRatio()+"\t"+
 						sp.getInformationContentSumForNRNodesInCommon()+"\t"+
+						sp.getMaximumInformationContentForNodesInCommon()+"\t"+
 						getNodeDisp(sp.getNonRedundantNodesInCommon()));
 				// getSP is expensive : limited amount
 				if (n >= 40) // HARDCODE ALERT - TODO

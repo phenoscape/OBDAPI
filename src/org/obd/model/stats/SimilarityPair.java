@@ -409,8 +409,16 @@ public class SimilarityPair {
 				for (String cn : cset) {
 					// we also have to take the reflexive case into account
 					if (!cn.equals(n) && nic.contains(cn)) {
-						includeMe = false;
-						break; // will NOT get added to nric
+						if (getInverseClosureMap().containsKey(cn) &&
+								getInverseClosureMap().get(cn).contains(n)) {
+
+							System.err.println("  :: warning: cycle between "+cn+" and "+n+" --  neither is considered redundant");
+						}
+						else {
+							includeMe = false;
+							//System.err.println("  :: excluded "+n+" because we have the more specific "+cn);
+							break; // will NOT get added to nric
+						}
 					}
 				}
 			}

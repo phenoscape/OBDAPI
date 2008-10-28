@@ -152,31 +152,42 @@ CREATE TABLE link_argument (
 
 COMMENT ON TABLE link_argument IS 'n-ary relations (not involving time)';
 
-CREATE TABLE link_inference (
-        link_inference_id        SERIAL PRIMARY KEY,
+CREATE TABLE inference_evidence (
+        inference_evidence_id        SERIAL PRIMARY KEY,
 	link_id INTEGER NOT NULL,
 	FOREIGN KEY (link_id) REFERENCES link(link_id) ON DELETE CASCADE,
+	type_id INTEGER,
+	FOREIGN KEY (type_id) REFERENCES node (node_id) ON DELETE CASCADE
+);
+
+COMMENT ON TABLE inference_evidence IS 'Reason why a link was inferred';
+
+COMMENT ON COLUMN inference_evidence.link_id IS 'A link that has been
+inferred by some deductive process';
+
+CREATE TABLE inference_evidence_support (
+        inference_evidence_support_id        SERIAL PRIMARY KEY,
+	inference_evidence_id INTEGER NOT NULL,
+	FOREIGN KEY (inference_evidence_id) REFERENCES inference_evidence(inference_evidence_id) ON DELETE CASCADE,
 	inferred_from_link_id INTEGER NOT NULL,
 	FOREIGN KEY (inferred_from_link_id) REFERENCES link(link_id) ON DELETE CASCADE,
 	type_id INTEGER,
 	FOREIGN KEY (type_id) REFERENCES node (node_id) ON DELETE CASCADE
 );
 
-COMMENT ON TABLE link_inference IS 'A dependency relation between an
-inferred link and the links it was inferred from. Can be used for
-inference provenance';
+COMMENT ON TABLE inference_evidence_support IS 'Each piece of inference evidence can be supported by 1 or more links';
 
-COMMENT ON COLUMN link_inference.link_id IS 'A link that has been
-inferred by some deductive process';
-
-COMMENT ON COLUMN link_inference.inferred_from_link_id IS 'The link
+COMMENT ON COLUMN inference_evidence_support.inferred_from_link_id IS 'The link
 that was used to support an inferred link. May itself be inferred, or
 asserted. Note that cascading deletes do not propagate, unless a
 trigger is added such that any inferred link must have a corresponding
-link_inference or be deleted.';
+inference_evidence or be deleted.';
 
-COMMENT ON COLUMN link_inference.link_id IS 'An optional inference
+COMMENT ON COLUMN inference_evidence_support.type_id IS 'An optional inference
 type; may come from an ontology of deductive operations';
+
+
+
 
 
 CREATE TABLE sameas (

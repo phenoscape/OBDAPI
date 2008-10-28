@@ -2234,6 +2234,14 @@ COMMENT ON VIEW 'annotation_with_information_content' IS 'Annotations
 adorned with the information content; this means annotations can be
 sorted by information';
 
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('annotation_with_information_content');
+-- CREATE INDEX annotation_with_information_content_idx_node ON annotation_with_information_content(node_id);
+-- CREATE INDEX annotation_with_information_content_idx_object ON annotation_with_information_content(object_id);
+-- CREATE INDEX annotation_with_information_content_idx_node_object ON annotation_with_information_content(node_id,object_id);
+-- CREATE INDEX annotation_with_information_content_idx_node_object_info ON annotation_with_information_content(shannon_information,node_id,object_id);
+-- END MATERIALIZE
+
 CREATE OR REPLACE VIEW annotation_with_information_content_and_auto_label AS
  SELECT
   ai.*,

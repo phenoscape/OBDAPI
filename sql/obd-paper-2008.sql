@@ -178,7 +178,6 @@ CREATE OR REPLACE VIEW omim_genotype_annotation_summary_by_allele_table AS
   omim_allele.allele, 
   gt_labels;
   
-
 CREATE OR REPLACE VIEW omim_genotype_annotsrc_coverage AS
  SELECT
   omim_genotype.uid, 
@@ -231,4 +230,54 @@ CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_gene AS
   INNER JOIN omim_gene AS ogg ON (aec.annotated_entity_id = ogg.node_id)
   INNER JOIN omim_annotation_source AS src ON (src.node_id=aec.source_id);
 
-  
+CREATE OR REPLACE VIEW avg_information_content AS 
+ SELECT avg(shannon_information) AS avg_information_content
+ FROM class_node_entropy_by_evidence;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotsrc AS 
+ SELECT 
+  aic.source_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.source_id;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotated_entity AS 
+ SELECT 
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.node_id;
+
+CREATE OR REPLACE VIEW unique_annotation_with_information_content AS
+ SELECT DISTINCT
+  node_id,
+  object_id,
+  annotated_entity_count,
+  shannon_information
+ FROM
+  annotation_with_information_content;
+
+CREATE OR REPLACE VIEW avg_unique_information_content_by_annotated_entity AS 
+ SELECT 
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  unique_annotation_with_information_content AS aic
+ GROUP BY
+  aic.node_id;
+
+CREATE OR REPLACE VIEW avg_unique_information_content_by_annotsrc_and_annotated_entity AS 
+ SELECT 
+  aic.source_id,
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  unique_annotation_with_information_content AS aic
+ GROUP BY
+  aic.source_id,
+  aic.node_id;
+

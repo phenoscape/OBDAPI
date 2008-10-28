@@ -910,6 +910,8 @@ entity and the implied pairwise product of the annotation. E.g. if g1
 is annotated to LeftEye-small then the implied xp would be
 {small,size,morphology} x {LeftEye,Eye,SenseOrgan,..}';
 
+-- implied_annotation_xp too large to materialize
+
 CREATE OR REPLACE VIEW count_of_annotated_entity AS
  SELECT 
   count(DISTINCT node_id) AS total
@@ -1679,6 +1681,7 @@ CREATE INDEX annotated_entity_total_annotation_nodes_idx_ae ON annotated_entity_
 CREATE INDEX annotated_entity_total_annotation_nodes_idx_ae_total ON annotated_entity_total_annotation_nodes(annotated_entity_id,total_annotation_nodes);
 -- END MATERIALIZE
 
+
 -- Example: SELECT node_label(is_a_node_id),node_label(object_id) from node_pair_annotation_xp_intersection where node1_id = 532850 and node2_id=239699;
 CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection AS
  SELECT DISTINCT
@@ -1726,6 +1729,7 @@ COMMENT ON VIEW node_pair_annotation_xp_intersection_with_stats1 IS
 'intermediate view used to construct
 node_pair_annotation_xp_intersection_with_stats';
 
+-- Example: SELECT node_label(is_a_node_id),node_label(object_id) from node_pair_annotation_xp_intersection_with_stats where node1_id = 532850 and node2_id=239699;
 CREATE OR REPLACE VIEW node_pair_annotation_xp_intersection_with_stats AS
  SELECT 
   npaxt.*,
