@@ -204,6 +204,11 @@ public class SimilarityPair {
 	Set<String> nodesInSet1 ;
 	Set<String> nodesInSet2;
 	Set<String> nodesInCommon;
+	Set<String> assertedNodesInSet1 ;
+	Set<String> assertedNodesInSet2;
+	protected Collection<String> irreconcilableInSet1 = null;
+	protected Collection<String> irreconcilableInSet2 = null;
+
 
 	private int totalNodesInCommon;
 	private int totalNodesInUnion;
@@ -216,6 +221,8 @@ public class SimilarityPair {
 	private String nodeWithMaximumInformationContent;
 	private Map<String,Set<String>> closureMap;
 	private Map<String,Set<String>> inverseClosureMap;
+	private Map<String,String> bestCommonNodeMap;
+	private Map<String,String> bestMatchMap;
 	private List<ScoredNode> scoredNodes;
 	Map<String,Double> nodeInformationContentMap = new HashMap<String,Double>();
 	private Graph graph;
@@ -328,6 +335,34 @@ public class SimilarityPair {
 	public Set<String> getNodesInSet2() {
 		return nodesInSet2;
 	}
+
+
+	/**
+	 * @return all n : n &isin; nodesInSet1 & n is directly asserted to be in set1 (ie not computed by ontology closure)
+	 */
+	public Set<String> getAssertedNodesInSet1() {
+		return assertedNodesInSet1;
+	}
+
+
+	public void setAssertedNodesInSet1(Set<String> assertedNodesInSet1) {
+		this.assertedNodesInSet1 = assertedNodesInSet1;
+	}
+
+
+	/**
+	 * @return all n : n &isin; nodesInSet2 & n is directly asserted to be in set2 (ie not computed by ontology closure)
+	 */
+	public Set<String> getAssertedNodesInSet2() {
+		return assertedNodesInSet2;
+	}
+
+
+	public void setAssertedNodesInSet2(Set<String> assertedNodesInSet2) {
+		this.assertedNodesInSet2 = assertedNodesInSet2;
+	}
+
+
 	/**
 	 * @return all n : n &isin; nodesInSet2  & invclosure(n) &notin; nodesInSet2
 	 */
@@ -377,6 +412,13 @@ public class SimilarityPair {
 		calculateInverseClosureMap();
 	}
 
+	public Set<String> getReflexiveClosure(String id) {
+		Set<String> pids = new HashSet<String>();
+		if (closureMap.get(id) != null)
+			pids.addAll(closureMap.get(id));
+		pids.add(id);
+		return pids;
+	}
 
 
 
@@ -566,6 +608,157 @@ public class SimilarityPair {
 		setTotalNodesInSet2(nodesInSet2.size());
 
 	}
+	
+
+	public float getDisagreementScore() {
+		float s1 = ((float)getIrreconcilableNodesInSet1().size() / assertedNodesInSet1.size());
+		float s2 = ((float)getIrreconcilableNodesInSet2().size() / assertedNodesInSet2.size());
+		return (s1+s2)/2;
+	}
+
+	/**
+	 * @return all n : n &isin; assertedNodesInSet1 & not(n &isin; closure(nodesInSet2)) & not(n &isin; invClosure(nodesInSet2))
+	 */
+	public Collection<String> getIrreconcilableNodesInSet1() {
+		if (irreconcilableInSet1 == null)
+			calculateIrreconcilable();		
+		return irreconcilableInSet1;
+	}
+	/**
+	 * @return all n : n &isin; assertedNodesInSet2 & not(n &isin; closure(nodesInSet1)) & not(n &isin; invClosure(nodesInSet1))
+	 */
+	public Collection<String> getIrreconcilableNodesInSet2() {
+		if (irreconcilableInSet2 == null)
+			calculateIrreconcilable();		
+		return irreconcilableInSet2;
+	}
+
+	private void calculateIrreconcilable() {
+		Collection<String> mapped = new HashSet<String>();
+		for (String a : assertedNodesInSet1) {
+			if (assertedNodesInSet2.contains(a)) {
+				mapped.add(a);
+			}
+			for (String x : getClosureMap().get(a)) {
+				if (assertedNodesInSet2.contains(x)) {
+					mapped.add(a);
+					mapped.add(x);
+				}
+			}		
+		}
+		for (String a : assertedNodesInSet2) {
+			if (assertedNodesInSet1.contains(a)) {
+				mapped.add(a);
+			}
+			for (String x : getClosureMap().get(a)) {
+				if (assertedNodesInSet1.contains(x)) {
+					mapped.add(a);
+					mapped.add(x);
+				}
+			}		
+		}
+		irreconcilableInSet1 = new HashSet<String>();
+		for (String a : assertedNodesInSet1) {
+			if (!mapped.contains(a))
+				irreconcilableInSet1.add(a);
+		}
+		irreconcilableInSet2 = new HashSet<String>();
+		for (String a : assertedNodesInSet2) {
+			if (!mapped.contains(a))
+				irreconcilableInSet2.add(a);
+		}
+	}
+	
+	public Collection<String> getBestCommonSubsumers() {
+		Collection<String> subsumers = new HashSet<String>();
+		for (String nid : getAssertedNodesInSet1()) {
+			String x = getBestCommonSubsumer(nid);
+			if (x != null)
+				subsumers.add(getBestCommonSubsumer(nid));
+		}
+		for (String nid : getAssertedNodesInSet2()) {
+			String x = getBestCommonSubsumer(nid);
+			if (x != null)
+				subsumers.add(getBestCommonSubsumer(nid));
+		}
+		return subsumers;
+	}
+	
+	public Double getCommonSubsumerAverageIC() {
+		Double totalIC = 0.0;
+		int n = 0;
+		for (String nid : this.getAssertedNodesInSet1()) {
+			n++;
+			String bcn = getBestCommonNodeMap().get(nid);
+			if (bcn != null)
+				totalIC += getInformationContent(bcn);
+			else
+				System.err.println("no CS for "+nid);
+		}
+		for (String nid : this.getAssertedNodesInSet2()) {
+			n++;
+			String bcn = getBestCommonNodeMap().get(nid);
+			if (bcn != null)
+				totalIC += getInformationContent(bcn);
+			else
+				System.err.println("no CS for "+nid);
+		}
+		return totalIC / n;
+	}
+	
+	public String getBestCommonSubsumer(String nid) {
+		if (bestCommonNodeMap.containsKey(nid))
+			return bestCommonNodeMap.get(nid);
+		return null;
+	}
+	
+	public Map<String, String> getBestCommonNodeMap() {
+		return bestCommonNodeMap;
+	}
+	public void setBestCommonNodeMap(Map<String, String> bestCommonNodeMap) {
+		this.bestCommonNodeMap = bestCommonNodeMap;
+	}
+
+
+	
+	/*
+	public Collection<String> getIrreconcilableNodes(Collection<String> ids1, Collection<String> ids2) {
+		Collection<String> unmapped = new HashSet<String>();
+		for (String id1 : ids1) {
+			if (!isReconcilable(id1, ids2)) {
+				unmapped.add(id1);
+			}
+		}
+		return unmapped;
+	}
+	
+	public boolean isReconcilable(String id1, Collection<String> ids2) {
+		boolean mapped = false;
+		for (String x : getClosureMap().get(id1)) {
+			if (ids2.contains(x)) {
+				mapped = true;
+				break;
+			}
+		}
+		if (!mapped) {
+			for (String x : ids2) {
+				if (getClosureMap().get(x).contains(id1)) {
+					mapped = true;
+					break;					
+				}
+			}
+			for (String x : getInverseClosureMap().get(id1)) {
+				if (ids2.contains(x)) {
+					mapped = true;
+					break;
+				}
+			}
+		}
+		return mapped;
+	}
+	*/
+
+
 
 	/**
 	 * The basic similarity score is the number of nodes in common divided by the number of nodes in the union. We assume that this has been pre-assigned,

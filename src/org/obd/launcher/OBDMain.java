@@ -166,11 +166,36 @@ public class OBDMain {
 					calcIC = true;
 				}
 					
-					String nid1 = args[i];
+				String nid1 = args[i];
 				i++;
 				String nid2 = args[i];
 				i++;
 				compareNodes(calcIC,nid1,nid2);
+			}
+			else if (args[i].equals("--compare-sources")) {
+				i++;
+				boolean calcIC = false;
+				String rel = null;
+				if (args[i].equals("--ic")) {
+					i++;
+					calcIC = true;
+				}
+				if (args[i].equals("--rel")) {
+					i++;
+					rel = args[i];
+					i++;
+				}
+					
+				String ae = args[i];
+				i++;
+				String nid1 = args[i];
+				i++;
+				String nid2 = args[i];
+				i++;
+				if (rel != null) 
+					compareAnnotationSources(calcIC,ae,nid1,nid2,rel);
+				else 
+					compareAnnotationSources(calcIC,ae,nid1,nid2);
 			}
 			else if (args[i].equals("--findsim")) {
 				i++;
@@ -280,26 +305,86 @@ public class OBDMain {
 		if (calcIC)
 			multiShard.calculateInformationContentMetrics(sp);
 		System.out.println("BSS: "+sp.getBasicSimilarityScore());
+		System.out.println("SIM: "+uid1+" -vs- "+uid2+
+				" BSS: "+sp.getBasicSimilarityScore()+
+				" SIMIC: "+ (calcIC ? sp.getInformationContentRatio() : "na")+
+				" DISAG: "+ sp.getDisagreementScore() +
+				" ICCS: "+ (calcIC ? sp.getCommonSubsumerAverageIC() : "na") +
+				" TOTAL: "+sp.getAssertedNodesInSet1().size()+", "+sp.getAssertedNodesInSet2().size());
+		
 		if (calcIC) {
 			System.out.println("getInformationContentRatio: "+sp.getInformationContentRatio());
 			System.out.println("getInformationContentSumForNRNodesInCommon: "+sp.getInformationContentSumForNRNodesInCommon());
 		}
 		//Graph g = sp.getGraph();
-		System.out.println("\n** NR:");
+		System.out.println("\n** NR IN COMMON:");
 		for (String nid : sp.getNonRedundantNodesInCommon()) {
-			System.out.println(getNodeDisp(nid));
+			System.out.println("NRIC: "+getNodeDisp(nid));
 		}
 		System.out.println("\n** ALL NODES IN COMMON:");
 		for (String nid : sp.getNodesInCommon()) {
-			System.out.println(getNodeDisp(nid));
+			System.out.println("NIC: "+getNodeDisp(nid));
 		}
-		System.out.println("\nSET 1 (all):");
+		System.out.println("\n** SET 1 (all):");
 		for (String nid : sp.getNodesInSet1()) {
-			System.out.println(getNodeDisp(nid));
+			System.out.println("SET1: "+getNodeDisp(nid));
 		}
-		System.out.println("\nSET 2 (all):");
+		System.out.println("\n** SET 2 (all):");
 		for (String nid : sp.getNodesInSet2()) {
-			System.out.println(getNodeDisp(nid));
+			System.out.println("SET2: "+getNodeDisp(nid));
+		}
+
+	}
+	
+	public void compareAnnotationSources(boolean calcIC, String ae, String src1, String src2, String rel) {
+		QueryTerm qt = new LinkQueryTerm(rel, ae);
+		Collection<Node> nodes = multiShard.getNodesByQuery(qt);
+		for (Node n : nodes) {
+			compareAnnotationSources(calcIC,n.getId(),src1,src2);
+		}
+	}
+
+	
+	public void compareAnnotationSources(boolean calcIC, String ae, String src1, String src2) {
+		Node n = multiShard.getNode(ae);
+		System.out.println("COMPARING: "+ae+" '"+n.getLabel()+"' sources: "+src1+" -vs- "+src2);
+
+		SimilarityPair sp = multiShard.compareAnnotationsBySourcePair(ae, src1, src2);
+		if (calcIC)
+			multiShard.calculateInformationContentMetrics(sp);
+		System.out.println("SIM: "+ae+" "+n.getLabel()+" sources: "+src1+" -vs- "+src2+
+				" BSS: "+sp.getBasicSimilarityScore()+
+				" IC: "+ (calcIC ? sp.getInformationContentRatio() : "na")+
+				" DISAG: "+ sp.getDisagreementScore() +
+				" TOTAL: "+sp.getAssertedNodesInSet1().size()+", "+sp.getAssertedNodesInSet2().size());
+		if (calcIC) {
+			System.out.println("getInformationContentRatio: "+sp.getInformationContentRatio());
+			System.out.println("getInformationContentSumForNRNodesInCommon: "+sp.getInformationContentSumForNRNodesInCommon());
+		}
+		//Graph g = sp.getGraph();
+		System.out.println("\n** NR IN COMMON:");
+		for (String nid : sp.getNonRedundantNodesInCommon()) {
+			System.out.println("NRIC: "+getNodeDisp(nid));
+		}
+		System.out.println("\n** ALL NODES IN COMMON:");
+		for (String nid : sp.getNodesInCommon()) {
+			System.out.println("NIC: "+getNodeDisp(nid));
+		}
+		System.out.println("\n** SET 1 (NR):");
+		for (String nid : sp.getNonRedundantNodesInSet1()) {
+			System.out.println("SRC1: "+getNodeDisp(nid));
+		}
+		System.out.println("\n** SET 2 (NR):");
+		for (String nid : sp.getNonRedundantNodesInSet2()) {
+			System.out.println("SRC2: "+getNodeDisp(nid));
+		}
+		System.out.println("\n** SET 1 (IRREC):");
+		for (String nid : sp.getIrreconcilableNodesInSet1()) {
+			System.out.println("UNIQ1: "+getNodeDisp(nid));
+		}
+		System.out.println("\n** SET 2 (IRREC):");
+		for (String nid : sp.getIrreconcilableNodesInSet2()) {
+			System.out.println("UNIQ2: "+getNodeDisp(nid));
 		}
 
 	}

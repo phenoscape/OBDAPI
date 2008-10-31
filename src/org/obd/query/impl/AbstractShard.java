@@ -904,6 +904,20 @@ public abstract class AbstractShard implements Shard {
 			LinkQueryTerm extQt) {
 
 		SimilarityPair sp = new SimilarityPair();
+		
+		Set<String> assertedNodesInSet1 = new HashSet<String>();
+		Set<String> assertedNodesInSet2 = new HashSet<String>();
+		for (LinkStatement s : stmts1) {
+			String tid = s.getTargetId();
+			assertedNodesInSet1.add(tid);
+		}
+		for (LinkStatement s : stmts2) {
+			String tid = s.getTargetId();
+			assertedNodesInSet2.add(tid);
+		}
+		sp.setAssertedNodesInSet1(assertedNodesInSet1);
+		sp.setAssertedNodesInSet2(assertedNodesInSet2);
+
 		if (extQt != null) {
 			Collection<LinkStatement> allStmts = new HashSet<LinkStatement>();
 			allStmts.addAll(stmts1);
@@ -997,8 +1011,48 @@ public abstract class AbstractShard implements Shard {
 		sp.setMaximimumInformationContentForNodesInCommon(maxIC);
 		sp.setNodeWithMaximumInformationContent(nodeWithMaxIC);
 		sp.setInformationContentRatio(simGIC);
-
+		
+		calculateBestCommonNodeMap(sp);
 	}
+	
+	private void calculateBestCommonNodeMap(SimilarityPair sp) {
+		Map<String,String> bestCommonNodeMap = new HashMap<String,String>();
+		for (String nid : sp.getNodesInSet1()) {
+			bestCommonNodeMap.put(nid,caclulateBestCommonNode(sp, nid, 1));
+		}
+		for (String nid : sp.getNodesInSet2()) {
+			bestCommonNodeMap.put(nid,caclulateBestCommonNode(sp, nid, 2));
+		}
+		sp.setBestCommonNodeMap(bestCommonNodeMap);
+	}
+	
+	private String caclulateBestCommonNode(SimilarityPair sp, String id, int setNum) {
+		String bestId = null;
+		Double bestIC = null;
+		Set<String> nric = sp.getNodesInCommon();
+		Map<String, Double> icmap = sp.getNodeInformationContentMap();
+		for (String pid : sp.getReflexiveClosure(id)) {
+			if (!nric.contains(pid))
+				continue;
+			if (!icmap.containsKey(pid)) {
+				icmap.put(pid, getInformationContentByAnnotations(pid));
+			}			
+			double ic =	icmap.get(pid);
+			if (bestIC == null || ic > bestIC) {
+				bestIC = ic;
+				bestId = pid;
+			}
+		}
+		// now find the best match in the opposing set
+		Set<String> opSet = setNum == 1 ? sp.getNodesInSet2() : sp.getNodesInSet1();
+		for (String x : opSet) {
+			if (sp.getReflexiveClosure(x).contains(bestId)) {
+				
+			}
+		}
+		return bestId;
+	}
+
 
 	// implements |x AND y| / 
 	public void calculateInformationContentMetricsForAll(SimilarityPair sp) {

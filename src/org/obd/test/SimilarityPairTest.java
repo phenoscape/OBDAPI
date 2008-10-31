@@ -47,9 +47,14 @@ public class SimilarityPairTest extends AbstractOBDTest {
 		
 		System.out.println("sp1:"+sp.getBasicSimilarityScore() + "\t" + sp.getInformationContentRatio());
 		System.out.println("sp2:"+sp2.getBasicSimilarityScore() + "\t" + sp2.getInformationContentRatio());
-	
+
+		System.out.println("sp1 ICCS:"+sp.getCommonSubsumerAverageIC());
+		for (String x : sp.getBestCommonSubsumers()) {
+			System.out.println("  BCS: "+x);
+		}
+
 		assertTrue(sp.getBasicSimilarityScore() == sp2.getBasicSimilarityScore());
-		assertTrue(sp.getInformationContentRatio() == sp2.getInformationContentRatio());
+		assertTrue(sp.getInformationContentRatio() - sp2.getInformationContentRatio() < 0.0001);
 
 	}
 	

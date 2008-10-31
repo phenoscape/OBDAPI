@@ -462,6 +462,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	}
 
 
+	// exhaustive search - compares node with all matching targets,
+	// calls getBasicSimilarityScore - mapped to SQL function, which caches results
 	private List<ScoredNode> getSimilarNodesExhaustive(SimilaritySearchParameters params, String nodeId) {
 		String ontologySourceId = params.ontologySourceId;
 
@@ -529,7 +531,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 				iids.add(iid2);
 				Double bss = this.getBasicSimilarityScore(iid1, iid2);
 				iid2score.put(iid2, bss);
-
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

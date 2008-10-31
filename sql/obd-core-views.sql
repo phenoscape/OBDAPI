@@ -2025,8 +2025,8 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
  SELECT
   ial.node_id AS annotated_entity_id,
   ial.source_id,
-  COUNT(DISTINCT ial.object_id) AS total_nodes_in_src,
   ialc.total                    AS total_nodes,
+  COUNT(DISTINCT ial.object_id) AS total_nodes_in_src,
   CAST(COUNT(DISTINCT ial.object_id) AS FLOAT) / ialc.total AS congruence
  FROM
              implied_annotation_link AS ial
@@ -2273,6 +2273,127 @@ CREATE OR REPLACE VIEW avg_annotation_information_content_by_annotation_source A
   annotation_with_information_content AS ai
   INNER JOIN node AS source ON (ai.source_id=source.node_id)
  GROUP BY source.uid,source.label;
+
+-- some redundancy follows...
+
+CREATE OR REPLACE VIEW avg_information_content AS 
+ SELECT avg(shannon_information) AS avg_information_content
+ FROM class_node_entropy_by_evidence;
+
+CREATE OR REPLACE VIEW stddev_information_content AS 
+ SELECT stddev(shannon_information) AS stddev_information_content
+ FROM class_node_entropy_by_evidence;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotsrc AS 
+ SELECT 
+  aic.source_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.source_id;
+
+COMMENT ON VIEW avg_information_content_by_annotsrc IS 'avg( { IC(c) :
+forall direct-annotation-to(c) }) by annotation-source. Be careful
+interpreting these results. The IC is measured against the background
+of the whole database. This means that species-centric annotation
+sources will have an IC inversely proportional to the size of the
+annotation set for that source. For example, if the majority of
+annotations in the database are to human anatomical classes, then a
+xenopus-specific annotation source will have a high IC because it uses
+"rarer" classes.';
+
+CREATE OR REPLACE VIEW avg_information_content_by_ontology AS 
+ SELECT 
+  n.source_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  class_node_entropy_by_evidence AS e
+  INNER JOIN node AS n ON (e.node_id=n.node_id)
+ WHERE
+  n.metatype='C'
+ GROUP BY
+  n.source_id;
+
+COMMENT ON VIEW avg_information_content_by_ontology IS 'avg( {IC(c) :
+forall c in O }). average information content of a class, broken down
+by ontology.';
+
+CREATE OR REPLACE VIEW dist_information_content_by_annotation AS 
+ SELECT 
+  CAST(shannon_information AS INT) AS ic_midpoint,
+  COUNT(DISTINCT node_id) AS total_annotation_classes,
+  COUNT(DISTINCT object_id) AS total_annotated_entities,
+  COUNT(link_id) AS total_annotations
+ FROM annotation_with_information_content
+ GROUP BY
+  CAST(shannon_information AS INT)
+ ORDER BY
+  CAST(shannon_information AS INT);
+
+COMMENT ON VIEW dist_information_content_by_annotation IS
+'distribution of information content. Each bin is an IC midpoint -
+i.e. "3" is any IC between 2.5 and 3.5. There are 3 counts for each
+bin: The total number of classes whose IC fall within that range; The
+total number of annotated entities (e.g. genes) that have an
+annotation to a class with an IC within that bin; The total number of
+annotations within that bin. Be careful with the 2nd count: the same
+annotated entity (e.g. gene) can be present in multiple bins - thus
+the numbers do not sum to the total number of annotated entities. Note
+that at the high end of the distribution the numbers may tail off more
+dramatically for classes than annotations - this is because there may
+be multiple redundant annotations to the same high-IC class. There is
+a danger of annotation bias here, especially if there are "promoted"
+annotations. total_annotation_classes is the safest number to
+use. Note that for the counts we only consider direct/asserted
+annotations. However, for the IC itself, implicit annotations are
+used. E.g. IC("small organ") = -log(p(annot*("small organ"))), where
+annot* includes "small heart" etc. However, if there are no direct
+annotations to "small organ" then it will not be counted in the
+histogram.';
+
+
+
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotated_entity AS 
+ SELECT 
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.node_id;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotsrc_and_annotated_entity AS 
+ SELECT 
+  aic.source_id,
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.source_id,
+  aic.node_id;
+
+CREATE OR REPLACE VIEW unique_annotation_with_information_content AS
+ SELECT DISTINCT
+  node_id,
+  object_id,
+  annotated_entity_count,
+  shannon_information
+ FROM
+  annotation_with_information_content;
+
+CREATE OR REPLACE VIEW avg_unique_information_content_by_annotated_entity AS 
+ SELECT 
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  unique_annotation_with_information_content AS aic
+ GROUP BY
+  aic.node_id;
+
+
 
 -- ************************************************************
 -- REASONER VIEWS

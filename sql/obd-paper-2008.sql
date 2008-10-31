@@ -206,7 +206,7 @@ CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_entity AS
   INNER JOIN omim_annotation_source AS base_src ON (base_src.node_id=aec.base_source_id)
   INNER JOIN omim_annotation_source AS target_src ON (target_src.node_id=aec.target_source_id);
 
-CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_gene AS
+CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_omim_gene AS
  SELECT DISTINCT
   ogg.uid, 
   ogg.label, 
@@ -219,7 +219,7 @@ CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_gene AS
   INNER JOIN omim_annotation_source AS base_src ON (base_src.node_id=aec.base_source_id)
   INNER JOIN omim_annotation_source AS target_src ON (target_src.node_id=aec.target_source_id);
 
- CREATE OR REPLACE VIEW omim_annotator_global_congruence_by_gene AS
+ CREATE OR REPLACE VIEW omim_annotator_global_congruence_by_omim_gene AS
  SELECT DISTINCT
   ogg.uid, 
   ogg.label, 
@@ -230,54 +230,35 @@ CREATE OR REPLACE VIEW omim_annotator_pairwise_congruence_by_gene AS
   INNER JOIN omim_gene AS ogg ON (aec.annotated_entity_id = ogg.node_id)
   INNER JOIN omim_annotation_source AS src ON (src.node_id=aec.source_id);
 
-CREATE OR REPLACE VIEW avg_information_content AS 
- SELECT avg(shannon_information) AS avg_information_content
- FROM class_node_entropy_by_evidence;
-
-CREATE OR REPLACE VIEW avg_information_content_by_annotsrc AS 
+CREATE OR REPLACE VIEW avg_information_content_by_omim_gene AS 
  SELECT 
-  aic.source_id,
-  avg(shannon_information) AS avg_information_content
+  g.uid,
+  g.label,
+  aic.*
  FROM 
-  annotation_with_information_content AS aic
- GROUP BY
-  aic.source_id;
+  avg_information_content_by_annotated_entity AS aic
+  INNER JOIN omim_gene AS g ON (aic.annotated_entity_id=g.node_id);
 
-CREATE OR REPLACE VIEW avg_information_content_by_annotated_entity AS 
+COMMENT ON VIEW avg_information_content_by_omim_gene IS 'Average IC of
+each annotation for each OMIM gene. Formally: avg({ic(EQ) :
+annotation(g) }). This means that if there are multiple redundant
+annotations to the exact same EQ description, the numbers *may* be
+skewed towards this description. For example, 3 annotation sources may
+all record "small eye". If this EQ has a low IC, then the average will
+be lowered, because this is counted 3 times.';
+
+CREATE OR REPLACE VIEW avg_unique_information_content_by_omim_gene AS 
  SELECT 
-  aic.node_id AS annotated_entity_id,
-  avg(shannon_information) AS avg_information_content
+  g.uid,
+  g.label,
+  aic.*
  FROM 
-  annotation_with_information_content AS aic
- GROUP BY
-  aic.node_id;
+  avg_unique_information_content_by_annotated_entity AS aic
+  INNER JOIN omim_gene AS g ON (aic.annotated_entity_id=g.node_id);
 
-CREATE OR REPLACE VIEW unique_annotation_with_information_content AS
- SELECT DISTINCT
-  node_id,
-  object_id,
-  annotated_entity_count,
-  shannon_information
- FROM
-  annotation_with_information_content;
-
-CREATE OR REPLACE VIEW avg_unique_information_content_by_annotated_entity AS 
- SELECT 
-  aic.node_id AS annotated_entity_id,
-  avg(shannon_information) AS avg_information_content
- FROM 
-  unique_annotation_with_information_content AS aic
- GROUP BY
-  aic.node_id;
-
-CREATE OR REPLACE VIEW avg_unique_information_content_by_annotsrc_and_annotated_entity AS 
- SELECT 
-  aic.source_id,
-  aic.node_id AS annotated_entity_id,
-  avg(shannon_information) AS avg_information_content
- FROM 
-  unique_annotation_with_information_content AS aic
- GROUP BY
-  aic.source_id,
-  aic.node_id;
-
+COMMENT ON VIEW avg_unique_information_content_by_omim_gene IS
+'Average IC of each *distinct* EQ description for each OMIM
+gene. Formally: avg({DISTINCT ic(EQ) : annotation(g) }). This means
+that if there are multiple redundant annotations to the exact same EQ
+description, the numbers will *not* be skewed towards this description
+(however, this is not a guarantee there will be no annotation bias).';

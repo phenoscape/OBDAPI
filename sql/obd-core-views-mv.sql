@@ -2236,6 +2236,14 @@ COMMENT ON VIEW 'annotation_with_information_content' IS 'Annotations
 adorned with the information content; this means annotations can be
 sorted by information';
 
+-- BEGIN MATERIALIZE
+SELECT create_matview('annotation_with_information_content');
+CREATE INDEX annotation_with_information_content_idx_node ON annotation_with_information_content(node_id);
+CREATE INDEX annotation_with_information_content_idx_object ON annotation_with_information_content(object_id);
+CREATE INDEX annotation_with_information_content_idx_node_object ON annotation_with_information_content(node_id,object_id);
+CREATE INDEX annotation_with_information_content_idx_node_object_info ON annotation_with_information_content(shannon_information,node_id,object_id);
+-- END MATERIALIZE
+
 CREATE OR REPLACE VIEW annotation_with_information_content_and_auto_label AS
  SELECT
   ai.*,
@@ -2267,6 +2275,62 @@ CREATE OR REPLACE VIEW avg_annotation_information_content_by_annotation_source A
   annotation_with_information_content AS ai
   INNER JOIN node AS source ON (ai.source_id=source.node_id)
  GROUP BY source.uid,source.label;
+
+-- some redundancy follows...
+
+CREATE OR REPLACE VIEW avg_information_content AS 
+ SELECT avg(shannon_information) AS avg_information_content
+ FROM class_node_entropy_by_evidence;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotsrc AS 
+ SELECT 
+  aic.source_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.source_id;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotated_entity AS 
+ SELECT 
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.node_id;
+
+CREATE OR REPLACE VIEW avg_information_content_by_annotsrc_and_annotated_entity AS 
+ SELECT 
+  aic.source_id,
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  annotation_with_information_content AS aic
+ GROUP BY
+  aic.source_id,
+  aic.node_id;
+
+
+CREATE OR REPLACE VIEW unique_annotation_with_information_content AS
+ SELECT DISTINCT
+  node_id,
+  object_id,
+  annotated_entity_count,
+  shannon_information
+ FROM
+  annotation_with_information_content;
+
+CREATE OR REPLACE VIEW avg_unique_information_content_by_annotated_entity AS 
+ SELECT 
+  aic.node_id AS annotated_entity_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  unique_annotation_with_information_content AS aic
+ GROUP BY
+  aic.node_id;
+
+
 
 -- ************************************************************
 -- REASONER VIEWS
