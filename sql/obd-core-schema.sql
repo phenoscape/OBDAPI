@@ -10,6 +10,14 @@ CREATE TABLE obd_schema_metadata (
 );
 INSERT INTO obd_schema_metadata (schema_release,schema_revision,schema_version_date) VALUES ('1.1','$Revision: 153 $','$Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008) $');
 
+CREATE TABLE idspace (
+       idspace VARCHAR,
+       uri_prefix VARCHAR,
+
+       UNIQUE(idspace),
+       UNIQUE(uri_prefix)
+);
+
 ---CREATE TYPE t_metatype AS ENUM ('C','I','R');
 
 CREATE SEQUENCE node_node_uid_seq;

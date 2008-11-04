@@ -546,7 +546,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			PreparedStatement nodePS = conn.prepareStatement("SELECT uid FROM node WHERE node_id=?");
 
 			for (int iid2 : shm.keySet()) {
-				
+
 				if (rowNum > params.max_candidate_hits) {
 					System.err.println("got "+rowNum+" hits");
 					break;
@@ -2185,7 +2185,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	public void renameIdentifierSpace(String from, String to) {
 		SqlQueryImpl rq = new SqlQueryImpl("node_id, uid", NODE_TABLE, "uid like '"
-				+ from + ":%'");
+				+ from + "%'");
 		Map<String, Integer> uid2iid = new HashMap<String, Integer>();
 		try {
 			ResultSet rs = this.execute(rq);
@@ -2198,21 +2198,74 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String sql = "UPDATE node SET uid=? WHERE node_id=?";
 		try {
-			PreparedStatement ps = obd.getConnection().prepareStatement(sql);
+			String testSql = "SELECT node_id FROM node WHERE  uid=?";
+			PreparedStatement testPS = obd.getConnection().prepareStatement(testSql);
+			String updateSql = "UPDATE node SET uid=? WHERE node_id=?";
+			PreparedStatement updatePS = obd.getConnection().prepareStatement(updateSql);
 			for (String uid : uid2iid.keySet()) {
 				int iid = uid2iid.get(uid);
-				String newUid = uid.replace(from + ":", to + ":");
-				ps.setString(1, newUid);
-				ps.setInt(2, iid);
-				ps.execute();
+				String newUid = uid.replace(from, to);
+				testPS.setString(1, newUid);
+				ResultSet rs = testPS.executeQuery();
+				if (rs.next()) {
+					mapInternalIdentifier(iid,rs.getInt("node_id"));
+				}
+				else {
+					System.err.println(uid+" -> "+newUid);
+					updatePS.setString(1, newUid);
+					updatePS.setInt(2, iid);
+					updatePS.execute();
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
 
+	public void mapInternalIdentifier(int iidFrom, int iidTo) throws SQLException {
+		Node curNode = this.getNodeByInternalId(iidFrom);
+		String[] updates =
+		{
+				"UPDATE node SET source_id=? WHERE source_id=?",
+				"UPDATE link SET node_id=? WHERE node_id=?",
+				"UPDATE link SET object_id=? WHERE object_id=?",
+				"UPDATE link SET predicate_id=? WHERE predicate_id=?",
+				"UPDATE link SET source_id=? WHERE source_id=?",
+				"UPDATE link SET reiflink_node_id=? WHERE reiflink_node_id=?",
+				"UPDATE sameas SET node_id=? WHERE node_id=?",
+				"UPDATE sameas SET object_id=? WHERE object_id=?",
+				"UPDATE sameas SET source_id=? WHERE source_id=?",
+				"UPDATE tagval SET node_id=? WHERE node_id=?",
+				"UPDATE tagval SET tag_id=? WHERE tag_id=?",
+				"UPDATE tagval SET source_id=? WHERE source_id=?",
+				"UPDATE alias SET node_id=? WHERE node_id=?",
+				"UPDATE alias SET type_id=? WHERE type_id=?",
+				"UPDATE alias SET source_id=? WHERE source_id=?",
+				"UPDATE description SET node_id=? WHERE node_id=?",
+				"UPDATE description SET type_id=? WHERE type_id=?",
+				"UPDATE description	SET source_id=? WHERE source_id=?"
+		};
+		for (String updateSql : updates) {
+			PreparedStatement ps = obd.getConnection().prepareStatement(updateSql);
+			ps.setInt(1, iidTo);
+			ps.setInt(2, iidFrom);
+			ps.executeUpdate();
+		}
+		System.err.println(iidFrom+" merge-> "+iidTo);
+		PreparedStatement ps;
+
+		if (curNode.getLabel() != null) {
+			ps = obd.getConnection().prepareStatement("UPDATE node SET label=?, metatype='"+curNode.getMetatype().name().substring(0,1)+
+					"' WHERE node_id = ?");
+			ps.setString(1, curNode.getLabel());
+			ps.setInt(2, iidTo);
+			ps.execute();
+		}
+
+		ps = obd.getConnection().prepareStatement("DELETE FROM node WHERE node_id = "+iidFrom);
+		ps.execute();
 	}
 
 	public void switchRelationIdGlobally(String from, String to) {

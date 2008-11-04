@@ -23,6 +23,28 @@ $$
   node_id=$1
 $$ LANGUAGE 'sql';
 
+CREATE OR REPLACE FUNCTION node_info(INT) RETURNS RECORD
+ AS
+$$
+ SELECT
+  *
+ FROM
+  node
+ WHERE
+  node_id=$1
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION inst(INT) RETURNS RECORD
+ AS
+$$
+ SELECT
+  *
+ FROM
+  node
+ WHERE
+  node_id IN (SELECT object_id FROM instantiation_link WHERE node_id=$1 AND is_inferred='f')
+$$ LANGUAGE 'sql';
+
 CREATE OR REPLACE FUNCTION source_uid(INT) RETURNS VARCHAR
  AS
 $$
@@ -95,6 +117,8 @@ $$ LANGUAGE 'sql';
 CREATE OR REPLACE FUNCTION instance_of(INT) RETURNS VARCHAR
  AS 'SELECT uid FROM instantiation_link AS l INNER JOIN node AS c ON (l.object_id=c.node_id) WHERE l.node_id=''$1''' LANGUAGE 'sql';
 
+
+
 CREATE OR REPLACE VIEW node_to_auto_label AS SELECT node_id,node_auto_label(node_id) AS auto_label FROM node WHERE metatype='C';
 
 CREATE TABLE cache_information_content(node_id INT, ic FLOAT);
@@ -143,3 +167,22 @@ $$
  END
 $$ LANGUAGE 'plpgsql';
   
+CREATE OR REPLACE FUNCTION contract_uids(VARCHAR, VARCHAR) RETURNS VOID
+ AS
+$$
+ DECLARE
+  v_idspace  ALIAS FOR $1;
+  v_uri_prefix  ALIAS FOR $2;
+  v_node_id INT;
+ BEGIN
+  SELECT INTO v_node_id v_bss basic_score FROM cache_basic_similarity_score WHERE node1_id=$1 AND node2_id=$2;
+  IF NOT FOUND THEN
+    SELECT INTO v_bss basic_score FROM cache_basic_similarity_score WHERE node1_id=$2 AND node2_id=$1;     -- symmetric
+    IF NOT FOUND THEN
+      SELECT INTO v_bss basic_score FROM node_pair_annotation_similarity_score WHERE node1_id = $1 AND node2_id = $2;
+      INSERT INTO cache_basic_similarity_score (node1_id,node2_id,basic_score) VALUES ($1,$2,v_bss);
+    END IF;
+  END IF;
+  RETURN v_bss;
+ END
+$$ LANGUAGE 'plpgsql';

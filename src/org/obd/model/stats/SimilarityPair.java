@@ -412,6 +412,11 @@ public class SimilarityPair {
 		calculateInverseClosureMap();
 	}
 
+	/**
+	 * gets the parents of a node, and the node itself
+	 * @param id
+	 * @return n &cup; closure(n)
+	 */
 	public Set<String> getReflexiveClosure(String id) {
 		Set<String> pids = new HashSet<String>();
 		if (closureMap.get(id) != null)

@@ -24,8 +24,8 @@ DECLARE
    -- split dbxrefstr on ":"
    WHILE i <= length(v_id) LOOP
      IF (substring(v_id,i,1) = ':') THEN
-       v_dbname = substr(v_id,1,i-1);
-       v_accession = substr(v_id,i+1);
+       v_dbname = regexp_replace(substr(v_id,1,i-1),'[^A-Za-z0-9_]','_','g');
+       v_accession = regexp_replace(substr(v_id,i+1),'[^A-Za-z0-9_]','_','g');
        i = length(v_id);
      END IF;
      i := i+1;
@@ -113,7 +113,7 @@ DECLARE
     IF NOT FOUND THEN
       SELECT INTO v_instance_of_id store_relation_node('OBO_REL:instance_of');
     END IF;
-    SELECT INTO v_db,v_local_id db,local_id FROM parse_id(v_class);
+    SELECT INTO v_db,v_local_id db,LOWER(local_id) FROM parse_id(v_class);
     RAISE NOTICE 'v % % %', v_class_id, v_db, v_local_id;
 
     SELECT INTO v_schema nspname FROM pg_namespace WHERE lower(v_db) = lower(nspname);
@@ -158,5 +158,19 @@ DECLARE
     RETURN;
  END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_all_classes_in (VARCHAR) 
+  RETURNS VOID AS
+$$
+DECLARE
+   v_node               RECORD;
+ BEGIN
+    FOR v_node IN SELECT DISTINCT node_id FROM node WHERE metatype='C' AND uid LIKE $1 || '%' LOOP
+      PERFORM realize_class_i(v_node.node_id);
+    END LOOP;
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
 
 

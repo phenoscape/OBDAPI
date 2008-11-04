@@ -120,6 +120,11 @@ public class OBDMain {
 				multiShard.mergeIdentifierByIDSpaces(args[i], args[i+1]);
 				i++;
 			}
+			else if (args[i].equals("--rename-idspace")) {
+				i++;
+				obdsql.renameIdentifierSpace(args[i], args[i+1]);
+				i++;
+			}
 			else if (args[i].equals("--removeIdPrefix")) {
 				i++;
 				Collection<Node> delNodes = multiShard.getNodesBySearch(args[i], ComparisonQueryTerm.Operator.STARTS_WITH, null, AliasType.ID);
