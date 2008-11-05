@@ -584,3 +584,40 @@ DECLARE
  END;
 $$
 LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION reify_link(INT,INT) RETURNS VOID AS
+$$
+  UPDATE link SET reiflink_node_id=$2 WHERE link_id=$1;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION reify_links_by_predicate(INT,INT) RETURNS VOID AS
+$$
+  UPDATE link SET reiflink_node_id=$2 WHERE predicate_id=$1 AND is_inferred='f';
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION reify_links_by_predicate(VARCHAR,VARCHAR) RETURNS VOID AS
+$$
+  UPDATE link SET reiflink_node_id=get_node_id($2) WHERE predicate_id=get_node_id($1) AND is_inferred='f';
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION store_genus_differentium(INT,INT,INT) RETURNS INT AS
+$$
+ DECLARE
+  v_genus_id  ALIAS FOR $1;
+  v_relation_id  ALIAS FOR $2;
+  v_filler_id  ALIAS FOR $3;
+  v_xp_uid VARCHAR;
+  v_is_a_id INT;
+  v_node_id INT;
+ BEGIN
+  SELECT INTO v_xp_uid node_uid(v_genus_id) || '^' || node_uid(v_relation_id) || '(' || node_uid(v_filler_id) || ')';
+  SELECT INTO v_node_id node_id FROM node WHERE uid=v_xp_uid;
+  IF NOT FOUND THEN
+    SELECT INTO v_node_id store_node(v_xp_uid);
+    SELECT INTO v_is_a_id node_id FROM is_a_relation;
+    INSERT INTO link (node_id,predicate_id,object_id,combinator) VALUES (v_node_id,v_is_a_id,v_genus_id,'I');
+    INSERT INTO link (node_id,predicate_id,object_id,combinator) VALUES (v_node_id,v_relation_id,v_filler_id,'I');
+  END IF;
+  RETURN v_node_id;
+ END
+$$ LANGUAGE 'plpgsql';

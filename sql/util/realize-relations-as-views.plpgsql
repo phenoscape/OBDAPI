@@ -107,6 +107,7 @@ DECLARE
    v_db                    VARCHAR;
    v_cmd                   VARCHAR;
    v_instance_of_id        INTEGER;
+   v_name                  VARCHAR;
  BEGIN
     SELECT INTO v_class uid FROM node WHERE node_id=$1;
     SELECT INTO v_instance_of_id node_id FROM node WHERE uid='OBO_REL:instance_of';
@@ -125,10 +126,14 @@ DECLARE
       EXECUTE 'CREATE SCHEMA asserted_' || v_db;
     END IF;
 
-    v_cmd :=  'CREATE OR REPLACE VIEW ' || v_db || '.' || quote_ident(v_local_id) || ' AS SELECT DISTINCT node.* FROM node INNER JOIN link USING (node_id) WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id;
+    v_name := v_db || '.' || quote_ident(v_local_id);
+    v_cmd :=  'CREATE OR REPLACE VIEW ' || v_name || ' AS SELECT DISTINCT node.* FROM node INNER JOIN link USING (node_id) WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id;
     RAISE NOTICE 'sql % ', v_cmd;
     EXECUTE v_cmd;
-    EXECUTE  'CREATE OR REPLACE VIEW asserted_' || v_db || '.' || quote_ident(v_local_id) || ' AS SELECT DISTINCT node.* FROM node INNER JOIN link USING (node_id) WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id || ' AND is_inferred=''f''';
+    EXECUTE  'CREATE OR REPLACE VIEW asserted_' || v_name || ' AS SELECT DISTINCT node.* FROM node INNER JOIN link USING (node_id) WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id || ' AND is_inferred=''f''';
+    v_cmd := 'CREATE OR REPLACE FUNCTION ' || v_name || '(INT) RETURNS BOOLEAN AS ''SELECT CAST(''''t'''' AS boolean) WHERE EXISTS (SELECT link.node_id FROM link WHERE predicate_id=' || v_instance_of_id || ' AND object_id=' || v_class_id || ' AND node_id=$1)'' LANGUAGE "sql"';
+    RAISE NOTICE 'sql % ', v_cmd;
+    EXECUTE v_cmd;
     RETURN;
  END;
 $$ LANGUAGE 'plpgsql';

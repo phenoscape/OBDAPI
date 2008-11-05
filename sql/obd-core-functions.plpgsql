@@ -34,6 +34,17 @@ $$
   node_id=$1
 $$ LANGUAGE 'sql';
 
+CREATE OR REPLACE FUNCTION get_node_id(VARCHAR) RETURNS INT
+ AS
+$$
+ SELECT
+  node_id
+ FROM
+  node
+ WHERE
+  uid=$1
+$$ LANGUAGE 'sql';
+
 CREATE OR REPLACE FUNCTION inst(INT) RETURNS RECORD
  AS
 $$
@@ -186,3 +197,4 @@ $$
   RETURN v_bss;
  END
 $$ LANGUAGE 'plpgsql';
+
