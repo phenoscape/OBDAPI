@@ -1,6 +1,9 @@
 -- CREATE SCHEMA obd_mutable_api;
 -- SET search_path TO obd_mutable_api,public;
 
+TODO
+
+
 -- @@ store_node(UID,label,source,metatype)
 CREATE OR REPLACE FUNCTION store_node (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
   RETURNS INT AS 
@@ -9,6 +12,26 @@ DECLARE
    v_uid                   ALIAS FOR $1;
    v_label                 ALIAS FOR $2;
    v_source                ALIAS FOR $3;
+   v_metatype              ALIAS FOR $4;
+
+   v_node_id               INTEGER;
+   v_source_id             INTEGER;
+ BEGIN
+
+    IF v_source IS NOT NULL THEN
+      SELECT INTO v_source_id store_node(v_source);
+    END IF;
+    RETURN SELECT store_node(v_uid,v_label,v_source_id,v_metatype);
+ END
+$$ LANUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION store_node (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_uid                   ALIAS FOR $1;
+   v_label                 ALIAS FOR $2;
+   v_source             ALIAS FOR $3;
    v_metatype              ALIAS FOR $4;
 
    v_node_id               INTEGER;
@@ -600,12 +623,14 @@ $$
   UPDATE link SET reiflink_node_id=get_node_id($2) WHERE predicate_id=get_node_id($1) AND is_inferred='f';
 $$ LANGUAGE 'sql';
 
-CREATE OR REPLACE FUNCTION store_genus_differentium(INT,INT,INT) RETURNS INT AS
+-- store_genus_differentium(genus,predicate,filler,xp_source) RETURNS INT
+CREATE OR REPLACE FUNCTION store_genus_differentium(INT,INT,INT,INT) RETURNS INT AS
 $$
  DECLARE
   v_genus_id  ALIAS FOR $1;
   v_relation_id  ALIAS FOR $2;
   v_filler_id  ALIAS FOR $3;
+  v_source_id  ALIAS FOR $3;
   v_xp_uid VARCHAR;
   v_is_a_id INT;
   v_node_id INT;
@@ -613,7 +638,7 @@ $$
   SELECT INTO v_xp_uid node_uid(v_genus_id) || '^' || node_uid(v_relation_id) || '(' || node_uid(v_filler_id) || ')';
   SELECT INTO v_node_id node_id FROM node WHERE uid=v_xp_uid;
   IF NOT FOUND THEN
-    SELECT INTO v_node_id store_node(v_xp_uid);
+    SELECT INTO v_node_id store_node(v_xp_uid,CAST(null AS VARCHAR),'',CAST('C' AS VARCHAR));
     SELECT INTO v_is_a_id node_id FROM is_a_relation;
     INSERT INTO link (node_id,predicate_id,object_id,combinator) VALUES (v_node_id,v_is_a_id,v_genus_id,'I');
     INSERT INTO link (node_id,predicate_id,object_id,combinator) VALUES (v_node_id,v_relation_id,v_filler_id,'I');

@@ -20,6 +20,7 @@ my %skip = ();
 my $verbose = 0;
 my %ruleconf = ();
 my $test_intersection;
+my $infer_instance_of;
 while (@ARGV && $ARGV[0] =~ /^\-/) {
     my $opt = shift @ARGV;
     if ($opt eq '-d' || $opt eq '--database') {
@@ -54,6 +55,9 @@ while (@ARGV && $ARGV[0] =~ /^\-/) {
     }
     elsif ($opt eq '--rule') {
         $ruleconf{shift @ARGV}=1;
+    }
+    elsif ($opt eq '--inst') {
+        $infer_instance_of = 1;
     }
     else {
         die $opt;
@@ -90,6 +94,13 @@ if (@is_a_nodes != 1) {
     die "@is_a_nodes";
 }
 my $is_a = shift @is_a_nodes;
+
+my @instance_of_nodes = 
+  $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:instance_of'");
+if (@instance_of_nodes != 1) {
+    die "@instance_of_nodes";
+}
+my $instance_of = shift @instance_of_nodes;
 
 # TODO: use this below
 my @transitive_relation_node_ids = 
@@ -246,8 +257,18 @@ foreach my $node_id (keys %$i_by_node_id) {
     #print STDERR "$sql\n";
     # we do this at the start - unless new intersections can be added
     unshift(@views,
-         {id=>"intersection_for_$node_id",
-          sql=>$sql});
+            {id=>"intersection_for_$node_id",
+             sql=>$sql});
+    if ($infer_instance_of) {
+        my $sql = intersection_to_query($node_id,$intersection_h,1);
+        #print STDERR "$sql\n";
+        # we do this at the start - unless new intersections can be added
+        unshift(@views,
+            {id=>"instance_intersection_for_$node_id",
+             sql=>$sql});
+    }
+
+
 }
 
 my $done = 0;
@@ -362,6 +383,7 @@ sub get_intersections {
 sub intersection_to_query {
     my $defined_node_id = shift;
     my $i_h = shift;
+    my $is_inst = shift;
     my @conds = @$i_h;
     my $linknum=0;
     my @links = ();
@@ -374,17 +396,32 @@ sub intersection_to_query {
                $linknum++;
                my $link = "link_".$linknum;
                push(@links,"link AS $link");
+               my $q;
+               my $pred_id = $_->{predicate_id};
+               if ($is_inst) {
+                   if ($pred_id == $is_a) {
+                       $pred_id = $instance_of;
+                       $q = "$link.node_id=subsumed_node.node_id AND $link.predicate_id = $instance_of AND $link.object_id = $_->{object_id} AND $link.combinator!='U'";
+                   }
+                   else {
+                       $q = "$link.node_id=subsumed_node.node_id AND $link.predicate_id = $pred_id AND $link.object_id IN (SELECT node_id FROM instantiation_link WHERE object_id= $_->{object_id}) AND $link.combinator!='U'";
+                   }
+               }
+               else {
+                   $q = "$link.node_id=subsumed_node.node_id AND $link.predicate_id = $pred_id AND $link.object_id = $_->{object_id} AND $link.combinator!='U'";
+               }
                # TODO: omit negation links
-               my $q = "$link.node_id=subsumed_node.node_id AND $link.predicate_id = $_->{predicate_id} AND $link.object_id = $_->{object_id} AND $link.combinator!='U'";
                $q;
            } @conds);
     my $from = join(', ',@links);
-    
+
+    my $inf_pred_id = $is_inst ? $instance_of : $is_a;
+
     my $sql =
       qq[
  SELECT DISTINCT
   subsumed_node.node_id  AS node_id,
-  $is_a                  AS predicate_id,
+  $inf_pred_id                  AS predicate_id,
   $defined_node_id       AS object_id
  FROM node AS subsumed_node, $from
  WHERE
