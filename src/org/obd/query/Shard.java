@@ -208,11 +208,21 @@ public interface Shard extends BasicRepository,
 
 
 	/**
+	 * A query to search for Entity Quality combinations
+	 * 
+	 * @author cartik1.0
+	 * @param entity
+	 * @param quality
+	 * @return
+	 */
+	public Collection<Statement> getStatementsForEQCombination(String entity, String quality);
+	/**
 	 * Given a node identifier, retrieve the class expression defining this node
 	 * @param id
 	 * @param traverseNamedClasses
 	 * @return null if none found
 	 */
+	
 	// TODO: return multiple?
 	public CompositionalDescription getCompositionalDescription(String id, 
 			boolean traverseNamedClasses);
