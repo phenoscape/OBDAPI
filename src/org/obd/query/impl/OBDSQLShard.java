@@ -316,8 +316,12 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+" IS NOT NULL");
 		return getStatements(whereClause);
 	}
-
-
+	
+	public Collection<Statement> getStatementsForEQCombination(String entity, String quality) {
+		WhereClause whereClause = new SqlWhereClauseImpl();
+		whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, quality + "%inheres%" + entity);
+		return getStatements(whereClause);
+	}
 
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,

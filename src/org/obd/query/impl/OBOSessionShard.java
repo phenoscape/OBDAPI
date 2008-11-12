@@ -369,5 +369,12 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 		
 	}
 
+	@Override
+	public Collection<Statement> getStatementsForEQCombination(String entity,
+			String quality) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

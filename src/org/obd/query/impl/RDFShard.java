@@ -90,8 +90,8 @@ public class RDFShard extends AbstractShard implements Shard {
 		 * 
 		 * Background:
 		 * Normally, each subClassOf OWL axiom  is converted to a single RDF triple, but 
-		 * other relations follow a different pattern. OWL has no notion of ÒedgesÓ in an ontology graph as such. 
-		 * Instead, edges such as ÒHeartVentricle part_of HeartÓ (taken from the adult mouse anatomy ontology)
+		 * other relations follow a different pattern. OWL has no notion of ï¿½edgesï¿½ in an ontology graph as such. 
+		 * Instead, edges such as ï¿½HeartVentricle part_of Heartï¿½ (taken from the adult mouse anatomy ontology)
 		 *  are treated as subclass axioms between (a) a named class and (b) an owl description .
 		 *  Here the description is an owl:Restriction representing the class of all things that are part of the heart.
 		 *  When we convert a part_of edge to RDF via OWL we end up with 4 triples. In turtle syntax:
@@ -569,6 +569,13 @@ public class RDFShard extends AbstractShard implements Shard {
 	public void removeNode(String nid) throws ShardExecutionException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Collection<Statement> getStatementsForEQCombination(String entity,
+			String quality) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
