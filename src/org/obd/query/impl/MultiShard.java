@@ -442,8 +442,7 @@ public class MultiShard extends AbstractShard implements Shard {
 	}
 
 	@Override
-	public Collection<Statement> getStatementsForEQCombination(String entity,
-			String quality) {
+	public Collection<Statement> getStatementsForEQCombination(String phenotype) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -317,9 +317,9 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return getStatements(whereClause);
 	}
 	
-	public Collection<Statement> getStatementsForEQCombination(String entity, String quality) {
+	public Collection<Statement> getStatementsForEQCombination(String phenotype) {
 		WhereClause whereClause = new SqlWhereClauseImpl();
-		whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, quality + "%inheres%" + entity);
+		whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, phenotype);
 		return getStatements(whereClause);
 	}
 
