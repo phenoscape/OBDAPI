@@ -215,7 +215,7 @@ public interface Shard extends BasicRepository,
 	 * @param quality
 	 * @return
 	 */
-	public Collection<Statement> getStatementsForEQCombination(String entity, String quality);
+	public Collection<Statement> getStatementsForEQCombination(String phenotype);
 	/**
 	 * Given a node identifier, retrieve the class expression defining this node
 	 * @param id
