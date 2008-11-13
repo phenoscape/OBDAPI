@@ -216,6 +216,16 @@ public interface Shard extends BasicRepository,
 	 * @return
 	 */
 	public Collection<Statement> getStatementsForEQCombination(String phenotype);
+	
+	/**
+	 * @author cartik
+	 * @param term
+	 * @return
+	 * A query to search for all instances of a given term in the database
+	 */
+	
+	public Collection<Statement> getStatementsForGenericTerm(String term);
+	
 	/**
 	 * Given a node identifier, retrieve the class expression defining this node
 	 * @param id

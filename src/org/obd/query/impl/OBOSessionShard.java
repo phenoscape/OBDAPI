@@ -375,5 +375,11 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 		return null;
 	}
 
+	@Override
+	public Collection<Statement> getStatementsForGenericTerm(String term) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

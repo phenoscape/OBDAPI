@@ -34,7 +34,6 @@
 	<classpathentry kind="lib" path="lib/runlibs/postgresql-8.2-504.jdbc3.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/antlr-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/antlr-runtime-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/runlibs/bbop.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/obo.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/oboedit.jar"/>
@@ -59,5 +58,6 @@
 	<classpathentry kind="lib" path="lib/buildlibs/arq-extra.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/arq.jar" sourcepath="/jena"/>
 	<classpathentry kind="lib" path="lib/buildlibs/antlr-2.7.5.jar"/>
+	<classpathentry kind="lib" path="/home/cartik/workspace/Phenex/lib/bbop.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

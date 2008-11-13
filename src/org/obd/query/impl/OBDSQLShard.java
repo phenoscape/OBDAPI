@@ -317,10 +317,40 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return getStatements(whereClause);
 	}
 	
+	/**
+	 * @author cartik
+	 * This method has been defined specifically to query for Entity Quality combinations
+	 * by using wildcard matches between target compositional descriptions and 
+	 * EQ combinations
+	 */
+	
 	public Collection<Statement> getStatementsForEQCombination(String phenotype) {
 		WhereClause whereClause = new SqlWhereClauseImpl();
 		whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, phenotype);
 		return getStatements(whereClause);
+	}
+
+	/**
+	 * @author cartik
+	 * @param term
+	 * @return
+	 * 
+	 * This method has been defined to return statements containing a specific term 
+	 * irrespective of where it appears: in the subject, predicate, or object  
+	 */
+	public Collection<Statement> getStatementsForGenericTerm(String term){
+		Set<Statement> results = new HashSet<Statement>();
+		WhereClause whereClauseSubj = new SqlWhereClauseImpl();
+		WhereClause whereClausePred = new SqlWhereClauseImpl();
+		WhereClause whereClauseObj = new SqlWhereClauseImpl();
+		whereClauseSubj.addLikeConstraint(LINK_NODE_EXPOSED_ID_COLUMN, term);
+		whereClausePred.addLikeConstraint(LINK_RELATION_EXPOSED_ID_COLUMN, term);
+		whereClauseObj.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, term);
+		results.addAll(getStatements(whereClauseSubj));
+		results.addAll(getStatements(whereClausePred));
+		results.addAll(getStatements(whereClauseObj));
+		
+		return results;
 	}
 
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
