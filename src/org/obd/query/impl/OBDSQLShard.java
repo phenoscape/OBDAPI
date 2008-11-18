@@ -347,32 +347,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return getStatements(whereClause);
 	}
 
-	/**
-	 * @author cartik
-	 * @param term
-	 * @return
-	 * 
-	 * This method has been defined to return statements containing a specific term 
-	 * irrespective of where it appears: in the subject, predicate, or object  
-	 */
-	public Collection<Statement> getStatementsForGenericTerm(String term){
-		Set<Statement> results = new HashSet<Statement>();
-		WhereClause whereClauseSubj = new SqlWhereClauseImpl();
-		WhereClause whereClausePred = new SqlWhereClauseImpl();
-		WhereClause whereClauseObj = new SqlWhereClauseImpl();
-		whereClauseSubj.addLikeConstraint(LINK_NODE_EXPOSED_ID_COLUMN, term);
-		whereClausePred.addLikeConstraint(LINK_RELATION_EXPOSED_ID_COLUMN, term);
-		whereClauseObj.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, term);
-		whereClauseSubj.addEqualityConstraint("is_inferred", false);
-		whereClausePred.addEqualityConstraint("is_inferred", false);
-		whereClauseObj.addEqualityConstraint("is_inferred", false);
-		results.addAll(getStatements(whereClauseSubj));
-		results.addAll(getStatements(whereClausePred));
-		results.addAll(getStatements(whereClauseObj));
-		
-		return results;
-	}
-
+	
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,
 			GraphTranslation gea) {

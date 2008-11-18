@@ -219,14 +219,6 @@ public interface Shard extends BasicRepository,
 			String relation, String target, String source,
 			Boolean useImplied, Boolean isReified);
 	
-	/**
-	 * @author cartik
-	 * @param term
-	 * @return
-	 * A query to search for all instances of a given term in the database
-	 */
-	
-	public Collection<Statement> getStatementsForGenericTerm(String term);
 	
 	/**
 	 * Given a node identifier, retrieve the class expression defining this node
