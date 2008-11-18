@@ -215,7 +215,9 @@ public interface Shard extends BasicRepository,
 	 * @param quality
 	 * @return
 	 */
-	public Collection<Statement> getStatementsForEQCombination(String phenotype);
+	public Collection<Statement> getStatementsWithSearchTerm(String node, 
+			String relation, String target, String source,
+			Boolean useImplied, Boolean isReified);
 	
 	/**
 	 * @author cartik

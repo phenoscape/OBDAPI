@@ -319,14 +319,31 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	
 	/**
 	 * @author cartik
-	 * This method has been defined specifically to query for Entity Quality combinations
-	 * by using wildcard matches between target compositional descriptions and 
-	 * EQ combinations
+	 * This method has been defined to look for wildcard matches in statements using the 'LIKE' SQL keyword
+	 * 
 	 */
 	
-	public Collection<Statement> getStatementsForEQCombination(String phenotype) {
+	public Collection<Statement> getStatementsWithSearchTerm(String node, String relation, String target, 
+			String source, Boolean useImplied, Boolean isReified) {
 		WhereClause whereClause = new SqlWhereClauseImpl();
-		whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, phenotype);
+		if(node != null){
+			whereClause.addLikeConstraint(LINK_NODE_EXPOSED_ID_COLUMN, node);
+		}
+		if(relation != null){
+			whereClause.addLikeConstraint(LINK_RELATION_EXPOSED_ID_COLUMN, relation);
+		}
+		if(target != null){
+			whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, target);
+		}
+		if(source != null){
+			whereClause.addLikeConstraint(LINK_SOURCE_EXPOSED_ID_COLUMN, source);
+		}
+		if(useImplied != null){
+			whereClause.addEqualityConstraint("is_inferred", useImplied);
+		}
+		if(isReified){
+			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN + " IS NOT NULL");
+		}
 		return getStatements(whereClause);
 	}
 

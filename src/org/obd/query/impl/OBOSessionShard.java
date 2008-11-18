@@ -370,7 +370,9 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 	}
 
 	@Override
-	public Collection<Statement> getStatementsForEQCombination(String phenotype) {
+	public Collection<Statement> getStatementsWithSearchTerm(String node, 
+			String relation, String target, String source,
+			Boolean useImplied, Boolean isReified) {
 		// TODO Auto-generated method stub
 		return null;
 	}
