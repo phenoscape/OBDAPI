@@ -104,7 +104,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	protected String LINK_NODE_EXPOSED_ID_COLUMN = "node_uid";
 	protected String LINK_TARGET_EXPOSED_ID_COLUMN = "object_uid";
-	protected String LINK_RELATION_EXPOSED_ID_COLUMN = "pred_uid";
+	protected String LINK_RELATION_EXPOSED_ID_COLUMN = "predicate_uid";
 	protected String LINK_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
 	protected String LINK_REIF_EXPOSED_ID_COLUMN = "reiflink_node_uid";
 
