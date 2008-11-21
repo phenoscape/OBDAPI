@@ -104,7 +104,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	protected String LINK_NODE_EXPOSED_ID_COLUMN = "node_uid";
 	protected String LINK_TARGET_EXPOSED_ID_COLUMN = "object_uid";
-	protected String LINK_RELATION_EXPOSED_ID_COLUMN = "predicate_uid";
+	protected String LINK_RELATION_EXPOSED_ID_COLUMN = "pred_uid";
 	protected String LINK_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
 	protected String LINK_REIF_EXPOSED_ID_COLUMN = "reiflink_node_uid";
 
@@ -113,7 +113,11 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	protected String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
 	protected String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
 	protected String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
-
+	
+	//added to address a discrepancy between column names (pred_uid and predicate_uid)
+	// this must be addressed in the DDL statements creating the tables and views: Cartik
+	protected String LINK_RELATION_EXPOSED_ID_COLUMN_SHORTENED = "predicate_uid";
+	
 	protected String IS_A_LINK_TABLE = "is_a_link";
 	protected String REIFIED_LINK_TABLE = "reified_link";
 
@@ -1283,7 +1287,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			while (rs.next()) {
 				LiteralStatement s = new LiteralStatement();
 				s.setNodeId(rs.getString(LINK_NODE_EXPOSED_ID_COLUMN));
-				s.setRelationId(rs.getString(LINK_RELATION_EXPOSED_ID_COLUMN));
+				s.setRelationId(rs.getString(LINK_RELATION_EXPOSED_ID_COLUMN_SHORTENED));
 				s.setValue(rs.getString("val"));
 				statements.add(s);
 			}
