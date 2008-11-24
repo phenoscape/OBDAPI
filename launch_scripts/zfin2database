@@ -1,0 +1,38 @@
+#! /bin/bash
+# Set the classname of the Java class to execute
+CLASSNAME=org.phenoscape.bridge.ZfinObdBridge
+
+# Give a space-separated list of classpath items RELATIVE TO THE CURRENT SCRIPT
+# These will be resolved into absolute pathnames
+# Wildcards are allowed
+CLASSPATH_RELATIVE=../lib/runlibs/*.jar
+
+# If literal classpath values are needed, uncomment the line below
+# This can be useful if the classpath contains URLs
+# CLASSPATH_LITERAL=""
+
+# To set a specific default Java path, set the JAVAPATH variable below.
+# This value can be overridden with the -Jvm= option.
+# If JAVAPATH is not set, the script will use whatever version of Java is on the
+# path. If there is no copy of Java on the path, the JAVA_HOME environment
+# variable will be used. If that fails, we just use "java" in the hopes that the
+# failure message will make a little more sense.
+# JAVAPATH="java"
+
+PATH_SEP=":"
+
+JAVAARGS=" "
+CMDARGS=""
+
+
+for ARG in "$CLASSPATH_RELATIVE"
+do
+	DEREFERENCED_CLASSPATH=`ls -1 -L $ARG`
+	for CP_ENTRY in $DEREFERENCED_CLASSPATH
+	do
+		CLASSPATH="$CLASSPATH$PATH_SEP$CP_ENTRY"
+	done
+done
+
+#echo $CLASSPATH
+sh -c "java -classpath $CLASSPATH '-Xmx1024m' $CLASSNAME $CMDARGS"
