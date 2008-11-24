@@ -87,11 +87,17 @@ run("perl obd-create-db.pl $createDBargs");
 
 print STDERR "Finished creating database\n";
 
+#call the Java class that loads the Zfin data files into the newly created database
+run("sh ../launch_scripts/zfin2database");
+
 #call the Java class that loads all the data files into the newly created database
-run("java -classpath $classpath -DlauncherDir=../launch_scripts '-Xmx1024m' org.phenoscape.bridge.PhenoscapeDataLoader ../data/");
+run("sh ../launch_scripts/nexml2database");
 
 #run the reasoner
 run("perl obd-reasoner.pl -d $deleteDBargs");
+
+#commit the problem log to the SVN site
+#run("svn commit");
 
 sub run {
     my $cmd = shift;
