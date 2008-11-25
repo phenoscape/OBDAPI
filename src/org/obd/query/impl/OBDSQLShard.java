@@ -353,8 +353,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	/**
 	 * @author cartik
-	 * @param tblName
-	 * @param colName
 	 * @param searchTerm
 	 * @return
 	 * This has been added to search for nodes by labels in the node table
