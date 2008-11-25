@@ -377,6 +377,12 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 		return null;
 	}
 
+	@Override
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

@@ -351,6 +351,42 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return getStatements(whereClause);
 	}
 
+	/**
+	 * @author cartik
+	 * @param tblName
+	 * @param colName
+	 * @param searchTerm
+	 * @return
+	 * This has been added to search for nodes by labels in the node table
+	 */
+	
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm){
+		
+		Collection<Node> results = new LinkedList<Node>();
+		
+		RelationalQuery rq = new SqlQueryImpl();
+		rq.addTable(NODE_TABLE, "n");
+		rq.setSelectClause("n.uid AS uid");
+		
+		WhereClause wc = new SqlWhereClauseImpl();
+		wc.addLikeConstraint("n.label", searchTerm);
+		rq.setWhereClause(wc);
+		//System.out.println(rq.toSQL());
+		
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				results.add(getNode(rs.getString(1)));
+				
+			}
+		} catch (SQLException e) {
+			System.err.println("Error fetching nodes: "
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return results;
+	}
 	
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,
