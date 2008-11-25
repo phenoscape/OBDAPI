@@ -385,6 +385,6 @@ public interface Shard extends BasicRepository,
 	public Collection<LinkStatement> getClosure(Collection<String> ids, String relId);
 
 
-
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm);
 
 }
