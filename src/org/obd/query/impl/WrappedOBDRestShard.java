@@ -137,6 +137,18 @@ public class WrappedOBDRestShard extends AbstractShard implements Shard {
 		return null;
 	}
 
+	@Override
+	public Collection<Node> getNodesForSearchTermBySynonym(String term) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<Node> getNodesForSearchTermByDefinition(String term) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 }

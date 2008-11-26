@@ -387,4 +387,10 @@ public interface Shard extends BasicRepository,
 
 	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm);
 
+
+	public Collection<Node> getNodesForSearchTermBySynonym(String term);
+
+
+	public Collection<Node> getNodesForSearchTermByDefinition(String term);
+
 }

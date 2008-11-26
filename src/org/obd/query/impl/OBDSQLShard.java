@@ -386,6 +386,81 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return results;
 	}
 	
+	public Collection<Node> getNodesForSearchTermBySynonym(String searchTerm){
+		
+		Collection<Node> results = new HashSet<Node>();
+		
+		RelationalQuery rq = new SqlQueryImpl();
+		rq.addTable("alias", "a");
+		rq.addTable(NODE_TABLE, "n");
+		rq.setSelectClause("n.uid AS uid, a.label as synonym");
+		
+		WhereClause wc = new SqlWhereClauseImpl();
+		wc.addJoinConstraint("a.node_id", "n.node_id");
+		wc.addLikeConstraint("a.label", searchTerm);
+		rq.setWhereClause(wc);
+	//	System.out.println(rq.toSQL());
+		
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				String nodeId = rs.getString(1);
+				Node node = getNode(nodeId);
+				LiteralStatement s = new LiteralStatement();
+				s.setNodeId(nodeId);
+				s.setRelationId("hasSynonym");
+				s.setValue(rs.getString(2));
+				node.addStatement(s);
+				results.add(node);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error fetching nodes: "
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return results;
+		
+	}
+	
+	public Collection<Node> getNodesForSearchTermByDefinition(String searchTerm){
+		
+		Collection<Node> results = new HashSet<Node>();
+		
+		RelationalQuery rq = new SqlQueryImpl();
+		rq.addTable("description", "d");
+		rq.addTable(NODE_TABLE, "n");
+		rq.setSelectClause("n.uid AS uid, d.label as definition");
+		
+		WhereClause wc = new SqlWhereClauseImpl();
+		wc.addJoinConstraint("d.node_id", "n.node_id");
+		wc.addLikeConstraint("d.label", searchTerm);
+		rq.setWhereClause(wc);
+	//	System.out.println(rq.toSQL());
+		
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				String nodeId = rs.getString(1);
+				Node node = getNode(nodeId);
+				LiteralStatement s = new LiteralStatement();
+				s.setNodeId(nodeId);
+				s.setRelationId("hasDefinition");
+				s.setValue(rs.getString(2));
+				node.addStatement(s);
+				results.add(node);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error fetching nodes: "
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return results;
+		
+	}
+	
+	
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,
 			GraphTranslation gea) {
