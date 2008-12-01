@@ -401,6 +401,24 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+ -- @@ store_node_dbxref_isa_i (IID, xrefID, nodeID)
+ CREATE OR 	REPLACE FUNCTION store_node_dbxref_isa_i (INT, VARCHAR)
+ 	RETURNS INT AS
+ $$
+ DECLARE
+
+   v_node_id               ALIAS FOR $1;
+   v_rel_id                INTEGER;
+   v_xref_id               INTEGER;
+ BEGIN
+    SELECT INTO v_xref_id store_node($2);
+    SELECT INTO v_rel_id store_relation_node('OBO_REL:is_a');
+    INSERT INTO link (node_id,predicate_id,object_id)
+        VALUES (v_xref_id,v_rel_id,v_node_id);
+    RETURN v_xref_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
 -- @@ store_node_synonym_i (IID, scope, type, syn)
 -- scope = B/N/E/R
 -- type = UID for optional type
