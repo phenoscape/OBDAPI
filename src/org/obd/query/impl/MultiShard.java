@@ -441,7 +441,6 @@ public class MultiShard extends AbstractShard implements Shard {
 		
 	}
 
-	@Override
 	public Collection<Statement> getStatementsWithSearchTerm(String node, 
 			String relation, String target, String source,
 			Boolean useImplied, Boolean isReified) {
@@ -449,19 +448,16 @@ public class MultiShard extends AbstractShard implements Shard {
 		return null;
 	}
 
-	@Override
 	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Collection<Node> getNodesForSearchTermBySynonym(String term) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Collection<Node> getNodesForSearchTermByDefinition(String term) {
 		// TODO Auto-generated method stub
 		return null;
