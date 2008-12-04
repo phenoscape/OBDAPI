@@ -35,12 +35,10 @@
 	<classpathentry kind="lib" path="lib/runlibs/antlr-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/antlr-runtime-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="lib/runlibs/obo.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/oboedit.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/obo-vocab.jar" sourcepath="/obo-vocab-java"/>
 	<classpathentry kind="lib" path="lib/runlibs/stringtemplate-3.1b1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BBOP"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/OBO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/obo-vocab-java"/>
 	<classpathentry kind="lib" path="lib/buildlibs/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/xercesImpl.jar"/>
@@ -58,5 +56,7 @@
 	<classpathentry kind="lib" path="lib/buildlibs/arq-extra.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/arq.jar" sourcepath="/jena"/>
 	<classpathentry kind="lib" path="lib/buildlibs/antlr-2.7.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Phenex"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OBO"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
