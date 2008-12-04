@@ -56,7 +56,6 @@
 	<classpathentry kind="lib" path="lib/buildlibs/arq-extra.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/arq.jar" sourcepath="/jena"/>
 	<classpathentry kind="lib" path="lib/buildlibs/antlr-2.7.5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Phenex"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OBO"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
