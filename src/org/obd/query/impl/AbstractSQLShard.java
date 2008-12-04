@@ -32,7 +32,6 @@ import org.obo.dataadapter.OBDSQLDatabaseAdapter;
 import org.obo.dataadapter.OBDSQLDatabaseAdapter.OBDSQLDatabaseAdapterConfiguration;
 import org.obo.datamodel.IdentifiedObject;
 import org.obo.datamodel.Link;
-import org.obo.datamodel.SynonymCategory;
 
 /**
  * Base class for Shard implementations that use a JDBC connection
@@ -161,8 +160,6 @@ public abstract class AbstractSQLShard extends AbstractShard implements Shard {
 				stmt.setBoolean(i + 2, (Boolean) arg);
 			} else if (arg instanceof IdentifiedObject) {
 				stmt.setString(i + 2, ((IdentifiedObject) arg).getID());
-			} else if (arg instanceof SynonymCategory) {
-				stmt.setString(i + 2, ((SynonymCategory) arg).getID());
 			} else {
 				stmt.setString(i + 2, (String) arg);
 			}
@@ -202,8 +199,6 @@ public abstract class AbstractSQLShard extends AbstractShard implements Shard {
 				stmt.setBoolean(i + 2, (Boolean) arg);
 			} else if (arg instanceof IdentifiedObject) {
 				stmt.setString(i + 2, ((IdentifiedObject) arg).getID());
-			} else if (arg instanceof SynonymCategory) {
-				stmt.setString(i + 2, ((SynonymCategory) arg).getID());
 			} else {
 				stmt.setString(i + 2, (String) arg);
 			}
