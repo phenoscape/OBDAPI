@@ -29,7 +29,6 @@ import org.obo.annotation.datamodel.impl.AnnotationImpl;
 import org.obo.dataadapter.OBOAdapter;
 import org.obo.dataadapter.OBOFileAdapter;
 import org.obo.dataadapter.OBOSerializationEngine;
-import org.obo.datamodel.CategorizedObject;
 import org.obo.datamodel.Dbxref;
 import org.obo.datamodel.DefinedObject;
 import org.obo.datamodel.IdentifiedObject;
@@ -46,7 +45,6 @@ import org.obo.datamodel.ObjectFactory;
 import org.obo.datamodel.PropertyValue;
 import org.obo.datamodel.Synonym;
 import org.obo.datamodel.SynonymedObject;
-import org.obo.datamodel.TermCategory;
 import org.obo.datamodel.impl.DanglingLinkImpl;
 import org.obo.datamodel.impl.OBOSessionImpl;
 import org.obo.datamodel.impl.SynonymImpl;
@@ -142,15 +140,6 @@ public class OBOBridge {
 					ls.setNodeId(node.getId());
 					ls.setRelationId(vocab.HAS_SYNONYM());
 					ls.setValue(s.getText());
-					ls.setSourceId(srcId);
-					node.addStatement(ls);
-				}
-			}
-			if (obj.getCategories() != null) {
-				for (TermCategory c : obj.getCategories()) {
-					LinkStatement ls = new LinkStatement(id,
-							vocab.IN_SUBSET(),
-							c.getName());
 					ls.setSourceId(srcId);
 					node.addStatement(ls);
 				}
