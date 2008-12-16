@@ -1,0 +1,156 @@
+id	birn_human_parkinsons_disease_phenotype_ontology
+title	BIRN Human Parkinsons Disease Phenotype Ontology
+namespace	SAO_HumanDPO
+uriprefix	http://ccdb.ucsd.edu/SAO/HumanDPO.owl#
+foundry	No
+status	Production and review
+download	
+source	http://ccdb.ucsd.edu/SAO/DPO/1.0/HumanDPO.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	contains human disease phenotypes at the class level
+relevant_organism	NCBITaxon:9606|Homo sapiens
+
+id	birn_animal_model_phenotype_ontology
+title	BIRN Animal Model Phenotype Ontology
+namespace	BIRN_PDPO
+uriprefix	http://ccdb.ucsd.edu/PDPhenotypeOntology/1.0#
+foundry	No
+status	Production and review
+download	
+source	http://ccdb.ucsd.edu/SAO/DPO/1.0/DPO.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	contains animal model phenotypes at the instance level 
+
+id	birn_image_phenotype_ontology
+title	BIRN Image Phenotype Ontology
+namespace	BIRN_ImagePhenotype
+uriprefix	http://ccdb.ucsd.edu/SAO/DPO/1.0/ImagePhenotype.owl
+foundry	No
+status	Production and review
+download	
+source	http://ccdb.ucsd.edu/SAO/DPO/1.0/ImagePhenotype.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	contains image annotations of animal model phenotypes at the instance level. many of the annotations done through Smart Atlas (http://smartatlas.nbirn.net:8080/atlas-clientside/) 
+
+id	birn_parkinsons_disease_stage_ontology
+title	BIRN Parkinson's Disease Stage Ontology
+namespace	BIRN_PDStage
+uriprefix	http://ccdb.ucsd.edu/PDStageOntology/1.0/
+foundry	No
+status	Production and review
+download	
+source	http://ccdb.ucsd.edu/SAO/PDSO/1.0/PDSO.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	The stage ontology contains various staging standards for diseases. 
+
+id	birn_smart_atlas
+title	BIRN Smart Atlas
+namespace	BIRN_SA
+uriprefix	http://ccdb.ucsd.edu/smart_atlas_ontology/sa.owl#
+foundry	No
+status	Production and review
+download	
+source	
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	
+
+id	birnlex_anatomy
+title	BIRNLex Anatomy
+namespace	birnlex_anatomy
+uriprefix	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Anatomy.owl#
+foundry	No
+status	Production and review
+download	
+source	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Anatomy.owl#
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	
+
+id	birnlex_disease
+title	BIRNLex Disease
+namespace	birnlex_disease
+uriprefix	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Disease.owl#
+foundry	No
+status	Production and review
+download	
+source	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Disease.owl#
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	
+
+id	birnlex_organismal_taxonomy
+title	BIRNLex Organismal Taxonomy
+namespace	birnlex_tax
+uriprefix	http://purl.org/nbirn/birnlex/ontology/BIRNLex-OrganismalTaxonomy.owl#
+foundry	No
+status	Production and review
+download	
+source	http://purl.org/nbirn/birnlex/ontology/BIRNLex-OrganismalTaxonomy.owl#
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	
+
+id	birnlex_ubo
+title	BIRNLex UBO
+namespace	birnlex_ubo
+uriprefix	http://birnlex.nbirn.net/ontology/BIRNLex-OBO-UBO.owl#
+foundry	No
+status	Production and review
+download	
+source	http://birnlex.nbirn.net/ontology/BIRNLex-OBO-UBO.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	This is a proposed upper biomedial ontology derived by examples from the Biodynamic Ontology, the Simple Upper Bio Ontology, the Ontology of Biomedical Reality, and the Foundational Model of Anatomy.  It is designed to be a very slim layer intervening between the Basic Formal Ontology (BFO) and the generic, domain, and application ontologies developed to formally represent entities relevant to biomedical research and clinical practice.  The intension is for their to be a shared layer for all of these ontologies to use to declares a biological context from which they can all derive required classes thereby making the equivalent foundational entities 100% algorithmically commensurate across all of these ontological artifacts.  At this date (2006-10-06), this is just a proposal meant for: review by the community of OBO Foundry-associated biomedical ontology developers; very sparse and preliminary with the bulk of the coverage in the domain of biomaterial and immaterial objects; immediate use by the BIRN Ontology Task Force with the expectation this normalized layer will expedite future integration/import of the upper level biomedical ontology eventually adopted and endorsed by the OBO Foundry participant ontology development community members.
+
+id	nif_molecule
+title	NIF Molecule
+namespace	NIF_Molecule
+uriprefix	http://purl.org/nif/ontology/NIF-Molecule.owl#
+foundry	No
+status	Production and review
+download	
+source	http://purl.org/nif/ontology/NIF-Molecule.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	
+
+id	nif_cell
+title	NIF Cell
+namespace	NIF_Cell
+uriprefix	http://purl.org/nif/ontology/NIF-Cell.owl#
+foundry	No
+status	Production and review
+download	
+source	http://purl.org/nif/ontology/NIF-Cell.owl
+home	http://openccdb.org/wiki/index.php/Disease_Ontology
+documentation	
+contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+format	owl
+description	
+
+
