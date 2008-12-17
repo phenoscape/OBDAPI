@@ -366,7 +366,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		rq.setSelectClause("n.uid AS uid");
 		
 		WhereClause wc = new SqlWhereClauseImpl();
-		wc.addLikeConstraint("lower(n.label)", searchTerm);
+		wc.addCaseInsensitiveRegexConstraint("lower(n.label)", searchTerm);
 		rq.setWhereClause(wc);
 		//System.out.println(rq.toSQL());
 		
@@ -396,7 +396,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addJoinConstraint("a.node_id", "n.node_id");
-		wc.addLikeConstraint("lower(a.label)", searchTerm);
+		wc.addCaseInsensitiveRegexConstraint("lower(a.label)", searchTerm);
 		rq.setWhereClause(wc);
 	//	System.out.println(rq.toSQL());
 		
@@ -433,7 +433,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addJoinConstraint("d.node_id", "n.node_id");
-		wc.addLikeConstraint("lower(d.label)", searchTerm);
+		wc.addCaseInsensitiveRegexConstraint("lower(d.label)", searchTerm);
 		rq.setWhereClause(wc);
 	//	System.out.println(rq.toSQL());
 		
