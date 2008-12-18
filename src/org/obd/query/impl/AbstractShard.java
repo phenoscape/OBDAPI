@@ -180,10 +180,54 @@ public abstract class AbstractShard implements Shard {
 	}
 
 	public Collection<Statement> getStatementsByNode(String id) {
-		LinkQueryTerm qt = new LinkQueryTerm();
+		LinkQueryTerm lqt = new LinkQueryTerm();
+		lqt.setNode(id);
+		Collection<Statement> stmts = getStatementsByQuery(lqt);
+		LiteralQueryTerm qt = new LiteralQueryTerm();
 		qt.setNode(id);
-		return getStatementsByQuery(qt);
+		stmts.addAll(getStatementsByQuery(qt));
+		return stmts;
 	}
+
+	public Collection<Statement> getNonRedundantStatementsForNode(String id) {
+		Collection<Statement> stmts = getStatementsByNode(id);
+		Collection<Statement> togo = new HashSet<Statement>();
+		// it would be much faster to do this in SQL..
+		for (Statement s : stmts) {
+			
+			if (s instanceof LinkStatement &&
+					isRedundant((LinkStatement)s))
+				togo.add(s);
+		}
+		stmts.removeAll(togo);
+		//Graph g = new Graph(stmts);
+		//g.trim();	
+		return stmts;
+	}
+
+	public boolean isRedundant(LinkStatement s) {
+		if (s.isReflexive())
+			return true;
+		LinkQueryTerm cq = new LinkQueryTerm();
+		cq.setNode(s.getNodeId());
+		cq.setTarget(new LinkQueryTerm(s.getTargetId()));
+		//System.err.println(cq.toString());
+		Collection<LinkStatement> rlist = getLinkStatementsByQuery(cq);
+		boolean isr = false;
+		for (LinkStatement rs : rlist) {
+			if (rs.isReflexive())
+				continue;
+			if (!rs.getTargetId().equals(s.getNodeId()) &&
+					!rs.getTargetId().equals(s.getTargetId()) &&
+					rs.getRelationId().equals(s.getRelationId())) {
+				//System.err.println("REDUNDANT:: "+rs);
+				isr = true;
+				break;
+			}
+		}
+		return isr;
+	}
+
 
 	public Collection<Statement> getStatementsForNodeWithSource(String id,
 			String ns) {
@@ -331,14 +375,14 @@ public abstract class AbstractShard implements Shard {
 	public List<ScoredNode> getSimilarNodes(String nodeId) {
 		return getSimilarNodes(nodeId, null);
 	}
-	
+
 	public List<ScoredNode> getSimilarNodes(String nodeId, String src) {
 		SimilaritySearchParameters params = new SimilaritySearchParameters();
 		params.ontologySourceId = src;
 		return getSimilarNodes(params, nodeId);
 	}
 
-	
+
 	public List<ScoredNode> getSimilarNodes(String nodeId, String ontologySourceId, QueryTerm hitNodeFilter) {
 		// use defaults
 		return
@@ -351,7 +395,7 @@ public abstract class AbstractShard implements Shard {
 		params.hitNodeFilter = hitNodeFilter;
 		return getSimilarNodes(params, nodeId);
 	}
-	
+
 	// TODO: don't put this here..
 	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, String nodeId) {
 		// TODO: use ontologySrcId
@@ -360,7 +404,7 @@ public abstract class AbstractShard implements Shard {
 			getAnnotationStatementsForAnnotatedEntity(nodeId, null, null);
 		return getSimilarNodes(params, stmts);
 	}
-	
+
 	public List<ScoredNode> getSimilarNodes(SimilaritySearchParameters params, QueryTerm nodeQueryTerm) {
 		Collection<Node> nodes = this.getNodesByQuery(nodeQueryTerm);
 		Collection<Statement> stmts = new LinkedList<Statement>();
@@ -856,7 +900,7 @@ public abstract class AbstractShard implements Shard {
 		sp.setId2(src2);
 		return sp;
 	}
-	
+
 	public Double getBasicSimilarityScore(String aeid1, String aeid2) {
 		SimilarityPair sp = compareAnnotationsByAnnotatedEntityPair(aeid1, aeid2);
 		return sp.getBasicSimilarityScore();
@@ -904,7 +948,7 @@ public abstract class AbstractShard implements Shard {
 			LinkQueryTerm extQt) {
 
 		SimilarityPair sp = new SimilarityPair();
-		
+
 		Set<String> assertedNodesInSet1 = new HashSet<String>();
 		Set<String> assertedNodesInSet2 = new HashSet<String>();
 		for (LinkStatement s : stmts1) {
@@ -1011,10 +1055,10 @@ public abstract class AbstractShard implements Shard {
 		sp.setMaximimumInformationContentForNodesInCommon(maxIC);
 		sp.setNodeWithMaximumInformationContent(nodeWithMaxIC);
 		sp.setInformationContentRatio(simGIC);
-		
+
 		calculateBestCommonNodeMap(sp);
 	}
-	
+
 	private void calculateBestCommonNodeMap(SimilarityPair sp) {
 		Map<String,String> bestCommonNodeMap = new HashMap<String,String>();
 		for (String nid : sp.getNodesInSet1()) {
@@ -1025,7 +1069,7 @@ public abstract class AbstractShard implements Shard {
 		}
 		sp.setBestCommonNodeMap(bestCommonNodeMap);
 	}
-	
+
 	private String caclulateBestCommonNode(SimilarityPair sp, String id, int setNum) {
 		String bestId = null;
 		Double bestIC = null;
@@ -1047,7 +1091,7 @@ public abstract class AbstractShard implements Shard {
 		Set<String> opSet = setNum == 1 ? sp.getNodesInSet2() : sp.getNodesInSet1();
 		for (String x : opSet) {
 			if (sp.getReflexiveClosure(x).contains(bestId)) {
-				
+
 			}
 		}
 		return bestId;

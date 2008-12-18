@@ -17,6 +17,7 @@ import org.obd.model.CompositionalDescription;
 import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
 import org.obd.model.Node;
+import org.obd.model.Statement;
 import org.obd.model.CompositionalDescription.Predicate;
 import org.obd.model.stats.ScoredNode;
 import org.obd.model.stats.SimilarityPair;
@@ -148,6 +149,10 @@ public class OBDMain {
 				}
 				else
 					draw(args[i]);
+			}
+			else if (args[i].equals("--nrlinks")) {
+				i++;
+				showNonRedundantLinksFrom(args[i]);
 			}
 			else if (args[i].equals("--cacheall")) {
 				i++;
@@ -303,6 +308,18 @@ public class OBDMain {
 		GraphVizWriter gvw = new GraphVizWriter(g);
 		System.out.println(gvw.generate());
 	}
+	
+	public void showNonRedundantLinksFrom(String id) {
+		System.err.println("nr links from: "+id);
+		Collection<Statement> stmts = multiShard.getNonRedundantStatementsForNode(id);
+		Graph g = new Graph(stmts);
+		//System.out.println(g.toString());
+		for (Statement s : stmts) {
+			System.out.println(s);
+		}
+	}
+
+	
 	public void compareNodes(boolean calcIC, String uid1, String uid2) {
 		System.out.println("COMPARING: "+uid1+" "+uid2);
 

@@ -1269,8 +1269,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 					AliasType.INTERNAL_ID, reiflinkNodeInternalId);
 			for (Statement ss : getLinkStatementsByQuery(linkMetadataDataQt))
 				s.addSubStatement(ss);
-			for (Statement ss : getLiteralStatementsByQuery(linkMetadataDataQt,
-			"tagval"))
+			//for (Statement ss : getLiteralStatementsByQuery(linkMetadataDataQt,"tagval"))
+			for (Statement ss : getLiteralStatementsByQuery(linkMetadataDataQt))
 				s.addSubStatement(ss);
 		}
 		s.setAppliesToAllInstancesOf(rs.getBoolean(APPLIES_TO_ALL));
@@ -1288,6 +1288,19 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			s.setUnionSemantics(true);
 		return s;
 	}
+	
+	public LiteralStatement createLiteralStatementFromResultSet(ResultSet rs)
+	throws SQLException {
+
+		LiteralStatement s = new LiteralStatement();
+		s.setNodeId(rs.getString(LINK_NODE_EXPOSED_ID_COLUMN));
+		s.setRelationId(rs.getString(LINK_RELATION_EXPOSED_ID_COLUMN));
+		String valCol = "val";
+		s.setValue(rs.getString(valCol));
+		// TODO setSourceId(s,rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN));
+		return s;
+	}
+
 
 	public LiteralStatement createLiteralStatementFromResultSet(String tbl, ResultSet rs)
 	throws SQLException {
@@ -1322,6 +1335,26 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 		return statements;
 	}
+	
+	public Collection<LiteralStatement> getLiteralStatementsByQuery(
+			QueryTerm queryTerm) {
+
+		RelationalQuery rq = translateQueryForLiteral(queryTerm);
+		Collection<LiteralStatement> statements = new LinkedList<LiteralStatement>();
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LiteralStatement s = createLiteralStatementFromResultSet(rs);
+				statements.add(s);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error in SQL: " + rq.toSQL());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return statements;
+	}
+
 
 	public Collection<LinkStatement> getImpliedLinkStatementsByQuery(
 			QueryTerm queryTerm, String rel, String innerLinkAlias) {
@@ -1347,6 +1380,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return statements;
 	}
 
+	/*
 	public Collection<LiteralStatement> getLiteralStatementsByQuery(
 			QueryTerm queryTerm) {
 		if (queryTerm instanceof LiteralQueryTerm
@@ -1362,12 +1396,13 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			return statements;
 		}
 	}
+	*/
 
 	@Override
 	public Collection<LiteralStatement> getLiteralStatementsByNode(
 			String nodeID, String relationID) {
 
-		System.out
+		System.err
 		.println("WARNING: getLiteralStatementsByNode is hacky and fully implemeneted.");
 
 		Collection<LiteralStatement> statements = new LinkedList<LiteralStatement>();
@@ -1409,30 +1444,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	}
 
-	protected Collection<LiteralStatement> getLiteralStatementsByQuery(
-			QueryTerm queryTerm, String tbl) {
-
-		Collection<LiteralStatement> statements = new LinkedList<LiteralStatement>();
-		if (queryTerm instanceof LinkQueryTerm) {
-			// cannot return anything by definition
-			return statements;
-		}
-		boolean join = tbl.equals("tagval");
-		RelationalQuery rq = translateQueryForLiteral(queryTerm, tbl, join);
-		try {
-			ResultSet rs = execute(rq);
-			while (rs.next()) {
-				LiteralStatement s = createLiteralStatementFromResultSet(tbl, rs);
-				// TODO setSourceId(s,rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN));
-
-				statements.add(s);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return statements;
-	}
 
 	public RelationalQuery translateQueryForNode(QueryTerm qt) {
 		return translateQueryForNode(qt,"query_node");
@@ -1456,8 +1467,34 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		rq.getSelectClause().setDistinct(true);
 		return rq;
 	}
+	
+	protected Collection<LiteralStatement> old___getLiteralStatementsByQuery(
+			QueryTerm queryTerm, String tbl) {
 
-	protected RelationalQuery translateQueryForLiteral(QueryTerm qt, String tbl,
+		Collection<LiteralStatement> statements = new LinkedList<LiteralStatement>();
+		if (queryTerm instanceof LinkQueryTerm) {
+			// cannot return anything by definition
+			return statements;
+		}
+		boolean join = tbl.equals("tagval");
+		RelationalQuery rq = old___translateQueryForLiteral(queryTerm, tbl, join);
+		try {
+			ResultSet rs = execute(rq);
+			while (rs.next()) {
+				LiteralStatement s = createLiteralStatementFromResultSet(tbl, rs);
+				// TODO setSourceId(s,rs.getInt(LINK_SOURCE_INTERNAL_ID_COLUMN));
+
+				statements.add(s);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return statements;
+	}
+
+
+	protected RelationalQuery old___translateQueryForLiteral(QueryTerm qt, String tbl,
 			boolean joinRelationNode) {
 		RelationalQuery rq = new SqlQueryImpl();
 		WhereClause wc = rq.getWhereClause();
@@ -1471,7 +1508,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		SelectClause selectClause = rq.getSelectClause();
 		selectClause.setDistinct(true);
 		selectClause.addColumn(tbl + ".*");
-		selectClause.addColumn(tblCol(SUBJECT_NODE_ALIAS,NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
+		selectClause.addColumn(tblCol(SUBJECT_NODE_ALIAS,NODE_EXPOSED_ID_COLUMN), 
+				LINK_NODE_EXPOSED_ID_COLUMN);
 
 		if (joinRelationNode) {
 			rq.addTable(NODE_TABLE, RELATION_NODE_ALIAS);
@@ -1486,12 +1524,10 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			selectClause.addColumn("CAST('" + pred
 					+ "' AS VARCHAR) AS predicate_uid");
 		}
-
 		return rq;
-
 	}
 
-	public RelationalQuery translateQueryForLiteral(QueryTerm qt) {
+	public RelationalQuery old___translateQueryForLiteral(QueryTerm qt) {
 		RelationalQuery rq = new SqlQueryImpl();
 		WhereClause wc = rq.getWhereClause();
 
@@ -1523,6 +1559,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			return translateQueryForLinkStatement(outerq, targetLinkAlias);
 		}
 
+                // translate the link query to an SQL term. This SQL term will lack
+                // select clauses
 		String linkTableAlias = translateQuery(qt, rq, null);
 		SelectClause selectClause = rq.getSelectClause();
 		selectClause.setDistinct(true);
@@ -1587,7 +1625,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			// we have already joined the target node table. Use the alias given
 			selectClause.addColumn(tblCol(targetNodeTable,
 					NODE_EXPOSED_ID_COLUMN), LINK_TARGET_EXPOSED_ID_COLUMN);
-
 		}
 
 		selectClause.addColumn(tblCol(linkTableAlias,LINK_REIF_INTERNAL_ID_COLUMN), LINK_REIF_INTERNAL_ID_COLUMN);
@@ -1601,6 +1638,73 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			selectClause.addColumn("NULL", LINK_REIF_EXPOSED_ID_COLUMN);
 		}
 		// rq.addTable(NODE_TABLE);
+		return rq;
+	}
+
+	public RelationalQuery translateQueryForLiteral(QueryTerm qt) {
+		return translateQueryForLiteral(qt, null);
+	}
+	public RelationalQuery translateQueryForLiteral(QueryTerm qt,
+			String targetLiteralAlias) {
+		RelationalQuery rq = new SqlQueryImpl();
+
+		if (!(qt instanceof LiteralQueryTerm)) {
+			// it only makes sense to return links for link queries;
+			// a query to for example LiteralQuery("apoptosis") should
+			// be wrapped such that links with this node are returned
+			LiteralQueryTerm outerq = new LiteralQueryTerm();
+			outerq.setNode(qt);
+			return translateQueryForLiteral(outerq, targetLiteralAlias);
+		}
+
+                // translate the link query to an SQL term. This SQL term will lack
+                // select clauses
+		String linkTableAlias = translateQuery(qt, rq, null);
+		SelectClause selectClause = rq.getSelectClause();
+		selectClause.setDistinct(true);
+		selectClause.addColumn(linkTableAlias + ".*");
+		WhereClause wc = rq.getWhereClause();
+
+		// The basic query translation leaves us surrogate keys hanging off
+		// link.
+		// we can join using an extra node table alias;
+		// however, the appropriate table may already have been joined.
+
+		String subjectJoinCol = tblCol(linkTableAlias, NODE_INTERNAL_ID_COLUMN);
+		String subjectNodeTable = rq.getTableAliasReferencedInJoin(
+				subjectJoinCol, NODE_TABLE);
+		if (subjectNodeTable == null) {
+			// add a new alias
+			rq.addTable(NODE_TABLE, SUBJECT_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(SUBJECT_NODE_ALIAS,
+					NODE_INTERNAL_ID_COLUMN), subjectJoinCol);
+			selectClause.addColumn(tblCol(SUBJECT_NODE_ALIAS,
+					NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
+		} else {
+			// we have already joined the subject node table. Use the alias
+			// given
+			selectClause.addColumn(tblCol(subjectNodeTable,
+					NODE_EXPOSED_ID_COLUMN), LINK_NODE_EXPOSED_ID_COLUMN);
+
+		}
+		String relationJoinCol = tblCol(linkTableAlias, LINK_RELATION_INTERNAL_ID_COLUMN);
+		String relationNodeTable = rq.getTableAliasReferencedInJoin(
+				relationJoinCol, NODE_TABLE);
+		if (relationNodeTable == null) {
+			// add a new alias
+			rq.addTable(NODE_TABLE, RELATION_NODE_ALIAS);
+			wc.addJoinConstraint(tblCol(RELATION_NODE_ALIAS,
+					NODE_INTERNAL_ID_COLUMN), relationJoinCol);
+			selectClause.addColumn(tblCol(RELATION_NODE_ALIAS,
+					NODE_EXPOSED_ID_COLUMN), LINK_RELATION_EXPOSED_ID_COLUMN);
+		} else {
+			// we have already joined the relation node table. Use the alias
+			// given
+			selectClause.addColumn(tblCol(relationNodeTable,
+					NODE_EXPOSED_ID_COLUMN), LINK_RELATION_EXPOSED_ID_COLUMN);
+
+		}
+
 		return rq;
 	}
 
@@ -1754,6 +1858,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			}
 			return "";
 		} else if (qt instanceof LiteralQueryTerm
+                           && false
 				&& ((LiteralQueryTerm) qt).isAlias()) { // OLD
 			LiteralQueryTerm cqt = (LiteralQueryTerm) qt;
 			String tbl = "node_literal";
@@ -1914,13 +2019,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			translateQuery(cqt.getTarget(), rq, tblCol(tblAlias, LINK_TARGET_INTERNAL_ID_COLUMN));
 			translateQuery(cqt.getSource(), rq, tblCol(tblAlias, LINK_SOURCE_INTERNAL_ID_COLUMN));
 			translateQuery(cqt.getPositedBy(), rq, tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN));
-			/*
-			translateQuery(cqt.getNode(), rq, tblAlias+ ".node_id");
-			translateQuery(cqt.getRelation(), rq, tblAlias+ ".predicate_id");
-			translateQuery(cqt.getTarget(), rq, tblAlias+ ".object_id");
-			translateQuery(cqt.getSource(), rq, tblAlias+ ".source_id");
-			translateQuery(cqt.getPositedBy(), rq,tblAlias + ".reiflink_node_id");
-			 */
 			// returns the name of the link table alias used in this query
 			if (qt.getIsAnnotation() != null) {
 				String isNullConstr = qt.getIsAnnotation() ? " IS NOT NULL"
@@ -1928,6 +2026,21 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 				wc.addConstraint(tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN)
 						+ isNullConstr);
 			}
+			return tblAlias;
+		} else if (qt instanceof LiteralQueryTerm) {
+
+			// Example: LitQ(alias,x) => node_literal * node[r]{alias} 
+			LiteralQueryTerm cqt = (LiteralQueryTerm) qt;
+			String tbl = LITERAL_TABLE;
+			String tblAlias = rq.addAutoAliasedTable(tbl, qt.getQueryAlias());
+			if (subjCol != null) {
+				wc.addConstraint(tblAlias + "." + aspectCol + " = " + subjCol);
+			}
+
+			translateQuery(cqt.getNode(), rq, tblCol(tblAlias, LINK_NODE_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getRelation(), rq, tblCol(tblAlias, LINK_RELATION_INTERNAL_ID_COLUMN));
+			translateQuery(cqt.getValue(), rq, tblCol(tblAlias, "val")); 
+			translateQuery(cqt.getSource(), rq, tblCol(tblAlias, LINK_SOURCE_INTERNAL_ID_COLUMN));
 			return tblAlias;
 		} else if (qt instanceof RootQueryTerm) { // TODO: DRY
 			RootQueryTerm rqt = (RootQueryTerm) qt;

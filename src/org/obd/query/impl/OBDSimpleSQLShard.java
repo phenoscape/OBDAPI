@@ -70,6 +70,7 @@ public class OBDSimpleSQLShard extends OBDSQLShard {
 	}
 
 
+	/*
 	@Override
 	public Collection<LiteralStatement> getLiteralStatementsByQuery(
 			QueryTerm queryTerm) {
@@ -91,6 +92,6 @@ public class OBDSimpleSQLShard extends OBDSQLShard {
 		return rq;
 
 	}
-
+*/
 
 }

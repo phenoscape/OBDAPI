@@ -153,13 +153,23 @@ public interface Shard extends BasicRepository,
 	
 	public Collection<LiteralStatement> getLiteralStatementsByNode(String nodeID, String relationID);
 
+	/**
+	 * as getNonRedundantStatementsForNode(id), excluding links that are redundant by simple transitivity.
+	 * 
+	 * R(a,b) is redundant iff
+	 * exists R',x and links: R(a,x),R'(x,b)
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Collection<Statement> getNonRedundantStatementsForNode(String id);
 
  
 
 	/**
 	 * as getStatementsForNode(id), possibly filtering based on whether the statement is asserted or inferred
 	 * @param id
-	 * @param isInferred - if explicitly set to false, obly return asserted
+	 * @param isInferred - if explicitly set to false, only return asserted
 	 * @return
 	 */
 	public Collection<Statement> getStatementsForNode(String id, Boolean isInferred);

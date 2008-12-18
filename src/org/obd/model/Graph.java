@@ -491,6 +491,9 @@ public class Graph implements BasicRepository, Serializable {
 
 	}
 
+	/**
+	 * removes redundant links
+	 */
 	public void trim() {
 		Collection<LinkStatement> togo = new HashSet<LinkStatement>();
 		for (Statement s : getAllStatements()) {
