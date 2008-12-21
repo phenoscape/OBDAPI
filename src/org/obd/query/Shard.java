@@ -395,12 +395,12 @@ public interface Shard extends BasicRepository,
 	public Collection<LinkStatement> getClosure(Collection<String> ids, String relId);
 
 
-	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm);
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies);
 
 
-	public Collection<Node> getNodesForSearchTermBySynonym(String term);
+	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies);
 
 
-	public Collection<Node> getNodesForSearchTermByDefinition(String term);
+	public Collection<Node> getNodesForSearchTermByDefinition(String term, boolean zfinOption, List<String> ontologies);
 
 }

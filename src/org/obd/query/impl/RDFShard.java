@@ -2,6 +2,7 @@ package org.obd.query.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 
 import org.obd.model.CompositionalDescription;
 import org.obd.model.Graph;
@@ -578,17 +579,17 @@ public class RDFShard extends AbstractShard implements Shard {
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm) {
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermBySynonym(String term) {
+	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermByDefinition(String term) {
+	public Collection<Node> getNodesForSearchTermByDefinition(String term, boolean zfinOption, List<String> ontologies) {
 		// TODO Auto-generated method stub
 		return null;
 	}

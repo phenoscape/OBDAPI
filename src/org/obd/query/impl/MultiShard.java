@@ -448,17 +448,17 @@ public class MultiShard extends AbstractShard implements Shard {
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm) {
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermBySynonym(String term) {
+	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermByDefinition(String term) {
+	public Collection<Node> getNodesForSearchTermByDefinition(String term, boolean zfinOption, List<String> ontologies) {
 		// TODO Auto-generated method stub
 		return null;
 	}
