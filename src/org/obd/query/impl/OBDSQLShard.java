@@ -379,7 +379,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addInConstraint("n.source_id", sq);
 		}
 		if(zfinOption){
-			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GEN[O|E]");
+			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
 		}
 		rq.setWhereClause(wc);
 		//System.out.println(rq.toSQL());
@@ -426,7 +426,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addInConstraint("n.source_id", sq);
 		}
 		if(zfinOption){
-			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GEN[O|E]");
+			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
 		}
 		rq.setWhereClause(wc);
 		System.out.println(rq.toSQL());
@@ -476,7 +476,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addInConstraint("n.source_id", sq);
 		}
 		if(zfinOption){
-			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GEN[O|E]");
+			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
 		}
 		rq.setWhereClause(wc);
 		System.out.println(rq.toSQL());
