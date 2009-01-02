@@ -399,9 +399,9 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return results;
 	}
 	
-	public Collection<Node> getNodesForSearchTermBySynonym(String searchTerm, boolean zfinOption, List<String> ontologies){
+	public Collection<Node> getNodesForSearchTermBySynonym(String searchTerm, boolean zfinOption, List<String> ontologies, boolean searchByName){
 		
-		Collection<Node> results = new HashSet<Node>();
+		Collection<Node> results = new ArrayList<Node>();
 		
 		RelationalQuery rq = new SqlQueryImpl();
 		rq.addTable("alias", "a");
@@ -410,7 +410,12 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addJoinConstraint("a.node_id", "n.node_id");
-		wc.addCaseInsensitiveRegexConstraint("lower(a.label)", searchTerm);
+		if(searchByName){
+			wc.addCaseInsensitiveRegexConstraint("lower(a.label)", searchTerm);
+		}
+		else{
+			wc.addCaseInsensitiveRegexConstraint("lower(n.label)", searchTerm);
+		}
 		if(ontologies != null){
 			RelationalQuery sq = new SqlQueryImpl();
 			sq.addTable(NODE_TABLE, "n1");
@@ -424,7 +429,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GEN[O|E]");
 		}
 		rq.setWhereClause(wc);
-	//	System.out.println(rq.toSQL());
+		System.out.println(rq.toSQL());
 		
 		try {
 			ResultSet rs = execute(rq);

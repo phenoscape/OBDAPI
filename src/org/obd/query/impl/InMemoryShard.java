@@ -132,7 +132,7 @@ public class InMemoryShard extends AbstractShard implements Shard {
 		return null;
 	}
 
-	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies) {
+	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies, boolean searchByName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
