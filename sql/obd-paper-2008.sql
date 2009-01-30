@@ -82,6 +82,16 @@ CREATE OR REPLACE VIEW omim_genotype_gene AS
   l2n.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:variant_of')
   AND l2n.object_uid like 'NCBI_Gene:%';
 
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('omim_genotype_gene');
+-- CREATE INDEX omim_genotype_gene_idx_id ON omim_genotype_gene(node_id);
+-- CREATE INDEX omim_genotype_gene_idx_uid ON omim_genotype_gene(uid);
+-- CREATE INDEX omim_genotype_gene_idx_label ON omim_genotype_gene(label);
+-- CREATE INDEX omim_genotype_gene_idx_gene_id ON omim_genotype_gene(gene_id);
+-- CREATE UNIQUE INDEX omim_genotype_gg_idx_gene_id ON omim_genotype_gene(node_id,gene_id);
+-- END MATERIALIZE
+
+
 CREATE OR REPLACE VIEW omim_gene AS
  SELECT DISTINCT
   l2n.object_id AS node_id,
@@ -262,3 +272,14 @@ gene. Formally: avg({DISTINCT ic(EQ) : annotation(g) }). This means
 that if there are multiple redundant annotations to the exact same EQ
 description, the numbers will *not* be skewed towards this description
 (however, this is not a guarantee there will be no annotation bias).';
+
+
+CREATE OR REPLACE VIEW podocyte_IC AS
+ select uid,label,get_information_content(node_id) as ic from node where node_id in (select object_id from node_link where node_uid='ZFA:0000151' or node_uid = 'ZFA:0009285' or node_uid='ZFA:0000150') and uid like 'ZFA%' order by ic;
+
+CREATE OR REPLACE VIEW mislocalised_posteriorly_IC AS
+ select uid,label,get_information_content(node_id) as ic from node where node_id in (select object_id from node_link where node_uid='PATO:0001922') and uid like 'PATO:%' order by ic;
+
+CREATE OR REPLACE VIEW rectum_IC AS
+ select uid,label,get_information_content(node_id) as ic from node where node_id in (select object_id from node_link where node_uid='PATO:0001922') and uid like 'PATO:%' order by ic;
+

@@ -1,0 +1,254 @@
+CREATE OR REPLACE FUNCTION show_congruence_for_omim_gene() RETURNS VOID
+ AS
+$$
+ DECLARE
+  c1 annotated_entity_congruence_by_annotsrc%ROWTYPE;
+  v_base_source_id  INTEGER;
+  v_target_source_id  INTEGER;
+  v_node_id  INTEGER;
+  v_uid  VARCHAR;
+  v_label  VARCHAR;
+  v_congruence FLOAT;
+ BEGIN
+  FOR v_node_id IN SELECT node_id FROM omim_gene LOOP
+   SELECT INTO v_uid, v_label uid,label FROM node WHERE node_id=v_node_id;
+   RAISE NOTICE 'Gene: % %', v_uid,v_label;
+   FOR c1 IN SELECT * FROM annotated_entity_congruence_by_annotsrc WHERE annotated_entity_id = v_node_id LOOP
+     RAISE NOTICE '    GlobalCongruence(%) =  %', node_uid(c1.source_id),c1.congruence;
+   END LOOP;
+   RAISE NOTICE '  AverageCongruence =  %', avg(congruence) FROM annotated_entity_congruence_by_annotsrc WHERE annotated_entity_id = v_node_id;
+   
+  END LOOP;
+ END
+$$ LANGUAGE 'plpgsql';
+
+COMMENT ON  FUNCTION show_congruence_for_omim_gene IS 'Displays source-vs-all congruence for each annotation source within an OMIM gene. 
+
+congruence(ae,s) = |annotnodes*(ae,s)| / |annotnodes*(ae)|
+
+i.e. the proportion of classes s used to annotate the gene vs the total number of classes used to annotate the gene.
+
+If annotation sources are in agreement, then this should approximate 1: i.e. an annotation source does not lack a class used by another source.
+
+Unfortunately this number is biased by secondary sources such as GAD, which provide annotations to different ontologies (e.g. DO)
+
+';
+
+
+CREATE OR REPLACE FUNCTION show_pairwise_congruence_for_omim_gene() RETURNS VOID
+ AS
+$$
+ DECLARE
+  c1 annotated_entity_congruence_between_annotsrc_pair;
+  v_node_id  INTEGER;
+  v_uid  VARCHAR;
+  v_label  VARCHAR;
+  v_congruence FLOAT;
+ BEGIN
+  FOR v_node_id IN SELECT node_id FROM omim_gene LOOP
+   SELECT INTO v_uid, v_label uid,label FROM node WHERE node_id=v_node_id;
+   RAISE NOTICE 'Gene: % %', v_uid,v_label;
+   FOR c1 IN SELECT * FROM annotated_entity_congruence_between_annotsrc_pair WHERE annotated_entity_id = v_node_id LOOP
+     RAISE NOTICE '    GlobalCongruence( % , %s ) =  %', node_uid(c1.base_source_id),node_uid(c1.target_source_id),c1.congruence;
+   END LOOP;
+   RAISE NOTICE '  AverageCongruence =  %', avg(congruence) FROM annotated_entity_congruence_between_annotsrc_pair WHERE annotated_entity_id = v_node_id;
+   
+  END LOOP;
+ END
+$$ LANGUAGE 'plpgsql';
+
+COMMENT ON FUNCTION show_pairwise_congruence_for_omim_gene IS 'Displays source-vs-source congruence of each annotation source pair within an OMIM gene.
+
+
+
+the proportion of (inferred) nodes in common divided by the proportion
+of nodes in the union of both annotation sets:
+
+  congruence(ae,s1,s2) = |annotnodes*(ae,s1) ^ annotnodes*(ae,s2)| / |annotnodes*(ae,s1) UNION annotnodes*(ae,s2)|
+
+Here, annotnodes*(ae,s) is the set of classes used to annotated ae by
+s, together with all classes that are inferred to be parents of those
+classes.
+
+For example, if ae is a gene, s1 may annotate {T-cell,astrocyte}, and
+s2 may annotate {lymphocyte,interneuron}. The inferred nodes in common
+are {lymphocyte,nerve cell,cell}. The inferred nodesin the union are
+{T-cell,astrocyte,glial cell,neuron,lymphocyte,nerve cell,cell}. Thus
+the congruence is 3/7.
+
+We can visualize this is graph coloring, with nodes in one set and its
+deductive closure colored one way, the other annotation set colored
+the other way, with some color mixing indicating the intersection.
+
+';
+
+
+CREATE TABLE cached_pairwise_similarity (
+  node1_id  INT,
+  node2_id  INT,
+  node1_total_nodes INT,
+  node2_total_nodes INT,
+  total_nodes_in_intersection INT,
+  basic_score FLOAT,
+  max_ic FLOAT,
+  ic_ratio FLOAT,
+  iccs FLOAT
+);
+
+CREATE UNIQUE INDEX cps1 ON cached_pairwise_similarity(node1_id,node2_id);
+CREATE INDEX cps2 ON cached_pairwise_similarity(node1_id);
+CREATE INDEX cps3 ON cached_pairwise_similarity(node2_id);
+ 
+CREATE OR REPLACE FUNCTION populate_cached_pairwise_similarity_for_omim_genotypes() RETURNS VOID
+ AS
+$$
+ DECLARE
+  v_node1_id  INTEGER;
+  v_node2_id  INTEGER;
+ BEGIN
+  FOR v_node1_id IN SELECT node_id FROM omim_genotype LOOP
+   FOR v_node2_id IN SELECT node_id FROM omim_genotype LOOP
+    RAISE NOTICE '  comparing % vs %',v_node1_id,v_node2_id;
+    INSERT INTO cached_pairwise_similarity  SELECT * FROM node_pair_annotation_similarity_score WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+    UPDATE cached_pairwise_similarity SET max_ic = get_max_ic(v_node1_id,v_node2_id) WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+   END LOOP;
+  END LOOP;
+ END
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE VIEW intragene_genotype_similarity AS
+ SELECT
+  ogg.gene_id,
+  ogg.gene_uid,
+  ogg.gene_label,
+  AVG(basic_score) AS avg_basic_score,
+  MAX(basic_score) AS max_basic_score,
+  AVG(max_ic) AS avg_max_ic,
+  MAX(max_ic) AS max_max_ic,
+  COUNT(DISTINCT ogg.node_id) AS num_genotypes
+ FROM
+  omim_genotype_gene AS ogg
+  INNER JOIN omim_genotype_gene AS ogg2 ON (ogg.gene_id=ogg2.gene_id)
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id)
+ GROUP BY
+  ogg.gene_id,
+  ogg.gene_uid,
+  ogg.gene_label;
+
+COMMENT ON VIEW intragene_genotype_similarity IS 'summary statistics
+for two genotypes of the same gene. An all by all scoring and max IC
+is performed for every unique pair of non-identical genotypes, then
+the average and maximum is found. ';
+
+  
+CREATE OR REPLACE VIEW intergene_genotype_similarity AS
+ SELECT
+  ogg.gene_id,
+  ogg.gene_uid,
+  ogg.gene_label,
+  ogg2.gene_id AS gene2_id,
+  ogg2.gene_uid AS gene2_uid,
+  ogg2.gene_label AS gene2_label,
+  AVG(basic_score) AS avg_basic_score,
+  MAX(basic_score) AS max_basic_score,
+  AVG(max_ic) AS avg_max_ic,
+  MAX(max_ic) AS max_max_ic,
+  COUNT(DISTINCT ogg.node_id) AS num_genotypes
+ FROM
+  omim_genotype_gene AS ogg
+  INNER JOIN omim_genotype_gene AS ogg2 ON (ogg.gene_id != ogg2.gene_id)
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id)
+ GROUP BY
+  ogg.gene_id,
+  ogg.gene_uid,
+  ogg.gene_label,
+  ogg2.gene_id,
+  ogg2.gene_uid,
+  ogg2.gene_label;
+
+COMMENT ON VIEW intergene_genotype_similarity IS 'summary statistics
+for two genotypes of different genes. For every gene pair, an all by
+all scoring and max IC is performed for every pair of gene-spanning
+genotypes, then the average and maximum is found';
+
+  
+CREATE OR REPLACE VIEW intergene_genotype_similarity_summary AS
+ SELECT
+  ogg.gene_id,
+  ogg.gene_uid,
+  ogg.gene_label,
+  MAX(avg_basic_score) AS max_avg_basic_score,
+  MAX(max_basic_score) AS max_max_basic_score,
+  MAX(avg_max_ic) AS max_avg_max_ic,
+  MAX(max_max_ic) AS max_max_max_ic
+ FROM
+  intergene_genotype_similarity AS ogg
+ GROUP BY
+  ogg.gene_id,
+  ogg.gene_uid,
+  ogg.gene_label;
+ 
+COMMENT ON VIEW intergene_genotype_similarity_summary IS 'average and
+maximums for comparisons of non-identical gene pairs';
+
+CREATE OR REPLACE VIEW genotype_gene_similarity AS
+ SELECT
+  ogg1.gene_id AS gene1_id,
+  ogg1.gene_uid AS gene1_uid,
+  ogg1.gene_label AS gene1_label,
+  ogg1.uid AS genotype1_uid,
+  ogg1.label AS genotype1_label,
+  ogg2.gene_id AS gene2_id,
+  ogg2.gene_uid AS gene2_uid,
+  ogg2.gene_label AS gene2_label,
+  ogg2.uid AS genotype2_uid,
+  ogg2.label AS genotype2_label,
+  cps.*
+ FROM
+  omim_genotype_gene AS ogg1
+  INNER JOIN omim_genotype_gene AS ogg2 ON (ogg1.gene_id=ogg2.gene_id)
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg1.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id);
+  
+CREATE OR REPLACE VIEW cached_pairwise_similarity_sym AS
+ SELECT
+  node1_id,
+  node2_id,
+  node1_total_nodes,
+  node2_total_nodes,
+  total_nodes_in_intersection,
+  basic_score,
+  max_ic,
+  ic_ratio,
+  iccs
+ FROM 
+  cached_pairwise_similarity 
+ UNION
+ SELECT
+  node2_id AS node1_id,
+  node1_id AS node2_id,
+  node2_total_nodes AS node1_total_nodes,
+  node1_total_nodes AS node2_total_nodes,
+  total_nodes_in_intersection,
+  basic_score,
+  max_ic,
+  ic_ratio,
+  iccs
+ FROM 
+  cached_pairwise_similarity;
+
+-- BEGIN MATERIALIZE
+-- CREATE UNIQUE INDEX cpss1 ON cached_pairwise_similarity_sim(node1_id,node2_id);
+-- CREATE INDEX cpss2 ON cached_pairwise_similarity_sim(node1_id);
+-- CREATE INDEX cpss3 ON cached_pairwise_similarity_sim(node2_id);
+-- END MATERIALIZE
+
+-- always 1!
+CREATE OR REPLACE VIEW genotype_best_match_for_node1_basic AS
+ SELECT
+  cps.*
+ FROM
+  cached_pairwise_similarity_sym AS cps
+  WHERE NOT EXISTS (SELECT * FROM cached_pairwise_similarity_sym AS cps2 WHERE cps.node1_id=cps2.node1_id AND cps2.basic_score > cps.basic_score);
+
+  
+ 

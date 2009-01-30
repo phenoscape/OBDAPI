@@ -154,7 +154,7 @@ public interface Shard extends BasicRepository,
 	public Collection<LiteralStatement> getLiteralStatementsByNode(String nodeID, String relationID);
 
 	/**
-	 * as getNonRedundantStatementsForNode(id), excluding links that are redundant by simple transitivity.
+	 * as getStatementsForNode(id), excluding links that are redundant by simple transitivity.
 	 * 
 	 * R(a,b) is redundant iff
 	 * exists R',x and links: R(a,x),R'(x,b)
@@ -163,6 +163,8 @@ public interface Shard extends BasicRepository,
 	 * @return
 	 */
 	public Collection<Statement> getNonRedundantStatementsForNode(String id);
+	
+	public Collection<Statement> getNonRedundantStatementsForNode(String id, QueryTerm rel);
 
  
 
@@ -233,7 +235,7 @@ public interface Shard extends BasicRepository,
 	/**
 	 * Given a node identifier, retrieve the class expression defining this node
 	 * @param id
-	 * @param traverseNamedClasses
+	 * @param traverseNamedClasses - if true, this was recursively build the description, even checking if named classes have xp defs
 	 * @return null if none found
 	 */
 	

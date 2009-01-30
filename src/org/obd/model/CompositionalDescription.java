@@ -228,9 +228,7 @@ public class CompositionalDescription extends Node implements Comparable {
 						// none assigned so far
 						genus = arg;
 					}
-					else {
-						return false;
-					}
+					return true;
 				}
 			}
 			return true;
@@ -254,12 +252,10 @@ public class CompositionalDescription extends Node implements Comparable {
 						// none assigned so far
 						genus = arg;
 					}
-					else {
-						return null;
-					}
+					return genus;
 				}
 			}
-			return genus;
+			return null;
 		}
 		else {
 			return null;

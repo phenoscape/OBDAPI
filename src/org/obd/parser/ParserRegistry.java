@@ -9,6 +9,7 @@ public class ParserRegistry {
 			HomologeneParser.class,
 			MGIGenotypePhenotypeParser.class,
 			OBOFormatParser.class,
+			ZFINPhenotypeEnvironmentParser.class,
 			ZFINGenotypeFeatureParser.class,
 			ZFINGenotypePhenotypeOBOParser.class
 	};

@@ -27,6 +27,9 @@ CREATE INDEX transitive_relation_node_idx_node ON transitive_relation_node(node_
 CREATE INDEX transitive_relation_node_idx_node_uid ON transitive_relation_node(node_id,uid);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW metadata_relation_node AS SELECT * FROM node WHERE metatype='R' AND is_metadata='t';
+COMMENT ON VIEW metadata_relation_node IS 'A relation node that is for metadata relations (annotationProperties in OWL)';
+
 CREATE OR REPLACE VIEW instance_node AS SELECT * FROM node WHERE metatype='I';
 COMMENT ON VIEW instance_node IS 'A graph node representing a Instance. Examples: an instance of an Annotation; an instance of a Person';
 
@@ -133,10 +136,16 @@ CREATE OR REPLACE VIEW instantiation_link AS
  FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id);
 COMMENT ON VIEW instantiation_link IS 'A link of type "instance_of" between an instance and a class';
 -- DUPLCATE; TODO: dereprecate one
+
 CREATE OR REPLACE VIEW instance_of_link AS
  SELECT link.*
  FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id)
  WHERE combinator='';
+
+CREATE OR REPLACE VIEW asserted_instance_of_link AS
+ SELECT link.*
+ FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id)
+ WHERE combinator='' AND is_inferred='f';
 
 CREATE OR REPLACE VIEW asserted_instantiation_link AS SELECT * FROM instantiation_link WHERE is_inferred='f';
 COMMENT ON VIEW asserted_instantiation_link IS 'An instantiation link that is asserted (not implied/inferred)';
@@ -335,6 +344,46 @@ COMMENT ON VIEW differentium_link_to_label IS 'A differentium_link
 with a human-readable label for the link; substitutes the ID of the
 predicate and the ID of the object/relatum with their labels. Example:
 "part_of nucleus"';
+
+-- TODO: change names, these are misleading..
+-- useful for populating xps
+-- e.g. given some E instances and some Q instances, with
+-- instance-level inheres_in relations we make find all 
+-- EQ combinations
+CREATE OR REPLACE VIEW some_some_relation_by_asserted_instance_links AS 
+ SELECT DISTINCT
+  link.predicate_id,
+  nt.object_id AS node_class_id,
+  obt.object_id AS object_class_id
+ FROM link 
+  INNER JOIN asserted_instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN asserted_instance_of_link AS obt ON (link.object_id=obt.node_id);
+
+-- ??
+CREATE OR REPLACE VIEW some_some_relation_by_asserted_instances AS 
+ SELECT DISTINCT
+  link.predicate_id,
+  nt.object_id AS node_class_id,
+  obt.object_id AS object_class_id
+ FROM link 
+  INNER JOIN instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id)
+ WHERE
+  EXISTS (SELECT * FROM asserted_instance_of_link AS c1 WHERE c1.object_id=nt.object_id)
+ AND
+  EXISTS (SELECT * FROM asserted_instance_of_link AS c2 WHERE c2.object_id=obt.object_id);
+
+
+CREATE OR REPLACE VIEW some_some_relation_by_instance_links AS 
+ SELECT DISTINCT
+  link.predicate_id,
+  nt.object_id AS node_class_id,
+  obt.object_id AS object_class_id,
+  nt.is_inferred AS is_inferred_node,
+  obt.is_inferred AS is_inferred_object
+ FROM link 
+  INNER JOIN instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id);
 
 
 -- ************************************************************
@@ -1418,6 +1467,83 @@ CREATE OR REPLACE VIEW implied_link_count_by_node_source AS
  WHERE link.is_inferred='t'
  GROUP BY source.uid,source.label;
 
+CREATE OR REPLACE VIEW instance_count_by_class AS
+ SELECT
+  object_id AS class_node_id,
+  count(DISTINCT node_id) AS instance_count
+ FROM
+  instance_of_link
+ GROUP BY
+  object_id;
+
+CREATE OR REPLACE VIEW asserted_instance_count_by_class AS
+ SELECT
+  object_id AS class_node_id,
+  count(DISTINCT node_id) AS instance_count
+ FROM
+  asserted_instance_of_link
+ GROUP BY
+  object_id;
+
+CREATE OR REPLACE VIEW instance_count_by_class_all AS
+ SELECT DISTINCT
+  ic.class_node_id,
+  aic.instance_count AS asserted_instance_count,
+  ic.instance_count AS instance_count
+ FROM
+  instance_count_by_class AS ic
+  LEFT OUTER JOIN asserted_instance_count_by_class AS aic USING (class_node_id);
+
+CREATE OR REPLACE VIEW relation_summary AS 
+ SELECT 
+  pred.uid AS relation_uid,
+  pred.label AS relation_label,
+  count(link.link_id) AS link_count,
+  count(DISTINCT link.node_id) AS node_count,
+  count(DISTINCT link.object_id) AS obj_count,
+  count(DISTINCT link.source_id) AS source_count
+ FROM link 
+  INNER JOIN node AS pred ON (link.predicate_id=pred.node_id)
+ GROUP BY 
+  pred.uid,
+  pred.label;
+
+CREATE OR REPLACE VIEW instance_level_relation_summary AS 
+ SELECT 
+  pred.uid AS relation_uid,
+  pred.label AS relation_label,
+  count(link.link_id) AS link_count,
+  count(DISTINCT link.node_id) AS node_count,
+  count(DISTINCT link.object_id) AS obj_count,
+  count(DISTINCT link.source_id) AS source_count
+ FROM link 
+  INNER JOIN node AS pred ON (link.predicate_id=pred.node_id)
+  INNER JOIN node AS n ON (link.node_id=n.node_id)
+  INNER JOIN node AS ob ON (link.object_id=ob.node_id)
+ WHERE
+  n.metatype='I'
+  AND
+  ob.metatype='I'
+ GROUP BY 
+  pred.uid,
+  pred.label;
+
+CREATE OR REPLACE VIEW instance_level_relation_class_summary AS 
+ SELECT 
+  pred.uid AS relation_uid,
+  pred.label AS relation_label,
+  count(link.link_id) AS link_count,
+  count(DISTINCT nt.object_id) AS node_class_count,
+  count(DISTINCT obt.object_id) AS obj_class_count,
+  count(DISTINCT link.source_id) AS source_count
+ FROM link 
+  INNER JOIN node AS pred ON (link.predicate_id=pred.node_id)
+  INNER JOIN instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id)
+ GROUP BY 
+  pred.uid,
+  pred.label;
+
 CREATE OR REPLACE VIEW node_count_by_metatype_and_node_source AS 
  SELECT node.metatype,source.uid,source.label, count(node.node_id) AS node_count
  FROM node LEFT OUTER JOIN node AS source ON (node.source_id=source.node_id)
@@ -2027,8 +2153,8 @@ CREATE OR REPLACE VIEW annotated_entity_congruence_by_annotsrc AS
  SELECT
   ial.node_id AS annotated_entity_id,
   ial.source_id,
-  COUNT(DISTINCT ial.object_id) AS total_nodes_in_src,
   ialc.total                    AS total_nodes,
+  COUNT(DISTINCT ial.object_id) AS total_nodes_in_src,
   CAST(COUNT(DISTINCT ial.object_id) AS FLOAT) / ialc.total AS congruence
  FROM
              implied_annotation_link AS ial
@@ -2158,6 +2284,15 @@ CREATE INDEX implied_annotation_link_with_entropy_idx_node_object ON implied_ann
 CREATE INDEX implied_annotation_link_with_entropy_idx_node_object_info ON implied_annotation_link_with_entropy(shannon_information,node_id,object_id);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW node_pair_annotation_match AS
+ SELECT
+  ial1.node_id AS node1_id,
+  ial2.node_id AS node2_id,
+  object_id AS match_id,
+  shannon_information AS ic
+ FROM 
+  implied_annotation_link AS ial1
+  INNER JOIN implied_annotation_link_with_entropy AS ial2 USING (object_id);
 
 CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
  SELECT
@@ -2170,6 +2305,19 @@ CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
  GROUP BY
   ial1.node_id,
   ial2.node_id;
+
+CREATE OR REPLACE VIEW node_pair_annotation_match_having_max_entropy AS
+ SELECT
+  node1_id,
+  node2_id,
+  match_id,
+  ic
+ FROM 
+  node_pair_annotation_match
+  INNER JOIN node_pair_annotation_match_max_entropy USING(node1_id,node2_id)
+ WHERE 
+  ic >= max_ic;
+
 
 CREATE OR REPLACE VIEW node_pair_annotation_match_sum_entropy AS
  SELECT
@@ -2282,6 +2430,10 @@ CREATE OR REPLACE VIEW avg_information_content AS
  SELECT avg(shannon_information) AS avg_information_content
  FROM class_node_entropy_by_evidence;
 
+CREATE OR REPLACE VIEW stddev_information_content AS 
+ SELECT stddev(shannon_information) AS stddev_information_content
+ FROM class_node_entropy_by_evidence;
+
 CREATE OR REPLACE VIEW avg_information_content_by_annotsrc AS 
  SELECT 
   aic.source_id,
@@ -2290,6 +2442,68 @@ CREATE OR REPLACE VIEW avg_information_content_by_annotsrc AS
   annotation_with_information_content AS aic
  GROUP BY
   aic.source_id;
+
+COMMENT ON VIEW avg_information_content_by_annotsrc IS 'avg( { IC(c) :
+forall direct-annotation-to(c) }) by annotation-source. Be careful
+interpreting these results. The IC is measured against the background
+of the whole database. This means that species-centric annotation
+sources will have an IC inversely proportional to the size of the
+annotation set for that source. For example, if the majority of
+annotations in the database are to human anatomical classes, then a
+xenopus-specific annotation source will have a high IC because it uses
+"rarer" classes.';
+
+CREATE OR REPLACE VIEW avg_information_content_by_ontology AS 
+ SELECT 
+  n.source_id,
+  avg(shannon_information) AS avg_information_content
+ FROM 
+  class_node_entropy_by_evidence AS e
+  INNER JOIN node AS n ON (e.node_id=n.node_id)
+ WHERE
+  n.metatype='C'
+ GROUP BY
+  n.source_id;
+
+COMMENT ON VIEW avg_information_content_by_ontology IS 'avg( {IC(c) :
+forall c in O }). average information content of a class, broken down
+by ontology.';
+
+CREATE OR REPLACE VIEW dist_information_content_by_annotation AS 
+ SELECT 
+  CAST(shannon_information AS INT) AS ic_midpoint,
+  COUNT(DISTINCT node_id) AS total_annotation_classes,
+  COUNT(DISTINCT object_id) AS total_annotated_entities,
+  COUNT(link_id) AS total_annotations
+ FROM annotation_with_information_content
+ GROUP BY
+  CAST(shannon_information AS INT)
+ ORDER BY
+  CAST(shannon_information AS INT);
+
+COMMENT ON VIEW dist_information_content_by_annotation IS
+'distribution of information content. Each bin is an IC midpoint -
+i.e. "3" is any IC between 2.5 and 3.5. There are 3 counts for each
+bin: The total number of classes whose IC fall within that range; The
+total number of annotated entities (e.g. genes) that have an
+annotation to a class with an IC within that bin; The total number of
+annotations within that bin. Be careful with the 2nd count: the same
+annotated entity (e.g. gene) can be present in multiple bins - thus
+the numbers do not sum to the total number of annotated entities. Note
+that at the high end of the distribution the numbers may tail off more
+dramatically for classes than annotations - this is because there may
+be multiple redundant annotations to the same high-IC class. There is
+a danger of annotation bias here, especially if there are "promoted"
+annotations. total_annotation_classes is the safest number to
+use. Note that for the counts we only consider direct/asserted
+annotations. However, for the IC itself, implicit annotations are
+used. E.g. IC("small organ") = -log(p(annot*("small organ"))), where
+annot* includes "small heart" etc. However, if there are no direct
+annotations to "small organ" then it will not be counted in the
+histogram.';
+
+
+
 
 CREATE OR REPLACE VIEW avg_information_content_by_annotated_entity AS 
  SELECT 
@@ -2310,7 +2524,6 @@ CREATE OR REPLACE VIEW avg_information_content_by_annotsrc_and_annotated_entity 
  GROUP BY
   aic.source_id,
   aic.node_id;
-
 
 CREATE OR REPLACE VIEW unique_annotation_with_information_content AS
  SELECT DISTINCT
@@ -2346,6 +2559,21 @@ CREATE OR REPLACE VIEW inferred_nr_subclass AS
               WHERE
                il.node_id=clp.node_id AND
                il.object_id=clp.next_object_id AND
+               clp.via_node_id != clp.node_id AND
+               clp.via_node_id != clp.next_object_id);
+
+CREATE OR REPLACE VIEW nr_link AS
+ SELECT
+  *
+ FROM
+  link
+ WHERE
+  NOT EXISTS 
+   (SELECT *
+            FROM consecutive_link_pair AS clp
+            WHERE
+               link.node_id=clp.node_id AND
+               link.object_id=clp.next_object_id AND
                clp.via_node_id != clp.node_id AND
                clp.via_node_id != clp.next_object_id);
 

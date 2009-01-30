@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.obd.model.CompositionalDescription;
 import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
@@ -49,6 +49,8 @@ import org.obd.query.exception.ShardExecutionException;
  *
  */
 public abstract class AbstractShard implements Shard {
+	
+	protected final static Logger logger = Logger.getLogger(AbstractShard.class);
 
 	public class CongruentPair {
 		private Node baseNode;
@@ -180,8 +182,14 @@ public abstract class AbstractShard implements Shard {
 	}
 
 	public Collection<Statement> getStatementsByNode(String id) {
+		return getStatementsByNode(id, null, null);
+	}
+	
+	public Collection<Statement> getStatementsByNode(String id, QueryTerm rel, Boolean isAnnotation) {
 		LinkQueryTerm lqt = new LinkQueryTerm();
 		lqt.setNode(id);
+		lqt.setRelation(rel);
+		lqt.setIsAnnotation(isAnnotation);
 		Collection<Statement> stmts = getStatementsByQuery(lqt);
 		LiteralQueryTerm qt = new LiteralQueryTerm();
 		qt.setNode(id);
@@ -190,7 +198,13 @@ public abstract class AbstractShard implements Shard {
 	}
 
 	public Collection<Statement> getNonRedundantStatementsForNode(String id) {
-		Collection<Statement> stmts = getStatementsByNode(id);
+		return getNonRedundantStatementsForNode(id, null);
+	}
+	
+	public Collection<Statement> getNonRedundantStatementsForNode(String id, QueryTerm rel) {
+		logger.info("fetching all (non-annotation) statements for "+id+" "+rel);
+		Collection<Statement> stmts = getStatementsByNode(id, rel, false);
+		logger.info("fetched "+stmts.size()+" all statements for "+id);
 		Collection<Statement> togo = new HashSet<Statement>();
 		// it would be much faster to do this in SQL..
 		for (Statement s : stmts) {
@@ -199,6 +213,7 @@ public abstract class AbstractShard implements Shard {
 					isRedundant((LinkStatement)s))
 				togo.add(s);
 		}
+		logger.info("removing "+togo.size()+" redundant statements for "+id);
 		stmts.removeAll(togo);
 		//Graph g = new Graph(stmts);
 		//g.trim();	
@@ -323,12 +338,12 @@ public abstract class AbstractShard implements Shard {
 		else
 			stmts = new LinkedList<Statement>(); // TODO: minimal info?
 
-		Logger.getLogger("org.obd").fine("fetching annotation statements: "+id);
+		logger.info("fetching annotation statements: "+id);
 		Collection<Statement> annots = 
 			getAnnotationStatementsForNode(id, entailment, null);
 		Graph g = new Graph(annots);
 		Collection<String> referencedNodeIds = g.getReferencedNodeIds();
-		Logger.getLogger("org.obd").fine("fetching referenced nodes: "+id+" num="+
+		logger.info("fetching referenced nodes: "+id+" num="+
 				referencedNodeIds.size());
 		for (String nid : referencedNodeIds) {
 			Node n = getNode(nid);
@@ -531,7 +546,7 @@ public abstract class AbstractShard implements Shard {
 			new LinkQueryTerm(linksFromSelectedNodeQuery,null,null);
 		assertedLinkQuery.setInferred(false);
 		assertedLinkQuery.setNode(linksFromSelectedNodeQuery); // redundant?
-		Logger.getLogger("org.obd").fine("subgraph q="+assertedLinkQuery.toString());
+		logger.info("subgraph q="+assertedLinkQuery.toString());
 
 		Collection<Statement> stmts = getStatementsByQuery(assertedLinkQuery);
 		Graph g = new Graph();
@@ -576,7 +591,7 @@ public abstract class AbstractShard implements Shard {
 		LinkQueryTerm assertedLinkQuery = 
 			new LinkQueryTerm(lqt,null,null);
 		//assertedLinkQuery.setInferred(false);
-		Logger.getLogger("org.obd").fine("subgraph q="+assertedLinkQuery.toString());
+		logger.info("subgraph q="+assertedLinkQuery.toString());
 		//System.err.println("subgraph q="+assertedLinkQuery.toString());
 
 		Collection<Statement> stmts = getStatementsByQuery(assertedLinkQuery);
@@ -628,14 +643,14 @@ public abstract class AbstractShard implements Shard {
 					String nid = s.getNodeId();
 					newIds.add(s.getTargetId());
 					checkedIds.add(nid);
-					Logger.getLogger("org.obd").fine("added: "+nid);
+					logger.info("added: "+nid);
 					if (g.getNode(nid) == null) {
 						Node n = getNode(nid);
 						g.addNode(n);
-						Logger.getLogger("org.obd").fine("fetched: "+n);
+						logger.info("fetched: "+n);
 					}
 					if (g.getNode(nid) == null) {
-						Logger.getLogger("org.obd").fine("problem:"+nid);
+						logger.info("problem:"+nid);
 					}					
 				}
 				if (false) {
@@ -944,7 +959,7 @@ public abstract class AbstractShard implements Shard {
 	 * @param stmts2
 	 * @param extQt - 
 	 */
-	protected SimilarityPair compareAnnotationSetPair(Collection<LinkStatement> stmts1, Collection<LinkStatement> stmts2, 
+	public SimilarityPair compareAnnotationSetPair(Collection<LinkStatement> stmts1, Collection<LinkStatement> stmts2, 
 			LinkQueryTerm extQt) {
 
 		SimilarityPair sp = new SimilarityPair();
@@ -1059,6 +1074,10 @@ public abstract class AbstractShard implements Shard {
 		calculateBestCommonNodeMap(sp);
 	}
 
+	/**
+	 * Given two sets of nodes, calculate the best match for a node n from set s_1 from the closure of all nodes in set s_2 
+	 * @param sp
+	 */
 	private void calculateBestCommonNodeMap(SimilarityPair sp) {
 		Map<String,String> bestCommonNodeMap = new HashMap<String,String>();
 		for (String nid : sp.getNodesInSet1()) {

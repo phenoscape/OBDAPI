@@ -36,6 +36,10 @@ public class GeneticAssociationDatabaseTextFileParser extends TabularInfoParser 
 		super(path);
 	}
 
+	@Override
+	public String[] requires() {
+		return new String[]{"mammalian_phenotype", "disease_ontology"};
+	}
 
 
 

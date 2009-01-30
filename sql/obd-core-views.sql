@@ -25,6 +25,9 @@ COMMENT ON VIEW transitive_relation_node IS 'A relation node that is transitive.
 -- CREATE INDEX transitive_relation_node_idx_node_uid ON transitive_relation_node(node_id,uid);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW metadata_relation_node AS SELECT * FROM node WHERE metatype='R' AND is_metadata='t';
+COMMENT ON VIEW metadata_relation_node IS 'A relation node that is for metadata relations (annotationProperties in OWL)';
+
 CREATE OR REPLACE VIEW instance_node AS SELECT * FROM node WHERE metatype='I';
 COMMENT ON VIEW instance_node IS 'A graph node representing a Instance. Examples: an instance of an Annotation; an instance of a Person';
 
@@ -131,10 +134,16 @@ CREATE OR REPLACE VIEW instantiation_link AS
  FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id);
 COMMENT ON VIEW instantiation_link IS 'A link of type "instance_of" between an instance and a class';
 -- DUPLCATE; TODO: dereprecate one
+
 CREATE OR REPLACE VIEW instance_of_link AS
  SELECT link.*
  FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id)
  WHERE combinator='';
+
+CREATE OR REPLACE VIEW asserted_instance_of_link AS
+ SELECT link.*
+ FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id)
+ WHERE combinator='' AND is_inferred='f';
 
 CREATE OR REPLACE VIEW asserted_instantiation_link AS SELECT * FROM instantiation_link WHERE is_inferred='f';
 COMMENT ON VIEW asserted_instantiation_link IS 'An instantiation link that is asserted (not implied/inferred)';
@@ -333,6 +342,46 @@ COMMENT ON VIEW differentium_link_to_label IS 'A differentium_link
 with a human-readable label for the link; substitutes the ID of the
 predicate and the ID of the object/relatum with their labels. Example:
 "part_of nucleus"';
+
+-- TODO: change names, these are misleading..
+-- useful for populating xps
+-- e.g. given some E instances and some Q instances, with
+-- instance-level inheres_in relations we make find all 
+-- EQ combinations
+CREATE OR REPLACE VIEW some_some_relation_by_asserted_instance_links AS 
+ SELECT DISTINCT
+  link.predicate_id,
+  nt.object_id AS node_class_id,
+  obt.object_id AS object_class_id
+ FROM link 
+  INNER JOIN asserted_instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN asserted_instance_of_link AS obt ON (link.object_id=obt.node_id);
+
+-- ??
+CREATE OR REPLACE VIEW some_some_relation_by_asserted_instances AS 
+ SELECT DISTINCT
+  link.predicate_id,
+  nt.object_id AS node_class_id,
+  obt.object_id AS object_class_id
+ FROM link 
+  INNER JOIN instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id)
+ WHERE
+  EXISTS (SELECT * FROM asserted_instance_of_link AS c1 WHERE c1.object_id=nt.object_id)
+ AND
+  EXISTS (SELECT * FROM asserted_instance_of_link AS c2 WHERE c2.object_id=obt.object_id);
+
+
+CREATE OR REPLACE VIEW some_some_relation_by_instance_links AS 
+ SELECT DISTINCT
+  link.predicate_id,
+  nt.object_id AS node_class_id,
+  obt.object_id AS object_class_id,
+  nt.is_inferred AS is_inferred_node,
+  obt.is_inferred AS is_inferred_object
+ FROM link 
+  INNER JOIN instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id);
 
 
 -- ************************************************************
@@ -1416,6 +1465,83 @@ CREATE OR REPLACE VIEW implied_link_count_by_node_source AS
  WHERE link.is_inferred='t'
  GROUP BY source.uid,source.label;
 
+CREATE OR REPLACE VIEW instance_count_by_class AS
+ SELECT
+  object_id AS class_node_id,
+  count(DISTINCT node_id) AS instance_count
+ FROM
+  instance_of_link
+ GROUP BY
+  object_id;
+
+CREATE OR REPLACE VIEW asserted_instance_count_by_class AS
+ SELECT
+  object_id AS class_node_id,
+  count(DISTINCT node_id) AS instance_count
+ FROM
+  asserted_instance_of_link
+ GROUP BY
+  object_id;
+
+CREATE OR REPLACE VIEW instance_count_by_class_all AS
+ SELECT DISTINCT
+  ic.class_node_id,
+  aic.instance_count AS asserted_instance_count,
+  ic.instance_count AS instance_count
+ FROM
+  instance_count_by_class AS ic
+  LEFT OUTER JOIN asserted_instance_count_by_class AS aic USING (class_node_id);
+
+CREATE OR REPLACE VIEW relation_summary AS 
+ SELECT 
+  pred.uid AS relation_uid,
+  pred.label AS relation_label,
+  count(link.link_id) AS link_count,
+  count(DISTINCT link.node_id) AS node_count,
+  count(DISTINCT link.object_id) AS obj_count,
+  count(DISTINCT link.source_id) AS source_count
+ FROM link 
+  INNER JOIN node AS pred ON (link.predicate_id=pred.node_id)
+ GROUP BY 
+  pred.uid,
+  pred.label;
+
+CREATE OR REPLACE VIEW instance_level_relation_summary AS 
+ SELECT 
+  pred.uid AS relation_uid,
+  pred.label AS relation_label,
+  count(link.link_id) AS link_count,
+  count(DISTINCT link.node_id) AS node_count,
+  count(DISTINCT link.object_id) AS obj_count,
+  count(DISTINCT link.source_id) AS source_count
+ FROM link 
+  INNER JOIN node AS pred ON (link.predicate_id=pred.node_id)
+  INNER JOIN node AS n ON (link.node_id=n.node_id)
+  INNER JOIN node AS ob ON (link.object_id=ob.node_id)
+ WHERE
+  n.metatype='I'
+  AND
+  ob.metatype='I'
+ GROUP BY 
+  pred.uid,
+  pred.label;
+
+CREATE OR REPLACE VIEW instance_level_relation_class_summary AS 
+ SELECT 
+  pred.uid AS relation_uid,
+  pred.label AS relation_label,
+  count(link.link_id) AS link_count,
+  count(DISTINCT nt.object_id) AS node_class_count,
+  count(DISTINCT obt.object_id) AS obj_class_count,
+  count(DISTINCT link.source_id) AS source_count
+ FROM link 
+  INNER JOIN node AS pred ON (link.predicate_id=pred.node_id)
+  INNER JOIN instance_of_link AS nt ON (link.node_id=nt.node_id)
+  INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id)
+ GROUP BY 
+  pred.uid,
+  pred.label;
+
 CREATE OR REPLACE VIEW node_count_by_metatype_and_node_source AS 
  SELECT node.metatype,source.uid,source.label, count(node.node_id) AS node_count
  FROM node LEFT OUTER JOIN node AS source ON (node.source_id=source.node_id)
@@ -2156,6 +2282,15 @@ CREATE OR REPLACE VIEW implied_annotation_link_with_entropy AS
 -- CREATE INDEX implied_annotation_link_with_entropy_idx_node_object_info ON implied_annotation_link_with_entropy(shannon_information,node_id,object_id);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW node_pair_annotation_match AS
+ SELECT
+  ial1.node_id AS node1_id,
+  ial2.node_id AS node2_id,
+  object_id AS match_id,
+  shannon_information AS ic
+ FROM 
+  implied_annotation_link AS ial1
+  INNER JOIN implied_annotation_link_with_entropy AS ial2 USING (object_id);
 
 CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
  SELECT
@@ -2168,6 +2303,19 @@ CREATE OR REPLACE VIEW node_pair_annotation_match_max_entropy AS
  GROUP BY
   ial1.node_id,
   ial2.node_id;
+
+CREATE OR REPLACE VIEW node_pair_annotation_match_having_max_entropy AS
+ SELECT
+  node1_id,
+  node2_id,
+  match_id,
+  ic
+ FROM 
+  node_pair_annotation_match
+  INNER JOIN node_pair_annotation_match_max_entropy USING(node1_id,node2_id)
+ WHERE 
+  ic >= max_ic;
+
 
 CREATE OR REPLACE VIEW node_pair_annotation_match_sum_entropy AS
  SELECT
@@ -2230,7 +2378,7 @@ CREATE OR REPLACE VIEW annotation_with_information_content AS
  WHERE
   reiflink_node_id IS NOT NULL;
 
-COMMENT ON VIEW 'annotation_with_information_content' IS 'Annotations
+COMMENT ON VIEW annotation_with_information_content IS 'Annotations
 adorned with the information content; this means annotations can be
 sorted by information';
 
@@ -2411,6 +2559,46 @@ CREATE OR REPLACE VIEW inferred_nr_subclass AS
                il.object_id=clp.next_object_id AND
                clp.via_node_id != clp.node_id AND
                clp.via_node_id != clp.next_object_id);
+
+CREATE OR REPLACE VIEW nr_link AS
+ SELECT
+  *
+ FROM
+  link
+ WHERE
+  NOT EXISTS 
+   (SELECT *
+            FROM consecutive_link_pair AS clp
+            WHERE
+               link.node_id=clp.node_id AND
+               link.object_id=clp.next_object_id AND
+               clp.via_node_id != clp.node_id AND
+               clp.via_node_id != clp.next_object_id);
+
+CREATE OR REPLACE VIEW nr_instance_of_link AS
+ SELECT
+  *
+ FROM
+  instance_of_link AS link
+ WHERE
+  NOT EXISTS 
+   (SELECT *
+            FROM consecutive_link_pair AS clp
+            WHERE
+               link.node_id=clp.node_id AND
+               link.predicate_id=clp.predicate_id AND
+               link.object_id=clp.next_object_id AND
+               clp.via_node_id != clp.node_id AND
+	       clp.next_predicate_id IN (SELECT node_id FROM is_a_relation) AND
+               clp.via_node_id != clp.next_object_id);
+
+CREATE OR REPLACE VIEW redundant_anonymous_node AS
+ SELECT * 
+ FROM node 
+ WHERE is_anonymous=true AND 
+  node_id IN (SELECT node_id FROM sameas) AND 
+  NOT EXISTS (SELECT * FROM asserted_link WHERE object_id=node.node_id);
+
 
 -- ************************************************************
 -- OWL

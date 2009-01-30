@@ -1,0 +1,14 @@
+[Typedef]
+id: OBO_REL:has_population_of
+name: has_population_of
+is_a: OBO_REL:has_part
+
+[Typedef]
+id: OBO_REL:has_part_bearer_of
+name: has_part_bearer_of
+holds_over_chain: OBO_REL:has_part birnlex_ubo:birnlex_17
+
+[Typedef]
+id: OBO_REL:exemplifies
+name: exemplifies
+holds_over_chain: OBO_REL:has_part_bearer_of OBO_REL:instance_of

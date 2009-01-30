@@ -20,6 +20,12 @@ public class ZFINGenotypeFeatureParser extends ZFINTabularParser {
 	public Boolean canParse(String fileName) {		// TODO Auto-generated method stub
 		return fileName.contains("genotype_features.txt");
 	}
+	
+	@Override
+	public String[] requires() {
+		return new String[]{"sequence"};
+	}
+
 	@Override
 	public String getDefaultURL() {
 		return "http://zfin.org/data_transfer/Downloads/genotype_features.txt";

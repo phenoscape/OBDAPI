@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
@@ -23,6 +22,7 @@ import org.obd.model.vocabulary.AnnotationVocabulary;
 import org.obd.model.vocabulary.TermVocabulary;
 import org.obd.query.Shard;
 import org.obd.query.ComparisonQueryTerm.Operator;
+import org.obo.util.ReasonerUtil;
 import org.purl.obo.vocab.RelationVocabulary;
 
 
@@ -42,7 +42,6 @@ public abstract class Parser {
 	protected Shard dataShard;
 	protected String path;
 	protected InputStream inputStream;
-	protected Logger logger = Logger.getLogger("org.obd.parser");
 	protected TermVocabulary termVocabulary = new TermVocabulary();
 	protected RelationVocabulary relationVocabulary = new RelationVocabulary();
 	protected AnnotationVocabulary annotationVocabulary = new AnnotationVocabulary();
@@ -74,6 +73,10 @@ public abstract class Parser {
 	 */
 	public Boolean canParse(String fileName) {
 		return null;
+	}
+	
+	public String[] requires() {
+		return new String[]{};
 	}
 
 	public String getDefaultURL() {
@@ -123,6 +126,7 @@ public abstract class Parser {
 	}
 	public static Parser createParser(String fmt, String path) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
 		if (fmt == null) {
+			//logger.info("Attempting to guess parser for "+path);
 			for (Class parserClass : new ParserRegistry().getParsers()) {
 				Parser parser = ((Parser) parserClass.newInstance());
 				System.out.println("  p= "+parser);
@@ -131,35 +135,11 @@ public abstract class Parser {
 					continue;
 				if (canParse) {
 					parser.setPath(path);
+					System.out.println("Using "+parser+" to parse "+path);
 					return parser;
 				}
 				
 			}
-			/*
-			Class psc = Parser.class;
-			Package [] pcks = Package.getPackages();
-			for (Package p : pcks) {
-				for (Class parserClass : getClasses(p.getName())) {
-					System.out.println("trying "+parserClass+" for "+path);
-					try {
-						parserClass.asSubclass(psc);
-					}
-					catch (Exception e) {
-						continue;
-					}
-					Parser parser = ((Parser) parserClass.newInstance());
-					//System.out.println("  p= "+parser);
-					Boolean canParse = parser.canParse(path);
-					if (canParse == null)
-						continue;
-					if (canParse) {
-						parser.setPath(path);
-						return parser;
-					}
-				}
-			}
-			*/
-
 		}
 		else if (fmt.equals("homologene"))
 			return new HomologeneParser(path);

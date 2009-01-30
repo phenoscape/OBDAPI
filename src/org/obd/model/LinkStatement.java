@@ -63,7 +63,7 @@ public class LinkStatement extends Statement {
 	 */
 	public boolean isSubClassSemantics() {
 		// TODO - use RDFS vocabulary
-		return relationId.equals(rvocab.is_a()) || relationId.equals("rdfs:subClassOf");
+		return relationId != null && relationId.equals(rvocab.is_a()) || relationId.equals("rdfs:subClassOf");
 	}
 	public void setSubClassSemantics(boolean set) {
 		if (set)

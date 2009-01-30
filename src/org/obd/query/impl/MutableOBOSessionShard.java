@@ -2,6 +2,7 @@ package org.obd.query.impl;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.bbop.dataadapter.DataAdapterException;
 import org.obo.dataadapter.OBOAdapter;
@@ -16,6 +17,7 @@ import org.obo.datamodel.OBOSession;
 public class MutableOBOSessionShard extends OBOSessionShard {
 
 	Collection pathsLoaded = new LinkedList<String>();
+	
 	public MutableOBOSessionShard(String f) throws DataAdapterException {
 		super();
 		loadFile(f);
@@ -32,6 +34,9 @@ public class MutableOBOSessionShard extends OBOSessionShard {
 		return loadFile(path);
 	}
 	public int loadFile(String path) throws DataAdapterException {
+		if (pathsLoaded.contains(path)) {
+			return 0;
+		}
 		OBOFileAdapter.OBOAdapterConfiguration config = new OBOFileAdapter.OBOAdapterConfiguration();
 		config.getReadPaths().add(path);
 

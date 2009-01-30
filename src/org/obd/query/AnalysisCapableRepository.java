@@ -303,6 +303,20 @@ public interface AnalysisCapableRepository {
 	 * @return
 	 */
 	public SimilarityPair compareAnnotationsByAnnotatedEntityPair(String aeid1, String aeid2);
+	
+	/**
+	 * given two sets of annotations, return a SimilarityPair indicating target nodes in common
+	 * 
+	 * if extQt is not null, then the annotations are extended using this query term
+	 * For example, given a set of asserted/direct annotations, we may want to extend these to be
+	 * implied annotations
+	 * 
+	 * @param stmts1
+	 * @param stmts2
+	 * @param extQt - extension query for closure of annots
+	 */
+	public SimilarityPair compareAnnotationSetPair(Collection<LinkStatement> stmts1, Collection<LinkStatement> stmts2, 
+			LinkQueryTerm extQt);
 
 	/**
 	 * @param aeid1

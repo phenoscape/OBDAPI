@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.LogManager;
@@ -16,11 +18,13 @@ import org.obd.io.GraphVizWriter;
 import org.obd.model.CompositionalDescription;
 import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
+import org.obd.model.LiteralStatement;
 import org.obd.model.Node;
 import org.obd.model.Statement;
 import org.obd.model.CompositionalDescription.Predicate;
 import org.obd.model.stats.ScoredNode;
 import org.obd.model.stats.SimilarityPair;
+import org.obd.model.stats.AggregateStatistic.AggregateType;
 import org.obd.parser.Parser;
 import org.obd.query.AnnotationLinkQueryTerm;
 import org.obd.query.LabelQueryTerm;
@@ -31,6 +35,7 @@ import org.obd.query.Shard;
 import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
 import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
+import org.obd.query.QueryTerm.Aspect;
 import org.obd.query.impl.MultiShard;
 import org.obd.query.impl.MutableOBOSessionShard;
 import org.obd.query.impl.OBDSQLShard;
@@ -104,6 +109,10 @@ public class OBDMain {
 					metadataShard = new MutableOBOSessionShard();
 				metadataShard.load(args[i]);
 			}
+			else if (args[i].equals("--store")) {
+				i++;
+				storeFile(args[i]);
+			}
 			else if (args[i].equals("--source")) {
 				i++;
 				loadSource(metadataShard,args[i]);
@@ -154,6 +163,31 @@ public class OBDMain {
 				i++;
 				showNonRedundantLinksFrom(args[i]);
 			}
+			else if (args[i].equals("--links")) {
+				i++;
+				boolean ic = false;
+				if (args[i].equals("--ic")) {
+					ic = true;
+					i++;
+				}
+				showAllLinks(args[i],ic);
+			}
+			else if (args[i].equals("--allparents")) {
+				i++;
+				boolean ic = false;
+				if (args[i].equals("--ic")) {
+					ic = true;
+					i++;
+				}
+				String nid = args[i];
+				if (args[i].equals("--lookup")) {
+					i++;
+					nid = lookup(args[i]);
+					i++;
+				}
+
+				showAllParents(nid,ic);
+			}
 			else if (args[i].equals("--cacheall")) {
 				i++;
 				cacheAllSimilarityScores();
@@ -171,16 +205,21 @@ public class OBDMain {
 			else if (args[i].equals("--compare")) {
 				i++;
 				boolean calcIC = false;
+				boolean summary = false;
 				if (args[i].equals("--ic")) {
 					i++;
 					calcIC = true;
 				}
-					
+				if (args[i].equals("--summary")) {
+					i++;
+					summary = true;
+				}
+
 				String nid1 = args[i];
 				i++;
 				String nid2 = args[i];
 				i++;
-				compareNodes(calcIC,nid1,nid2);
+				compareNodes(calcIC,nid1,nid2,summary);
 			}
 			else if (args[i].equals("--compare-sources")) {
 				i++;
@@ -195,7 +234,7 @@ public class OBDMain {
 					rel = args[i];
 					i++;
 				}
-					
+
 				String ae = args[i];
 				i++;
 				String nid1 = args[i];
@@ -269,17 +308,26 @@ public class OBDMain {
 
 	}
 
+	/**
+	 * @param file
+	 * @throws Exception
+	 */
 	public void storeFile(String file) throws Exception {
 		Parser p = Parser.createParser(fmt, file);
 		if (p == null) {
 			System.err.println("could not find a parser for "+file+" fmt:"+fmt);
 			System.exit(1);
 		}
+		for (String ont : p.requires()) {
+			System.err.println("fetching "+ont);
+			oboShard.load(ont);
+		}
 		p.setDataShard(multiShard);
 		p.setShard(oboShard);
 		p.parse();
-		if (isStoreGraph)
-			multiShard.putGraph(p.getGraph());
+		System.err.println("storing...");
+		//if (isStoreGraph)
+		multiShard.putGraph(p.getGraph());
 
 	}
 
@@ -289,9 +337,9 @@ public class OBDMain {
 		}
 		Graph g = metadataShard.getGraph();
 		g.nestStatementsUnderNodes();
-		Node md = g.getNode(id);
+		Node md = g.getNode(id); // metadata for this particular source
 		for (Node sn : md.getTargetNodes("source")) {
-
+			
 		}
 		//String src = metadataShard.getLi TODO
 	}
@@ -308,7 +356,7 @@ public class OBDMain {
 		GraphVizWriter gvw = new GraphVizWriter(g);
 		System.out.println(gvw.generate());
 	}
-	
+
 	public void showNonRedundantLinksFrom(String id) {
 		System.err.println("nr links from: "+id);
 		Collection<Statement> stmts = multiShard.getNonRedundantStatementsForNode(id);
@@ -319,8 +367,78 @@ public class OBDMain {
 		}
 	}
 
-	
-	public void compareNodes(boolean calcIC, String uid1, String uid2) {
+	public void showAllLinks(String id, boolean showIC) throws Exception {
+		System.err.println("nr links from: "+id);
+		System.out.println("\n** NR LINKS FROM:");
+		Collection<Statement> stmts = multiShard.getNonRedundantStatementsForNode(id);
+		showStatements(stmts, showIC, true);
+
+		System.out.println("\n** LINKS TO:");
+		stmts = multiShard.getStatementsForTarget(id);
+		showStatements(stmts, showIC, false);
+
+		System.out.println("\n** ANNOTS TO:");
+		int numTo = multiShard.getNodeAggregateQueryResults(new AnnotationLinkQueryTerm(id),
+				AggregateType.COUNT);
+		System.out.println("\n   count: "+numTo);
+		
+		stmts = multiShard.getAnnotationStatementsForNode(id, null, null);
+		showStatements(stmts, showIC, false);
+
+		System.out.println("\n** ANNOTATED WITH:");
+		stmts = multiShard.getAnnotationStatementsForAnnotatedEntity(id, null, null);
+		showStatements(stmts, showIC, true);
+	}
+
+	public void showAllParents(String id, boolean showIC) {
+		System.err.println("nr links from: "+id);
+		LinkQueryTerm qt = new LinkQueryTerm(id, null, null);
+		qt.setAspect(Aspect.TARGET);
+		Collection<Node> nodes = multiShard.getNodesByQuery(qt);
+		System.out.println("\n** PARENTS:");
+		for (Node node : nodes) {
+			if (showIC) {
+				Double ic = multiShard.getInformationContentByAnnotations(node.getId());
+				System.out.print(ic+" :: ");
+			}
+			System.out.println(this.getNodeDisp(node));
+		}
+	}
+
+	public void showStatements(Collection<Statement> stmts, boolean showIC, boolean isParent) {
+
+		for (Statement s : stmts) {
+			showStatement(s, showIC, isParent);
+		}
+
+	}
+
+	public void showStatement(Statement stmt, boolean showIC, boolean isParent) {
+		if (!isParent) {
+			if (showIC) {
+				Double ic = multiShard.getInformationContentByAnnotations(stmt.getNodeId());
+				System.out.print(ic+" :: ");
+			}
+			System.out.print(this.getNodeDisp(stmt.getNodeId()));
+		}
+		System.out.print(" --["+stmt.getRelationId()+"]-- ");
+		if (isParent) {
+			if (stmt instanceof LiteralStatement)
+				System.out.print(((LiteralStatement)stmt).getValue());
+			else {
+				System.out.print(this.getNodeDisp(stmt.getTargetId()));
+				if (showIC) {
+					Double ic = multiShard.getInformationContentByAnnotations(stmt.getTargetId());
+					System.out.print(" :: "+ic);
+				}
+			}
+
+		}
+		System.out.println("");
+	}
+
+
+	public void compareNodes(boolean calcIC, String uid1, String uid2, boolean summary) {
 		System.out.println("COMPARING: "+uid1+" "+uid2);
 
 		SimilarityPair sp = multiShard.compareAnnotationsByAnnotatedEntityPair(uid1,uid2);
@@ -333,7 +451,10 @@ public class OBDMain {
 				" DISAG: "+ sp.getDisagreementScore() +
 				" ICCS: "+ (calcIC ? sp.getCommonSubsumerAverageIC() : "na") +
 				" TOTAL: "+sp.getAssertedNodesInSet1().size()+", "+sp.getAssertedNodesInSet2().size());
-		
+
+		if (summary) {
+			return;
+		}
 		if (calcIC) {
 			System.out.println("getInformationContentRatio: "+sp.getInformationContentRatio());
 			System.out.println("getInformationContentSumForNRNodesInCommon: "+sp.getInformationContentSumForNRNodesInCommon());
@@ -342,6 +463,9 @@ public class OBDMain {
 		System.out.println("\n** NR IN COMMON:");
 		for (String nid : sp.getNonRedundantNodesInCommon()) {
 			System.out.println("NRIC: "+getNodeDisp(nid));
+		}
+		for (String nid : sp.getBestCommonSubsumers()) {
+			System.out.println("BestCC: "+getNodeDisp(nid));
 		}
 		System.out.println("\n** ALL NODES IN COMMON:");
 		for (String nid : sp.getNodesInCommon()) {
@@ -357,7 +481,7 @@ public class OBDMain {
 		}
 
 	}
-	
+
 	public void compareAnnotationSources(boolean calcIC, String ae, String src1, String src2, String rel) {
 		QueryTerm qt = new LinkQueryTerm(rel, ae);
 		Collection<Node> nodes = multiShard.getNodesByQuery(qt);
@@ -366,7 +490,7 @@ public class OBDMain {
 		}
 	}
 
-	
+
 	public void compareAnnotationSources(boolean calcIC, String ae, String src1, String src2) {
 		Node n = multiShard.getNode(ae);
 		System.out.println("COMPARING: "+ae+" '"+n.getLabel()+"' sources: "+src1+" -vs- "+src2);
@@ -440,7 +564,7 @@ public class OBDMain {
 			}
 		}
 	}
-	
+
 	public void cacheSimilarityScoresByGene(String geneId, String taxId) {
 		QueryTerm qt1 = 
 			new LabelQueryTerm(AliasType.ID,
@@ -456,7 +580,7 @@ public class OBDMain {
 		obdsql.cacheSimilarityScores(qt1, qt2);	
 	}
 
-	
+
 	public void cacheSimilarityScores(String ns1, String ns2) {
 		QueryTerm qt1 = 
 			new LabelQueryTerm(AliasType.ID,
@@ -467,11 +591,11 @@ public class OBDMain {
 					ns2,
 					Operator.STARTS_WITH);
 		obdsql.cacheSimilarityScores(qt1, qt2);
-		
+
 	}
 	public void cacheAllSimilarityScores() {
 		obdsql.cacheSimilarityScores(null); //all
-		
+
 	}
 
 	public String getNodeDispCD(CompositionalDescription cd) {
@@ -516,11 +640,20 @@ public class OBDMain {
 	}
 
 
-
+	Map<String,Node> nodemap = new HashMap<String,Node>();
 	public String getNodeDisp(String id) {
-		Node n =  multiShard.getNode(id);
+		Node n;
+		if (nodemap.containsKey(id)) {
+			n = nodemap.get(id);
+		}
+		else {
+			n =  multiShard.getNode(id);
+			nodemap.put(id, n);
+		}
 		return getNodeDisp(n);
 	}
+
+
 	public String getNodeDisp(Node n) {
 		if (n instanceof CompositionalDescription)
 			return getNodeDispCD((CompositionalDescription)n);
@@ -534,6 +667,11 @@ public class OBDMain {
 			return getNodeDispCD(cd);
 		}
 		return id;
+	}
+
+	public String lookup(String txt) {
+		Collection<Node> nodes = multiShard.getNodesByQuery(new LabelQueryTerm(txt));
+		return nodes.iterator().next().getId();
 	}
 
 	public void setupLog4j() {

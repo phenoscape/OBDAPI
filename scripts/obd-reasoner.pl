@@ -21,6 +21,7 @@ my $verbose = 0;
 my %ruleconf = ();
 my $test_intersection;
 my $infer_instance_of;
+my @inference_views = ();
 while (@ARGV && $ARGV[0] =~ /^\-/) {
     my $opt = shift @ARGV;
     if ($opt eq '-d' || $opt eq '--database') {
@@ -55,6 +56,9 @@ while (@ARGV && $ARGV[0] =~ /^\-/) {
     }
     elsif ($opt eq '--rule') {
         $ruleconf{shift @ARGV}=1;
+    }
+    elsif ($opt eq '--view') {
+        push(@inference_views, shift @ARGV);
     }
     elsif ($opt eq '--inst') {
         $infer_instance_of = 1;
@@ -98,7 +102,9 @@ my $is_a = shift @is_a_nodes;
 my @instance_of_nodes = 
   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:instance_of'");
 if (@instance_of_nodes != 1) {
-    die "@instance_of_nodes";
+    if ($infer_instance_of) {
+	die "expected 1 instance_of node. Got: @instance_of_nodes";
+    }
 }
 my $instance_of = shift @instance_of_nodes;
 
@@ -242,6 +248,33 @@ unless ($skip{chain}) {
         rule=>"$rel = ".join(' * ',@chain),
         sql=>$sql});
   }
+}
+
+if ($skip{rules}) {
+    @views = ();
+}
+
+foreach my $view (@inference_views) {
+
+      my $sql =
+        qq[
+ SELECT DISTINCT
+  x.node_id     ,
+  x.predicate_id,
+  x.object_id 
+ FROM $view AS x
+  LEFT JOIN  link AS existing_link
+        ON (x.node_id=existing_link.node_id AND
+            x.predicate_id=existing_link.predicate_id AND
+            x.object_id=existing_link.object_id)
+ WHERE
+  existing_link.link_id IS NULL 
+
+];
+    push(@views,
+       {id=>$view,
+        rule=>"$view",
+        sql=>$sql});
 }
 
 my $sth_link = $dbh->prepare_cached("SELECT link_id FROM LINK WHERE node_id=? AND predicate_id=? AND object_id=?");

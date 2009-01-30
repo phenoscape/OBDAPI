@@ -1,16 +1,40 @@
 -- CREATE SCHEMA obd_core_functions;
 -- SET search_path TO obd_core_functions,public;
 
+CREATE OR REPLACE FUNCTION get_node_id(VARCHAR) RETURNS INT
+ AS
+$$
+ SELECT
+  node_id
+ FROM
+  node
+ WHERE
+  uid=$1
+$$ LANGUAGE 'sql';
+
 CREATE OR REPLACE FUNCTION node_label(INT) RETURNS VARCHAR
  AS
 $$
  SELECT
-  label
+  CASE WHEN label IS NULL THEN uid ELSE label END
  FROM
   node
  WHERE
   node_id=$1
 $$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION pred_label(INT) RETURNS VARCHAR
+ AS
+$$
+ SELECT
+  CASE WHEN label IS NULL THEN uid ELSE label END
+ FROM
+  node
+ WHERE
+  node_id=$1
+$$ LANGUAGE 'sql';
+
+  
 
 CREATE OR REPLACE FUNCTION node_uid(INT) RETURNS VARCHAR
  AS
@@ -34,16 +58,54 @@ $$
   node_id=$1
 $$ LANGUAGE 'sql';
 
-CREATE OR REPLACE FUNCTION get_node_id(VARCHAR) RETURNS INT
+CREATE OR REPLACE FUNCTION link_info(INT) RETURNS RECORD
  AS
 $$
  SELECT
-  node_id
+  node_info(node_id) AS node_info,
+  node_info(predicate_id) AS pred_info,
+  node_info(object_id) AS obj_info,
+  *
  FROM
-  node
+  link
  WHERE
-  uid=$1
+  link_id=$1
 $$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION link_from(INT) RETURNS SETOF RECORD
+ AS
+$$
+ SELECT
+  node_info(node_id) AS node_info,
+  node_info(predicate_id) AS pred_info,
+  node_info(object_id) AS obj_info,
+  *
+ FROM
+  link
+ WHERE
+  node_id=$1
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION link_from(VARCHAR) RETURNS SETOF RECORD
+ AS
+$$
+ SELECT link_from(get_node_id($1))
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION link_to(INT) RETURNS RECORD
+ AS
+$$
+ SELECT
+  node_info(node_id) AS node_info,
+  node_info(predicate_id) AS pred_info,
+  node_info(object_id) AS obj_info,
+  *
+ FROM
+  link
+ WHERE
+  object_id=$1
+$$ LANGUAGE 'sql';
+
 
 CREATE OR REPLACE FUNCTION inst(INT) RETURNS RECORD
  AS
@@ -118,10 +180,9 @@ CREATE OR REPLACE FUNCTION name_from_intersections_full(INT) RETURNS VARCHAR
  AS
 $$
  SELECT DISTINCT
---  '"' || object_label || '" that ' || (SELECT concat(pred_uid || ' "' || object_label || '" & ') FROM differentium_link_to_label WHERE node_id=$1)
-  '"' || object_label || '" that ' || (SELECT concat(pred.label || ' (' || node_auto_label(object_id) || ') & ') FROM uniq_differentium_link AS dl INNER JOIN node AS pred ON (pred.node_id=predicate_id) WHERE dl.node_id=$1)
+  node_label(genus_link.object_id) || ' that ' || (SELECT concat(pred_label(predicate_id) || ' ' || node_auto_label(object_id) || ' ') FROM uniq_differentium_link AS dl INNER JOIN node AS pred ON (pred.node_id=predicate_id) WHERE dl.node_id=$1)
  FROM
-  genus_link_to_node 
+  genus_link 
  WHERE node_id=$1
 $$ LANGUAGE 'sql';
 
@@ -159,7 +220,38 @@ CREATE TABLE cache_basic_similarity_score(node1_id INT, node2_id INT, basic_scor
 CREATE INDEX cache_basic_similarity_score_ix1 ON cache_basic_similarity_score(node1_id);
 CREATE INDEX cache_basic_similarity_score_ix2 ON cache_basic_similarity_score(node2_id);
 CREATE UNIQUE INDEX cache_basic_similarity_score_ix3 ON cache_basic_similarity_score(node1_id,node2_id);
-  
+
+-- select node_info(node1_id),node_info(node2_id) from proper_basic_simlarity_score;
+CREATE OR REPLACE VIEW proper_basic_similarity_score AS
+ SELECT
+  *
+ FROM cache_basic_similarity_score
+ WHERE basic_score <1
+ ORDER BY basic_score DESC;
+
+CREATE OR REPLACE VIEW proper_basic_similarity_score_max_entropy AS
+ SELECT
+  *
+ FROM cache_basic_similarity_score AS s
+  INNER JOIN node_pair_annotation_match_max_entropy AS npme USING(node1_id,node2_id)
+ WHERE basic_score <1
+ ORDER BY basic_score DESC;
+
+-- slow
+CREATE OR REPLACE VIEW proper_basic_similarity_score_with_best_match AS
+ SELECT
+  *
+ FROM cache_basic_similarity_score AS s
+  INNER JOIN node_pair_annotation_match_having_max_entropy AS npme USING(node1_id,node2_id)
+ WHERE basic_score <1
+ ORDER BY basic_score DESC;
+
+CREATE OR REPLACE FUNCTION get_best_match(INT,INT) RETURNS INT AS
+$$
+ SELECT match_id FROM node_pair_annotation_match WHERE node1_id=$1 and node2_id=$2 ORDER BY ic DESC;
+$$ LANGUAGE 'sql';
+
+-- get_basic_similarity_score(INT,INT) RETURNS FLOAT
 CREATE OR REPLACE FUNCTION get_basic_similarity_score(INT,INT) RETURNS FLOAT
  AS
 $$
@@ -177,6 +269,14 @@ $$
   RETURN v_bss;
  END
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION get_max_ic(INT,INT) RETURNS FLOAT
+ AS
+$$
+  SELECT max_ic FROM node_pair_annotation_match_max_entropy WHERE node1_id=$1 AND node2_id=$2;
+$$ LANGUAGE 'sql';
+  
+
   
 CREATE OR REPLACE FUNCTION contract_uids(VARCHAR, VARCHAR) RETURNS VOID
  AS

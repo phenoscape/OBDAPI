@@ -179,3 +179,18 @@ $$ LANGUAGE 'plpgsql';
 
 
 
+CREATE OR REPLACE FUNCTION realize_all_relations_in (VARCHAR) 
+  RETURNS VOID AS
+$$
+DECLARE
+   v_node               RECORD;
+ BEGIN
+    FOR v_node IN SELECT DISTINCT node_id FROM node WHERE metatype='R' AND uid LIKE $1 || '%' LOOP
+      PERFORM realize_relation_i(v_node.node_id);
+    END LOOP;
+    RETURN;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+
+

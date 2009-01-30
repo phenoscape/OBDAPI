@@ -112,11 +112,11 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	protected String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
 	protected String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
 	protected String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
-	
+
 	//added to address a discrepancy between column names (pred_uid and predicate_uid)
 	// this must be addressed in the DDL statements creating the tables and views: Cartik
 	protected String LINK_RELATION_EXPOSED_ID_COLUMN_FULL = "predicate_uid";
-	
+
 	protected String IS_A_LINK_TABLE = "is_a_link";
 	protected String REIFIED_LINK_TABLE = "reified_link";
 
@@ -315,17 +315,18 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			whereClause.addEqualityConstraint(LINK_SOURCE_EXPOSED_ID_COLUMN, sourceId);
 		if (useImplied != null)
 			whereClause.addEqualityConstraint("is_inferred", useImplied);
-		if (isReified)
-			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+" IS NOT NULL");
+		if (isReified != null) {
+			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+ (isReified ? " IS NOT NULL" : "IS NULL"));
+		}
 		return getStatements(whereClause);
 	}
-	
+
 	/**
 	 * @author cartik
 	 * This method has been defined to look for wildcard matches in statements using the 'LIKE' SQL keyword
 	 * 
 	 */
-	
+
 	public Collection<Statement> getStatementsWithSearchTerm(String node, String relation, String target, 
 			String source, Boolean useImplied, Boolean isReified) {
 		WhereClause whereClause = new SqlWhereClauseImpl();
@@ -344,8 +345,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		if(useImplied != null){
 			whereClause.addEqualityConstraint("is_inferred", useImplied);
 		}
-		if(isReified != null && isReified){
-			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN + " IS NOT NULL");
+		if (isReified != null) {
+			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+ (isReified ? " IS NOT NULL" : "IS NULL"));
 		}
 		return getStatements(whereClause);
 	}
@@ -356,15 +357,15 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	 * @return
 	 * This has been added to search for nodes by labels in the node table
 	 */
-	
+
 	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies){
-		
+
 		Collection<Node> results = new LinkedList<Node>();
-		
+
 		RelationalQuery rq = new SqlQueryImpl();
 		rq.addTable(NODE_TABLE, "n");
 		rq.setSelectClause("n.uid AS uid");
-		
+
 		
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addCaseInsensitiveRegexConstraint("lower(n.label)", searchTerm);
@@ -383,31 +384,31 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 		rq.setWhereClause(wc);
 		//System.out.println(rq.toSQL());
-		
+
 		try {
 			ResultSet rs = execute(rq);
 			while (rs.next()) {
 				results.add(getNode(rs.getString(1)));
-				
+
 			}
 		} catch (SQLException e) {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return results;
 	}
-	
+
 	public Collection<Node> getNodesForSearchTermBySynonym(String searchTerm, boolean zfinOption, List<String> ontologies, boolean searchByName){
-		
+
 		Collection<Node> results = new ArrayList<Node>();
-		
+
 		RelationalQuery rq = new SqlQueryImpl();
 		rq.addTable("alias", "a");
 		rq.addTable(NODE_TABLE, "n");
 		rq.setSelectClause("n.uid AS uid, a.label as synonym");
-		
+
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addJoinConstraint("a.node_id", "n.node_id");
 		if(searchByName){
@@ -429,8 +430,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
 		}
 		rq.setWhereClause(wc);
-		System.out.println(rq.toSQL());
-		
+		//	System.out.println(rq.toSQL());
 		try {
 			ResultSet rs = execute(rq);
 			while (rs.next()) {
@@ -448,20 +448,20 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 					+ e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return results;
-		
+
 	}
-	
+
 	public Collection<Node> getNodesForSearchTermByDefinition(String searchTerm, boolean zfinOption, List<String> ontologies){
-		
+
 		Collection<Node> results = new HashSet<Node>();
-		
+
 		RelationalQuery rq = new SqlQueryImpl();
 		rq.addTable("description", "d");
 		rq.addTable(NODE_TABLE, "n");
 		rq.setSelectClause("n.uid AS uid, d.label as definition");
-		
+
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addJoinConstraint("d.node_id", "n.node_id");
 		wc.addCaseInsensitiveRegexConstraint("lower(d.label)", searchTerm);
@@ -479,8 +479,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
 		}
 		rq.setWhereClause(wc);
-		System.out.println(rq.toSQL());
-		
+		//	System.out.println(rq.toSQL());
 		try {
 			ResultSet rs = execute(rq);
 			while (rs.next()) {
@@ -498,12 +497,12 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 					+ e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return results;
-		
+
 	}
-	
-	
+
+
 	public Collection<Node> getAnnotatedEntitiesBelowNodeSet(
 			Collection<String> ids, EntailmentUse entailment,
 			GraphTranslation gea) {
@@ -546,26 +545,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			e.printStackTrace();
 		}
 		return null;
-		/*
-		RelationalQuery q = new SqlQueryImpl();
-		q.addTable("node_pair_annotation_similarity_score");
-		WhereClause wc = q.getWhereClause();
-		wc.addEqualityConstraint("node1_id", iid1);
-		wc.addEqualityConstraint("node2_id", iid2);
-
-		ResultSet rs;
-		try {
-			rs = execute(q);
-			if (rs.next()) {
-				Double bss = rs.getDouble("basic_similarity_score");
-				return bss;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-		 */
 	}
 
 	public Double getBasicSimilarityScore(String aeid1, String aeid2) {
@@ -1332,7 +1311,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			s.setUnionSemantics(true);
 		return s;
 	}
-	
+
 	public LiteralStatement createLiteralStatementFromResultSet(ResultSet rs)
 	throws SQLException {
 
@@ -1379,7 +1358,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 		return statements;
 	}
-	
+
 	public Collection<LiteralStatement> getLiteralStatementsByQuery(
 			QueryTerm queryTerm) {
 
@@ -1440,7 +1419,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			return statements;
 		}
 	}
-	*/
+	 */
 
 	@Override
 	public Collection<LiteralStatement> getLiteralStatementsByNode(
@@ -1511,7 +1490,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		rq.getSelectClause().setDistinct(true);
 		return rq;
 	}
-	
+
 	protected Collection<LiteralStatement> old___getLiteralStatementsByQuery(
 			QueryTerm queryTerm, String tbl) {
 
@@ -1603,8 +1582,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			return translateQueryForLinkStatement(outerq, targetLinkAlias);
 		}
 
-                // translate the link query to an SQL term. This SQL term will lack
-                // select clauses
+		// translate the link query to an SQL term. This SQL term will lack
+		// select clauses
 		String linkTableAlias = translateQuery(qt, rq, null);
 		SelectClause selectClause = rq.getSelectClause();
 		selectClause.setDistinct(true);
@@ -1701,8 +1680,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			return translateQueryForLiteral(outerq, targetLiteralAlias);
 		}
 
-                // translate the link query to an SQL term. This SQL term will lack
-                // select clauses
+		// translate the link query to an SQL term. This SQL term will lack
+		// select clauses
 		String linkTableAlias = translateQuery(qt, rq, null);
 		SelectClause selectClause = rq.getSelectClause();
 		selectClause.setDistinct(true);
@@ -1902,7 +1881,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			}
 			return "";
 		} else if (qt instanceof LiteralQueryTerm
-                           && false
+				&& false
 				&& ((LiteralQueryTerm) qt).isAlias()) { // OLD
 			LiteralQueryTerm cqt = (LiteralQueryTerm) qt;
 			String tbl = "node_literal";
@@ -2066,7 +2045,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			// returns the name of the link table alias used in this query
 			if (qt.getIsAnnotation() != null) {
 				String isNullConstr = qt.getIsAnnotation() ? " IS NOT NULL"
-						: "IS NULL";
+						: " IS NULL";
 				wc.addConstraint(tblCol(tblAlias, LINK_REIF_INTERNAL_ID_COLUMN)
 						+ isNullConstr);
 			}
@@ -2556,7 +2535,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 		if (curNode.getLabel() != null) {
 			ps = obd.getConnection().prepareStatement("UPDATE node SET label=?, metatype='"+curNode.getMetatype().name().substring(0,1)+
-					"' WHERE node_id = ?");
+			"' WHERE node_id = ?");
 			ps.setString(1, curNode.getLabel());
 			ps.setInt(2, iidTo);
 			ps.execute();

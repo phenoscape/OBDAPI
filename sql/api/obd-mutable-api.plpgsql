@@ -1,9 +1,6 @@
 -- CREATE SCHEMA obd_mutable_api;
 -- SET search_path TO obd_mutable_api,public;
 
-TODO
-
-
 -- @@ store_node(UID,label,source,metatype)
 CREATE OR REPLACE FUNCTION store_node (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
   RETURNS INT AS 
@@ -17,30 +14,25 @@ DECLARE
    v_node_id               INTEGER;
    v_source_id             INTEGER;
  BEGIN
-
     IF v_source IS NOT NULL THEN
       SELECT INTO v_source_id store_node(v_source);
     END IF;
-    RETURN SELECT store_node(v_uid,v_label,v_source_id,v_metatype);
+    RETURN store_node(v_uid,v_label,v_source_id,v_metatype);
  END
-$$ LANUAGE 'plpgsql';
+$$ LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION store_node (VARCHAR,VARCHAR,VARCHAR,VARCHAR) 
+CREATE OR REPLACE FUNCTION store_node (VARCHAR,VARCHAR,INT,VARCHAR) 
   RETURNS INT AS 
 $$
 DECLARE
    v_uid                   ALIAS FOR $1;
    v_label                 ALIAS FOR $2;
-   v_source             ALIAS FOR $3;
+   v_source_id             ALIAS FOR $3;
    v_metatype              ALIAS FOR $4;
 
    v_node_id               INTEGER;
-   v_source_id             INTEGER;
  BEGIN
 
-    IF v_source IS NOT NULL THEN
-      SELECT INTO v_source_id store_node(v_source);
-    END IF;
     SELECT INTO v_node_id node_id
       FROM node
       WHERE uid=v_uid;
@@ -51,9 +43,9 @@ DECLARE
        (v_uid,v_label,v_source_id,v_metatype);
        RETURN currval('node_node_id_seq');
     ELSE
-     IF v_source IS NULL OR v_source='' THEN
-      SELECT INTO v_source_id source_id FROM node WHERE uid=v_uid;
-     END IF;
+--     IF v_source IS NULL OR v_source='' THEN
+ --     SELECT INTO v_source_id source_id FROM node WHERE uid=v_uid;
+--     END IF;
     END IF;
     -- we only reach the code if the node is found
     IF v_label IS NULL THEN
@@ -188,7 +180,7 @@ LANGUAGE 'sql';
 -- @@ store_instance_node(UID,label,source)
 CREATE OR REPLACE FUNCTION store_instance_node (VARCHAR,VARCHAR,VARCHAR) RETURNS INT AS
 $$ 
-SELECT store_node($1,$2,$3,'I') 
+SELECT store_node($1,$2,$3,CAST('I' AS VARCHAR)) 
 $$
 LANGUAGE 'sql';
 
@@ -401,6 +393,24 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+-- @@ store_node_alt_id_i (IID, xref)
+CREATE OR REPLACE FUNCTION store_node_alt_id_i (INT,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+
+   v_node_id               ALIAS FOR $1;
+   v_rel_id                INTEGER;
+   v_xref_id               INTEGER;
+ BEGIN
+    SELECT INTO v_xref_id store_node($2);
+    SELECT INTO v_rel_id store_relation_node('oboInOwl:hasAlternativeId');
+    INSERT INTO link (node_id,predicate_id,object_id,is_metadata)
+        VALUES (v_node_id,v_rel_id,v_xref_id,'t');
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
  -- @@ store_node_dbxref_isa_i (IID, xrefID, nodeID)
  CREATE OR 	REPLACE FUNCTION store_node_dbxref_isa_i (INT, VARCHAR)
  	RETURNS INT AS
@@ -484,6 +494,7 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+
 CREATE OR REPLACE FUNCTION set_node_is_transitive_i (INT,BOOLEAN) 
   RETURNS INT AS 
 $$
@@ -502,6 +513,17 @@ DECLARE
    v_node_id               ALIAS FOR $1;
  BEGIN
     UPDATE node SET is_anonymous=$2 WHERE node_id=$1;
+    RETURN v_node_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_node_is_metadata_i (INT,BOOLEAN) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+ BEGIN
+    UPDATE node SET is_metadata=$2 WHERE node_id=$1;
     RETURN v_node_id;
  END;
 $$ LANGUAGE 'plpgsql';
@@ -606,6 +628,19 @@ SELECT store_tagval($1,$2,$3,$4,NULL)
 $$
 LANGUAGE 'sql';
 
+CREATE OR REPLACE FUNCTION store_comment_i (INT,VARCHAR) 
+  RETURNS INT AS 
+$$
+DECLARE
+   v_node_id               ALIAS FOR $1;
+   v_tagval_id               INTEGER;
+ BEGIN
+    SELECT INTO v_tagval_id store_tagval_i(v_node_id,'oboInOwl:comment',$2,'xsd:string');
+    RETURN v_tagval_id;
+ END;
+$$ LANGUAGE 'plpgsql';
+
+
 -- Example: select migrate_links_to_alt_id('quality');  
 CREATE OR REPLACE FUNCTION migrate_links_to_alt_id(VARCHAR) RETURNS INT AS
 $$
@@ -615,8 +650,9 @@ DECLARE
   v_source_id       INTEGER;
   v_alias_link          link%ROWTYPE;
  BEGIN
-  SELECT INTO v_alias_pred_id node_id FROM node WHERE uid='oboInOwl:hasDbXref';
+  SELECT INTO v_alias_pred_id node_id FROM node WHERE uid='oboInOwl:hasAlternativeId';
   SELECT INTO v_source_id node_id FROM node WHERE uid=v_idspace;
+  RAISE NOTICE 'source_id: %', v_source_id;
   FOR v_alias_link IN SELECT * FROM link WHERE predicate_id = v_alias_pred_id AND node_id IN (SELECT node_id FROM node WHERE source_id=v_source_id) LOOP
     RAISE NOTICE 'old link: %', v_alias_link;
     UPDATE link SET object_id = v_alias_link.node_id WHERE object_id=v_alias_link.object_id AND predicate_id != v_alias_pred_id;
@@ -639,6 +675,11 @@ $$ LANGUAGE 'sql';
 CREATE OR REPLACE FUNCTION reify_links_by_predicate(VARCHAR,VARCHAR) RETURNS VOID AS
 $$
   UPDATE link SET reiflink_node_id=get_node_id($2) WHERE predicate_id=get_node_id($1) AND is_inferred='f';
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION reify_all_links_by_predicate(VARCHAR,VARCHAR) RETURNS VOID AS
+$$
+  UPDATE link SET reiflink_node_id=get_node_id($2) WHERE predicate_id=get_node_id($1);
 $$ LANGUAGE 'sql';
 
 -- store_genus_differentium(genus,predicate,filler,xp_source) RETURNS INT
@@ -664,3 +705,84 @@ $$
   RETURN v_node_id;
  END
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION create_xps_by_relation(INT,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT store_genus_differentium(node_class_id,$1,object_class_id,$2) FROM some_some_relation_by_asserted_instance_links WHERE predicate_id=$1 AND node_class_id NOT IN (SELECT node_id FROM intersection_link);
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION create_xps_by_inferred_relation(INT,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT store_genus_differentium(node_class_id,$1,object_class_id,$2) FROM some_some_relation_by_instance_links WHERE predicate_id=$1 AND node_class_id NOT IN (SELECT node_id FROM intersection_link);
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION create_xps_by_relation_with_asserted_instances(INT,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT store_genus_differentium(node_class_id,$1,object_class_id,$2) FROM some_some_relation_by_asserted_instances WHERE predicate_id=$1 AND node_class_id NOT IN (SELECT node_id FROM intersection_link);
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION create_xps_by_relation_between(INT,INT,INT,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT store_genus_differentium(node_class_id,$1,object_class_id,$4) 
+ FROM some_some_relation_by_asserted_instances 
+ WHERE predicate_id=$1 
+  AND node_class_id IN (SELECT node_id FROM is_a_link WHERE object_id=$2)
+  AND object_class_id IN (SELECT node_id FROM is_a_link WHERE object_id=$3)
+  AND node_class_id NOT IN (SELECT node_id FROM intersection_link);
+$$ LANGUAGE 'sql';
+
+-- todo
+CREATE OR REPLACE FUNCTION create_nested_xps_by_relation_chain(INT,INT,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT store_genus_differentium(node_class_id,$1,object_class_id,$2) 
+  FROM 
+    (SELECT DISTINCT
+      nt.object_id AS node_class_id,
+      obt.object_id AS object_class_id
+     FROM link 
+      INNER JOIN asserted_instance_of_link AS nt ON (link.node_id=nt.node_id)
+      INNER JOIN instance_of_link AS obt ON (link.object_id=obt.node_id)
+    WHERE link.predicate_id=$1
+     AND obt.object_id IN (SELECT node_id FROM differentium_link WHERE differentium_link.predicate_id=$2)) AS some_some
+  WHERE some_some.node_class_id NOT IN (SELECT node_id FROM intersection_link);
+$$ LANGUAGE 'sql';
+
+
+CREATE OR REPLACE FUNCTION create_xps_by_relation_between(VARCHAR,VARCHAR,VARCHAR,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT create_xps_by_relation_between(get_node_id($1),get_node_id($2),get_node_id($3),$4);
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION create_xps_by_relation_to_xp(INT,INT) RETURNS SETOF RECORD AS
+$$
+ SELECT store_genus_differentium(node_class_id,$1,object_class_id,$2)
+ FROM some_some_relation_by_instance_links
+ WHERE predicate_id=$1
+  AND is_inferred_node='f'
+  AND object_class_id NOT IN (SELECT node_id FROM node WHERE uid LIKE '%:__Desc%')
+  AND object_class_id IN (SELECT node_id FROM intersection_link)
+  AND node_class_id NOT IN (SELECT node_id FROM intersection_link);
+$$ LANGUAGE 'sql';
+
+
+CREATE OR REPLACE FUNCTION enforce_link_metadata() RETURNS VOID AS
+$$
+  UPDATE link SET is_metadata=true WHERE predicate_id IN (SELECT node_id FROM metadata_relation_node);
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION remove_inferred_metadata_links() RETURNS VOID AS
+$$
+  DELETE FROM link WHERE is_metadata=true;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION force_anon_for_empty_idspace() RETURNS VOID AS
+$$
+  UPDATE node SET is_anonymous=true WHERE uid like '_:%';
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION delete_redundant_anonymous_nodes() RETURNS VOID AS
+$$
+  DELETE FROM node WHERE is_anonymous=true AND node_id IN (SELECT node_id FROM sameas) 
+  AND NOT EXISTS (SELECT * FROM asserted_link WHERE object_id=node.node_id);
+$$ LANGUAGE 'sql';
+

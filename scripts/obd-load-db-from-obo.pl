@@ -40,6 +40,10 @@ while ($ARGV[0] =~ /^\-/) {
     elsif ($opt eq '--split') {
         $split = shift @ARGV;
     }
+    elsif ($opt eq '--help') {
+        usage();
+        exit(0);
+    }
     elsif ($opt eq '--parg' || $opt eq '-p') {
         push(@parse_args, shift @ARGV);
     }
@@ -166,4 +170,13 @@ sub clear_previous {
             $dbh->do("DELETE FROM link WHERE is_inferred='t' AND node_id IN (SELECT node_id FROM node WHERE source_id=$source)")
         }
     }
+}
+
+#
+
+sub usage {
+    print <<EOM;
+obd-load-db-from-obo.pl -d JDBCPATH [-c CONFFILE] [FILE1.obo, FILE2.obo, ...]
+
+EOM
 }
