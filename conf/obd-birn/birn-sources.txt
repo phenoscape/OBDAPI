@@ -75,7 +75,6 @@ title	BIRNLex Anatomy
 namespace	birnlex_anatomy
 uriprefix	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Anatomy.owl#
 foundry	No
-add	Yes
 status	Production and review
 download	
 source	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Anatomy.owl#
@@ -83,6 +82,8 @@ home	http://openccdb.org/wiki/index.php/Disease_Ontology
 documentation	
 contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
 format	owl
+is_obsolete	true
+replaced_by	NIF_GrossAnatomy
 description	
 
 id	birnlex_disease
@@ -90,15 +91,53 @@ title	BIRNLex Disease
 namespace	birnlex_disease
 uriprefix	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Disease.owl#
 foundry	No
-add	Yes
 status	Production and review
 download	
 source	http://purl.org/nbirn/birnlex/ontology/BIRNLex-Disease.owl#
 home	http://openccdb.org/wiki/index.php/Disease_Ontology
 documentation	
 contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
+is_obsolete	true
+replaced_by	NIF_Dysfunction
 format	owl
 description	
+
+id	NIF_GrossAnatomy
+title	NIF Gross Anatomy
+namespace	NIF_GrossAnatomy
+uriprefix	http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-GrossAnatomy.owl#
+foundry	No
+add	Yes
+status	Production and review
+download	
+source	http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-GrossAnatomy.owl
+home	http://neuinfo.org/
+documentation	http://neuinfo.org/about/vocabularies.shtml
+contact	Fahim Imam	smtifahim	gmail.com
+format	owl
+description	NIF-GrossAnatomy: anatomical entities of relevance to neuroscience. Contains most classes from BIRNLex-Anatomy
+patho_type	canonical
+subtypes_of	CARO:0000000
+domain	neuroscience
+granularity	organismal
+
+id	NIF_Dysfunction
+title	NIF Dysfunction
+namespace	NIF_Dysfunction
+uriprefix	http://ontology.neuinfo.org/NIF/Dysfunction/NIF-Dysfunction.owl#
+foundry	No
+add	Yes
+status	Production and review
+download	
+source	http://ontology.neuinfo.org/NIF/Dysfunction/NIF-Dysfunction.owl
+home	http://neuinfo.org/
+documentation	http://neuinfo.org/about/vocabularies.shtml
+contact	Fahim Imam	smtifahim	gmail.com
+format	owl
+description	This ontology contains the former BIRNLex-Disease, version 1.3.2. -- The BIRN Project lexicon will provide entities for data and database annotation for the BIRN project, covering anatomy, disease, data collection, project management and experimental design.  It is built using the organizational framework provided by the foundational Basic Formal Ontology (BFO).  It uses an abstract biomedical layer on top of that - OBO-UBO which has been constructed  as a proposal to the OBO Foundry.  This is meant to support creating a sharable view of core biomedical objects such as biomaterial_entity, and organismal_entity that all biomedical ontologies are likely to need and want to use with the same intended meaning.  The BIRNLex biomaterial entities have already been factored to separately maintained ontology - BIRNLexBiomaterialEntity.owl which this BIRNLex-Main.owl file imports.  The Ontology of Biomedical Investigation (OBI) is also imported and forms the foundation for the formal description of all experiment-related artifacts.  The BIRNLex will serve as the basis for construction of a formal ontology for the multiscale investigation of neurological disease.
+patho_type	pathological
+subtypes_of	bfo:DependentContinuant
+domain	neuroscience
 
 id	birnlex_organismal_taxonomy
 title	BIRNLex Organismal Taxonomy
@@ -155,5 +194,20 @@ documentation
 contact	Sarah Maynard	smaynard	ncmir.ucsd.edu
 format	owl
 description	
+
+id	nif_anatomy_xp
+type	logical_definitions
+title	nif_anatomy logical definitions
+namespace	NIF_anatomy_XP
+extends	nif_anatomy
+foundry	NA
+status	Draft
+download	nif_anatomy_xp.obo|http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/anatomy/anatomy_xp/nif_anatomy_xp.obo
+source	
+home	http://www.berkeleybop.org/obol
+documentation	
+contact	
+format	obo
+description	logical definitions for nif_anatomy classes
 
 

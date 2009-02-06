@@ -21,6 +21,7 @@ obd-exec  -d $DB --rename-idspace http://ccdb.ucsd.edu/SAO/DPO/2.0/DPO.owl# BIRN
 obd-exec  -d $DB --rename-idspace http://ccdb.ucsd.edu/SAO/DPO/2.0/HumanDPO.owl# SAO_HumanDPO:
 obd-exec  -d $DB --rename-idspace _:http:::ccdb.ucsd.edu:SAO:DPO:2.0:HumanDPO.owl# _:SAO_Human_DPO_
 
+obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/BiomaterialEntities/SAO-CORE_properties.owl# NIF_core:
 obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-GrossAnatomy.owl# birnlex_anatomy:
 obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/Backend/BIRNLex-OBO-UBO.owl# birnlex_ubo:
 obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/DigitalEntities/NIF-Investigation.owl# NIF_investigation:
@@ -30,6 +31,9 @@ obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/BiomaterialEnt
 obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Quality.owl# NIF_quality:
 obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/Dysfunction/NIF-Dysfunction.owl# birnlex_disease:
 obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Organism.owl# birnlex_tax:
+obd-exec  -d $DB --rename-idspace http://ontology.neuinfo.org/NIF/Backend/BIRNLex-OBI-proxy.owl# NIF_OBI:
+
+obd-exec  -d $DB --rename-idspace NIF_core:sao1239937685 OBO_REL:regional_part_of
 
 # TODO:
 

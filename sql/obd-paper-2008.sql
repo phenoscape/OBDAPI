@@ -283,3 +283,5 @@ CREATE OR REPLACE VIEW mislocalised_posteriorly_IC AS
 CREATE OR REPLACE VIEW rectum_IC AS
  select uid,label,get_information_content(node_id) as ic from node where node_id in (select object_id from node_link where node_uid='PATO:0001922') and uid like 'PATO:%' order by ic;
 
+SELECT realize_relation('OBO_REL:in_organism');
+SELECT realize_relation('OBO_REL:variant_of');

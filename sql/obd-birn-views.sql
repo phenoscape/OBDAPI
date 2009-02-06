@@ -10,7 +10,7 @@ CREATE OR REPLACE VIEW is_organism AS
   c.uid='birnlex_ubo:birnlex_2';
 
 -- e.g. (human with PD) is_bearer_of (P)
-UPDATE link SET reiflink_node_id=get_node_id('BIRN:generic_annotation') WHERE predicate_id=get_node_id('birnlex_ubo:birnlex_17') AND is_inferred='f' AND node_id IN (SELECT node_id FROM asserted_is_a_link WHERE object_id=get_node_id('birnlex_tax:birnlex_516'));
+UPDATE link SET reiflink_node_id=get_node_id('BIRN:generic_annotation') WHERE predicate_id=get_node_id('birnlex_ubo:birnlex_17') AND is_inferred='f' AND node_id IN (SELECT node_id FROM asserted_is_a_link WHERE object_id=get_node_id('birnlex_tax:birnlex_516')) AND object_id NOT IN (SELECT node_id FROM is_a_link WHERE object_id=get_node_id('NIF_OBI:birnlex_11013'));
 
 CREATE OR REPLACE VIEW is_bearer_of AS SELECT * FROM link WHERE predicate_id IN (SELECT node_id FROM node WHERE uid='birnlex_ubo:birnlex_17');
 SELECT realize_relation('OBO_REL:has_part');
@@ -26,20 +26,198 @@ CREATE OR REPLACE VIEW has_part_bearer_of AS
  WHERE
   is_bearer_of.is_inferred='f';
 
+CREATE OR REPLACE VIEW reflexive_has_part_bearer_of AS
+ SELECT * FROM has_part_bearer_of UNION
+ SELECT DISTINCT
+  is_bearer_of.node_id,
+  get_node_id('OBO_REL:has_part_bearer_of') AS predicate_id,
+  is_bearer_of.object_id
+ FROM
+   is_bearer_of
+ WHERE
+  is_bearer_of.is_inferred='f';
+
+SELECT realize_relation('OBO_REL:part_of');
+
+CREATE OR REPLACE VIEW inheres_in_part_of AS
+ SELECT DISTINCT
+  inheres_in.node_id,
+  get_node_id('OBO_REL:inheres_in_part_of') AS predicate_id,
+  part_of.object_id
+ FROM
+  OBO_REL.inheres_in
+  INNER JOIN obo_rel.part_of ON (inheres_in.object_id=part_of.node_id)
+ WHERE
+  inheres_in.is_inferred='f';
+
+SELECT realize_relation('OBO_REL:inheres_in');
+SELECT realize_relation('OBO_REL:instance_of');
+
+CREATE OR REPLACE VIEW inferred_inheres_in_with_types_c AS
+ SELECT
+  ni.object_id AS node_type_id,
+  oi.object_id AS object_type_id,
+  count(DISTINCT inh.node_id) AS num_instances
+ FROM
+  OBO_REL.inheres_in AS inh
+  INNER JOIN OBO_REL.instance_of  AS ni ON (inh.node_id=ni.node_id)
+  INNER JOIN OBO_REL.instance_of  AS oi ON (inh.object_id=oi.node_id)
+ GROUP BY
+  ni.object_id,
+  oi.object_id;
+
+CREATE OR REPLACE VIEW asserted_inheres_in_with_types_c AS
+ SELECT
+  ni.object_id AS node_type_id,
+  oi.object_id AS object_type_id,
+  count(DISTINCT inh.node_id) AS num_instances
+ FROM
+  OBO_REL.inheres_in AS inh
+  INNER JOIN asserted_OBO_REL.instance_of  AS ni ON (inh.node_id=ni.node_id)
+  INNER JOIN asserted_OBO_REL.instance_of  AS oi ON (inh.object_id=oi.node_id)
+ GROUP BY
+  ni.object_id,
+  oi.object_id;
+
+CREATE OR REPLACE VIEW nr_inheres_in_with_types_c AS
+ SELECT
+  ni.object_id AS node_type_id,
+  oi.object_id AS object_type_id,
+  count(DISTINCT inh.node_id) AS num_instances
+ FROM
+  OBO_REL.inheres_in AS inh
+  INNER JOIN asserted_instance_of_link  AS ni ON (inh.node_id=ni.node_id)
+  INNER JOIN nr_instance_of_link  AS oi ON (inh.object_id=oi.node_id)
+ GROUP BY
+  ni.object_id,
+  oi.object_id;
+
+
+SELECT realize_relation('OBO_REL:towards');
+
+CREATE OR REPLACE VIEW asserted_towards_with_types_c AS
+ SELECT
+  ni.object_id AS node_type_id,
+  oi.object_id AS object_type_id,
+  count(DISTINCT towards.node_id) AS num_instances
+ FROM
+  OBO_REL.towards AS towards
+  INNER JOIN asserted_OBO_REL.instance_of  AS ni ON (towards.node_id=ni.node_id)
+  INNER JOIN asserted_OBO_REL.instance_of  AS oi ON (towards.object_id=oi.node_id)
+ GROUP BY
+  ni.object_id,
+  oi.object_id;
+
+CREATE OR REPLACE VIEW asserted_part_of_types_c AS
+ SELECT
+  ni.object_id AS node_type_id,
+  oi.object_id AS object_type_id,
+  count(DISTINCT part_of.node_id) AS num_instances
+ FROM
+  OBO_REL.part_of AS part_of
+  INNER JOIN asserted_OBO_REL.instance_of  AS ni ON (part_of.node_id=ni.node_id)
+  INNER JOIN asserted_OBO_REL.instance_of  AS oi ON (part_of.object_id=oi.node_id)
+ WHERE
+  part_of.object_id NOT IN (SELECT node_id FROM is_organism)
+ GROUP BY
+  ni.object_id,
+  oi.object_id;
+
+
+-- conservative
+SELECT 
+   store_genus_differentium(node_type_id,get_node_id('OBO_REL:part_of'),object_type_id,get_node_id('BIRN:generic_annotation'))
+ FROM asserted_part_of_types_c;
+-- should reason after this..
+
+SELECT 
+   store_genus_differentium(node_type_id,get_node_id('OBO_REL:inheres_in'),object_type_id,get_node_id('BIRN:generic_annotation'))
+ FROM asserted_inheres_in_with_types_c;
+
+SELECT 
+   store_genus_differentium(node_type_id,get_node_id('OBO_REL:inheres_in'),object_type_id,get_node_id('BIRN:generic_annotation'))
+ FROM nr_inheres_in_with_types_c;
+
+SELECT 
+   store_genus_differentium(node_type_id,get_node_id('OBO_REL:towards'),object_type_id,get_node_id('BIRN:generic_annotation'))
+ FROM asserted_towards_with_types_c;
+
+SELECT 
+   store_genus_differentium(node_id,get_node_id('OBO_REL:inheres_in_part_of'),object_id,get_node_id('BIRN:generic_annotation'))
+ FROM inheres_in_part_of;
+
+SELECT realize_relation('OBO_REL:inheres_in_part_of');
+
+-- obd-reasoner.pl --skip intersections --view inheres_in_link_from_has_quality --view has_population_of --rule none -d $* ;\
+
+
 CREATE OR REPLACE VIEW exemplifies AS
  SELECT DISTINCT
   hpbo.node_id,
   get_node_id('OBO_REL:exemplifies') AS predicate_id,
   io.object_id  
  FROM
-  has_part_bearer_of AS hpbo
+  reflexive_has_part_bearer_of AS hpbo
   INNER JOIN nr_instance_of_link AS io ON (hpbo.object_id=io.node_id)
  WHERE
   hpbo.node_id IN (SELECT node_id FROM is_organism);
 
+
+-- delete from link where predicate_id=get_node_id('OBO_REL:exemplifies');
 -- INSERT INTO LINK (reiflink_node_id,node_id,predicate_id,object_id) (SELECT get_node_id('BIRN:generic_annotation'), node_id, predicate_id, object_id FROM has_part_bearer_of);
 -- SELECT reify_links_by_predicate('OBO_REL:exemplifies','BIRN:generic_annotation');
 INSERT INTO LINK (reiflink_node_id,node_id,predicate_id,object_id) (SELECT get_node_id('BIRN:generic_annotation'), node_id, predicate_id, object_id FROM exemplifies);
+
+
+CREATE OR REPLACE VIEW instance_class_sim AS
+ SELECT 
+  ss.*,
+  inode.uid AS i_uid,
+  inode.label AS i_label,
+  cnode.uid AS c_uid,
+  cnode.label AS c_label
+ FROM 
+  node_pair_annotation_similarity_score AS ss
+  INNER JOIN node AS inode ON (ss.node1_id=inode.node_id)
+  INNER JOIN node AS cnode ON (ss.node2_id=cnode.node_id)
+ WHERE
+  inode.metatype='I' AND
+  cnode.metatype='C';
+-- SELECT * FROM instance_class_sim ORDER BY basic_score DESC;
+
+CREATE OR REPLACE VIEW instance_class_xp_sim AS
+ SELECT 
+  ss.*,
+  inode.uid AS i_uid,
+  inode.label AS i_label,
+  cnode.uid AS c_uid,
+  cnode.label AS c_label
+ FROM 
+  node_pair_annotation_xp_intersection_with_total AS ss
+  INNER JOIN node AS inode ON (ss.node1_id=inode.node_id)
+  INNER JOIN node AS cnode ON (ss.node2_id=cnode.node_id)
+ WHERE
+  inode.metatype='I' AND
+  cnode.metatype='C';
+
+
+
+CREATE OR REPLACE VIEW model_disease_sim AS
+ SELECT 
+  ss.*,
+  mnode.uid AS i_uid,
+  mnode.label AS i_label,
+  dnode.uid AS c_uid,
+  dnode.label AS c_label
+ FROM 
+  node_pair_annotation_similarity_score AS ss
+  INNER JOIN node AS mnode ON (ss.node1_id=mnode.node_id)
+  INNER JOIN node AS dnode ON (ss.node2_id=dnode.node_id)
+ WHERE
+  mnode.node_id IN (SELECT node_id FROM is_organism) AND
+  dnode.node_id IN (SELECT node_id FROM foo);
+
+-- UPDATE node SET label=node_auto_label(node_id) WHERE label IS NULL AND node_id IN (SELECT node_id FROM genus_link);
 
 
 -- everything after here may apply to old data version
@@ -49,7 +227,6 @@ INSERT INTO LINK (reiflink_node_id,node_id,predicate_id,object_id) (SELECT get_n
 -- SELECT realize_all_relations();
 SELECT realize_class('BIRN_PDPO:Phenotype');
 SELECT realize_relation('BIRN_PDPO:has_quality');
-SELECT realize_relation('OBO_REL:inheres_in');
 SELECT realize_relation('OBO_REL:exemplifies');
 SELECT realize_relation('OBO_REL:instance_of');
 SELECT realize_relation('BIRN_PDPO:bears');

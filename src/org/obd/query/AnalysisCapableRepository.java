@@ -176,6 +176,8 @@ public interface AnalysisCapableRepository {
 		 */
 		public Integer search_profile_max_classes_per_source = 50;
 		
+		public Integer max_reported_hits = 40;
+		
 		/**
 		 * restrict hits to be in this organism
 		 */

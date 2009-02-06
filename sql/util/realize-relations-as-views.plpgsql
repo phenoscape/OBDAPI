@@ -82,6 +82,12 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+COMMENT ON FUNCTION realize_relation(VARCHAR) IS 'realize_relation(R)
+: translates statements with relation R into first-class SQL
+predicates. i.e. s(R,su,ob) -> R(su,ob). Here R is the uid that must
+be present in relation_node. By default R is implemented as a SQL
+view, but this can be materialized by calling select create_matview(R)';
+
 CREATE OR REPLACE FUNCTION realize_all_relations () 
   RETURNS VOID AS
 $$
@@ -94,6 +100,9 @@ DECLARE
     RETURN;
  END;
 $$ LANGUAGE 'plpgsql';
+
+COMMENT ON FUNCTION realize_all_relations() IS 'calls realize_relation(R) for all R in r(S,_,_)';
+
 
 CREATE OR REPLACE FUNCTION realize_class_i (INTEGER) 
   RETURNS VOID AS 
@@ -151,6 +160,13 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+COMMENT ON FUNCTION realize_class(VARCHAR) IS 'realize_class(C) :
+creates a first-class SQL predicate C, a subtype of node such that
+C(i, ..) <- node(i, ...) & s(instance_of,i,C). Here C is the uid that
+must be present in class_node. By default C is implemented as a SQL
+view, but this can be materialized by calling select
+create_matview(C)';
+
 CREATE OR REPLACE FUNCTION realize_all_classes () 
   RETURNS VOID AS
 $$
@@ -163,6 +179,9 @@ DECLARE
     RETURN;
  END;
 $$ LANGUAGE 'plpgsql';
+
+COMMENT ON FUNCTION realize_all_class() IS 'calls realize_class(C) for all C in s(instance_of,_,C)';
+
 
 CREATE OR REPLACE FUNCTION realize_all_classes_in (VARCHAR) 
   RETURNS VOID AS
@@ -177,6 +196,9 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+COMMENT ON FUNCTION realize_all_classes_in(VARCHAR) IS 'calls
+realize_class(C) for all C in s(instance_of,_,C) where C is in a
+particular IDspace';
 
 
 CREATE OR REPLACE FUNCTION realize_all_relations_in (VARCHAR) 
@@ -192,5 +214,8 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+COMMENT ON FUNCTION realize_all_relations_in(VARCHAR) IS 'calls
+realize_relation(R) for all R in s(instance_of,_,R) where R is in a
+particular IDspace';
 
 

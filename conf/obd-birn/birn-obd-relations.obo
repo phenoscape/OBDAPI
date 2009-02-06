@@ -12,3 +12,8 @@ holds_over_chain: OBO_REL:has_part birnlex_ubo:birnlex_17
 id: OBO_REL:exemplifies
 name: exemplifies
 holds_over_chain: OBO_REL:has_part_bearer_of OBO_REL:instance_of
+
+[Typedef]
+id: OBO_REL:regional_part_of
+name: regional_part_of
+is_a: OBO_REL:part_of

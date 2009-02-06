@@ -274,6 +274,11 @@ public class OBDMain {
 						ssp.search_profile_max_annotated_entities_per_class = Integer.parseInt(args[i]);
 						i++;
 					}
+					else if (args[i].equals("-R") || args[i].equals("--max_reported")) {
+						i++;
+						ssp.max_reported_hits = Integer.parseInt(args[i]);
+						i++;
+					}
 					else if (args[i].equals("-O") || args[i].equals("--max_per_src")) {
 						i++;
 						ssp.search_profile_max_classes_per_source = Integer.parseInt(args[i]);
@@ -556,7 +561,7 @@ public class OBDMain {
 						sp.getMaximumInformationContentForNodesInCommon()+"\t"+
 						getNodeDisp(sp.getNonRedundantNodesInCommon()));
 				// getSP is expensive : limited amount
-				if (n >= 40) // HARDCODE ALERT - TODO
+				if (n >= ssp.max_reported_hits) // HARDCODE ALERT - TODO
 					break;
 			}
 			else {
