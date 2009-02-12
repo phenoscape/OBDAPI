@@ -42,13 +42,42 @@ CREATE VIEW inf_gt_label AS
 
 -- UPDATE node SET label=(SELECT gt_label FROM inf_gt_label WHERE gt_label.gt_node_id=node_id) WHERE node.uid LIKE 'OMIM:%';
 
-CREATE OR REPLACE VIEW omim_genotype AS
+
+
+
+CREATE OR REPLACE VIEW omim_genotype_gene AS
  SELECT
-  *,
-  split_part(uid,'/',1) AS allele
+  og.*,
+  split_part(og.uid,'/',1) AS allele,
+  l2n.object_id AS gene_id,
+  l2n.object_uid AS gene_uid,
+  l2n.object_label AS gene_label
  FROM
-  node
- WHERE uid like 'OMIM:%';
+  node AS og
+  INNER JOIN link_to_node AS l2n USING (node_id)
+ WHERE
+  og.uid LIKE 'OMIM:%' AND
+  l2n.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:variant_of')
+  AND l2n.object_uid like 'NCBI_Gene:%';
+
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('omim_genotype_gene');
+-- CREATE INDEX omim_genotype_gene_idx_id ON omim_genotype_gene(node_id);
+-- CREATE INDEX omim_genotype_gene_idx_uid ON omim_genotype_gene(uid);
+-- CREATE INDEX omim_genotype_gene_idx_label ON omim_genotype_gene(label);
+-- CREATE INDEX omim_genotype_gene_idx_gene_id ON omim_genotype_gene(gene_id);
+-- CREATE UNIQUE INDEX omim_genotype_gg_idx_gene_id ON omim_genotype_gene(node_id,gene_id);
+-- END MATERIALIZE
+
+CREATE OR REPLACE VIEW omim_genotype AS
+ SELECT DISTINCT
+  node_id,
+  uid,
+  label,
+  allele
+ FROM
+  omim_genotype_gene;
+
 
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('omim_genotype');
@@ -66,30 +95,6 @@ CREATE OR REPLACE VIEW omim_allele AS
   omim_genotype
   INNER JOIN inf_gt_label ON (node_id=gt_node_id)
  GROUP BY omim_genotype.node_id,allele;
-
-
-
-CREATE OR REPLACE VIEW omim_genotype_gene AS
- SELECT
-  og.*,
-  l2n.object_id AS gene_id,
-  l2n.object_uid AS gene_uid,
-  l2n.object_label AS gene_label
- FROM
-  omim_genotype AS og
-  INNER JOIN link_to_node AS l2n USING (node_id)
- WHERE
-  l2n.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:variant_of')
-  AND l2n.object_uid like 'NCBI_Gene:%';
-
--- BEGIN MATERIALIZE
--- SELECT create_matview('omim_genotype_gene');
--- CREATE INDEX omim_genotype_gene_idx_id ON omim_genotype_gene(node_id);
--- CREATE INDEX omim_genotype_gene_idx_uid ON omim_genotype_gene(uid);
--- CREATE INDEX omim_genotype_gene_idx_label ON omim_genotype_gene(label);
--- CREATE INDEX omim_genotype_gene_idx_gene_id ON omim_genotype_gene(gene_id);
--- CREATE UNIQUE INDEX omim_genotype_gg_idx_gene_id ON omim_genotype_gene(node_id,gene_id);
--- END MATERIALIZE
 
 
 CREATE OR REPLACE VIEW omim_gene AS

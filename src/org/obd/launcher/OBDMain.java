@@ -246,6 +246,50 @@ public class OBDMain {
 				else 
 					compareAnnotationSources(calcIC,ae,nid1,nid2);
 			}
+			else if (args[i].equals("--compare-sources-for-two")) {
+				i++;
+				boolean calcIC = false;
+				String rel = null;
+				if (args[i].equals("--ic")) {
+					i++;
+					calcIC = true;
+				}
+				if (args[i].equals("--rel")) {
+					i++;
+					rel = args[i];
+					i++;
+				}
+
+				String ae1 = args[i];
+				i++;
+				String ae2 = args[i];
+				i++;
+				String nid1 = args[i];
+				i++;
+				String nid2 = args[i];
+				i++;
+				if (rel != null) 
+					compareAnnotationSourcesForTwoEntities(calcIC,ae1, ae2,nid1,nid2,rel);
+				else 
+					compareAnnotationSourcesForTwoEntities(calcIC,ae1, ae2,nid1,nid2);
+			}
+			else if (args[i].equals("--compare-sources-by-allele")) {
+				i++;
+				boolean calcIC = false;
+				String rel = null;
+				if (args[i].equals("--ic")) {
+					i++;
+					calcIC = true;
+				}
+
+				String ae = args[i];
+				i++;
+				String nid1 = args[i];
+				i++;
+				String nid2 = args[i];
+				i++;
+				compareAnnotationSourcesByAllele(calcIC,ae,nid1,nid2);
+			}
 			else if (args[i].equals("--findsim")) {
 				i++;
 				SimilaritySearchParameters ssp = new SimilaritySearchParameters();
@@ -274,7 +318,7 @@ public class OBDMain {
 						ssp.search_profile_max_annotated_entities_per_class = Integer.parseInt(args[i]);
 						i++;
 					}
-					else if (args[i].equals("-R") || args[i].equals("--max_reported")) {
+					else if (args[i].equals("-R") || args[i].equals("--max_reported")) {					
 						i++;
 						ssp.max_reported_hits = Integer.parseInt(args[i]);
 						i++;
@@ -486,6 +530,24 @@ public class OBDMain {
 		}
 
 	}
+	
+	public void compareAnnotationSourcesByAllele(boolean calcIC, String ae, String src1, String src2) {
+		LinkQueryTerm qt = new LinkQueryTerm();
+		qt.setNode(new LabelQueryTerm(AliasType.ID, ae, Operator.STARTS_WITH));
+		qt.setIsAnnotation(true);
+		qt.setSource(src1);
+		Collection<LinkStatement> stmts1 = multiShard.getLinkStatementsByQuery(qt);
+		qt.setSource(src2);
+		Collection<LinkStatement> stmts2 = multiShard.getLinkStatementsByQuery(qt);
+
+		SimilarityPair sp = multiShard.compareAnnotationSetPair(stmts1, stmts2, new LinkQueryTerm());
+		sp.setId1(src1);
+		sp.setId2(src2);
+		writeSimilarityPair(sp, calcIC, ae, ae, src1, src2);
+		
+	}
+
+
 
 	public void compareAnnotationSources(boolean calcIC, String ae, String src1, String src2, String rel) {
 		QueryTerm qt = new LinkQueryTerm(rel, ae);
@@ -495,17 +557,47 @@ public class OBDMain {
 		}
 	}
 
+	public void compareAnnotationSourcesForTwoEntities(boolean calcIC, String ae1, String ae2, String src1, String src2, String rel) {
+		// TODO
+	}
+	
+	public void compareAnnotationSourcesForTwoEntities(boolean calcIC, String ae1, String ae2, String src1, String src2) {
+		Node n1 = multiShard.getNode(ae1);
+		Node n2 = multiShard.getNode(ae2);
+		System.out.println("COMPARING: "+ae1+" '"+n1.getLabel()+" and "+ae2+" '"+n2.getLabel()+"' sources: "+src1+" -vs- "+src2);
+
+		LinkQueryTerm qt1 = new LinkQueryTerm();
+		LinkQueryTerm qt2 = new LinkQueryTerm();
+		qt1.setNode(ae1);
+		qt2.setNode(ae2);
+		qt1.setIsAnnotation(true);
+		qt2.setIsAnnotation(true);
+		qt1.setSource(src1);
+		qt2.setSource(src2);
+		Collection<LinkStatement> stmts1 = multiShard.getLinkStatementsByQuery(qt1);
+		Collection<LinkStatement> stmts2 = multiShard.getLinkStatementsByQuery(qt2);
+
+		SimilarityPair sp = multiShard.compareAnnotationSetPair(stmts1, stmts2, new LinkQueryTerm());
+		sp.setId1(src1);
+		sp.setId2(src2);
+		writeSimilarityPair(sp, calcIC, ae1+"--"+ae2, n1.getLabel()+"-to-"+n2.getLabel(), src1, src2);
+	}
+
 
 	public void compareAnnotationSources(boolean calcIC, String ae, String src1, String src2) {
 		Node n = multiShard.getNode(ae);
 		System.out.println("COMPARING: "+ae+" '"+n.getLabel()+"' sources: "+src1+" -vs- "+src2);
 
 		SimilarityPair sp = multiShard.compareAnnotationsBySourcePair(ae, src1, src2);
+		writeSimilarityPair(sp, calcIC, ae, n.getLabel(), src1, src2);
+	}
+	
+	private void writeSimilarityPair(SimilarityPair sp, boolean calcIC, String ae, String label, String src1, String src2) {
 		if (calcIC)
 			multiShard.calculateInformationContentMetrics(sp);
-		System.out.println("SIM: "+ae+" "+n.getLabel()+" sources: "+src1+" -vs- "+src2+
+		System.out.println("SIM: "+ae+" "+label+" sources: "+src1+" -vs- "+src2+
 				" BSS: "+sp.getBasicSimilarityScore()+
-				" IC: "+ (calcIC ? sp.getInformationContentRatio() : "na")+
+                                " IC: "+ (calcIC ? sp.getInformationContentRatio() : "na")+ // simIC
 				" DISAG: "+ sp.getDisagreementScore() +
 				" TOTAL: "+sp.getAssertedNodesInSet1().size()+", "+sp.getAssertedNodesInSet2().size());
 		if (calcIC) {

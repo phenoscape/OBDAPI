@@ -59,8 +59,6 @@ $$ LANGUAGE 'plpgsql';
 
 COMMENT ON FUNCTION show_pairwise_congruence_for_omim_gene IS 'Displays source-vs-source congruence of each annotation source pair within an OMIM gene.
 
-
-
 the proportion of (inferred) nodes in common divided by the proportion
 of nodes in the union of both annotation sets:
 
@@ -81,6 +79,32 @@ deductive closure colored one way, the other annotation set colored
 the other way, with some color mixing indicating the intersection.
 
 ';
+
+CREATE OR REPLACE FUNCTION show_congruence_for_omim_genotype() RETURNS VOID
+ AS
+$$
+ DECLARE
+  c1 annotated_entity_congruence_between_annotsrc_pair;
+  v_node_id  INTEGER;
+  v_src_id  INTEGER;
+  v_num_srcs  INTEGER;
+  v_gene VARCHAR;
+  v_uid  VARCHAR;
+  v_label  VARCHAR;
+  v_congruence FLOAT;
+ BEGIN
+  FOR v_node_id,v_gene IN SELECT node_id,gene_label FROM omim_genotype_gene ORDER BY gene_label LOOP
+   SELECT INTO v_uid, v_label uid,label FROM node WHERE node_id=v_node_id;
+   SELECT INTO v_num_srcs COUNT(DISTINCT source_id) FROM reified_link WHERE node_id=v_node_id AND source_id IN (SELECT node_id FROM omim_annotation_source);
+   RAISE NOTICE 'Genotype: % %  sources=%', v_gene,v_uid,v_num_srcs;
+   IF v_num_srcs = 3 THEN
+    FOR c1 IN SELECT * FROM annotated_entity_congruence_between_annotsrc_pair WHERE annotated_entity_id = v_node_id  LOOP
+     RAISE NOTICE '    GlobalCongruence( % , %s ) =  %', node_uid(c1.base_source_id),node_uid(c1.target_source_id),c1.congruence;     
+    END LOOP;
+   END IF;
+  END LOOP;
+ END
+$$ LANGUAGE 'plpgsql';
 
 
 CREATE TABLE cached_pairwise_similarity (
@@ -124,12 +148,24 @@ $$
  DECLARE
   v_node1_id  INTEGER;
   v_node2_id  INTEGER;
+  v_iccs      FLOAT;
+  v_ic_ratio   FLOAT;
  BEGIN
   FOR v_node1_id IN SELECT node_id FROM omim_genotype LOOP
-   RAISE NOTICE 'in %',v_node1_id;
-   FOR v_node2_id IN SELECT node_id FROM omim_genotype LOOP
-    INSERT INTO cached_pairwise_similarity  SELECT * FROM node_pair_annotation_similarity_score WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
-    UPDATE cached_pairwise_similarity SET max_ic = get_max_ic(v_node1_id,v_node2_id) WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+--   RAISE NOTICE 'in %',v_node1_id;
+   FOR v_node2_id IN SELECT node_id FROM omim_genotype WHERE node_id != v_node1_id LOOP
+    SELECT iccs INTO v_iccs FROM  cached_pairwise_similarity WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+    IF NOT FOUND THEN
+      RAISE NOTICE 'asym: % % (NO ENTRY)',v_node1_id, v_node2_id;
+    END IF;
+    IF v_iccs IS NULL THEN
+      SELECT iccs,ic_ratio INTO v_iccs,v_ic_ratio FROM  cached_pairwise_similarity WHERE node2_id=v_node1_id AND node1_id=v_node2_id;
+      IF v_iccs IS NULL THEN
+       RAISE NOTICE 'asym: % % (NULL)',v_node1_id, v_node2_id;
+      ELSE
+       UPDATE cached_pairwise_similarity SET iccs = v_iccs, ic_ratio=v_ic_ratio WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+      END IF;
+    END IF;
    END LOOP;
   END LOOP;
  END
@@ -144,15 +180,19 @@ CREATE OR REPLACE VIEW intragene_genotype_similarity AS
   AVG(ic_ratio) AS avg_ic_ratio,
   MIN(ic_ratio) AS min_ic_ratio,
   MAX(ic_ratio) AS max_ic_ratio,
+  STDDEV(ic_ratio) AS sdv_ic_ratio,
   AVG(iccs) AS avg_iccs,
   MIN(iccs) AS min_iccs,
   MAX(iccs) AS max_iccs,
+  STDDEV(iccs) AS sdv_iccs,
   AVG(basic_score) AS avg_basic_score,
   MIN(basic_score) AS min_basic_score,
   MAX(basic_score) AS max_basic_score,
+  STDDEV(basic_score) AS stddev_basic_score,
   AVG(max_ic) AS avg_max_ic,
   MIN(max_ic) AS min_max_ic,
   MAX(max_ic) AS max_max_ic,
+  STDDEV(max_ic) AS sdv_max_ic,
   COUNT(DISTINCT ogg.node_id) AS num_genotypes
  FROM
   omim_genotype_gene AS ogg
@@ -211,14 +251,23 @@ CREATE OR REPLACE VIEW intergene_genotype_similarity AS
   ogg.gene_uid,
   ogg.gene_label,
   AVG(ic_ratio) AS avg_ic_ratio,
+  MIN(ic_ratio) AS min_ic_ratio,
   MAX(ic_ratio) AS max_ic_ratio,
+  STDDEV(ic_ratio) AS sdv_ic_ratio,
   AVG(iccs) AS avg_iccs,
+  MIN(iccs) AS min_iccs,
   MAX(iccs) AS max_iccs,
+  STDDEV(iccs) AS sdv_iccs,
   AVG(basic_score) AS avg_basic_score,
+  MIN(basic_score) AS min_basic_score,
   MAX(basic_score) AS max_basic_score,
+  STDDEV(basic_score) AS stddev_basic_score,
   AVG(max_ic) AS avg_max_ic,
+  MIN(max_ic) AS min_max_ic,
   MAX(max_ic) AS max_max_ic,
-  COUNT(DISTINCT ogg.node_id) AS num_genotypes
+  STDDEV(max_ic) AS sdv_max_ic,
+  COUNT(DISTINCT ogg.node_id) AS num_genotypes,
+  COUNT(*) AS num_datapoints
  FROM
   omim_genotype_gene AS ogg
   INNER JOIN omim_genotype_gene AS ogg2 ON (ogg.gene_id!=ogg2.gene_id)
@@ -354,6 +403,21 @@ CREATE OR REPLACE VIEW all_intragene_genotype_similarity AS
  WHERE
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id=og2.gene_id;
 
+CREATE OR REPLACE VIEW all_intragene_genotype_similarity_datapoints AS
+ SELECT
+  og.uid || '-vs-' || og2.uid AS pair,
+  ic_ratio,
+  iccs,
+  basic_score,
+  max_ic  
+ FROM
+  omim_genotype_gene AS og,
+  omim_genotype_gene AS og2,
+  cached_pairwise_similarity AS cps
+ WHERE
+  og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id=og2.gene_id;
+
+
 CREATE OR REPLACE VIEW all_intergene_genotype_similarity AS
  SELECT
   AVG(ic_ratio) AS avg_ic_ratio,
@@ -380,6 +444,42 @@ CREATE OR REPLACE VIEW all_intergene_genotype_similarity AS
  WHERE
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id!=og2.gene_id;
 
+CREATE OR REPLACE VIEW all_intergene_genotype_similarity_datapoints AS
+ SELECT
+  og.uid || '-vs-' || og2.uid AS pair,
+  ic_ratio,
+  iccs,
+  basic_score,
+  max_ic  
+ FROM
+  omim_genotype_gene AS og,
+  omim_genotype_gene AS og2,
+  cached_pairwise_similarity AS cps
+ WHERE
+  og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id!=og2.gene_id;
+
+CREATE OR REPLACE VIEW all_genotype_similarity_datapoints_ordered AS
+ SELECT
+  og.gene_uid,
+  og.gene_label,
+  og.uid,
+  ic_ratio,
+  iccs,
+  basic_score,
+  max_ic,
+  og2.uid AS hit_gt,
+  og2.gene_uid AS hit_gene_uid,
+  og2.gene_label AS hit_gene
+ FROM
+  omim_genotype_gene AS og,
+  omim_genotype_gene AS og2,
+  cached_pairwise_similarity AS cps
+ WHERE
+  og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id
+ ORDER BY
+  og.gene_label,
+  og.uid,
+  iccs DESC;
 
 
   
@@ -496,6 +596,25 @@ CREATE OR REPLACE VIEW genotype_best_match_for_node1_basic AS
  FROM
   cached_pairwise_similarity_sym AS cps
   WHERE NOT EXISTS (SELECT * FROM cached_pairwise_similarity_sym AS cps2 WHERE cps.node1_id=cps2.node1_id AND cps2.basic_score > cps.basic_score);
+
+CREATE OR REPLACE VIEW genotype_best_match_for_node1_iccs AS
+ SELECT
+  cps.*
+ FROM
+  cached_pairwise_similarity_sym AS cps
+  WHERE NOT EXISTS (SELECT * FROM cached_pairwise_similarity AS cps2 WHERE cps.node1_id=cps2.node1_id AND cps2.basic_score > cps.basic_score);
+
+CREATE OR REPLACE VIEW best_hits_for_genotype AS
+ SELECT
+  *
+ FROM
+  cached_pairwise_similarity_sym AS cps
+  INNER JOIN omim_genotype_gene AS ogg ON (ogg.node_id=cps.node1_id)
+ ORDER BY
+  iccs DESC;
+
+
+
 
   
  

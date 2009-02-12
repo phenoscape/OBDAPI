@@ -6,12 +6,20 @@ sao.obo:
 remake-sao.obo:
 	cd /Users/cjm/cvs/obo/ontology/anatomy/anatomy_xp/ && rm sao.obo && make sao.obo
 
+# leave image and PDSO for now
 all.obo:
+	blip -u ontol_manifest_metadata_from_nif -import_all -debug load -debug ontol io-convert -f owl -i  http://ccdb.ucsd.edu/SAO/DPO/2.0/HumanDPO.owl -i http://ccdb.ucsd.edu/SAO/DPO/2.0/DPO.owl -to obo -o $@
+
+all-old.obo:
 	blip -import_all -debug load -debug ontol io-convert -f owl -i  http://ccdb.ucsd.edu/SAO/DPO/1.0/HumanDPO.owl -i http://ccdb.ucsd.edu/SAO/DPO/1.0/DPO.owl -i http://ccdb.ucsd.edu/SAO/DPO/1.0/ImagePhenotype.owl -i http://ccdb.ucsd.edu/SAO/PDSO/1.0/PDSO.owl -to obo -o $@
 
-# leave image and PDSO for now
-all2.obo:
-	blip -u ontol_manifest_metadata_from_nif -import_all -debug load -debug ontol io-convert -f owl -i  http://ccdb.ucsd.edu/SAO/DPO/2.0/HumanDPO.owl -i http://ccdb.ucsd.edu/SAO/DPO/2.0/DPO.owl -to obo -o $@
+
+
+HumanDPO_xp-basic.obo: all.obo
+	obol obol-generate-xps -u xp_pato_birn -i $< -r pato -idspace Human_DPO_XP: > $@.tmp && mv $@.tmp $@
+
+HumanDPO_xp.obo: HumanDPO_xp-basic.obo
+	obol obol-generate-names -debug obol_info -u obol_phenotype_xp_generate -i all.obo -r pato -i $< -query "sub_atom(ID,_,_,_,'Human_DPO_XP:')" -show_classdef > $@.tmp && cat idspaces.obo $@.tmp > $@
 
 bearers-%:
 	psql -q -c "SELECT DISTINCT node_uid(node_id) FROM birn_pdpo.bears" $* -o $@

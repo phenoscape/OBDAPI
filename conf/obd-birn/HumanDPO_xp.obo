@@ -1,0 +1,1989 @@
+idspace: AAO http://purl.org/obo/owl/AAO#AAO_ ""
+idspace: ADW http://purl.org/obo/owl/ADW#ADW_ ""
+idspace: BILA http://purl.org/obo/owl/BILA#BILA_ ""
+idspace: BIRN_ImagePhenotype http://ccdb.ucsd.edu/SAO/DPO/1.0/ImagePhenotype.owl ""
+idspace: BIRN_PDPO http://ccdb.ucsd.edu/PDPhenotypeOntology/1.0# ""
+idspace: BIRN_PDStage http://ccdb.ucsd.edu/PDStageOntology/1.0/ ""
+idspace: BIRN_SA http://ccdb.ucsd.edu/smart_atlas_ontology/sa.owl# ""
+idspace: BOOTStrep http://purl.org/obo/owl/BOOTStrep#BOOTStrep_ ""
+idspace: BSPO http://purl.org/obo/owl/BSPO#BSPO_ ""
+idspace: BTO http://purl.org/obo/owl/BTO#BTO_ ""
+idspace: CARO http://purl.org/obo/owl/CARO#CARO_ ""
+idspace: CHEBI http://purl.org/obo/owl/CHEBI#CHEBI_ ""
+idspace: CL http://purl.org/obo/owl/CL#CL_ ""
+idspace: DDANAT http://purl.org/obo/owl/DDANAT#DDANAT_ ""
+idspace: DOID http://purl.org/obo/owl/DOID#DOID_ ""
+idspace: ECO http://purl.org/obo/owl/ECO#ECO_ ""
+idspace: EHDA http://purl.org/obo/owl/EHDA#EHDA_ ""
+idspace: EHDAA http://purl.org/obo/owl/EHDAA#EHDAA_ ""
+idspace: EMAP http://purl.org/obo/owl/EMAP#EMAP_ ""
+idspace: ENVO http://purl.org/obo/owl/ENVO#ENVO_ ""
+idspace: EO http://purl.org/obo/owl/EO#EO_ ""
+idspace: EV http://purl.org/obo/owl/EV#EV_ ""
+idspace: FAO http://purl.org/obo/owl/FAO#FAO_ ""
+idspace: FBbi http://purl.org/obo/owl/FBbi#FBbi_ ""
+idspace: FBbt http://purl.org/obo/owl/FBbt#FBbt_ ""
+idspace: FBcv http://purl.org/obo/owl/FBcv#FBcv_ ""
+idspace: FBdv http://purl.org/obo/owl/FBdv#FBdv_ ""
+idspace: FBsp http://purl.org/obo/owl/FBsp#FBsp_ ""
+idspace: FIX http://purl.org/obo/owl/FIX#FIX_ ""
+idspace: FMA http://purl.org/obo/owl/FMA#FMA_ ""
+idspace: GO http://purl.org/obo/owl/GO#GO_ ""
+idspace: GRO http://purl.org/obo/owl/GRO#GRO_ ""
+idspace: HP http://purl.org/obo/owl/HP#HP_ ""
+idspace: IDO http://purl.org/obo/owl/IDO#IDO_ ""
+idspace: IEV http://purl.org/obo/owl/IEV#IEV_ ""
+idspace: IMR http://purl.org/obo/owl/IMR#IMR_ ""
+idspace: IPR http://purl.org/obo/owl/IPR#IPR_ ""
+idspace: MA http://purl.org/obo/owl/MA#MA_ ""
+idspace: MFO http://purl.org/obo/owl/MFO#MFO_ ""
+idspace: MI http://purl.org/obo/owl/MI#MI_ ""
+idspace: MIRO http://purl.org/obo/owl/MIRO#MIRO_ ""
+idspace: MO http://purl.org/obo/owl/MO#MO_ ""
+idspace: MOD http://purl.org/obo/owl/MOD#MOD_ ""
+idspace: MP http://purl.org/obo/owl/MP#MP_ ""
+idspace: MPATH http://purl.org/obo/owl/MPATH#MPATH_ ""
+idspace: MS http://purl.org/obo/owl/MS#MS_ ""
+idspace: NCBITaxon http://purl.org/obo/owl/NCBITaxon#NCBITaxon_ ""
+idspace: NCIt http://purl.org/obo/owl/NCIt#NCIt_ ""
+idspace: NEWT http://purl.org/obo/owl/NEWT#NEWT_ ""
+idspace: NIF_Molecule http://purl.org/nif/ontology/NIF-Molecule.owl# ""
+idspace: NMR http://purl.org/obo/owl/NMR#NMR_ ""
+idspace: PATO http://purl.org/obo/owl/PATO#PATO_ ""
+idspace: PLO http://purl.org/obo/owl/PLO#PLO_ ""
+idspace: PO http://purl.org/obo/owl/PO#PO_ ""
+idspace: PRO http://purl.org/obo/owl/PRO#PRO_ ""
+idspace: PW http://purl.org/obo/owl/PW#PW_ ""
+idspace: ProPreO http://purl.org/obo/owl/ProPreO#ProPreO_ ""
+idspace: RESID http://purl.org/obo/owl/RESID#RESID_ ""
+idspace: REX http://purl.org/obo/owl/REX#REX_ ""
+idspace: RO http://purl.org/obo/owl/RO#RO_ ""
+idspace: SAO_HumanDPO http://ccdb.ucsd.edu/SAO/HumanDPO.owl# ""
+idspace: SBO http://purl.org/obo/owl/SBO#SBO_ ""
+idspace: SEP http://purl.org/obo/owl/SEP#SEP_ ""
+idspace: SO http://purl.org/obo/owl/SO#SO_ ""
+idspace: SOPHARM http://purl.org/obo/owl/SOPHARM#SOPHARM_ ""
+idspace: SPD http://purl.org/obo/owl/SPD#SPD_ ""
+idspace: TADS http://purl.org/obo/owl/TADS#TADS_ ""
+idspace: TAO http://purl.org/obo/owl/TAO#TAO_ ""
+idspace: TGMA http://purl.org/obo/owl/TGMA#TGMA_ ""
+idspace: TO http://purl.org/obo/owl/TO#TO_ ""
+idspace: TRANS http://purl.org/obo/owl/TRANS#TRANS_ ""
+idspace: TTO http://purl.org/obo/owl/TTO#TTO_ ""
+idspace: UBERON http://purl.org/obo/owl/UBERON#UBERON_ ""
+idspace: UO http://purl.org/obo/owl/UO#UO_ ""
+idspace: WBPhenotype http://purl.org/obo/owl/WBPhenotype#WBPhenotype_ ""
+idspace: WBbt http://purl.org/obo/owl/WBbt#WBbt_ ""
+idspace: WBls http://purl.org/obo/owl/WBls#WBls_ ""
+idspace: XAO http://purl.org/obo/owl/XAO#XAO_ ""
+idspace: YPO http://purl.org/obo/owl/YPO#YPO_ ""
+idspace: ZEA http://purl.org/obo/owl/ZEA#ZEA_ ""
+idspace: ZFA http://purl.org/obo/owl/ZFA#ZFA_ ""
+idspace: biopax1 http://www.biopax.org/release/biopax-level1.owl# ""
+idspace: birnlex_anatomy http://purl.org/nbirn/birnlex/ontology/BIRNLex-Anatomy.owl# ""
+idspace: birnlex_disease http://purl.org/nbirn/birnlex/ontology/BIRNLex-Disease.owl# ""
+idspace: birnlex_tax http://purl.org/nbirn/birnlex/ontology/BIRNLex-OrganismalTaxonomy.owl# ""
+idspace: birnlex_ubo http://purl.org/nbirn/birnlex/ontology/BIRNLex-OBO-UBO.owl# ""
+idspace: birnlex_ubo2 http://birnlex.nbirn.net/ontology/BIRNLex-OBO-UBO.owl# ""
+idspace: dc http://purl.org/dc/elements/1.1/ ""
+idspace: eor http://dublincore.org/2000/03/13/eor# ""
+idspace: galen http://www.co-ode.org/ontologies/galen# ""
+idspace: mged http://mged.sourceforge.net/ontologies/MGEDOntology.owl# ""
+idspace: nif_anatomy http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-GrossAnatomy.owl# ""
+idspace: nif_annot http://ontology.neuinfo.org/NIF/Backend/OBO_annotation_properties.owl# ""
+idspace: nif_cell http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Cell.owl# ""
+idspace: nif_molecule http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Molecule.owl# ""
+idspace: nif_subcellular http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Subcellular.owl# ""
+idspace: oban http://www.berkeleybop.org/ontologies/oban/alpha# ""
+idspace: obd http://www.bioontology.org/obd/obd-ontology# ""
+idspace: oboInOwl http://www.geneontology.org/formats/oboInOwl# ""
+idspace: owl http://www.w3.org/2002/07/owl# ""
+idspace: propreo http://lsdis.cs.uga.edu/projects/glycomics/propreo# ""
+idspace: rdf http://www.w3.org/1999/02/22-rdf-syntax-ns# ""
+idspace: rdfs http://www.w3.org/2000/01/rdf-schema# ""
+idspace: reactome http://www.reactome.org/biopax# ""
+idspace: sao http://ccdb.ucsd.edu/SAO/1.2# ""
+idspace: serql http://www.openrdf.org/schema/serql# ""
+idspace: swrl http://www.w3.org/2003/11/swrl# ""
+idspace: xsd http://www.w3.org/2001/XMLSchema# ""
+[Term]
+id: Human_DPO_XP:1
+name: morphology of Predominantly gray regional part of telencephalon
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+
+[Term]
+id: Human_DPO_XP:2
+name: morphology of Regional part of spinal cord
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_1496 ! Regional part of spinal cord
+
+[Term]
+id: Human_DPO_XP:3
+name: morphology of Regional part of cerebellar cortex
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_1571 ! Regional part of cerebellar cortex
+
+[Term]
+id: Human_DPO_XP:4
+name: morphology of Regional part of cerebral white matter
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_1573 ! Regional part of cerebral white matter
+
+[Term]
+id: Human_DPO_XP:5
+name: morphology of Regional part of telencephalon
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+
+[Term]
+id: Human_DPO_XP:6
+name: morphology of Predominantly gray regional part of substantia nigra
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+
+[Term]
+id: Human_DPO_XP:7
+name: morphology of Lobe parts of cerebral cortex
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+
+[Term]
+id: Human_DPO_XP:8
+name: morphology of Neuron
+intersection_of: PATO:0000051 ! morphology
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:9
+name: degenerate Predominantly gray regional part of telencephalon
+intersection_of: PATO:0000639 ! degenerate
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+
+[Term]
+id: Human_DPO_XP:10
+name: degenerate Regional part of spinal cord
+intersection_of: PATO:0000639 ! degenerate
+intersection_of: inheres_in nif_anatomy:birnlex_1496 ! Regional part of spinal cord
+
+[Term]
+id: Human_DPO_XP:11
+name: degenerate Predominantly gray regional part of substantia nigra
+intersection_of: PATO:0000639 ! degenerate
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+
+[Term]
+id: Human_DPO_XP:12
+name: degenerate Neuron
+intersection_of: PATO:0000639 ! degenerate
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:13
+name: Predominantly gray regional part of pontine tegmentum, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:14
+name: Predominantly gray regional part of telencephalon, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:15
+name: Regional part of peripheral nervous system, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:16
+name: Regional part of basal part of pons, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:17
+name: Regional part of cerebral cortex, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:18
+name: Cytoarchitectural fields of hippocampal formation, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:19
+name: Regional part of cerebral peduncle, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:20
+name: Predominantly gray regional part of neostriatum, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:21
+name: Regional part of Parahippocampal gyrus, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:22
+name: Regional part of neostriatum, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:23
+name: Regional part of diencephalon, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:24
+name: Regional part of telencephalon, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:25
+name: Predominantly gray regional part of substantia nigra, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:26
+name: Lobe parts of cerebral cortex, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:27
+name: Cell, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:28
+name: Neuron Process, Neuron count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:29
+name: Predominantly gray regional part of pontine tegmentum, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:30
+name: Predominantly gray regional part of telencephalon, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:31
+name: Regional part of peripheral nervous system, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:32
+name: Regional part of basal part of pons, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:33
+name: Regional part of cerebral cortex, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:34
+name: Cytoarchitectural fields of hippocampal formation, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:35
+name: Regional part of cerebral peduncle, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:36
+name: Predominantly gray regional part of neostriatum, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:37
+name: Regional part of Parahippocampal gyrus, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:38
+name: Regional part of neostriatum, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:39
+name: Regional part of diencephalon, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:40
+name: Regional part of telencephalon, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:41
+name: Predominantly gray regional part of substantia nigra, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:42
+name: Lobe parts of cerebral cortex, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:43
+name: Neuron Process, Cell count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:44
+name: Predominantly gray regional part of pontine tegmentum, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:45
+name: Predominantly gray regional part of telencephalon, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:46
+name: Regional part of peripheral nervous system, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:47
+name: Regional part of basal part of pons, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:48
+name: Regional part of cerebral cortex, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:49
+name: Cytoarchitectural fields of hippocampal formation, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:50
+name: Regional part of cerebral peduncle, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:51
+name: Predominantly gray regional part of neostriatum, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:52
+name: Regional part of Parahippocampal gyrus, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:53
+name: Regional part of neostriatum, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:54
+name: Regional part of diencephalon, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:55
+name: Regional part of telencephalon, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:56
+name: Predominantly gray regional part of substantia nigra, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:57
+name: Lobe parts of cerebral cortex, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:58
+name: Neuron, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:59
+name: Cell, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:60
+name: Neuron Process, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:61
+name: Regional Part Of Neuron, Protein count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:62
+name: Predominantly gray regional part of pontine tegmentum, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:63
+name: Predominantly gray regional part of telencephalon, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:64
+name: Regional part of peripheral nervous system, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:65
+name: Regional part of basal part of pons, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:66
+name: Regional part of cerebral cortex, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:67
+name: Cytoarchitectural fields of hippocampal formation, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:68
+name: Regional part of cerebral peduncle, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:69
+name: Predominantly gray regional part of neostriatum, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:70
+name: Regional part of Parahippocampal gyrus, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:71
+name: Regional part of neostriatum, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:72
+name: Regional part of diencephalon, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:73
+name: Regional part of telencephalon, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:74
+name: Predominantly gray regional part of substantia nigra, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:75
+name: Lobe parts of cerebral cortex, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:76
+name: Neuron, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:77
+name: Cell, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:78
+name: Neuron Process, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:79
+name: Regional Part Of Neuron, Molecule count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:80
+name: Predominantly gray regional part of pontine tegmentum, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:81
+name: Predominantly gray regional part of telencephalon, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:82
+name: Regional part of peripheral nervous system, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:83
+name: Regional part of basal part of pons, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:84
+name: Regional part of cerebral cortex, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:85
+name: Cytoarchitectural fields of hippocampal formation, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:86
+name: Regional part of cerebral peduncle, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:87
+name: Predominantly gray regional part of neostriatum, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:88
+name: Regional part of Parahippocampal gyrus, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:89
+name: Regional part of neostriatum, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:90
+name: Regional part of diencephalon, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:91
+name: Regional part of telencephalon, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:92
+name: Predominantly gray regional part of substantia nigra, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:93
+name: Lobe parts of cerebral cortex, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:94
+name: Neuron, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:95
+name: Cell, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:96
+name: Neuron Process, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:97
+name: Regional Part Of Neuron, Cellular Inclusion count
+intersection_of: PATO:0001555 ! has number of
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:98
+name: atrophied Regional part of cerebellar cortex
+intersection_of: PATO:0001623 ! atrophied
+intersection_of: inheres_in nif_anatomy:birnlex_1571 ! Regional part of cerebellar cortex
+
+[Term]
+id: Human_DPO_XP:99
+name: atrophied Regional part of cerebral white matter
+intersection_of: PATO:0001623 ! atrophied
+intersection_of: inheres_in nif_anatomy:birnlex_1573 ! Regional part of cerebral white matter
+
+[Term]
+id: Human_DPO_XP:100
+name: atrophied Regional part of telencephalon
+intersection_of: PATO:0001623 ! atrophied
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+
+[Term]
+id: Human_DPO_XP:101
+name: atrophied Lobe parts of cerebral cortex
+intersection_of: PATO:0001623 ! atrophied
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+
+[Term]
+id: Human_DPO_XP:102
+name: Predominantly gray regional part of pontine tegmentum, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:103
+name: Predominantly gray regional part of telencephalon, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:104
+name: Regional part of peripheral nervous system, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:105
+name: Regional part of basal part of pons, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:106
+name: Regional part of cerebral cortex, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:107
+name: Cytoarchitectural fields of hippocampal formation, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:108
+name: Regional part of cerebral peduncle, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:109
+name: Predominantly gray regional part of neostriatum, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:110
+name: Regional part of Parahippocampal gyrus, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:111
+name: Regional part of neostriatum, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:112
+name: Regional part of diencephalon, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:113
+name: Regional part of telencephalon, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:114
+name: Predominantly gray regional part of substantia nigra, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:115
+name: Lobe parts of cerebral cortex, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:116
+name: Cell, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:117
+name: Neuron Process, Neuron decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:118
+name: Predominantly gray regional part of pontine tegmentum, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:119
+name: Predominantly gray regional part of telencephalon, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:120
+name: Regional part of peripheral nervous system, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:121
+name: Regional part of basal part of pons, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:122
+name: Regional part of cerebral cortex, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:123
+name: Cytoarchitectural fields of hippocampal formation, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:124
+name: Regional part of cerebral peduncle, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:125
+name: Predominantly gray regional part of neostriatum, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:126
+name: Regional part of Parahippocampal gyrus, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:127
+name: Regional part of neostriatum, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:128
+name: Regional part of diencephalon, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:129
+name: Regional part of telencephalon, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:130
+name: Predominantly gray regional part of substantia nigra, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:131
+name: Lobe parts of cerebral cortex, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:132
+name: Neuron Process, Cell decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:133
+name: Predominantly gray regional part of pontine tegmentum, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:134
+name: Predominantly gray regional part of telencephalon, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:135
+name: Regional part of peripheral nervous system, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:136
+name: Regional part of basal part of pons, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:137
+name: Regional part of cerebral cortex, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:138
+name: Cytoarchitectural fields of hippocampal formation, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:139
+name: Regional part of cerebral peduncle, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:140
+name: Predominantly gray regional part of neostriatum, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:141
+name: Regional part of Parahippocampal gyrus, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:142
+name: Regional part of neostriatum, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:143
+name: Regional part of diencephalon, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:144
+name: Regional part of telencephalon, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:145
+name: Predominantly gray regional part of substantia nigra, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:146
+name: Lobe parts of cerebral cortex, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:147
+name: Neuron, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:148
+name: Cell, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:149
+name: Neuron Process, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:150
+name: Regional Part Of Neuron, Protein decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:151
+name: Predominantly gray regional part of pontine tegmentum, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:152
+name: Predominantly gray regional part of telencephalon, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:153
+name: Regional part of peripheral nervous system, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:154
+name: Regional part of basal part of pons, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:155
+name: Regional part of cerebral cortex, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:156
+name: Cytoarchitectural fields of hippocampal formation, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:157
+name: Regional part of cerebral peduncle, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:158
+name: Predominantly gray regional part of neostriatum, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:159
+name: Regional part of Parahippocampal gyrus, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:160
+name: Regional part of neostriatum, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:161
+name: Regional part of diencephalon, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:162
+name: Regional part of telencephalon, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:163
+name: Predominantly gray regional part of substantia nigra, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:164
+name: Lobe parts of cerebral cortex, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:165
+name: Neuron, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:166
+name: Cell, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:167
+name: Neuron Process, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:168
+name: Regional Part Of Neuron, Molecule decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:169
+name: Predominantly gray regional part of pontine tegmentum, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:170
+name: Predominantly gray regional part of telencephalon, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:171
+name: Regional part of peripheral nervous system, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:172
+name: Regional part of basal part of pons, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:173
+name: Regional part of cerebral cortex, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:174
+name: Cytoarchitectural fields of hippocampal formation, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:175
+name: Regional part of cerebral peduncle, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:176
+name: Predominantly gray regional part of neostriatum, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:177
+name: Regional part of Parahippocampal gyrus, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:178
+name: Regional part of neostriatum, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:179
+name: Regional part of diencephalon, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:180
+name: Regional part of telencephalon, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:181
+name: Predominantly gray regional part of substantia nigra, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:182
+name: Lobe parts of cerebral cortex, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:183
+name: Neuron, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:184
+name: Cell, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:185
+name: Neuron Process, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:186
+name: Regional Part Of Neuron, Cellular Inclusion decreased count
+intersection_of: PATO:0002001 ! has fewer parts of type
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:187
+name: Predominantly gray regional part of pontine tegmentum, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:188
+name: Predominantly gray regional part of telencephalon, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:189
+name: Regional part of peripheral nervous system, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:190
+name: Regional part of basal part of pons, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:191
+name: Regional part of cerebral cortex, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:192
+name: Cytoarchitectural fields of hippocampal formation, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:193
+name: Regional part of cerebral peduncle, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:194
+name: Predominantly gray regional part of neostriatum, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:195
+name: Regional part of Parahippocampal gyrus, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:196
+name: Regional part of neostriatum, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:197
+name: Regional part of diencephalon, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:198
+name: Regional part of telencephalon, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:199
+name: Predominantly gray regional part of substantia nigra, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:200
+name: Lobe parts of cerebral cortex, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:201
+name: Cell, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:202
+name: Neuron Process, Neuron increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_cell:sao1417703748 ! Neuron
+
+[Term]
+id: Human_DPO_XP:203
+name: Predominantly gray regional part of pontine tegmentum, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:204
+name: Predominantly gray regional part of telencephalon, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:205
+name: Regional part of peripheral nervous system, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:206
+name: Regional part of basal part of pons, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:207
+name: Regional part of cerebral cortex, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:208
+name: Cytoarchitectural fields of hippocampal formation, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:209
+name: Regional part of cerebral peduncle, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:210
+name: Predominantly gray regional part of neostriatum, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:211
+name: Regional part of Parahippocampal gyrus, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:212
+name: Regional part of neostriatum, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:213
+name: Regional part of diencephalon, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:214
+name: Regional part of telencephalon, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:215
+name: Predominantly gray regional part of substantia nigra, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:216
+name: Lobe parts of cerebral cortex, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:217
+name: Neuron Process, Cell increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_cell:sao1813327414 ! Cell
+
+[Term]
+id: Human_DPO_XP:218
+name: Predominantly gray regional part of pontine tegmentum, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:219
+name: Predominantly gray regional part of telencephalon, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:220
+name: Regional part of peripheral nervous system, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:221
+name: Regional part of basal part of pons, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:222
+name: Regional part of cerebral cortex, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:223
+name: Cytoarchitectural fields of hippocampal formation, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:224
+name: Regional part of cerebral peduncle, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:225
+name: Predominantly gray regional part of neostriatum, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:226
+name: Regional part of Parahippocampal gyrus, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:227
+name: Regional part of neostriatum, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:228
+name: Regional part of diencephalon, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:229
+name: Regional part of telencephalon, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:230
+name: Predominantly gray regional part of substantia nigra, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:231
+name: Lobe parts of cerebral cortex, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:232
+name: Neuron, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:233
+name: Cell, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:234
+name: Neuron Process, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:235
+name: Regional Part Of Neuron, Protein increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_molecule:sao26622963 ! Protein
+
+[Term]
+id: Human_DPO_XP:236
+name: Predominantly gray regional part of pontine tegmentum, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:237
+name: Predominantly gray regional part of telencephalon, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:238
+name: Regional part of peripheral nervous system, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:239
+name: Regional part of basal part of pons, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:240
+name: Regional part of cerebral cortex, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:241
+name: Cytoarchitectural fields of hippocampal formation, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:242
+name: Regional part of cerebral peduncle, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:243
+name: Predominantly gray regional part of neostriatum, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:244
+name: Regional part of Parahippocampal gyrus, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:245
+name: Regional part of neostriatum, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:246
+name: Regional part of diencephalon, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:247
+name: Regional part of telencephalon, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:248
+name: Predominantly gray regional part of substantia nigra, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:249
+name: Lobe parts of cerebral cortex, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:250
+name: Neuron, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:251
+name: Cell, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:252
+name: Neuron Process, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:253
+name: Regional Part Of Neuron, Molecule increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_molecule:sao500241072 ! Molecule
+
+[Term]
+id: Human_DPO_XP:254
+name: Predominantly gray regional part of pontine tegmentum, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1061 ! Predominantly gray regional part of pontine tegmentum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:255
+name: Predominantly gray regional part of telencephalon, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1067 ! Predominantly gray regional part of telencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:256
+name: Regional part of peripheral nervous system, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1122 ! Regional part of peripheral nervous system
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:257
+name: Regional part of basal part of pons, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1168 ! Regional part of basal part of pons
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:258
+name: Regional part of cerebral cortex, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1173 ! Regional part of cerebral cortex
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:259
+name: Cytoarchitectural fields of hippocampal formation, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1192 ! Cytoarchitectural fields of hippocampal formation
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:260
+name: Regional part of cerebral peduncle, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1209 ! Regional part of cerebral peduncle
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:261
+name: Predominantly gray regional part of neostriatum, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1221 ! Predominantly gray regional part of neostriatum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:262
+name: Regional part of Parahippocampal gyrus, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1278 ! Regional part of Parahippocampal gyrus
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:263
+name: Regional part of neostriatum, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1367 ! Regional part of neostriatum
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:264
+name: Regional part of diencephalon, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1685 ! Regional part of diencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:265
+name: Regional part of telencephalon, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_1700 ! Regional part of telencephalon
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:266
+name: Predominantly gray regional part of substantia nigra, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_782 ! Predominantly gray regional part of substantia nigra
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:267
+name: Lobe parts of cerebral cortex, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_anatomy:birnlex_922 ! Lobe parts of cerebral cortex
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:268
+name: Neuron, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1417703748 ! Neuron
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:269
+name: Cell, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_cell:sao1813327414 ! Cell
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:270
+name: Neuron Process, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao-867568886 ! Neuron Process
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+
+[Term]
+id: Human_DPO_XP:271
+name: Regional Part Of Neuron, Cellular Inclusion increased count
+intersection_of: PATO:0002002 ! has extra parts of type
+intersection_of: inheres_in nif_subcellular:sao864921383 ! Regional Part Of Neuron
+intersection_of: towards nif_subcellular:sao120573470 ! Cellular Inclusion
+

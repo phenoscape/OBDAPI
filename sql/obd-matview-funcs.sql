@@ -92,6 +92,7 @@ END
 $$;
 
 -- todo: recreate view? or do en masse
+-- NOTE: USE WITH CARE. cascading deletes of material views will not be registered!
 CREATE OR REPLACE FUNCTION drop_matview(NAME,BOOLEAN) RETURNS VOID
 SECURITY DEFINER
 LANGUAGE plpgsql AS $$
