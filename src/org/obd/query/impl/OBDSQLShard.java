@@ -316,7 +316,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		if (useImplied != null)
 			whereClause.addEqualityConstraint("is_inferred", useImplied);
 		if (isReified != null) {
-			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+ (isReified ? " IS NOT NULL" : "IS NULL"));
+			whereClause.addConstraint(LINK_REIF_INTERNAL_ID_COLUMN+ (isReified ? " IS NOT NULL" : " IS NULL"));
 		}
 		return getStatements(whereClause);
 	}
