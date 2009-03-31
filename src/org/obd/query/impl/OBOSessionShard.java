@@ -392,6 +392,11 @@ public class OBOSessionShard extends AbstractShard implements Shard {
 		return null;
 	}
 
+	public Collection<Node> getSynonymsForTerm(String searchTerm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

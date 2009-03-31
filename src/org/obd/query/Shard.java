@@ -404,5 +404,7 @@ public interface Shard extends BasicRepository,
 
 
 	public Collection<Node> getNodesForSearchTermByDefinition(String term, boolean zfinOption, List<String> ontologies);
+	
+	public Collection<Node> getSynonymsForTerm(String searchTerm);
 
 }
