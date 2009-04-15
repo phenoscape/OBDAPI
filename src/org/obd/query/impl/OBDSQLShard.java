@@ -340,7 +340,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			whereClause.addLikeConstraint(LINK_TARGET_EXPOSED_ID_COLUMN, target);
 		}
 		if(source != null){
-			whereClause.addLikeConstraint(LINK_SOURCE_EXPOSED_ID_COLUMN, source);
+			whereClause.addEqualityConstraint(LINK_SOURCE_EXPOSED_ID_COLUMN, source);
 		}
 		if(useImplied != null){
 			whereClause.addEqualityConstraint("is_inferred", useImplied);
