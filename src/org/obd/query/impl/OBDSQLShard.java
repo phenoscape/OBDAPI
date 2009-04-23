@@ -361,8 +361,9 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies){
 
 		Collection<Node> results = new LinkedList<Node>();
-
-		RelationalQuery rq = new SqlQueryImpl();
+		RelationalQuery rq, zq = null;
+		
+		rq = new SqlQueryImpl();
 		rq.addTable(NODE_TABLE, "n");
 		rq.setSelectClause("n.uid AS uid");
 
@@ -379,18 +380,31 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			sq.setWhereClause(subWc);
 			wc.addInConstraint("n.source_id", sq);
 		}
-		if(zfinOption){
-			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
-		}
 		rq.setWhereClause(wc);
-		//System.out.println(rq.toSQL());
+//		System.out.println(rq.toSQL());
+		if(zfinOption){
+			zq = new SqlQueryImpl();
+			zq.addTable(NODE_TABLE, "n2");
+			zq.setSelectClause("n2.uid AS uid");
+			
+			WhereClause wcz = new SqlWhereClauseImpl();
+			wcz.addCaseInsensitiveRegexConstraint("n2.uid", "ZDB-GENE");
+			wcz.addCaseInsensitiveRegexConstraint("lower(n2.label)", searchTerm);
+			zq.setWhereClause(wcz);
+			logger.fine(zq.toString());
+		}
 
 		try {
 			ResultSet rs = execute(rq);
 			while (rs.next()) {
 				results.add(getNode(rs.getString(1)));
-
 			}
+			if(zq != null){
+				ResultSet rs2 = execute(zq);
+				while(rs2.next())
+					results.add(getNode(rs2.getString(1)));
+			}
+			
 		} catch (SQLException e) {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
@@ -463,9 +477,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			sq.setWhereClause(subWc);
 			wc.addInConstraint("n.source_id", sq);
 		}
-		if(zfinOption){
-			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
-		}
 		rq.setWhereClause(wc);
 		//	System.out.println(rq.toSQL());
 		try {
@@ -511,9 +522,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			subWc.addInConstraint("n1.uid", ontologies);
 			sq.setWhereClause(subWc);
 			wc.addInConstraint("n.source_id", sq);
-		}
-		if(zfinOption){
-			wc.addCaseInsensitiveRegexConstraint("n.uid", "ZDB-GENE");
 		}
 		rq.setWhereClause(wc);
 		//	System.out.println(rq.toSQL());
