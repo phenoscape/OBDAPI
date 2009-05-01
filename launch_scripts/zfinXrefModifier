@@ -1,6 +1,6 @@
 #! /bin/bash
 # Set the classname of the Java class to execute
-CLASSNAME=org.phenoscape.bridge.PhenoscapeDataLoader
+CLASSNAME=org.phenoscape.bridge.ZfinXrefModifier
 
 # Give a space-separated list of classpath items RELATIVE TO THE CURRENT SCRIPT
 # These will be resolved into absolute pathnames
@@ -22,7 +22,7 @@ CLASSPATH_RELATIVE=../lib/runlibs/*.jar
 PATH_SEP=":"
 
 JAVAARGS=" "
-CMDARGS="../data/ ../connectionParameters/connectionParameters"
+CMDARGS="../connectionParameters/connectionParameters"
 
 
 for ARG in "$CLASSPATH_RELATIVE"

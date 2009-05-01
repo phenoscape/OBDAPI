@@ -28,6 +28,8 @@ foreach my $dir (@dirs){
  run("svn co http://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files/$dir ../data/$dir");			#checkout data files fromevery directory
 }
 
+run("svn info http://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/ | grep 'Revision' > ../connectionParameters/revisionLog");
+
 sub run {
     my $cmd = shift;
     print STDERR "CMD: $cmd\n";
