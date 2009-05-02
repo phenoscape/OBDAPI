@@ -86,7 +86,7 @@ run("psql $args < $sqldir/obd-core-schema.sql ");
 useddl("$sqldir/obd-core-views.sql");
 useddl("$sqldir/obd-simple-views.sql");
 useddl("$sqldir/obd-util-funcs.sql");
-useddl("$sqldir/bd-matview-funcs.sql");
+useddl("$sqldir/obd-matview-funcs.sql");
 
 run("psql -c 'CREATE LANGUAGE plpgsql' $args");
 run("psql -c 'INSERT INTO obd_schema_metadata (notes) VALUES(\"$notes\")' $args")
