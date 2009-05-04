@@ -1,0 +1,263 @@
+CREATE TABLE anatomyrow (search_id VARCHAR, phenotype_id INT, phenotype_label VARCHAR, entity_info VARCHAR, quality_info VARCHAR, 
+attribute_info VARCHAR, taxa_info VARCHAR);
+
+CREATE OR REPLACE FUNCTION getAnatomyInfo(VARCHAR) RETURNS SETOF anatomyrow AS 
+$$
+DECLARE 
+	result anatomyrow%rowtype;
+	qualityRecord RECORD;
+	phenotype INT;
+	quality VARCHAR;
+	entity VARCHAR;
+	taxa VARCHAR;
+	gene VARCHAR;
+	attribute VARCHAR;
+	qualityAndAttribute VARCHAR[2];
+BEGIN	
+FOR result IN 
+SELECT DISTINCT 
+$1 AS search_id, phenotype_node.node_id as phenotype_id, phenotype_node.uid AS phenotype_label, 'entity' AS entity_info, 'quality' AS quality_info, 
+'attribute' AS attribute_info, 'taxa' AS taxa_info
+FROM 
+node AS taxon_node INNER JOIN link AS exhibits_link INNER JOIN
+node AS phenotype_node INNER JOIN link AS inheres_in_link INNER JOIN node AS search_node ON (inheres_in_link.object_id = search_node.node_id)
+ON (phenotype_node.node_id = inheres_in_link.node_id) ON (exhibits_link.object_id = phenotype_node.node_id) ON (taxon_node.node_id = exhibits_link.node_id), 
+node AS inheres_in_pred_node, node AS exhibits_pred_node
+WHERE
+search_node.uid = $1 AND
+exhibits_pred_node.uid = 'PHENOSCAPE:exhibits' AND
+inheres_in_pred_node.uid = 'OBO_REL:inheres_in' AND
+exhibits_link.predicate_id = exhibits_pred_node.node_id AND
+inheres_in_link.predicate_id = inheres_in_pred_node.node_id 
+LOOP
+	phenotype := result.phenotype_id;
+	qualityRecord := getQualityFromPhenotype(phenotype);
+	attribute := readCharacterForState(qualityRecord.quality_id);
+	quality := qualityRecord.quality;
+	taxa := getTaxaForPhenotype(phenotype);
+	entity := getEntityFromPhenotype(phenotype);
+	result.search_id := $1;	
+	result.entity_info := entity;
+	result.quality_info := quality;
+	result.attribute_info := attribute;
+	result.taxa_info := taxa;
+	RETURN NEXT result;
+END LOOP;
+--RAISE NOTICE '% unique phenotypes found', count;
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE or REPLACE FUNCTION getQualityFromPhenotype(INT) RETURNS RECORD AS
+$$
+SELECT object_id AS quality_id, node_uid(object_id) || ' (' || node_label(object_id) || ')' AS quality FROM link 
+WHERE predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a')
+AND node_id = $1 AND is_inferred = 'f';
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION getEntityFromPhenotype(INT) RETURNS VARCHAR AS
+$$
+DECLARE 
+entity_id VARCHAR;
+BEGIN
+SELECT node_uid(object_id) || ' ' || node_label(object_id) INTO entity_id FROM link WHERE
+predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in') AND node_id = $1
+AND is_inferred = 'f';
+RETURN entity_id;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION getTaxaForPhenotype(INT) RETURNS VARCHAR[]
+AS
+$$
+DECLARE
+rec RECORD;
+gene RECORD;
+taxa VARCHAR[20];
+ct int := 0;
+BEGIN
+FOR rec IN
+SELECT node_id, node_uid(node_id) AS uid, node_label(node_id) AS label FROM link WHERE
+predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:exhibits')
+AND object_id = $1
+LOOP
+ct := ct + 1;
+taxa[ct] := rec.uid || '(' || rec.label || ')';
+IF (rec.uid NOT LIKE '%TTO%') THEN
+FOR gene IN
+SELECT node_uid(node_id) AS gId, node_label(node_id) AS gLabel FROM link WHERE
+predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele')
+AND object_id = rec.node_id
+LOOP
+taxa[ct] := gene.gId || '(' || gene.gLabel || ')';
+END LOOP;
+END IF;
+END LOOP;
+RETURN taxa;	
+END
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION readCharacterForState(INT) RETURNS VARCHAR
+AS
+$$
+SELECT getAttributeForQuality FROM patoStateToCharacterMap WHERE
+node_id = $1;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION createStateToCharacterMapping() RETURNS void AS
+$$
+BEGIN	
+EXECUTE 'CREATE OR REPLACE VIEW patoStateToCharacterMap AS 
+SELECT node_id, uid, label, getAttributeForQuality(node_id) FROM node WHERE source_id = (SELECT node_id FROM node WHERE uid = ''quality'')';
+RETURN;
+END
+$$ LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION getAttributeForQuality(INT) RETURNS INTEGER
+AS
+$$
+DECLARE
+res 		VARCHAR;
+attr_id 	INT;
+slim    	VARCHAR;
+slim_id 	INT;
+temp_id 	INT;
+super_id 	INT;
+root_id  INT;
+BEGIN
+SELECT DISTINCT object_id, node_uid(object_id) INTO slim_id, slim FROM link
+WHERE node_id = $1 AND predicate_id = (SELECT node_id FROM node WHERE uid = 'oboInOwl:inSubset')
+AND object_id IN (SELECT node_id FROM node WHERE uid IN ('value_slim', 'attribute_slim'));
+IF (slim IS NULL) THEN
+	SELECT object_id FROM link INTO super_id WHERE node_id = $1 AND predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND is_inferred = 'f';
+	IF (super_id IS NULL) THEN
+		SELECT DISTINCT node_id FROM link INTO temp_id WHERE object_id = $1 AND predicate_id = (SELECT node_id FROM node WHERE uid = 'oboInOwl:hasDbXref');
+		IF temp_id IS NULL THEN
+			SELECT node_id FROM node INTO root_id WHERE uid = 'PATO:0000001';
+			RETURN root_id;  
+		ELSE
+			RETURN getAttributeForQuality(temp_id);
+		END IF;
+	ELSE
+		RETURN getAttributeForQuality(super_id);
+	END IF;	
+ELSIF (slim = 'attribute_slim') THEN
+RETURN $1; 
+ELSE
+SELECT object_id INTO attr_id FROM link
+WHERE node_id = $1 AND 
+predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND
+is_inferred = 'f';
+RETURN getAttributeForQuality(attr_id);
+END IF;
+END
+$$ LANGUAGE 'plpgsql';
+
+/*
+This is a function that uses materialized views to retrieve information about an anatomical entity,
+in the same manner as the original 'getanatomyinfo' method
+*/
+
+CREATE OR REPLACE FUNCTION getAnatomyInfoFromMatViews(VARCHAR) RETURNS SETOF anatomyrow
+AS
+$$
+DECLARE
+result     	   anatomyrow%rowtype;
+search_id  	   INT;
+phenotype_id   INT;
+taxa		   VARCHAR[2];	
+taxaRec		   RECORD;
+phenRec  	   RECORD;
+count		   INT;	 
+gene	   	   VARCHAR;  
+qId			   INT;
+BEGIN
+SELECT node_id INTO search_id FROM node WHERE uid = $1; 
+PERFORM realize_relation('OBO_REL:inheres_in');
+PERFORM realize_relation('PHENOSCAPE:exhibits');
+PERFORM realize_relation('OBO_REL:is_a');
+PERFORM realize_relation('PHENOSCAPE:has_allele');
+FOR phenRec IN
+SELECT * FROM OBO_REL.inheres_in WHERE object_id = search_id
+LOOP
+count := 0;
+taxa := NULL;
+result.search_id := $1; 
+result.phenotype_id := phenRec.node_id;
+result.phenotype_label := node_uid(phenRec.node_id); 
+SELECT node_uid(object_id) || '(' || node_label(object_id) || ')' INTO result.entity_info FROM asserted_OBO_REL.inheres_in WHERE node_id = phenRec.node_id;
+SELECT node_uid(object_id) || '(' || node_label(object_id) || ')', object_id INTO result.quality_info, qId FROM asserted_OBO_REL.is_a WHERE node_id = phenRec.node_id;
+result.attribute_info := readCharacterForState(qId);
+FOR taxaRec IN
+SELECT node_id AS TorGid, node_uid(node_id) AS TorG FROM asserted_PHENOSCAPE.exhibits WHERE object_id = phenRec.node_id
+LOOP
+count := count + 1;
+IF (taxaRec.TorG LIKE '%TTO%') THEN
+	taxa[count] := taxaRec.TorG;
+ELSE
+	SELECT node_uid(node_id) INTO gene FROM asserted_PHENOSCAPE.has_allele WHERE object_id = taxaRec.TorGid;
+	taxa[count] := gene; 
+END IF;
+END LOOP;
+-- RAISE NOTICE 'Taxa: %', taxa;
+result.taxa_info := taxa;
+RETURN NEXT result;
+END LOOP;
+END
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION get_equivalent_tao_term_for_zfa_entity(INT) RETURNS INTEGER
+AS
+$$
+DECLARE
+tao_id        INT;
+interim_id    INT;
+BEGIN
+SELECT object_id INTO tao_id FROM link WHERE predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
+node_id = $1 AND node_uid(object_id) LIKE 'TAO:%' AND
+is_inferred = 'f';
+IF tao_id IS NULL THEN
+SELECT object_id INTO interim_id FROM link WHERE predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND
+node_id = $1; 
+  IF interim_id IS NULL THEN
+  		RETURN NULL;
+  ELSE
+  		RETURN get_equivalent_tao_term_for_zfa_entity(interim_id);
+  END IF;				
+ELSE
+RETURN tao_id;
+END IF;
+END
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION replace_zfa_term_with_tao_term () RETURNS VOID
+AS
+$$
+DECLARE
+lin_id   INT;
+tao_id   INT;
+obj_id   INT;
+rec      RECORD;
+BEGIN
+FOR rec IN 
+SELECT link_id, object_id FROM link WHERE 
+predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in') AND
+is_inferred = 'f' AND
+object_id IN (SELECT node_id FROM node WHERE uid LIKE 'ZFA:%')
+LOOP
+obj_id := rec.object_id;
+lin_id := rec.link_id;
+IF (get_equivalent_tao_term_for_zfa_entity(obj_id) IS NOT NULL) THEN
+tao_id := get_equivalent_tao_term_for_zfa_entity(obj_id);
+EXECUTE 'UPDATE link SET object_id = '|| tao_id ||' WHERE link_id = ' || lin_id || '';
+--RAISE NOTICE 'CHANGING % TO %', obj_id, tao_id;
+--ELSE
+--EXECUTE 'DELETE FROM link WHERE link_id = ' || lin_id || '';
+--RAISE NOTICE 'DELETING row';
+END IF;
+END LOOP;
+END
+$$
+LANGUAGE 'plpgsql';
