@@ -10,11 +10,12 @@
 	<property name="build_date" value="${NOW}"/>
 	<property name="staging" value="staging"/>
 	<property name="nexml" value="${staging}/nexml"/>
+	<property name="ontologies" value="${staging}/ontologies"/>
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
 	
 	<property environment="environment"/>
-	<property name="db-name" value="obdphenoscape10"/>
+	<property name="db-name" value="obdphenoscape"/>
 <!-- Environment variables to set for database connections:
 PGUSER sets the user name used to connect to the database.
 PGPASSWORD sets the password used if the server demands password authentication. Use of this environment variable is not recommended for security reasons (some operating systems allow non-root users to see process environment variables via ps); instead consider using the ~/.pgpass file.
@@ -49,17 +50,16 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="create-db-phenoscape" description="adds additional Phenoscape ddl to the database">
-<!--	sql task doesn't seem to work with the plpgsql file, using exec instead
-	       <sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
-			userid="${db-user}" password="${db-password}" 
-			classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar" src="../sql/phenoscape/obdws-procedures.plpgsql"/> -->
-		<exec executable="psql" input="../sql/phenoscape/obdws-procedures.plpgsql"/>
+		<exec executable="psql" input="../sql/phenoscape/obdws-procedures.plpgsql">
+			<env key="PGDATABASE" value="${db-name}"/>
+	    </exec>
 	</target>
 	
 	<target name="load-obo" description="loads OBO ontologies into the database">
-<!-- TODO: put OBDAPI launch_scripts folder at beginning of PATH for exec task, for now make
-		sure this is true in your environment -->
-		<exec executable="perl" dir="staging/ontologies">
+		<property name="existing-path" value="${environment.PATH}"/>
+		<echo message="${existing-path}"/>
+		<exec executable="perl" dir="${ontologies}">
+			<env key="PATH" value="../../../launch_scripts:${existing-path}"/>
 			<arg value="../../../scripts/obd-load-db-from-obo.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
@@ -68,21 +68,32 @@ PGHOST sets the database server name.
 			<arg value="--noreasoner"/>
 			<arg value="--conf"/>
 			<arg value="../../${ontology-sources}"/>
+			<arg value="--keepdownloads"/>
 		</exec>
 	</target>
 	
 	<target name="load-nexml" description="loads NeXML data files into the database">
-		<java classname="org.phenoscape.bridge.PhenoscapeDataLoader" classpathref="${jarsclasspath}" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.bridge.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<arg value="${nexml}"/>
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="ontology-dir" value="${ontologies}"/>
 		</java>
 	</target>
 	
 	<target name="load-zfin" description="loads ZFIN data sources into the database">
-<!-- TODO -->
+		<java classname="org.phenoscape.bridge.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="ontology-dir" value="${ontologies}"/>
+			<sysproperty key="phenotype-url" value="http://zfin.org/data_transfer/Downloads/pheno_obo.txt"/>
+			<sysproperty key="missing-markers-url" value="http://zfin.org/data_transfer/Downloads/genotype_features_missing_markers.txt"/>
+		    <sysproperty key="genotype-url" value="http://zfin.org/data_transfer/Downloads/genotype_features.txt"/>
+		</java>
 	</target>
 	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
@@ -94,16 +105,25 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="run-phenoscape-reasoner" description="runs the Phenoscape-specific reasoner on the database contents">
-<!-- TODO -->
+<!-- TODO - this won't work properly until we remove standard reasoner stuff from Phenoscape reasoner script -->
+		<exec executable="perl">
+			<arg value="../scripts/phenoscape-obd-reasoner.pl"/>
+		    <arg value="--database"/>
+		    <arg value="${db-name}"/>
+		</exec>
 	</target>
 	
 	<target name="clear-db" depends="init" description="removes all data from the OBD database">
 <!-- TODO -->
 	</target>
 	
-	<target name="build-all" depends="init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
+	<target name="clean" description="removes cached files">
+	      <delete dir="${staging}"/>
+	</target>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,update-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
+	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
+	
+	<target name="refresh-all" depends="clear-db,load-obo,update-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval

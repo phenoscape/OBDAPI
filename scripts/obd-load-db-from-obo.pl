@@ -10,6 +10,7 @@ my $reasoner = 'oboedit';
 my $dump;
 my $split;
 my $nodelete = 1;
+my $keep_downloads = 0;
 my @parse_args = ();
 while ($ARGV[0] =~ /^\-/) {
     my $opt = shift @ARGV;
@@ -36,6 +37,9 @@ while ($ARGV[0] =~ /^\-/) {
     }
     elsif ($opt eq '--delete') {
         $nodelete = 0;
+    }
+    elsif ($opt eq '--keepdownloads') {
+        $keep_downloads = 1;
     }
     elsif ($opt eq '--split') {
         $split = shift @ARGV;
@@ -97,7 +101,9 @@ foreach my $file (@files) {
         my $nu = $1;
         run("wget -O $nu $file");
         $file=$nu;
-        $is_tmp=1;
+        if (!$keep_downloads) {
+            $is_tmp=1;
+        }
     }
     elsif ($file =~ /^file:(.*)$/) {
         $file = $1;

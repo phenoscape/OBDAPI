@@ -120,7 +120,13 @@ COMMENT ON VIEW standard_link IS 'A link without union or intersection condition
 --nucleus part_of cell (which is necessarily true for all cell nuclei)';
 
 --CREATE OR REPLACE VIEW inheritable_link AS SELECT * FROM link WHERE combinator!='U' AND is_metadata='f'; -- AND is_negated='f';
-CREATE OR REPLACE VIEW inheritable_link AS SELECT * FROM link WHERE combinator!='U' AND is_metadata='f' AND is_negated='f' AND reiflink_node_id IS NULL;
+-- Changed to avoid adding attrib_slims to value_slims qualities: Cartik (01-28-2009)
+-- Changed to avoid inferring from 'value for' links: Cartik (02-19-2009)
+-- Changed to avoid inferring down the hierarchy from 'exhibits' links: Cartik (04-21-2009)
+CREATE OR REPLACE VIEW inheritable_link AS SELECT link.* FROM link, node WHERE 
+link.combinator!='U' AND link.is_metadata='f' AND link.is_negated='f' AND 
+link.reiflink_node_id IS NULL AND link.predicate_id = node.node_id AND node.uid NOT IN ('oboInOwl:inSubset', 'PHENOSCAPE:value_for',
+'PHENOSCAPE:exhibits');
 
 CREATE OR REPLACE VIEW reified_link AS SELECT * FROM link WHERE reiflink_node_id IS NOT NULL;
 COMMENT ON VIEW reified_link IS 'A link that has a link pointing to it';
