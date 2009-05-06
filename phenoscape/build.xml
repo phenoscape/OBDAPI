@@ -114,7 +114,11 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="clear-db" depends="init" description="removes all data from the OBD database">
-<!-- TODO -->
+		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
+		            userid="${db-user}" password="${db-password}" 
+		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
+			TRUNCATE node CASCADE;
+		</sql>
 	</target>
 	
 	<target name="clean" description="removes cached files">
