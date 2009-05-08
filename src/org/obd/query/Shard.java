@@ -1,5 +1,6 @@
 package org.obd.query;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -397,14 +398,14 @@ public interface Shard extends BasicRepository,
 	public Collection<LinkStatement> getClosure(Collection<String> ids, String relId);
 
 
-	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies);
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies) throws SQLException;
 
 
-	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies, boolean searchByName);
+	public Collection<Node> getNodesForSearchTermBySynonym(String term, boolean zfinOption, List<String> ontologies, boolean searchByName) throws SQLException;
 
 
-	public Collection<Node> getNodesForSearchTermByDefinition(String term, boolean zfinOption, List<String> ontologies);
+	public Collection<Node> getNodesForSearchTermByDefinition(String term, boolean zfinOption, List<String> ontologies) throws SQLException;
 	
-	public Collection<Node> getSynonymsForTerm(String searchTerm);
+	public Collection<Node> getSynonymsForTerm(String searchTerm) throws SQLException;
 
 }

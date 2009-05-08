@@ -351,6 +351,161 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		return getStatements(whereClause);
 	}
 
+	
+	/**
+	 * @author cartik
+	 * @PURPOSE: This method retrieves matches for a search term, by label, by synonym, and by definition
+	 * @PROCEDURE: A query is constructed for searching for a match on term labels. If the synonym and definition
+	 * options are specified, UNIONS of other queries are added to the original query. Finally, if the ZFIN option
+	 * is specified, a last query to find ZFIN GENEs is UNIONed to the main query. The assembled query is now executed
+	 * over the Shard and the results are processed and packaged into a returned collection of nodes
+	 * @param searchTerm - the term to be searched for (if TRUE)
+	 * @param zfinOption - look for matches on GENE names (if TRUE)
+	 * @param synOption - look for synonyms containing search term (if TRUE)
+	 * @param defOption - look for definitions containing search term (if TRUE)
+	 * @param ontologyList - list of ontologies to filter by. by default, we look through all ontologies as set up in the
+	 * autocomplete resource. specified lists make the search scope more specific
+	 */
+	/** 
+	 * This is an experimental method that may be implemented in the future for better query execution 5/08/09
+	 */
+	public Collection<Node> getAutoCompletions(String searchTerm, boolean zfinOption, boolean synOption,
+								boolean defOption, List<String> ontologyList) throws SQLException{
+		Collection<Node> results = new LinkedList<Node>();
+		RelationalQuery labelQ = new SqlQueryImpl(), zfinQ = null, synQ = null, defQ = null;
+		SelectClause labelSC = new SqlSelectClauseImpl(), zfinSC, synSC, defSC;
+		WhereClause labelWC = new SqlWhereClauseImpl(), zfinWC, synWC, defWC;
+		RelationalQuery query4Ontologies = null;
+		
+		Node resultNode; //watch this node. this is what every returned row is packaged into
+				
+		/*
+		 * This is the default search, looking for matches on term labels
+		 */
+		labelSC.setDistinct(true);
+		labelSC.addColumn("label_node.uid", "uid");
+		labelSC.addColumn("label_node.label", "label");
+		labelSC.addColumn("NULL", "synonym");
+		labelSC.addColumn("NULL", "definition");
+		//synSC.setDistinct(true);
+		//defSC.setDistinct(true);
+		labelWC.addCaseInsensitiveRegexConstraint("lower(label_node.label)", searchTerm);
+
+		if(ontologyList != null && ontologyList.size() > 0){
+			query4Ontologies = new SqlQueryImpl();
+			query4Ontologies.addTable(NODE_TABLE, "n1");
+			query4Ontologies.setSelectClause("n1.node_id AS nodeId");
+			WhereClause subWc = new SqlWhereClauseImpl();
+			subWc.addInConstraint("n1.uid", ontologyList);
+			query4Ontologies.setWhereClause(subWc);
+			labelWC.addInConstraint("label_node.source_id", query4Ontologies);
+		}
+		labelQ.addTable(NODE_TABLE, "label_node");
+		labelQ.setSelectClause(labelSC);
+		labelQ.setWhereClause(labelWC);
+		
+		/*
+		 * We begin to assemble the final query here
+		 */
+		String finalQuery = labelQ.toSQL();
+		
+		/*
+		 * If ZFIN option is specified, ZFIN nodes come from text files and not from ontologies. A
+		 * separate query goes in here
+		 */
+		if(zfinOption){
+			zfinQ = new SqlQueryImpl();
+			
+			zfinSC = new SqlSelectClauseImpl();
+			zfinSC.setDistinct(true);
+			zfinSC.addColumn("zfin_node.uid", "uid");
+			zfinSC.addColumn("zfin_node.label", "label");
+			zfinSC.addColumn("NULL", "synonym");
+			zfinSC.addColumn("NULL", "definition");
+			
+			zfinWC = new SqlWhereClauseImpl();
+			zfinWC.addCaseInsensitiveRegexConstraint("zfin_node.uid", "ZDB-GENE");
+			zfinWC.addCaseInsensitiveRegexConstraint("lower(zfin_node.label)", searchTerm);
+			
+			zfinQ.addTable(NODE_TABLE, "zfin_node");
+			zfinQ.setWhereClause(zfinWC);
+			zfinQ.setSelectClause(zfinSC);
+			
+			finalQuery += " UNION " + zfinQ.toSQL();
+		}
+		
+		/*
+		 * Synonym option is used, so we use a table join between NODE and ALIAS tables 
+		 */
+		if(synOption){
+			synQ = new SqlQueryImpl();
+			
+			synSC = new SqlSelectClauseImpl();
+			synSC.setDistinct(true);
+			synSC.addColumn("main_node.uid", "uid");
+			synSC.addColumn("main_node.label", "label");
+			synSC.addColumn("alias_node.label", "synonym");
+			synSC.addColumn("NULL", "definition");
+			
+			synWC = new SqlWhereClauseImpl();
+			synWC.addJoinConstraint("main_node.node_id", "alias_node.node_id");
+			synWC.addCaseInsensitiveRegexConstraint("lower(alias_node.label)", searchTerm);
+			
+			synQ.addTable(NODE_TABLE, "main_node");
+			synQ.addTable("alias", "alias_node");
+			synQ.setSelectClause(synSC);
+			synQ.setWhereClause(synWC);
+			
+			finalQuery += " UNION " + synQ.toSQL();
+		}
+		/*
+		 * Definition option is used, so we join NODE and DESCRIPTION tables
+		 */
+		if(defOption){
+			defQ = new SqlQueryImpl();
+			
+			defSC = new SqlSelectClauseImpl();
+			defSC.setDistinct(true);
+			defSC.addColumn("main_node.uid", "uid");
+			defSC.addColumn("main_node.label", "label");
+			defSC.addColumn("NULL", "synonym");
+			defSC.addColumn("desc_node", "definition");
+			
+			defWC = new SqlWhereClauseImpl();
+			defWC.addJoinConstraint("main_node.node_id", "desc_node.node_id");
+			defWC.addCaseInsensitiveRegexConstraint("lower(desc_node.label)", searchTerm);
+			
+			defQ.addTable(NODE_TABLE, "main_node");
+			defQ.addTable("description", "desc_node");
+			defQ.setSelectClause(defSC);
+			defQ.setWhereClause(defWC);
+			
+			finalQuery += " UNION " + defQ.toSQL();
+		}
+		 
+		Connection conn = this.getConnection();
+		PreparedStatement ps = conn.prepareStatement(finalQuery);
+		
+		try{
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				String uid = rs.getString(1);
+				String label = rs.getString(2);
+				String syn = rs.getString(3);
+				String def = rs.getString(4);
+				resultNode = new Node(uid);
+			}
+		}
+		catch(SQLException sqle){
+			logger.severe("SqlException");
+			throw new SQLException(sqle);
+			
+		}
+		
+		
+		return results;
+	}
+	
 	/**
 	 * @author cartik
 	 * @param searchTerm
@@ -358,7 +513,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	 * This has been added to search for nodes by labels in the node table
 	 */
 
-	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies){
+	public Collection<Node> getNodesForSearchTermByLabel(String searchTerm, boolean zfinOption, List<String> ontologies)
+	throws SQLException{
 
 		Collection<Node> results = new LinkedList<Node>();
 		RelationalQuery rq, zq = null;
@@ -408,13 +564,16 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		} catch (SQLException e) {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
-			e.printStackTrace();
+			throw new SQLException(e);
 		}
 
 		return results;
 	}
 
-	public Collection<Node> getSynonymsForTerm(String searchTerm){
+	/**
+	 * This method is used to find synonyms for the TermResource
+	 */
+	public Collection<Node> getSynonymsForTerm(String searchTerm) throws SQLException{
 		
 		Collection<Node> results = new ArrayList<Node>();
 		
@@ -445,13 +604,14 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
+			throw new SQLException(e);
 		}
 		
 		return results;
 		
 	}
 	
-	public Collection<Node> getNodesForSearchTermBySynonym(String searchTerm, boolean zfinOption, List<String> ontologies, boolean searchByName){
+	public Collection<Node> getNodesForSearchTermBySynonym(String searchTerm, boolean zfinOption, List<String> ontologies, boolean searchByName) throws SQLException{
 
 		Collection<Node> results = new ArrayList<Node>();
 
@@ -495,13 +655,14 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
+			throw new SQLException(e);
 		}
 
 		return results;
 
 	}
 
-	public Collection<Node> getNodesForSearchTermByDefinition(String searchTerm, boolean zfinOption, List<String> ontologies){
+	public Collection<Node> getNodesForSearchTermByDefinition(String searchTerm, boolean zfinOption, List<String> ontologies) throws SQLException{
 
 		Collection<Node> results = new HashSet<Node>();
 
@@ -541,6 +702,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
+			throw new SQLException(e);
 		}
 
 		return results;
