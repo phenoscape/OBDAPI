@@ -15,7 +15,7 @@
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
 	
 	<property environment="environment"/>
-	<property name="db-name" value="obdphenoscape"/>
+	<property name="db-name" value="${environment.DBNAME}"/>
 <!-- Environment variables to set for database connections:
 PGUSER sets the user name used to connect to the database.
 PGPASSWORD sets the password used if the server demands password authentication. Use of this environment variable is not recommended for security reasons (some operating systems allow non-root users to see process environment variables via ps); instead consider using the ~/.pgpass file.
