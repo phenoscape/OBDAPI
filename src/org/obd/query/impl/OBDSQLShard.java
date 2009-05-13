@@ -580,7 +580,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		RelationalQuery rq = new SqlQueryImpl();
 		rq.addTable("alias", "a");
 		rq.addTable(NODE_TABLE, "n");
-		rq.setSelectClause("n.uid AS uid, a.label as synonym");
+		rq.setSelectClause("a.label as synonym");
 
 		WhereClause wc = new SqlWhereClauseImpl();
 		wc.addJoinConstraint("a.node_id", "n.node_id");
@@ -588,18 +588,28 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		
 		rq.setWhereClause(wc);
 		//	System.out.println(rq.toSQL());
+		/*
+		 * A set to weed out duplicate synonyms
+		 */
+		Set<String> synonymSet = new HashSet<String>();
 		try {
 			ResultSet rs = execute(rq);
 			while (rs.next()) {
-				String nodeId = rs.getString(1);
-				Node node = getNode(nodeId);
+				String synonym = rs.getString(1);
+				synonymSet.add(synonym);
+			}
+			
+			int j = 0;
+			for(String synonym : synonymSet){
+			  	Node node = new Node("Synonym#" + ++j);
 				LiteralStatement s = new LiteralStatement();
-				s.setNodeId(nodeId);
+				s.setNodeId(node.getId());
 				s.setRelationId("hasSynonym");
-				s.setValue(rs.getString(2));
+				s.setValue(synonym);
 				node.addStatement(s);
 				results.add(node);
 			}
+				
 		} catch (SQLException e) {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
