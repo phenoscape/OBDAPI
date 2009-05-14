@@ -17,6 +17,7 @@
 	<property environment="environment"/>
 	<property name="db-name" value="${environment.DBNAME}"/>
 <!-- Environment variables to set for database connections:
+DBNAME sets the name of the database
 PGUSER sets the user name used to connect to the database.
 PGPASSWORD sets the password used if the server demands password authentication. Use of this environment variable is not recommended for security reasons (some operating systems allow non-root users to see process environment variables via ps); instead consider using the ~/.pgpass file.
 PGHOST sets the database server name.
@@ -118,6 +119,26 @@ PGHOST sets the database server name.
 		            userid="${db-user}" password="${db-password}" 
 		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
 			TRUNCATE node CASCADE;
+			TRUNCATE obd_schema_metadata;
+			ALTER SEQUENCE node_node_id_seq RESTART WITH 1; 
+			ALTER SEQUENCE alias_alias_id_seq RESTART WITH 1;	
+			ALTER SEQUENCE description_description_id_seq RESTART WITH 1;	
+			ALTER SEQUENCE inference_evidence_inference_evidence_id_seq RESTART WITH 1;					
+			ALTER SEQUENCE inference_evidence_support_inference_evidence_support_id_seq RESTART WITH 1;
+			ALTER SEQUENCE link_argument_link_argument_id_seq RESTART WITH 1;								
+			ALTER SEQUENCE node_node_uid_seq RESTART WITH 1;
+			ALTER SEQUENCE tagval_tagval_id_seq RESTART WITH 1;												
+			ALTER SEQUENCE sameas_sameas_id_seq RESTART WITH 1;												
+			ALTER SEQUENCE link_link_id_seq RESTART WITH 1;
+		</sql>
+	</target>
+	
+	<target name="load-metadata" depends="init" description="Loads metadata into the database">
+		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
+		            userid="${db-user}" password="${db-password}" 
+		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
+			INSERT INTO obd_schema_metadata (schema_release,schema_revision,schema_version_date, notes) 
+			VALUES('1.1', 'Revision: 153', 'Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)', 'Refresh date: ${build_date}');			
 		</sql>
 	</target>
 	
@@ -147,5 +168,4 @@ PGHOST sets the database server name.
 			<arg value="update"/>
 		</exec>      
 	</target>
-	
 </project>
