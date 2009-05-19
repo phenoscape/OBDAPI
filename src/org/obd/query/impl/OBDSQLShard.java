@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.bbop.rdbms.FromClause;
 import org.bbop.rdbms.GroupByClause;
 import org.bbop.rdbms.RelationalQuery;
 import org.bbop.rdbms.SelectClause;
@@ -27,8 +26,6 @@ import org.bbop.rdbms.WhereClause;
 import org.bbop.rdbms.impl.SqlQueryImpl;
 import org.bbop.rdbms.impl.SqlSelectClauseImpl;
 import org.bbop.rdbms.impl.SqlWhereClauseImpl;
-import org.obd.model.CompositionalDescription;
-import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
 import org.obd.model.LiteralStatement;
 import org.obd.model.Node;
@@ -39,7 +36,6 @@ import org.obd.model.rule.InferenceRule;
 import org.obd.model.rule.RelationCompositionRule;
 import org.obd.model.stats.AggregateStatisticCollection;
 import org.obd.model.stats.ScoredNode;
-import org.obd.model.stats.SimilarityPair;
 import org.obd.model.stats.AggregateStatistic.AggregateType;
 import org.obd.model.vocabulary.TermVocabulary;
 import org.obd.query.AnnotationLinkQueryTerm;
@@ -49,7 +45,6 @@ import org.obd.query.CoAnnotatedQueryTerm;
 import org.obd.query.ComparisonQueryTerm;
 import org.obd.query.CompositionalDescriptionQueryTerm;
 import org.obd.query.ExistentialQueryTerm;
-import org.obd.query.GraphQuery;
 import org.obd.query.LabelQueryTerm;
 import org.obd.query.LinkQueryTerm;
 import org.obd.query.LiteralQueryTerm;
@@ -59,16 +54,11 @@ import org.obd.query.RootQueryTerm;
 import org.obd.query.Shard;
 import org.obd.query.SourceQueryTerm;
 import org.obd.query.SubsetQueryTerm;
-import org.obd.query.AnalysisCapableRepository.SimilaritySearchParameters;
 import org.obd.query.BooleanQueryTerm.BooleanOperator;
 import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
 import org.obd.query.QueryTerm.Aspect;
-import org.obd.query.Shard.EntailmentUse;
-import org.obd.query.Shard.GraphTranslation;
 import org.obd.query.exception.ShardExecutionException;
-import org.obo.dataadapter.OBDSQLDatabaseAdapter;
-import org.obo.dataadapter.OBDSQLDatabaseAdapter.OBDSQLDatabaseAdapterConfiguration;
 import org.obo.datamodel.IdentifiedObject;
 import org.obo.datamodel.Link;
 import org.obo.datamodel.LinkedObject;
@@ -498,7 +488,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		}
 		catch(SQLException sqle){
 			logger.severe("SqlException");
-			throw new SQLException(sqle);
+			throw sqle;
 			
 		}
 		
@@ -564,7 +554,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 		} catch (SQLException e) {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
-			throw new SQLException(e);
+			throw e;
 		}
 
 		return results;
@@ -614,7 +604,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
-			throw new SQLException(e);
+			throw e;
 		}
 		
 		return results;
@@ -665,7 +655,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
-			throw new SQLException(e);
+			throw e;
 		}
 
 		return results;
@@ -712,7 +702,7 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 			System.err.println("Error fetching nodes: "
 					+ e.getMessage());
 			e.printStackTrace();
-			throw new SQLException(e);
+			throw e;
 		}
 
 		return results;
