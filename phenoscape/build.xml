@@ -73,6 +73,17 @@ PGHOST sets the database server name.
 		</exec>
 	</target>
 	
+	<target name="load-homology" description="loads the homology file into the database">
+		<java classname="org.phenoscape.bridge.HomologyObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="ontology-dir" value="${ontologies}"/>
+			<sysproperty key="homology-url" value="http://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/homology-tables/Weberian-app-homology"/>
+		</java>
+	</target>
+	
 	<target name="load-nexml" description="loads NeXML data files into the database">
 		<java classname="org.phenoscape.bridge.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<arg value="${nexml}"/>
