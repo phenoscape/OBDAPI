@@ -29,11 +29,13 @@ DECLARE
    v_label                 ALIAS FOR $2;
    v_source_id             ALIAS FOR $3;
    v_metatype              ALIAS FOR $4;
-
+  
+   mtype                   CHARACTER VARYING;
+   v_source                INTEGER;
    v_node_id               INTEGER;
  BEGIN
 
-    SELECT INTO v_node_id node_id
+    SELECT INTO v_node_id, v_source, mtype node_id, source_id, metatype
       FROM node
       WHERE uid=v_uid;
     IF NOT FOUND THEN
@@ -54,7 +56,7 @@ DECLARE
       WHERE node_id = v_node_id;
     ELSE
      UPDATE NODE
-      SET label = v_label, source_id = v_source_id, metatype = v_metatype
+      SET label = v_label, source_id = v_source, metatype = mtype
       WHERE node_id = v_node_id;
     END IF;
     RETURN v_node_id;
