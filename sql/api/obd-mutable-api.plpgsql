@@ -54,9 +54,17 @@ DECLARE
       SET source_id = v_source_id, metatype = v_metatype
       WHERE node_id = v_node_id;
     ELSE
-     UPDATE NODE
-      SET label = v_label, source_id = v_source, metatype = v_metatype 
-      WHERE node_id = v_node_id;
+     IF v_source IS NOT NULL THEN
+       -- do not overwrite the source id in the database : Cartik 05/29/09
+       UPDATE NODE
+       SET label = v_label, source_id = v_source, metatype = v_metatype 
+       WHERE node_id = v_node_id;
+     ELSE
+       -- there is no source id in the database. so overwrite it with the function argument
+       UPDATE NODE
+       SET label = v_label, source_id = v_source_id, metatype = v_metatype 
+       WHERE node_id = v_node_id;
+     END IF;  
     END IF;
     RETURN v_node_id;
  END;
