@@ -171,6 +171,36 @@ $$
  END
 $$ LANGUAGE 'plpgsql';
 
+-- In progress...
+CREATE OR REPLACE FUNCTION populate_symmetric_scores_for_omim_alleles() RETURNS VOID
+ AS
+$$
+ DECLARE
+  v_node1_id  INTEGER;
+  v_node2_id  INTEGER;
+  v_iccs      FLOAT;
+  v_ic_ratio   FLOAT;
+ BEGIN
+  FOR v_node1_id IN SELECT node_id FROM omim_genotype LOOP
+--   RAISE NOTICE 'in %',v_node1_id;
+   FOR v_node2_id IN SELECT node_id FROM omim_genotype WHERE node_id != v_node1_id LOOP
+    SELECT iccs INTO v_iccs FROM  cached_pairwise_similarity WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+    IF NOT FOUND THEN
+      RAISE NOTICE 'asym: % % (NO ENTRY)',v_node1_id, v_node2_id;
+    END IF;
+    IF v_iccs IS NULL THEN
+      SELECT iccs,ic_ratio INTO v_iccs,v_ic_ratio FROM  cached_pairwise_similarity WHERE node2_id=v_node1_id AND node1_id=v_node2_id;
+      IF v_iccs IS NULL THEN
+       RAISE NOTICE 'asym: % % (NULL)',v_node1_id, v_node2_id;
+      ELSE
+       UPDATE cached_pairwise_similarity SET iccs = v_iccs, ic_ratio=v_ic_ratio WHERE node1_id=v_node1_id AND node2_id=v_node2_id;
+      END IF;
+    END IF;
+   END LOOP;
+  END LOOP;
+ END
+$$ LANGUAGE 'plpgsql';
+
 
 CREATE OR REPLACE VIEW intragene_genotype_similarity AS
  SELECT
@@ -197,11 +227,16 @@ CREATE OR REPLACE VIEW intragene_genotype_similarity AS
  FROM
   omim_genotype_gene AS ogg
   INNER JOIN omim_genotype_gene AS ogg2 ON (ogg.gene_id=ogg2.gene_id)
-  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id)
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id != node2_id)
  GROUP BY
   ogg.gene_id,
   ogg.gene_uid,
   ogg.gene_label;
+
+COMMENT ON VIEW intragene_genotype_similarity IS 'summary statistics
+for two genotypes of the same gene. An all by all scoring and max IC
+is performed for every unique pair of non-identical genotypes, then
+the average and maximum is found. ';
 
 CREATE OR REPLACE VIEW intragene_least_similar_by_iccs AS
  SELECT DISTINCT
@@ -240,10 +275,6 @@ CREATE OR REPLACE VIEW intragene_most_similar_by_iccs AS
   cps.iccs = igs.max_iccs;
   
 
-COMMENT ON VIEW intragene_genotype_similarity IS 'summary statistics
-for two genotypes of the same gene. An all by all scoring and max IC
-is performed for every unique pair of non-identical genotypes, then
-the average and maximum is found. ';
 
 CREATE OR REPLACE VIEW intergene_genotype_similarity AS
  SELECT
@@ -271,7 +302,7 @@ CREATE OR REPLACE VIEW intergene_genotype_similarity AS
  FROM
   omim_genotype_gene AS ogg
   INNER JOIN omim_genotype_gene AS ogg2 ON (ogg.gene_id!=ogg2.gene_id)
-  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id)
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id != node2_id)
  GROUP BY
   ogg.gene_id,
   ogg.gene_uid,
@@ -360,7 +391,7 @@ CREATE OR REPLACE VIEW best_hits_that_are_intergene AS
  WHERE ogg.gene_id != ogg2.gene_id; 
 
 CREATE OR REPLACE VIEW all_genotype_similarity AS
- SELECT
+ SELECT DISTINCT
   AVG(ic_ratio) AS avg_ic_ratio,
   MAX(ic_ratio) AS max_ic_ratio,
   AVG(iccs) AS avg_iccs,
@@ -378,7 +409,7 @@ CREATE OR REPLACE VIEW all_genotype_similarity AS
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id;
 
 CREATE OR REPLACE VIEW all_intragene_genotype_similarity AS
- SELECT
+ SELECT DISTINCT
   AVG(ic_ratio) AS avg_ic_ratio,
   MIN(ic_ratio) AS min_ic_ratio,
   MAX(ic_ratio) AS max_ic_ratio,
@@ -404,7 +435,7 @@ CREATE OR REPLACE VIEW all_intragene_genotype_similarity AS
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id=og2.gene_id;
 
 CREATE OR REPLACE VIEW all_intragene_genotype_similarity_datapoints AS
- SELECT
+ SELECT DISTINCT
   og.uid || '-vs-' || og2.uid AS pair,
   ic_ratio,
   iccs,
@@ -419,7 +450,7 @@ CREATE OR REPLACE VIEW all_intragene_genotype_similarity_datapoints AS
 
 
 CREATE OR REPLACE VIEW all_intergene_genotype_similarity AS
- SELECT
+ SELECT DISTINCT
   AVG(ic_ratio) AS avg_ic_ratio,
   MIN(ic_ratio) AS min_ic_ratio,
   MAX(ic_ratio) AS max_ic_ratio,
@@ -445,7 +476,7 @@ CREATE OR REPLACE VIEW all_intergene_genotype_similarity AS
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id!=og2.gene_id;
 
 CREATE OR REPLACE VIEW all_intergene_genotype_similarity_datapoints AS
- SELECT
+ SELECT DISTINCT
   og.uid || '-vs-' || og2.uid AS pair,
   ic_ratio,
   iccs,
@@ -459,7 +490,7 @@ CREATE OR REPLACE VIEW all_intergene_genotype_similarity_datapoints AS
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id AND og.gene_id!=og2.gene_id;
 
 CREATE OR REPLACE VIEW all_genotype_similarity_datapoints_ordered AS
- SELECT
+ SELECT DISTINCT
   og.gene_uid,
   og.gene_label,
   og.uid,
@@ -476,6 +507,76 @@ CREATE OR REPLACE VIEW all_genotype_similarity_datapoints_ordered AS
   cached_pairwise_similarity AS cps
  WHERE
   og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id
+ ORDER BY
+  og.gene_label,
+  og.uid,
+  iccs DESC;
+
+CREATE OR REPLACE VIEW all_genotype_similarity_datapoints_ordered_by_ic_ratio AS
+ SELECT DISTINCT
+  og.gene_uid,
+  og.gene_label,
+  og.uid,
+  ic_ratio,
+  iccs,
+  basic_score,
+  max_ic,
+  og2.uid AS hit_gt,
+  og2.gene_uid AS hit_gene_uid,
+  og2.gene_label AS hit_gene
+ FROM
+  omim_genotype_gene AS og,
+  omim_genotype_gene AS og2,
+  cached_pairwise_similarity AS cps
+ WHERE
+  og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id
+ ORDER BY
+  og.gene_label,
+  og.uid,
+  ic_ratio DESC;
+
+CREATE OR REPLACE VIEW all_genotype_similarity_datapoints_ordered_by_bs AS
+ SELECT DISTINCT
+  og.gene_uid,
+  og.gene_label,
+  og.uid,
+  ic_ratio,
+  iccs,
+  basic_score,
+  max_ic,
+  og2.uid AS hit_gt,
+  og2.gene_uid AS hit_gene_uid,
+  og2.gene_label AS hit_gene
+ FROM
+  omim_genotype_gene AS og,
+  omim_genotype_gene AS og2,
+  cached_pairwise_similarity AS cps
+ WHERE
+  og.node_id = cps.node1_id AND og2.node_id=cps.node2_id AND node1_id != node2_id
+ ORDER BY
+  og.gene_label,
+  og.uid,
+  basic_score DESC;
+
+
+CREATE OR REPLACE VIEW all_genotype_similarity_datapoints_ordered_refl AS
+ SELECT DISTINCT
+  og.gene_uid,
+  og.gene_label,
+  og.uid,
+  ic_ratio,
+  iccs,
+  basic_score,
+  max_ic,
+  og2.uid AS hit_gt,
+  og2.gene_uid AS hit_gene_uid,
+  og2.gene_label AS hit_gene
+ FROM
+  omim_genotype_gene AS og,
+  omim_genotype_gene AS og2,
+  cached_pairwise_similarity AS cps
+ WHERE
+  og.node_id = cps.node1_id AND og2.node_id=cps.node2_id
  ORDER BY
   og.gene_label,
   og.uid,
@@ -503,7 +604,7 @@ CREATE OR REPLACE VIEW intergene_genotype_similarity2 AS
  FROM
   omim_genotype_gene AS ogg
   INNER JOIN omim_genotype_gene AS ogg2 ON (ogg.gene_id != ogg2.gene_id)
-  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id)
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id != node2_id)
  GROUP BY
   ogg.gene_id,
   ogg.gene_uid,
@@ -519,7 +620,7 @@ genotypes, then the average and maximum is found';
 
   
 CREATE OR REPLACE VIEW intergene_genotype_similarity_summary AS
- SELECT
+ SELECT 
   ogg.gene_id,
   ogg.gene_uid,
   ogg.gene_label,
@@ -553,7 +654,7 @@ CREATE OR REPLACE VIEW genotype_gene_similarity AS
  FROM
   omim_genotype_gene AS ogg1
   INNER JOIN omim_genotype_gene AS ogg2 ON (ogg1.gene_id=ogg2.gene_id)
-  INNER JOIN cached_pairwise_similarity AS cps ON (ogg1.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id<node2_id);
+  INNER JOIN cached_pairwise_similarity AS cps ON (ogg1.node_id = cps.node1_id AND ogg2.node_id=cps.node2_id AND node1_id != node2_id);
   
 CREATE OR REPLACE VIEW cached_pairwise_similarity_sym AS
  SELECT
@@ -613,8 +714,3 @@ CREATE OR REPLACE VIEW best_hits_for_genotype AS
  ORDER BY
   iccs DESC;
 
-
-
-
-  
- 
