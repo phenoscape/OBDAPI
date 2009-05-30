@@ -94,6 +94,8 @@ COMMENT ON VIEW inferred_link IS 'A link that has been inferred;
 inferred links are created by deductive reasoning. Examples: X part_of
 Z because X is_a Y and Y part_of Z';
 
+CREATE OR REPLACE VIEW inferred_irreflexive_link AS SELECT * FROM inferred_link WHERE node_id != object_id;
+
 CREATE OR REPLACE VIEW asserted_link AS SELECT * FROM link WHERE is_inferred='f';
 COMMENT ON VIEW asserted_link IS 'A link that has been asserted; converse of inferred_link';
 
@@ -122,7 +124,13 @@ COMMENT ON VIEW standard_link IS 'A link without union or intersection condition
 --nucleus part_of cell (which is necessarily true for all cell nuclei)';
 
 --CREATE OR REPLACE VIEW inheritable_link AS SELECT * FROM link WHERE combinator!='U' AND is_metadata='f'; -- AND is_negated='f';
-CREATE OR REPLACE VIEW inheritable_link AS SELECT * FROM link WHERE combinator!='U' AND is_metadata='f' AND is_negated='f' AND reiflink_node_id IS NULL;
+-- Changed to avoid adding attrib_slims to value_slims qualities: Cartik (01-28-2009)
+-- Changed to avoid inferring from 'value for' links: Cartik (02-19-2009)
+-- Changed to avoid inferring down the hierarchy from 'exhibits' links: Cartik (04-21-2009)
+CREATE OR REPLACE VIEW inheritable_link AS SELECT link.* FROM link, node WHERE 
+link.combinator!='U' AND link.is_metadata='f' AND link.is_negated='f' AND 
+link.reiflink_node_id IS NULL AND link.predicate_id = node.node_id AND node.uid NOT IN ('oboInOwl:inSubset', 'PHENOSCAPE:value_for',
+'PHENOSCAPE:exhibits');
 
 CREATE OR REPLACE VIEW reified_link AS SELECT * FROM link WHERE reiflink_node_id IS NOT NULL;
 COMMENT ON VIEW reified_link IS 'A link that has a link pointing to it';
@@ -1080,7 +1088,10 @@ CREATE OR REPLACE VIEW annotation_node AS
 
 CREATE OR REPLACE VIEW annotated_entity AS
  SELECT * FROM node
- WHERE node_id IN (SELECT node_id FROM link WHERE reiflink_node_id IS NOT NULL);
+ WHERE node_id IN (SELECT DISTINCT node_id FROM link WHERE reiflink_node_id IS NOT NULL);
+
+CREATE OR REPLACE VIEW is_annotated_entity AS
+ SELECT DISTINCT node_id FROM link WHERE reiflink_node_id IS NOT NULL;
 
 -- example: select * from  annotation_count_by_annotated_entity where annotation_count > 20;
 CREATE OR REPLACE VIEW annotation_count_by_annotated_entity AS
@@ -1923,9 +1934,18 @@ CREATE OR REPLACE VIEW node_pair_annotation_intersection_count AS
   ial1.node_id,
   ial2.node_id;
 
-COMMENT ON VIEW node_pair_annotation_intersection_count IS 'For any
+COMMENT ON VIEW node_pair_annotation_intersection_count IS 'Formally: | a*(g1) ^ a*(g2) |. For any
 two nodes (e.g. two gene nodes), what is the total number of
 annotation nodes in common? implied_annotation_link is used here.';
+
+CREATE OR REPLACE VIEW node_pair_annotation_intersection_count_nonzero AS
+ SELECT * FROM node_pair_annotation_intersection_count
+ WHERE total_nodes_in_intersection > 0;
+-- can we create a matview out of this? possible with obdphuman
+
+-- TODO CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_1 ON count_of_annotated_entity_by_class_node_and_evidence(node_id);
+
+
 
 CREATE OR REPLACE VIEW node_pair_annotation_union1 AS
  SELECT DISTINCT
@@ -2004,7 +2024,7 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score_old AS
 CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
  SELECT
   nii.node1_id,
-  nii.node2_id,
+   nii.node2_id,
   n1t.total_annotation_nodes AS node1_total_nodes,
   n2t.total_annotation_nodes AS node2_total_nodes,
   total_nodes_in_intersection,
@@ -2017,7 +2037,10 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
   total_nodes_in_intersection > 0;
 
 COMMENT ON VIEW node_pair_annotation_similarity_score IS
-'annotation overlap between two nodes as a ratio of intersection / union';
+'annotation overlap between two nodes as a ratio of intersection / union. This is an approaximation, it actually calculates
+| nodes in intersection | / ( | nodes in set 1| + | nodes in set 2|). If we double this we get the Dice distance. 
+Tversky ratio = f( set1 ^ set 2) / ( f (set1 ^ set2) + alpha * f(set1 - set2) + beta * f(set2 - set1) ). if alpha = beta = 0.5 and f is the cardinality function, then this is S_dice
+ ';
 
 
 CREATE OR REPLACE VIEW annotated_entity_total_annotations_by_annotsrc AS
@@ -2380,7 +2403,7 @@ CREATE OR REPLACE VIEW annotation_with_information_content AS
  WHERE
   reiflink_node_id IS NOT NULL;
 
-COMMENT ON VIEW 'annotation_with_information_content' IS 'Annotations
+COMMENT ON VIEW annotation_with_information_content IS 'Annotations
 adorned with the information content; this means annotations can be
 sorted by information';
 
@@ -2576,6 +2599,32 @@ CREATE OR REPLACE VIEW nr_link AS
                link.object_id=clp.next_object_id AND
                clp.via_node_id != clp.node_id AND
                clp.via_node_id != clp.next_object_id);
+
+-- todo: test for equivalencies
+CREATE OR REPLACE VIEW nr_instance_of_link AS
+ SELECT
+  *
+ FROM
+  instance_of_link AS link
+ WHERE
+  NOT EXISTS 
+   (SELECT *
+            FROM consecutive_link_pair AS clp
+            WHERE
+               link.node_id=clp.node_id AND
+               link.predicate_id=clp.predicate_id AND
+               link.object_id=clp.next_object_id AND
+               clp.via_node_id != clp.node_id AND
+	       clp.next_predicate_id IN (SELECT node_id FROM is_a_relation) AND
+               clp.via_node_id != clp.next_object_id);
+
+CREATE OR REPLACE VIEW redundant_anonymous_node AS
+ SELECT * 
+ FROM node 
+ WHERE is_anonymous=true AND 
+  node_id IN (SELECT node_id FROM sameas) AND 
+  NOT EXISTS (SELECT * FROM asserted_link WHERE object_id=node.node_id);
+
 
 -- ************************************************************
 -- OWL
