@@ -773,7 +773,7 @@ $$ LANGUAGE 'sql';
 
 CREATE OR REPLACE FUNCTION remove_inferred_metadata_links() RETURNS VOID AS
 $$
-  DELETE FROM link WHERE is_metadata=true;
+  DELETE FROM link WHERE is_metadata=true AND is_inferred='t';
 $$ LANGUAGE 'sql';
 
 CREATE OR REPLACE FUNCTION force_anon_for_empty_idspace() RETURNS VOID AS
