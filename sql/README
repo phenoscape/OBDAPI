@@ -14,3 +14,36 @@ To return to normal views:
   psql>   SELECT drop_all_matviews();
   shell>  psql -a -h localhost -p 9999 obd_phenotype_200805 < obd-core-views.sql
 
+
+USING SQL VIEWS WITH THE REASONER
+
+SQL Views can be used to provide arbitrary horn rules for inferring binary relations to the sql reasoner.
+Let's say we want to the reasoner to infer a link chain:
+
+      fam:has_uncle(x,y) <- fam:has_parent(x,z),fam:has_brother(z,y)
+
+Assume that all 3 relations are stored as relation nodes, and
+has_parent and has_brother are in OBD as links.
+
+First, if you haven't already done a select realize_all_relations(), do this:
+
+  SELECT realize_relation('fam:has_parent');
+  SELECT realize_relation('fam:has_brother');
+
+Then create a SQL intensional predicate (view) for has_uncle:
+
+   CREATE OR REPLACE VIEW has_uncle AS
+   SELECT DISTINCT
+    has_parent.node_id,
+    get_node_id('fam:has_uncle') AS predicate_id,
+    has_brother.object_id
+   FROM
+    fam.has_parent INNER JOIN fam.has_brother ON (has_parent.object_id=has_brother.node_id);
+
+Then whenever you call the reasoner, pass this:
+
+     obd-reasoner.pl -d family --view has_uncle
+
+In future there may be a way to register the rule views within the database
+
+We can do more complex examples involving the creation of new 
