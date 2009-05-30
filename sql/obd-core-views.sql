@@ -92,6 +92,8 @@ COMMENT ON VIEW inferred_link IS 'A link that has been inferred;
 inferred links are created by deductive reasoning. Examples: X part_of
 Z because X is_a Y and Y part_of Z';
 
+CREATE OR REPLACE VIEW inferred_irreflexive_link AS SELECT * FROM inferred_link WHERE node_id != object_id;
+
 CREATE OR REPLACE VIEW asserted_link AS SELECT * FROM link WHERE is_inferred='f';
 COMMENT ON VIEW asserted_link IS 'A link that has been asserted; converse of inferred_link';
 
@@ -139,7 +141,7 @@ CREATE OR REPLACE VIEW instantiation_link AS
  SELECT link.* 
  FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id);
 COMMENT ON VIEW instantiation_link IS 'A link of type "instance_of" between an instance and a class';
--- DUPLCATE; TODO: dereprecate one
+-- DUPLICATE; TODO: dereprecate one
 
 CREATE OR REPLACE VIEW instance_of_link AS
  SELECT link.*
@@ -942,6 +944,38 @@ asserted_object_id, which in turn holds some relation to object_id
 -- CREATE INDEX implied_annotation_link_idx_node_object_source_id ON implied_annotation_link(node_id,object_id,source_id);
 -- END MATERIALIZE
 
+CREATE OR REPLACE VIEW annotation_xp AS
+  SELECT
+   alink.link_id,
+   alink.node_id,
+   alink.predicate_id,
+   alink.object_id AS asserted_object_id,
+   alink.source_id,
+   apl.predicate_id AS xp_predicate_id,
+   apl.is_inferred,
+   apl.object_id,
+   apl.combinator
+  FROM
+   reified_link AS alink
+   INNER JOIN intersection_link AS apl ON (alink.object_id=apl.node_id)
+  WHERE
+   apl.is_inferred='f';
+
+COMMENT ON VIEW annotation_xp IS 'A link between an annotated entity
+and the xp of the object directly annotated to. E.g. if g1 is
+annotated to LeftEye-small then this would yield two rows g1-LeftEye,
+g1-small';
+
+-- SELECT create_matview('annotation_xp');
+-- CREATE INDEX annotation_xp_idx_link_id ON annotation_xp(link_id);
+-- CREATE INDEX annotation_xp_idx_node_id ON annotation_xp(node_id);
+-- CREATE INDEX annotation_xp_idx_object_id ON annotation_xp(object_id);
+-- CREATE INDEX annotation_xp_idx_node_object_id ON annotation_xp(node_id,object_id);
+-- CREATE INDEX annotation_xp_idx_source_id ON annotation_xp(source_id);
+-- CREATE INDEX annotation_xp_idx_node_object_source_id ON annotation_xp(node_id,object_id,source_id);
+-- END MATERIALIZE
+
+
 CREATE OR REPLACE VIEW implied_annotation_xp AS
   SELECT
    alink.link_id,
@@ -1084,7 +1118,10 @@ CREATE OR REPLACE VIEW annotation_node AS
 
 CREATE OR REPLACE VIEW annotated_entity AS
  SELECT * FROM node
- WHERE node_id IN (SELECT node_id FROM link WHERE reiflink_node_id IS NOT NULL);
+ WHERE node_id IN (SELECT DISTINCT node_id FROM link WHERE reiflink_node_id IS NOT NULL);
+
+CREATE OR REPLACE VIEW is_annotated_entity AS
+ SELECT DISTINCT node_id FROM link WHERE reiflink_node_id IS NOT NULL;
 
 -- example: select * from  annotation_count_by_annotated_entity where annotation_count > 20;
 CREATE OR REPLACE VIEW annotation_count_by_annotated_entity AS
@@ -1927,9 +1964,18 @@ CREATE OR REPLACE VIEW node_pair_annotation_intersection_count AS
   ial1.node_id,
   ial2.node_id;
 
-COMMENT ON VIEW node_pair_annotation_intersection_count IS 'For any
+COMMENT ON VIEW node_pair_annotation_intersection_count IS 'Formally: | a*(g1) ^ a*(g2) |. For any
 two nodes (e.g. two gene nodes), what is the total number of
 annotation nodes in common? implied_annotation_link is used here.';
+
+CREATE OR REPLACE VIEW node_pair_annotation_intersection_count_nonzero AS
+ SELECT * FROM node_pair_annotation_intersection_count
+ WHERE total_nodes_in_intersection > 0;
+-- can we create a matview out of this? possible with obdphuman
+
+-- TODO CREATE UNIQUE INDEX count_of_annotated_entity_by_class_node_and_evidence_idx_1 ON count_of_annotated_entity_by_class_node_and_evidence(node_id);
+
+
 
 CREATE OR REPLACE VIEW node_pair_annotation_union1 AS
  SELECT DISTINCT
@@ -2008,7 +2054,7 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score_old AS
 CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
  SELECT
   nii.node1_id,
-  nii.node2_id,
+   nii.node2_id,
   n1t.total_annotation_nodes AS node1_total_nodes,
   n2t.total_annotation_nodes AS node2_total_nodes,
   total_nodes_in_intersection,
@@ -2021,7 +2067,10 @@ CREATE OR REPLACE VIEW node_pair_annotation_similarity_score AS
   total_nodes_in_intersection > 0;
 
 COMMENT ON VIEW node_pair_annotation_similarity_score IS
-'annotation overlap between two nodes as a ratio of intersection / union';
+'annotation overlap between two nodes as a ratio of intersection / union. This is an approaximation, it actually calculates
+| nodes in intersection | / ( | nodes in set 1| + | nodes in set 2|). If we double this we get the Dice distance. 
+Tversky ratio = f( set1 ^ set 2) / ( f (set1 ^ set2) + alpha * f(set1 - set2) + beta * f(set2 - set1) ). if alpha = beta = 0.5 and f is the cardinality function, then this is S_dice
+ ';
 
 
 CREATE OR REPLACE VIEW annotated_entity_total_annotations_by_annotsrc AS
@@ -2581,6 +2630,7 @@ CREATE OR REPLACE VIEW nr_link AS
                clp.via_node_id != clp.node_id AND
                clp.via_node_id != clp.next_object_id);
 
+-- todo: test for equivalencies
 CREATE OR REPLACE VIEW nr_instance_of_link AS
  SELECT
   *
