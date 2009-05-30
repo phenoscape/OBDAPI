@@ -1,4 +1,30 @@
 
+CREATE OR REPLACE VIEW influences_inheres_in AS
+ SELECT
+  a.link_id,
+  a.node_id,
+  a.predicate_id,
+  a.source_id,
+  a.combinator,
+  a.is_inferred,
+  a.is_obsolete,
+  a.reiflink_node_id,
+  a.is_negated,
+  a.applies_to_all,
+  a.object_quantifier_some,
+  a.object_quantifier_only,
+  i.object_id
+ FROM
+  link AS a
+  INNER JOIN link AS i ON (a.object_id=i.node_id)
+ WHERE
+  a.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:influences') AND
+  i.predicate_id IN (SELECT node_id FROM node WHERE uid='OBO_REL:inheres_in') AND
+  a.reiflink_node_id IS NOT NULL AND
+  i.is_inferred=false;
+
+
+
 --
 CREATE OR REPLACE VIEW gene_node AS
  SELECT 
@@ -11,6 +37,7 @@ CREATE OR REPLACE VIEW gene_node AS
 -- SELECT create_matview('gene_node');
 -- CREATE UNIQUE INDEX gene_node_idx_id ON gene_node(node_id);
 -- CREATE UNIQUE INDEX gene_node_idx_uid ON gene_node(uid);
+-- CREATE UNIQUE INDEX gene_node_idx_id_uid ON gene_node(node_id,uid);
 -- CREATE INDEX gene_node_idx_label ON gene_node(label);
 -- END MATERIALIZE
 
@@ -29,8 +56,8 @@ CREATE OR REPLACE VIEW omim_annotation_source AS
 -- CREATE INDEX omim_annotation_source_idx_id_uid ON omim_annotation_source(node_id,uid);
 -- END MATERIALIZE
 
-CREATE VIEW inf_gt_label AS
- SELECT 
+CREATE OR REPLACE VIEW inf_gt_label AS
+ SELECT DISTINCT
   node_id AS gt_node_id,
   node_uid AS gt_uid,
   (object_label || ' variant ' || replace(node_uid,'OMIM:','')) AS gt_label
@@ -38,9 +65,10 @@ CREATE VIEW inf_gt_label AS
  WHERE pred_uid='OBO_REL:variant_of'
   AND is_inferred='f'
   AND node_uid like 'OMIM:%'
-  AND object_uid like 'NCBI_Gene:%';
+  AND object_uid like 'NCBI_Gene:%'
+  AND object_label is not null;
 
--- UPDATE node SET label=(SELECT gt_label FROM inf_gt_label WHERE gt_label.gt_node_id=node_id) WHERE node.uid LIKE 'OMIM:%';
+-- UPDATE node SET label=(SELECT gt_label FROM inf_gt_label WHERE inf_gt_label.gt_node_id=node_id) WHERE node.uid LIKE 'OMIM:%';
 
 
 
@@ -290,3 +318,210 @@ CREATE OR REPLACE VIEW rectum_IC AS
 
 SELECT realize_relation('OBO_REL:in_organism');
 SELECT realize_relation('OBO_REL:variant_of');
+
+CREATE OR REPLACE VIEW distinct_descriptions_for_all_omim AS
+ select count(distinct object_id) from omim_genotype_gene as ogg inner join reified_link as al on (ogg.node_id=al.node_id);
+
+CREATE OR REPLACE VIEW distinct_annotations_for_all_omim AS
+ select count(distinct link_id) from omim_genotype_gene as ogg inner join reified_link as al on (ogg.node_id=al.node_id);
+
+CREATE OR REPLACE VIEW distinct_uses_of_description_for_all_omim AS 
+ select 
+  al.object_id AS description_id,
+  count(distinct al.node_id) AS num_genotypes
+ from omim_genotype_gene as ogg inner join reified_link as al on (ogg.node_id=al.node_id) group by al.object_id;
+
+CREATE OR REPLACE VIEW description_breakdown_for_all_omim AS
+ select 
+  s.uid,
+  count(distinct al.object_id) AS num_descriptions
+ from omim_genotype_gene as ogg inner join reified_link as al on (ogg.node_id=al.node_id)
+ inner join differentium_link AS dl ON (al.object_id=dl.node_id)
+ inner join node AS n ON (dl.object_id=n.node_id)
+ left outer join node as s on (n.source_id=s.node_id)
+ group by s.uid;
+
+CREATE OR REPLACE VIEW description_breakdown_for_all_omim2 AS
+ select 
+  substring(n.uid,1,2) As code,
+  count(distinct al.object_id) AS num_descriptions
+ from omim_genotype_gene as ogg inner join reified_link as al on (ogg.node_id=al.node_id)
+ inner join differentium_link AS dl ON (al.object_id=dl.node_id)
+ inner join node AS n ON (dl.object_id=n.node_id)
+ group by substring(n.uid,1,2);
+
+
+CREATE OR REPLACE VIEW gene_genotype_phenotype AS
+ SELECT
+  ogg.*,
+  ial.object_id AS phenotype_id
+ FROM
+  omim_genotype_gene AS ogg
+  INNER JOIN implied_annotation_link AS ial ON (ogg.node_id=ial.node_id);
+
+CREATE OR REPLACE VIEW gene_phenotype_gt_count AS
+ SELECT
+  gene_id,
+  phenotype_id,
+  count(DISTINCT node_id) AS gt_count
+ FROM
+  gene_genotype_phenotype AS ggp
+ GROUP BY gene_id,   phenotype_id;
+
+CREATE OR REPLACE VIEW gene_gt_count AS
+ SELECT
+  gene_id,
+  count(DISTINCT node_id) AS gt_count
+ FROM
+  omim_genotype_gene
+ GROUP BY gene_id;
+
+CREATE OR REPLACE VIEW phenotype_in_all_genotypes_of_gene AS
+ SELECT
+  gene_id,
+  phenotype_id,
+  gc.gt_count
+ FROM
+  gene_phenotype_gt_count AS gpc
+  INNER JOIN gene_gt_count AS gc USING (gene_id)
+ WHERE gpc.gt_count = gc.gt_count;
+
+CREATE OR REPLACE VIEW phenotype_in_all_genotypes_of_gene_with_ic AS
+ SELECT 
+  pg.*,
+  ic.shannon_information AS ic
+ FROM phenotype_in_all_genotypes_of_gene AS pg
+  INNER JOIN class_node_entropy_by_evidence AS ic ON (pg.phenotype_id=ic.node_id);
+
+CREATE OR REPLACE VIEW phenotype_in_all_genotypes_of_gene_with_ic AS
+ SELECT 
+  pg.*,
+  ic.shannon_information AS ic
+ FROM phenotype_in_all_genotypes_of_gene AS pg
+  INNER JOIN class_node_entropy_by_evidence AS ic ON (pg.phenotype_id=ic.node_id);
+
+CREATE OR REPLACE VIEW phenotype_in_all_genotypes_of_gene_max_ic AS
+ SELECT 
+  gene_id,
+  max(ic) AS max_ic
+ FROM phenotype_in_all_genotypes_of_gene_with_ic AS pg
+ GROUP BY
+  gene_id;
+
+CREATE OR REPLACE VIEW phenotype_in_all_genotypes_of_gene_with_max_ic AS
+ SELECT 
+  pgmax.gene_id,
+  pgic.phenotype_id,
+  pgic.ic,
+  pgic.gt_count
+ FROM 
+   phenotype_in_all_genotypes_of_gene_max_ic AS pgmax
+   INNER JOIN phenotype_in_all_genotypes_of_gene_with_ic AS pgic ON (pgmax.gene_id=pgic.gene_id AND pgmax.max_ic=pgic.ic);
+
+CREATE OR REPLACE VIEW phenotype_in_all_genotypes_of_gene_with_max_ic_nr AS
+ SELECT
+  *
+ FROM
+   phenotype_in_all_genotypes_of_gene_with_max_ic AS pg
+ WHERE 
+  phenotype_id NOT IN 
+   (SELECT 
+     pg2.phenotype_id
+    FROM
+     phenotype_in_all_genotypes_of_gene_with_max_ic AS pg2
+     INNER JOIN inferred_irreflexive_link AS il ON (pg2.phenotype_id=il.object_id)
+    WHERE il.node_id=pg.phenotype_id AND pg.gene_id=pg2.gene_id);
+
+
+
+
+
+
+
+CREATE OR REPLACE VIEW zebrafish_gene AS
+ SELECT
+  'ZFIN'::varchar AS src,
+  *
+ FROM
+  node
+ WHERE
+  uid LIKE 'ZFIN:ZDB-GENE%';
+
+CREATE OR REPLACE VIEW mouse_gene AS
+ SELECT
+  'MGI'::varchar AS src,
+  *
+ FROM
+  node
+ WHERE
+  node_id IN (SELECT node_id FROM asserted_is_a_link WHERE object_id = get_node_id('SO:0000704')) AND
+  uid LIKE 'MGI:%';
+
+CREATE OR REPLACE VIEW gene AS
+ SELECT
+  *
+ FROM
+  node
+ WHERE
+  node_id IN (SELECT node_id FROM asserted_is_a_link WHERE object_id = get_node_id('SO:0000704'));
+
+CREATE OR REPLACE VIEW genotype AS
+ SELECT
+  *
+ FROM
+  node
+ WHERE
+  node_id IN (SELECT node_id FROM asserted_is_a_link WHERE object_id = get_node_id('SO:0001027'));
+
+CREATE OR REPLACE VIEW mouse_genotype AS
+ SELECT
+  'MGI'::varchar AS src ,
+  *
+ FROM
+  node
+ WHERE
+  node_id IN (SELECT node_id FROM asserted_is_a_link WHERE object_id = get_node_id('SO:0001027')) AND
+  uid LIKE 'MGI:%';
+
+
+CREATE OR REPLACE VIEW fm_mgi AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM implied_annotation_link AS ial INNER JOIN mouse_gene AS f ON (f.node_id=ial.node_id);
+
+CREATE OR REPLACE VIEW fm_zfin AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM implied_annotation_link AS ial INNER JOIN node AS f ON (f.node_id=ial.node_id) INNER JOIN node AS a ON (a.node_id=ial.object_id) 
+  WHERE f.uid LIKE 'ZFIN:ZDB-GENE-%';
+
+CREATE OR REPLACE VIEW fm_human AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM implied_annotation_link AS ial INNER JOIN node AS f ON (f.node_id=ial.node_id) INNER JOIN node AS a ON (a.node_id=ial.object_id) 
+  WHERE f.uid IN (SELECT uid FROM omim_gene);
+
+CREATE OR REPLACE VIEW fm_allg AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM implied_annotation_link AS ial INNER JOIN gene_node AS f ON (f.node_id=ial.node_id) INNER JOIN node AS a ON (a.node_id=ial.object_id); 
+
+CREATE OR REPLACE VIEW fm_allg_direct AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM reified_link AS ial INNER JOIN gene_node AS f ON (f.node_id=ial.node_id) INNER JOIN node AS a ON (a.node_id=ial.object_id);
+
+CREATE OR REPLACE VIEW uid_label_genes AS
+  SELECT DISTINCT uid,label FROM gene_node
+  WHERE label IS NOT NULL;
+
+CREATE OR REPLACE VIEW fm_closure AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM inferred_link AS l INNER JOIN node AS f ON (f.node_id=l.node_id) INNER JOIN node AS a ON (a.node_id=l.object_id) 
+  WHERE f.node_id IN (SELECT object_id FROM reified_link);
+
+CREATE OR REPLACE VIEW fm_all AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM implied_annotation_link AS ial INNER JOIN node AS f ON (f.node_id=ial.node_id) INNER JOIN node AS a ON (a.node_id=ial.object_id); 
+
+CREATE OR REPLACE VIEW fm_all_direct AS
+  SELECT DISTINCT f.uid as f, a.uid as a 
+  FROM reified_link AS ial INNER JOIN node AS f ON (f.node_id=ial.node_id) INNER JOIN node AS a ON (a.node_id=ial.object_id); 
+
+
+ 
