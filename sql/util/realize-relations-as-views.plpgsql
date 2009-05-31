@@ -36,6 +36,20 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION safechars (v_id VARCHAR) 
+  RETURNS VARCHAR AS 
+$$
+DECLARE
+   v_id                ALIAS FOR $1;
+
+   v_safe             VARCHAR;
+ BEGIN
+   -- split dbxrefstr on ":"
+   v_safe = regexp_replace(substr(v_id,1),'[^A-Za-z0-9_]','_','g');
+   RETURN lower(v_safe);
+ END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE OR REPLACE FUNCTION realize_relation_i (INTEGER) 
   RETURNS VOID AS 
 $$
@@ -104,13 +118,13 @@ $$ LANGUAGE 'plpgsql';
 COMMENT ON FUNCTION realize_all_relations() IS 'calls realize_relation(R) for all R in r(S,_,_)';
 
 
-CREATE OR REPLACE FUNCTION realize_class_i (INTEGER) 
+
+CREATE OR REPLACE FUNCTION realize_class_i (v_class_id INTEGER, use_labels BOOLEAN) 
   RETURNS VOID AS 
 $$
 DECLARE
 
-   v_class_id               ALIAS FOR $1;
-   v_class                  VARCHAR;
+   v_uid                   VARCHAR;
    v_local_id              VARCHAR;
    v_schema                VARCHAR;
    v_db                    VARCHAR;
@@ -118,13 +132,16 @@ DECLARE
    v_instance_of_id        INTEGER;
    v_name                  VARCHAR;
  BEGIN
-    SELECT INTO v_class uid FROM node WHERE node_id=$1;
+    SELECT INTO v_uid uid FROM node WHERE node_id=$1;
+    SELECT INTO v_db,v_local_id db,LOWER(local_id) FROM parse_id(v_uid);
+    IF use_labels THEN
+      SELECT INTO v_local_id safechars(label) FROM node WHERE node_id=$1;
+    END IF;
     SELECT INTO v_instance_of_id node_id FROM node WHERE uid='OBO_REL:instance_of';
     IF NOT FOUND THEN
       SELECT INTO v_instance_of_id store_relation_node('OBO_REL:instance_of');
     END IF;
-    SELECT INTO v_db,v_local_id db,LOWER(local_id) FROM parse_id(v_class);
-    RAISE NOTICE 'v % % %', v_class_id, v_db, v_local_id;
+    RAISE NOTICE 'realize_class schema:% predicate:%', v_db, v_local_id;
 
     SELECT INTO v_schema nspname FROM pg_namespace WHERE lower(v_db) = lower(nspname);
     IF NOT FOUND THEN
@@ -146,6 +163,11 @@ DECLARE
     RETURN;
  END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_class_i (INTEGER) RETURNS VOID AS
+$$
+SELECT realize_class_i  ($1,'f' :: BOOLEAN)
+$$ LANGUAGE 'sql';
 
 CREATE OR REPLACE FUNCTION realize_class (VARCHAR) 
   RETURNS VOID AS 
@@ -180,21 +202,26 @@ DECLARE
  END;
 $$ LANGUAGE 'plpgsql';
 
-COMMENT ON FUNCTION realize_all_class() IS 'calls realize_class(C) for all C in s(instance_of,_,C)';
+COMMENT ON FUNCTION realize_all_classes() IS 'calls realize_class(C) for all C in s(instance_of,_,C)';
 
 
-CREATE OR REPLACE FUNCTION realize_all_classes_in (VARCHAR) 
+CREATE OR REPLACE FUNCTION realize_all_classes_in (ns VARCHAR, use_labels BOOLEAN) 
   RETURNS VOID AS
 $$
 DECLARE
    v_node               RECORD;
  BEGIN
-    FOR v_node IN SELECT DISTINCT node_id FROM node WHERE metatype='C' AND uid LIKE $1 || '%' LOOP
-      PERFORM realize_class_i(v_node.node_id);
+    FOR v_node IN SELECT DISTINCT node_id FROM node WHERE metatype='C' AND uid LIKE ns || '%' LOOP
+      PERFORM realize_class_i(v_node.node_id, use_labels);
     END LOOP;
     RETURN;
  END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION realize_all_classes_in (ns VARCHAR) RETURNS VOID AS
+$$
+SELECT realize_all_classes_in($1,'f'::BOOLEAN)
+$$ LANGUAGE 'sql';
 
 COMMENT ON FUNCTION realize_all_classes_in(VARCHAR) IS 'calls
 realize_class(C) for all C in s(instance_of,_,C) where C is in a
