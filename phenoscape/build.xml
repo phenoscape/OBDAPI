@@ -183,6 +183,7 @@ PGHOST sets the database server name.
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="file-loc" value="${staging}"/>
 		</java>
 	</target>
 	
@@ -193,6 +194,7 @@ PGHOST sets the database server name.
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="file-loc" value="${staging}"/>
 		</java>
 	</target>
 	
@@ -203,6 +205,7 @@ PGHOST sets the database server name.
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="file-loc" value="${staging}"/>
 		</java>
 	</target>
 	<target name="update-nexml" description="">
