@@ -150,7 +150,7 @@ PGHOST sets the database server name.
 		            userid="${db-user}" password="${db-password}" 
 		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
 			INSERT INTO obd_schema_metadata (schema_release,schema_revision,schema_version_date, notes) 
-			VALUES('1.1', 'Revision: 153', 'Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)', 'Refresh date: ${build_date}');			
+			VALUES('1.1', 'Revision: 153', 'Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)', '${build_date}');			
 		</sql>
 	</target>
 	
