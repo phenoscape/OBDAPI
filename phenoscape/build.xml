@@ -13,6 +13,7 @@
 	<property name="ontologies" value="${staging}/ontologies"/>
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
+	<property name="file-loc" value="${staging}"/>
 	
 	<property environment="environment"/>
 <!-- Environment variables to set for database connections:
@@ -177,35 +178,32 @@ PGHOST sets the database server name.
 	<target name="load-annotation-counts" depends="load-anatomy-annotation-counts,load-gene-annotation-counts,load-taxon-annotation-counts"/>
 	
 	<target name="load-anatomy-annotation-counts" description="extracts annotation counts for each entity">
-		<java classname="org.phenoscape.bridge.AnatomicalEntityAnnotationCounter" classpathref="jarsclasspath" 
-			fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.bridge.AnatomicalEntityAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
-			<sysproperty key="file-loc" value="${staging}"/>
+			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
 	</target>
 	
 	<target name="load-gene-annotation-counts" description="extracts annotation counts for each gene">
-		<java classname="org.phenoscape.bridge.GeneAnnotationCounter" classpathref="jarsclasspath" 
-				fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.bridge.GeneAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
-			<sysproperty key="file-loc" value="${staging}"/>
+			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
 	</target>
 	
 	<target name="load-taxon-annotation-counts" description="extracts annotation counts for each taxon">
-		<java classname="org.phenoscape.bridge.TaxonAnnotationCounter" classpathref="jarsclasspath" 
-					fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.bridge.TaxonAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
-			<sysproperty key="file-loc" value="${staging}"/>
+			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
 	</target>
 	<target name="update-nexml" description="">
