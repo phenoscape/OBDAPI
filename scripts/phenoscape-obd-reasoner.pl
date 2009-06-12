@@ -94,33 +94,12 @@ if ($d =~ /^dbi:/) {
     $dbh = DBI->connect($d);
 }
 else {
-    $dbh = DBI->connect("dbi:Pg:dbname=$d;host=$dbhost;port=$port",$uid,$pwd);
+    $dbh = DBI->connect("dbi:Pg:dbname=$d;host=$dbhost",$uid,$pwd);
 }
 
 if ($delete) {
     delete_inferred_links();
 }
-
-my $notes = "";
-my $line;
-my $revLog = "../connectionParameters/revisionLog";
-open REVLOG, $revLog || die("Could not open revision log");
-while($line = <REVLOG>){ 
-	$notes = $notes . $line;
-}
-close REVLOG;
-my @dates = $dbh->selectrow_array("SELECT date FROM current_date");;
-
-my $date = shift @dates;
-
-$notes = $notes . " Date: " . $date;
-
-my $sth_metadata = $dbh->prepare_cached("INSERT INTO obd_schema_metadata (schema_release,schema_revision,schema_version_date, notes) VALUES 
-											(?, ?, ?, ?)");
-	
-my @metadata = ("1.1", "Revision: 153", "Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)", $notes);
-					
-#$sth_metadata->execute(@metadata);		
 
 my @is_a_nodes = 
   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:is_a'");

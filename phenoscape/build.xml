@@ -114,6 +114,12 @@ PGHOST sets the database server name.
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
+			<arg value="-h"/>
+			<arg value="${db-host}"/>
+			<arg value="-U"/>
+			<arg value="${db-user}"/>
+			<arg value="--pwd"/>
+			<arg value="${db-password}"/>
 		</exec>
 	</target>
 	
@@ -123,6 +129,12 @@ PGHOST sets the database server name.
 			<arg value="../scripts/phenoscape-obd-reasoner.pl"/>
 		    <arg value="--database"/>
 		    <arg value="${db-name}"/>
+			<arg value="-h"/>
+			<arg value="${db-host}"/>
+			<arg value="-U"/>
+			<arg value="${db-user}"/>
+			<arg value="--pwd"/>
+			<arg value="${db-password}"/>
 		</exec>
 	</target>
 	
@@ -145,6 +157,19 @@ PGHOST sets the database server name.
 		</sql>
 	</target>
 	
+	<target name="select-db" depends="init" description="retrieves the refresh date from both databases">
+			<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/obdphenoscape" 
+			            userid="${db-user}" password="${db-password}" 
+			            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar" print="true"> 
+				SELECT 'obdphenoscape last refreshed on ' || notes AS refresh_date FROM obd_schema_metadata;
+			</sql>
+			<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/obdphenoscape_test" 
+					            userid="${db-user}" password="${db-password}" 
+					            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar" print="true"> 
+				SELECT 'obdphenoscape_test last refreshed on ' || notes AS refresh_date FROM obd_schema_metadata;
+			</sql>
+	</target>
+	
 	<target name="load-metadata" depends="init" description="Loads metadata into the database">
 		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
 		            userid="${db-user}" password="${db-password}" 
@@ -160,7 +185,7 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,update-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
+	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-phenoscape-reasoner,load-homology,load-metadata,load-annotation-counts"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
