@@ -120,7 +120,7 @@ my $sth_metadata = $dbh->prepare_cached("INSERT INTO obd_schema_metadata (schema
 	
 my @metadata = ("1.1", "Revision: 153", "Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)", $notes);
 					
-$sth_metadata->execute(@metadata);		
+#$sth_metadata->execute(@metadata);		
 
 my @is_a_nodes = 
   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:is_a'");
@@ -312,7 +312,7 @@ my $sql = qq[
 
 push(@views,
 	{id => 'value_for',
-	 rule => "insubset(X, value_slim), is_a(X, Y), insubset(Y, attribute_slim) => value_for(X, Y)",
+	 rule => "insubset(X, value_slim), is_a(X, Y), insubset(Y, character_slim) => value_for(X, Y)",
 	 sql => $sql
 	 });	
 }
@@ -460,12 +460,13 @@ sub cache_view {
               ($link->{node_id},
                $link->{predicate_id},
                $link->{object_id});
-            if ($triple[0] == $triple[2] && $view_id ne 'isa*') {
+            if ($triple[0] == $triple[2] && $view_id ne 'isa*' && $view_id ne 'value_for') {
                 # TODO: proper reflexivity rules. hardcode OK for is_a for now
                 # also: will report cycles for intersections to self, which is normal?
                 #
                 # this gives us lots of spurious messages for GALEN, since the obo translation
                 # uses anonymous IDs and class expression syntax
+                # Changed this to add reflexive links with 'value_for' predicate between characters: Cartik 05/08/09
                 logmsg("    Cycle detected for node: $triple[0] pred: $triple[1]");
                 next;
             }
