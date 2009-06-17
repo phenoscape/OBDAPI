@@ -267,11 +267,18 @@ if ($skip{rules}) {
 
 {
 my @quality_ontology_nodes = $dbh->selectrow_array("SELECT node_id FROM node WHERE uid = 'quality'");
+my @character_slim_ontology_nodes = $dbh->selectrow_array("SELECT node_id FROM node WHERE uid = 'character_slims'");
 
 if(@quality_ontology_nodes != 1){
 	die "No quality ontology node found";
 }
+
+if(@character_slim_ontology_nodes != 1){
+	die "No character slim ontology node found";
+}
+
 my $quality_ontology_id = shift @quality_ontology_nodes;
+my $character_slim_ontology_id = shift @character_slim_ontology_nodes;
 
 my @value_for_nodes =   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='PHENOSCAPE:value_for'");
 if (@value_for_nodes != 1) {
@@ -284,7 +291,7 @@ my $sql = qq[
 		node_id,
 		$value_for AS predicate_id,
 		getAttributeForQuality(node_id) AS object_id
-		FROM node WHERE source_id = $quality_ontology_id
+		FROM node WHERE source_id IN ($quality_ontology_id, $character_slim_ontology_id)
 	];	
 
 #print STDERR "Creating state to character mapping with SQL: \n%\n", $sql;
@@ -439,7 +446,8 @@ sub cache_view {
               ($link->{node_id},
                $link->{predicate_id},
                $link->{object_id});
-            if ($triple[0] == $triple[2] && $view_id ne 'isa*' && $view_id ne 'value_for') {
+            
+            if (($triple[0] == $triple[2]) && ($view_id !~ /isa.*/) && ($view_id !~ /value_for/)) {
                 # TODO: proper reflexivity rules. hardcode OK for is_a for now
                 # also: will report cycles for intersections to self, which is normal?
                 #
