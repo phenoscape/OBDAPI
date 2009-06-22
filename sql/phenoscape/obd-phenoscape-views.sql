@@ -14,6 +14,7 @@ phenotype_node.uid AS phenotype,
 CASE WHEN gene_node.node_id IS NULL THEN taxon_node.node_id ELSE gene_node.node_id END AS subject_nid, 
 CASE WHEN gene_node.uid IS NULL THEN taxon_node.uid ELSE gene_node.uid END AS subject_uid, 
 CASE WHEN gene_node.label IS NULL THEN taxon_node.label ELSE gene_node.label END AS subject_label, 
+CASE WHEN gene_node.uid IS NULL THEN 'T' ELSE 'G' END AS gene_or_taxon, 
 quality_node.node_id AS quality_nid, 
 quality_node.uid AS quality_uid,
 quality_node.label AS quality_label, 
@@ -22,7 +23,8 @@ character_node.uid AS character_uid,
 character_node.label AS character_label, 
 entity_node.node_id AS entity_nid, 
 entity_node.uid AS entity_uid,
-entity_node.label AS entity_label
+entity_node.label AS entity_label, 
+exhibits_link.reiflink_node_id AS reif_id
 FROM 
 node AS phenotype_node 
 JOIN (link AS exhibits_link 
