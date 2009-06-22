@@ -195,7 +195,9 @@ my @views =
         ON (node.node_id=existing_link.node_id AND
             $is_a=existing_link.predicate_id AND
             node.node_id=existing_link.object_id)
- WHERE node.metatype='C'
+ WHERE 
+ (node.metatype='C' OR node.metatype = 'I')  AND
+  node.source_id IS NOT NULL 
   $lj_cond
 ],
     },
@@ -447,7 +449,7 @@ sub cache_view {
                $link->{predicate_id},
                $link->{object_id});
             
-            if (($triple[0] == $triple[2]) && ($view_id !~ /isa.*/) && ($view_id !~ /value_for/)) {
+            if (($triple[0] == $triple[2]) && ($view_id ne 'isa*') && ($view_id ne 'value_for')) {
                 # TODO: proper reflexivity rules. hardcode OK for is_a for now
                 # also: will report cycles for intersections to self, which is normal?
                 #
