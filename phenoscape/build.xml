@@ -93,6 +93,7 @@ PGHOST sets the database server name.
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
+			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
 	</target>
 	
@@ -144,6 +145,8 @@ PGHOST sets the database server name.
 		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
 			TRUNCATE node CASCADE;
 			TRUNCATE obd_schema_metadata;
+			TRUNCATE phenotype_by_entity_character; 
+			TRUNCATE taxon_phenotype_metadata;
 			ALTER SEQUENCE node_node_id_seq RESTART WITH 1; 
 			ALTER SEQUENCE alias_alias_id_seq RESTART WITH 1;	
 			ALTER SEQUENCE description_description_id_seq RESTART WITH 1;	
@@ -157,6 +160,15 @@ PGHOST sets the database server name.
 		</sql>
 	</target>
 	
+	<target name="populate-phenotype-table" depends="init" description="puts all the phenotype info into one table">
+		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
+	            userid="${db-user}" password="${db-password}" 
+	            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
+			SELECT populate_phenotype_table();
+			SELECT populate_metadata_table();
+		</sql>
+	</target>
+				
 	<target name="select-db" depends="init" description="retrieves the refresh date from both databases">
 			<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/obdphenoscape" 
 			            userid="${db-user}" password="${db-password}" 
@@ -185,7 +197,7 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-phenoscape-reasoner,load-homology,load-metadata,load-annotation-counts"/>
+	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
@@ -236,4 +248,13 @@ PGHOST sets the database server name.
 			<arg value="update"/>
 		</exec>      
 	</target>
+	
+	<target name="make-labels" description="creates labels for compositional descriptions and updates the corresponding rows">
+			<java classname="org.phenoscape.bridge.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+				<sysproperty key="db-user" value="${db-user}"/>
+				<sysproperty key="db-password" value="${db-password}"/>
+				<sysproperty key="db-host" value="${db-host}"/>
+				<sysproperty key="db-name" value="${db-name}"/>
+			</java>
+		</target>
 </project>
