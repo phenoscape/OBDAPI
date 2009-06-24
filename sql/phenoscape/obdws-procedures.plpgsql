@@ -1,3 +1,87 @@
+CREATE OR REPLACE FUNCTION populate_metadata_table() RETURNS VOID
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO taxon_phenotype_metadata  
+(
+reif_id, 
+phenotype_uid, 
+taxon_uid, taxon_label, 
+entity_uid, entity_label, 
+quality_uid, quality_label, 
+publication, 
+character_text, character_comment, character_number, 
+state_text, state_comment, 
+curators
+)
+SELECT
+exhibits_link.reiflink_node_id, 
+phenotype_node.uid AS phenotype,
+taxon_node.uid AS taxon_id, 
+taxon_node.label AS taxon, 
+entity_node.uid AS entity_id, 
+entity_node.label AS entity, 
+quality_node.uid AS quality_id, 
+quality_node.label AS quality, 
+pub_node.uid AS publication,
+character_node.label AS character_text,
+char_tag.val AS char_comment, 
+char_num_tag.val AS char_number, 
+state_node.label AS state_text, 
+state_tag.val AS state_comment, 
+curator_tag.val AS curators
+FROM 
+link AS exhibits_link 
+JOIN link AS posited_by_link ON (posited_by_link.node_id = exhibits_link.reiflink_node_id AND 
+	posited_by_link.predicate_id = (SELECT node_id FROM node WHERE uid='posited_by'))
+JOIN (link AS has_pub_link 
+JOIN node AS pub_node 
+ON (has_pub_link.object_id = pub_node.node_id AND 
+	has_pub_link.predicate_id = (SELECT node_id FROM node WHERE uid='PHENOSCAPE:has_publication'))) 
+ON (posited_by_link.object_id = has_pub_link.node_id) 
+JOIN (link AS has_state_link 
+JOIN (link AS has_state_link2 
+JOIN (node AS state_node 
+JOIN (link AS has_character_link 
+JOIN node AS character_node 
+ON (has_character_link.node_id = character_node.node_id AND 
+	has_character_link.predicate_id = (SELECT node_id FROM node WHERE uid='cdao:has_Datum')))
+ON (has_character_link.object_id = state_node.node_id)) 
+ON (has_state_link2.object_id = state_node.node_id AND 
+	has_state_link2.predicate_id = (SELECT node_id FROM node WHERE uid='cdao:has_State')))
+ON (has_state_link2.node_id = has_state_link.object_id AND 
+	has_state_link.predicate_id = (SELECT node_id FROM node WHERE uid='cdao:has_State'))) 
+ON (has_state_link.node_id =  exhibits_link.reiflink_node_id)
+JOIN node AS taxon_node ON (exhibits_link.node_id = taxon_node.node_id) 
+JOIN node AS phenotype_node ON (exhibits_link.object_id = phenotype_node.node_id)
+JOIN (link AS inheres_in_link 
+JOIN node AS entity_node 
+ON (inheres_in_link.object_id = entity_node.node_id AND 
+	inheres_in_link.predicate_id = (SELECT node_id FROM node WHERE uid='OBO_REL:inheres_in'))) 
+ON (inheres_in_link.node_id = phenotype_node.node_id) 
+JOIN (link AS is_a_link 
+JOIN node AS quality_node 
+ON (is_a_link.object_id = quality_node.node_id AND 
+	is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid='OBO_REL:is_a'))) 
+ON (is_a_link.node_id = phenotype_node.node_id) 
+JOIN tagval AS curator_tag ON ((curator_tag.node_id = posited_by_link.object_id) 
+	AND (curator_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_curators')))
+JOIN tagval AS char_tag ON ((char_tag.node_id = character_node.node_id) 
+	AND (char_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_comment')))	
+JOIN tagval AS state_tag ON ((state_tag.node_id = state_node.node_id) 
+	AND (state_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_comment')))
+JOIN tagval AS char_num_tag ON ((char_num_tag.node_id = character_node.node_id) 
+	AND (char_num_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_number')))
+WHERE 
+exhibits_link.is_inferred = 'f' AND 
+inheres_in_link.is_inferred = 'f' AND 
+is_a_link.is_inferred = 'f';
+END
+$$LANGUAGE 'plpgsql'; 
+
+
 CREATE OR REPLACE FUNCTION populate_phenotype_table() RETURNS VOID 
 AS
 $$
@@ -11,6 +95,7 @@ subject_nid, subject_uid, subject_label,
 gene_or_taxon, 
 quality_nid, quality_uid, quality_label, 
 character_nid, character_uid, character_label, 
+count, 
 entity_nid, entity_uid, entity_label, 
 reif_id
 ) 
@@ -27,6 +112,7 @@ quality_node.label AS quality_label,
 character_node.node_id AS character_nid, 
 character_node.uid AS character_uid,
 character_node.label AS character_label, 
+count_node.uid AS count, 
 entity_node.node_id AS entity_nid, 
 entity_node.uid AS entity_uid,
 entity_node.label AS entity_label, 
@@ -58,6 +144,11 @@ JOIN node AS entity_node
 ON (entity_node.node_id = inheres_in_link.object_id AND 
 	inheres_in_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in'))) 
 ON (inheres_in_link.node_id = phenotype_node.node_id) 
+LEFT OUTER JOIN (link AS has_count_link 
+JOIN node AS count_node 
+ON (has_count_link.object_id = count_node.node_id AND 
+	has_count_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_count'))) 
+ON (phenotype_node.node_id = has_count_link.node_id) 
 WHERE
 exhibits_link.is_inferred = 'f' AND 
 is_a_link.is_inferred = 'f' AND 
