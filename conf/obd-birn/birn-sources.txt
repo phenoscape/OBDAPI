@@ -170,11 +170,11 @@ description	This is a proposed upper biomedical ontology derived by examples fro
 id	nif_molecule
 title	NIF Molecule
 namespace	NIF_Molecule
-uriprefix	http://purl.org/nif/ontology/NIF-Molecule.owl#
+uriprefix	http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Molecule.owl#
 foundry	No
 status	Production and review
 download	
-source	http://purl.org/nif/ontology/NIF-Molecule.owl
+source	http://ontology.neuinfo.org/NIF/BiomaterialEntities/NIF-Molecule.owl
 home	http://openccdb.org/wiki/index.php/Disease_Ontology
 documentation	
 contact	Sarah Maynard	smaynard	ncmir.ucsd.edu

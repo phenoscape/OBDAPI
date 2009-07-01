@@ -1,0 +1,8 @@
+[Instance]
+id: BIRN:generic_annotation
+name: generic annotation
+
+[Instance]
+id: BIRN_OBD:xp
+name: xp
+
