@@ -1,3 +1,32 @@
+CREATE OR REPLACE FUNCTION populate_phenotype_inheres_in_part_of_entity() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO phenotype_inheres_in_part_of_entity 
+(
+phenotype_nid, 
+entity_nid, 
+entity_uid, 
+entity_label
+)
+SELECT DISTINCT 
+phenotype_node.node_id AS phenotype_nid,
+entity_node.node_id AS entity_nid, 
+entity_node.uid AS entity_uid, 
+entity_node.label AS entity
+FROM 
+node AS phenotype_node 
+JOIN (link 
+JOIN node AS entity_node 
+ON (entity_node.node_id = link.object_id)) 
+ON (phenotype_node.node_id = link.node_id) 
+WHERE 
+link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in_part_of');
+END
+$$LANGUAGE 'plpgsql'; 
+
 CREATE OR REPLACE FUNCTION populate_metadata_table() RETURNS VOID
 AS
 $$

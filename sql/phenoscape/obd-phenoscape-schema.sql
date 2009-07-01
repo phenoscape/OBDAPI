@@ -173,3 +173,26 @@ CREATE INDEX reif_index ON taxon_phenotype_metadata(reif_id);
 
 COMMENT ON INDEX reif_index IS 
 'An index for REIF ID column in the taxon_phenotype_metadata table'; 
+
+CREATE TABLE phenotype_inheres_in_part_of_entity (
+phenotype_nid INTEGER, 
+entity_nid INTEGER, 
+entity_uid VARCHAR, 
+entity_label VARCHAR
+);
+
+COMMENT ON TABLE phenotype_inheres_in_part_of_entity IS 
+'A look up table that stores the tuples of the "one to many" relation 
+"OBO_REL:inheres_in_part_of" relation between PHENOTYPES and ENTITIES';
+
+COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_nid IS 
+'The node id of the ANATOMICAL ENTITY as stored in the NODE table';
+COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_uid IS 
+'The actual uid of the ANATOMICAL ENTITY. Eq: TAO:0001510';
+COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_label IS 
+'The actual label or name of the ANATOMICAL ENTITY. Eg: "basihyal cartilage"';
+
+CREATE INDEX entity_uid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(entity_uid);
+
+COMMENT ON INDEX entity_uid_index_in_inheres_in_table IS 'An index on the "entity_uid" column in the 
+entity_uid_index_in_inheres_in_table';
