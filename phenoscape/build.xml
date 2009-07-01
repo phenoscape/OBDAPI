@@ -147,6 +147,7 @@ PGHOST sets the database server name.
 			TRUNCATE obd_schema_metadata;
 			TRUNCATE phenotype_by_entity_character; 
 			TRUNCATE taxon_phenotype_metadata;
+			TRUNCATE phenotype_inheres_in_part_of_entity; 
 			ALTER SEQUENCE node_node_id_seq RESTART WITH 1; 
 			ALTER SEQUENCE alias_alias_id_seq RESTART WITH 1;	
 			ALTER SEQUENCE description_description_id_seq RESTART WITH 1;	
@@ -166,6 +167,7 @@ PGHOST sets the database server name.
 	            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
 			SELECT populate_phenotype_table();
 			SELECT populate_metadata_table();
+			SELECT populate_phenotype_inheres_in_part_of_entity();
 		</sql>
 	</target>
 				
