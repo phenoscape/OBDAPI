@@ -107,6 +107,7 @@ PGHOST sets the database server name.
 			<sysproperty key="phenotype-url" value="http://zfin.org/data_transfer/Downloads/pheno_obo.txt"/>
 			<sysproperty key="missing-markers-url" value="http://zfin.org/data_transfer/Downloads/genotype_features_missing_markers.txt"/>
 		    <sysproperty key="genotype-url" value="http://zfin.org/data_transfer/Downloads/genotype_features.txt"/>
+			<sysproperty key="gene-name-url" value="http://zfin.org/data_transfer/Downloads/genetic_markers.txt"/>
 		</java>
 	</target>
 	
