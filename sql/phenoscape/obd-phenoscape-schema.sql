@@ -76,6 +76,7 @@ the link to the publication, character number, character text, state text, comme
 CREATE INDEX entity_character_index ON phenotype_by_entity_character(entity_nid, character_nid);
 CREATE INDEX subject_index ON phenotype_by_entity_character(subject_nid);
 CREATE INDEX entity_index ON phenotype_by_entity_character(entity_nid);
+CREATE INDEX phenotype_nid_index ON phenotype_by_entity_character(phenotype_nid);
 
 COMMENT ON INDEX entity_character_index IS 
 'An index for ENTITY - CHARACTER combinations in the phenotype_with_entity_character table';
@@ -85,6 +86,9 @@ COMMENT ON INDEX subject_index IS
 
 COMMENT ON INDEX entity_index IS 
 'An index for ENTITY column in the phenotype_with_entity_character table'; 
+
+COMMENT ON INDEX phenotype_nid_index IS 
+'An index for the PHENOTYPE node id column in the phenotype_with_entity_character table';
 
 CREATE TABLE taxon_phenotype_metadata (
 row_number SERIAL PRIMARY KEY,
@@ -193,6 +197,10 @@ COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_label IS
 'The actual label or name of the ANATOMICAL ENTITY. Eg: "basihyal cartilage"';
 
 CREATE INDEX entity_uid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(entity_uid);
+CREATE INDEX phenotype_nid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(phenotype_nid);
 
 COMMENT ON INDEX entity_uid_index_in_inheres_in_table IS 'An index on the "entity_uid" column in the 
-entity_uid_index_in_inheres_in_table';
+phenotype_inheres_in_part_of_entity table';
+
+COMMENT ON INDEX phenotype_nid_index_in_inheres_in_table IS 'An index on the "phenotype_nid" column in the 
+phenotype_inheres_in_part_of_entity table';
