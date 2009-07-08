@@ -11,11 +11,14 @@ quality_uid VARCHAR,
 quality_label VARCHAR, 
 character_nid INTEGER, 
 character_uid VARCHAR, 
-character_label VARCHAR,
+character_label VARCHAR, 
 count VARCHAR, 
 entity_nid INTEGER, 
 entity_uid VARCHAR, 
 entity_label VARCHAR, 
+related_entity_nid INTEGER, 
+related_entity_uid VARCHAR, 
+related_entity_label VARCHAR, 
 reif_id INTEGER
 );
 
@@ -67,6 +70,12 @@ COMMENT ON COLUMN phenotype_by_entity_character.entity_uid IS
 'The actual uid of the ANATOMICAL ENTITY. Eq: TAO:0001510';
 COMMENT ON COLUMN phenotype_by_entity_character.entity_label IS 
 'The actual label or name of the ANATOMICAL ENTITY. Eg: "basihyal cartilage"';
+COMMENT ON COLUMN phenotype_by_entity_character.related_entity_nid IS 
+'The node id of the related ANATOMICAL ENTITY as stored in the NODE table';
+COMMENT ON COLUMN phenotype_by_entity_character.related_entity_uid IS 
+'The actual uid of the related ANATOMICAL ENTITY. Eq: TAO:0001510';
+COMMENT ON COLUMN phenotype_by_entity_character.related_entity_label IS 
+'The actual label or name of the related ANATOMICAL ENTITY. Eg: "basihyal cartilage"';
 COMMENT ON COLUMN phenotype_by_entity_character.reif_id IS 
 'The node id of the SUBJECT -> PHENOTYPE assertion as stored in the LINK table. This is 
 the link to the publication, character number, character text, state text, comments etc 

@@ -126,6 +126,7 @@ quality_nid, quality_uid, quality_label,
 character_nid, character_uid, character_label, 
 count, 
 entity_nid, entity_uid, entity_label, 
+related_entity_nid, related_entity_uid, related_entity_label, 
 reif_id
 ) 
 SELECT DISTINCT 
@@ -145,6 +146,9 @@ count_node.uid AS count,
 entity_node.node_id AS entity_nid, 
 entity_node.uid AS entity_uid,
 entity_node.label AS entity_label, 
+related_entity_node.node_id AS related_entity_nid,
+related_entity_node.uid AS related_entity_uid, 
+related_entity_node.label AS related_entity_label,
 exhibits_link.reiflink_node_id AS reif_id
 FROM 
 node AS phenotype_node 
@@ -178,6 +182,11 @@ JOIN node AS count_node
 ON (has_count_link.object_id = count_node.node_id AND 
 	has_count_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_count'))) 
 ON (phenotype_node.node_id = has_count_link.node_id) 
+LEFT OUTER JOIN (link AS towards_link 
+JOIN node AS related_entity_node 
+ON (towards_link.object_id = related_entity_node.node_id AND 
+	towards_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:towards'))) 
+ON (phenotype_node.node_id = towards_link.node_id)	
 WHERE
 exhibits_link.is_inferred = 'f' AND 
 is_a_link.is_inferred = 'f' AND 
