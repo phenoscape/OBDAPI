@@ -190,7 +190,8 @@ ON (phenotype_node.node_id = towards_link.node_id)
 WHERE
 exhibits_link.is_inferred = 'f' AND 
 is_a_link.is_inferred = 'f' AND 
-inheres_in_link.is_inferred = 'f'; 
+inheres_in_link.is_inferred = 'f' AND 
+towards_link.is_inferred = 'f'; 
 END
 $$LANGUAGE 'plpgsql'; 
 
