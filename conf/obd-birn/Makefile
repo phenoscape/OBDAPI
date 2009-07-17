@@ -1,4 +1,5 @@
 JDBC = jdbc:postgresql://localhost:5432
+T2P = tbl2p -d '\|' -p
 
 #sao.obo:
 #	cd /Users/cjm/cvs/obo/ontology/anatomy/anatomy_xp/ && make sao.obo
@@ -55,10 +56,12 @@ PDSO.owl:
 	thea-owl-to-prolog $< > $@.tmp && mv $@.tmp $@
 .PRECIOUS: %.owlpl
 
-PKB_SRCS = PKB PATO NIF-Quality NIF-GrossAnatomy NIF-Organism BIRNLex-OBO-UBO NIF-Dysfunction NDPO NIF-Subcellular NIF-Cell NIF-Molecule PDSO
+#PKB_SRCS = PKB PATO NIF-Quality NIF-GrossAnatomy NIF-Organism BIRNLex-OBO-UBO NIF-Dysfunction NDPO NIF-Subcellular NIF-Cell NIF-Molecule PDSO
+PKB_SRCS = PKB PATO NIF-Quality NIF-GrossAnatomy NIF-Organism BIRNLex-OBO-UBO NIF-Dysfunction NDPO NIF-Subcellular NIF-Cell NIF-Molecule
 PKB_OBO = $(patsubst %, %.obo, $(PKB_SRCS))
 PKB_OBO_INC = $(patsubst %, -i %.obo,$(PKB_SRCS))
-PKB_OWLPL = PKB.owlpl PATO.owlpl NIF-GrossAnatomy.owlpl NIF-Organism.owlpl BIRNLex-OBO-UBO.owlpl NIF-Dysfunction.owlpl
+PKB_OWLPL = $(patsubst %, %.owlpl, $(PKB_SRCS))
+#PKB_OWLPL = PKB.owlpl PATO.owlpl NIF-GrossAnatomy.owlpl NIF-Organism.owlpl BIRNLex-OBO-UBO.owlpl NIF-Dysfunction.owlpl
 PKB_dlp.pl:  $(PKB_OWLPL)
 	thea-owlpl-to-dlp $(PKB_OWLPL) | ./filter-dlp.pl > $@
 
@@ -66,8 +69,21 @@ PKB_all.obo:  $(PKB_OBO)
 	echo $(PKB_OBO) && \
 	obo-cat.pl $(PKB_OBO) PKB-xp.obo > $@
 
+# makes foo.owlpl as side-effect...
 PKB-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl
 	./generate-basic-class-expressions  PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl > $@
+
+# todo - combine with NDPO
+PKB-subsumers-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl foo.owlpl NDPO.owlpl
+	./generate-subsuming-class-expressions foo.owlpl $(PKB_OWLPL) > $@.tmp && mv $@.tmp $@
+
+PKB-all-subsumers-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl foo.owlpl
+	./generate-all-subsuming-class-expressions foo.owlpl $(PKB_OWLPL) > $@.tmp && mv $@.tmp $@
+
+%-exp.obo: %.obo
+	gobo-io-expand-xp.pl $< > $@
+%-syns.obo: %-exp.obo
+	obol-generate-synonyms -create_names -u obol_nif_phenotype_xp -i PKB-xp-rels.obo -r pato -r birnall -i $< > $@.tmp && mv $@.tmp $@
 
 PKB_modes.pl: $(PKB_OWLPL)
 	./birn-write-progol $(PKB_OWLPL) > $@
@@ -86,6 +102,31 @@ HumanDPO_xp-basic.obo: all.obo
 
 HumanDPO_xp.obo: HumanDPO_xp-basic.obo
 	obol obol-generate-names -debug obol_info -u obol_phenotype_xp_generate -i all.obo -r pato -i $< -query "sub_atom(ID,_,_,_,'NDPO_XP:')" -show_classdef > $@.tmp && cat idspaces.obo $@.tmp > $@
+
+%_fm.tbl:
+	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM implied_annotation_link" > $@
+
+%_fm.pro: %_fm.tbl
+	$(T2P) fm $< > $@
+
+%_attsub.tbl:
+#	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM inferred_link WHERE node_id IN (SELECT object_id FROM reified_link)" > $@
+	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM inferred_link" > $@
+%_attsub.pro: %_attsub.tbl
+	$(T2P) attribute_subsumer $< > $@
+
+%_fm_direct.tbl:
+	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM reified_link" > $@
+
+%_fm_direct.pro: %_fm.tbl
+	$(T2P) feature_attribute_direct $< > $@
+
+
+%-all_by_all.txt: %_fm.pro
+	blip-sim -r birnall  -i PKB-xp-syns.obo -i PKB-subsumers-xp-syns.obo -i $*_fm.pro -i $*_attsub.pro -i $*_fm_direct.pro > $@.tmp && mv $@.tmp $@
+
+%.rpt: %.txt
+	./pp-report.pl $< > $@
 
 bearers-%:
 	psql -q -c "SELECT DISTINCT node_uid(node_id) FROM birn_pdpo.bears" $* -o $@

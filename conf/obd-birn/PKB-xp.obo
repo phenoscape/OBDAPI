@@ -1,0 +1,4064 @@
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Cell:sao2128417084)^OBO_REL:towards(NIF_Subcellular:sao1702920020)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1702920020
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Cell:sao2128417084)^OBO_REL:towards(NIF_Subcellular:sao451912436)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+intersection_of: OBO_REL:towards NIF_Subcellular:sao451912436
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0000624^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000624
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103)^OBO_REL:towards(NIF_Subcellular:sao3826089237)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103
+intersection_of: OBO_REL:towards NIF_Subcellular:sao3826089237
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_145)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_158)^OBO_REL:towards(NIF_Subcellular:sao2409833926)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_158
+intersection_of: OBO_REL:towards NIF_Subcellular:sao2409833926
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_17)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_17
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_31)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_31
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_36)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_36
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_49)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_49
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_50)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_50
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1233810115)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1233810115
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1460710779)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1460710779
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao2128417084)^OBO_REL:towards(NIF_Molecule:sao941755985)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+intersection_of: OBO_REL:towards NIF_Molecule:sao941755985
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao471801888)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao471801888
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao840814183)^OBO_REL:towards(NIF_Molecule:sao471310941)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao840814183
+intersection_of: OBO_REL:towards NIF_Molecule:sao471310941
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao862606388)^OBO_REL:towards(NIF_Molecule:sao471310941)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao862606388
+intersection_of: OBO_REL:towards NIF_Molecule:sao471310941
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1099)^OBO_REL:towards(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1099
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1123)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1123
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1123)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1123
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1137)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1137
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1153)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1153
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090202)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090202
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1241)^OBO_REL:towards(NIF_Subcellular:sao2409833926)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1241
+intersection_of: OBO_REL:towards NIF_Subcellular:sao2409833926
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1275)^OBO_REL:towards(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1275
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1275)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1275
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1298)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1298
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1305)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1305
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1362)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1362
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1499)^OBO_REL:towards(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1499
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1499)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1499
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1555)^OBO_REL:towards(NIF_Subcellular:sao1211023249)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1555
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1211023249
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1555)^OBO_REL:towards(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1555
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1565)^OBO_REL:towards(NIF_Subcellular:sao2409833926)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1565
+intersection_of: OBO_REL:towards NIF_Subcellular:sao2409833926
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1565)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1565
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1610)^OBO_REL:towards(NIF_Subcellular:sao1211023249)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1610
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1211023249
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1610)^OBO_REL:towards(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1610
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1667)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1667
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)^OBO_REL:towards(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Molecule:sao333741607)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Molecule:sao333741607
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao2409833926)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao2409833926
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547)^OBO_REL:towards(NIF_Subcellular:sao2409833926)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547
+intersection_of: OBO_REL:towards NIF_Subcellular:sao2409833926
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)^OBO_REL:towards(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+intersection_of: OBO_REL:towards NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)^OBO_REL:towards(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4113)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4113
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4127)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4127
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Cell:sao789292116)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Cell:sao789292116
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090203)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090203
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Subcellular:sao2409833926)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Subcellular:sao2409833926
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_733)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_733
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_734)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_734
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_734)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_734
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_779)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_779
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_796)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_796
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_796)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_796
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_954)^OBO_REL:towards(NIF_Subcellular:sao9137852997)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_954
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9137852997
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_957)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_957
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_966)^OBO_REL:towards(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_966
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_966)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_966
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)^OBO_REL:towards(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+intersection_of: OBO_REL:towards NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090205)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090205
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090209)^OBO_REL:towards(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090209
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao101633890)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)^OBO_REL:towards(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+intersection_of: OBO_REL:towards NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao7561423738)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao7561423738
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)^OBO_REL:towards(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao205380252)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao205380252
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(PATO:0001555)^OBO_REL:towards(NIF_Subcellular:sao1539965131)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in PATO:0001555
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1539965131
+
+[Term]
+id: PATO:0001557^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1137)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001557
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1137
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001667^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001667
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090203)^OBO_REL:towards(NIF_Subcellular:sao9515821206)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090203
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9515821206
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Subcellular:sao1663586795)^OBO_REL:towards(NIF_Subcellular:sao3826089237)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1663586795
+intersection_of: OBO_REL:towards NIF_Subcellular:sao3826089237
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Subcellular:sao250772229)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(PATO:0001555)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in PATO:0001555
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Cell:sao1394521419)^OBO_REL:towards(NIF_Subcellular:sao9515821206)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1394521419
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9515821206
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Cell:sao789292116)^OBO_REL:towards(NIF_Subcellular:sao9515821206)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao789292116
+intersection_of: OBO_REL:towards NIF_Subcellular:sao9515821206
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(PATO:0001555)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in PATO:0001555
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001792^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001792
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001905^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001905
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001905^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001905
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001961^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001961
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao1736323572)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1736323572
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao471801888)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao471801888
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)^OBO_REL:towards(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Subcellular:sao1074198261)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1074198261
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NDPO:Human_with_Parkinsons_Disease)^OBO_REL:towards(NIF_Cell:nifext_145)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NDPO:Human_with_Parkinsons_Disease
+intersection_of: OBO_REL:towards NIF_Cell:nifext_145
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Cell:sao519252327)^OBO_REL:towards(NIF_Subcellular:sao5051906853)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao519252327
+intersection_of: OBO_REL:towards NIF_Subcellular:sao5051906853
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1178)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1178
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1178)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1178
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1305)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1305
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1305)^OBO_REL:towards(NIF_Cell:sao862606388)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1305
+intersection_of: OBO_REL:towards NIF_Cell:sao862606388
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1362)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1362
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Cell:nifext_77)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Cell:nifext_77
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Cell:sao471801888)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Cell:sao471801888
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao1036339110)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1036339110
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547)^OBO_REL:towards(NIF_Cell:sao1813327414)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547
+intersection_of: OBO_REL:towards NIF_Cell:sao1813327414
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4112)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4112
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)^OBO_REL:towards(NIF_Cell:nifext_145)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+intersection_of: OBO_REL:towards NIF_Cell:nifext_145
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090209)^OBO_REL:towards(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090209
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao101633890)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090211)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090211
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090211)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090211
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)^OBO_REL:towards(NIF_Subcellular:sao221389602)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+intersection_of: OBO_REL:towards NIF_Subcellular:sao221389602
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_103)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_103)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_145)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Molecule:sao471310941)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Molecule:sao471310941
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Subcellular:sao220861693)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Subcellular:sao220861693
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao2128417084)^OBO_REL:towards(NIF_Molecule:sao941755985)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+intersection_of: OBO_REL:towards NIF_Molecule:sao941755985
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao2128417084)^OBO_REL:towards(NIF_Subcellular:sao6603990120)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+intersection_of: OBO_REL:towards NIF_Subcellular:sao6603990120
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao313023570)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao313023570
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao840814183)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao840814183
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1160)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1160
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1178)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1178
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1241)^OBO_REL:towards(NIF_Cell:sao789292116)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1241
+intersection_of: OBO_REL:towards NIF_Cell:sao789292116
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1241)^OBO_REL:towards(NIF_Molecule:sao333741607)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1241
+intersection_of: OBO_REL:towards NIF_Molecule:sao333741607
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Cell:sao1394521419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Cell:sao1394521419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)^OBO_REL:towards(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1508)^OBO_REL:towards(NIF_Cell:sao789292116)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1508
+intersection_of: OBO_REL:towards NIF_Cell:sao789292116
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1508)^OBO_REL:towards(NIF_Molecule:sao333741607)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1508
+intersection_of: OBO_REL:towards NIF_Molecule:sao333741607
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1508)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1508
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1537)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1537
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560)^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1562)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1562
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1565)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1565
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1568)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1568
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1572)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1572
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)^OBO_REL:towards(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)^OBO_REL:towards(NIF_Cell:sao1394521419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+intersection_of: OBO_REL:towards NIF_Cell:sao1394521419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)^OBO_REL:towards(NIF_Cell:sao789292116)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+intersection_of: OBO_REL:towards NIF_Cell:sao789292116
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Molecule:sao333741607)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Molecule:sao333741607
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)^OBO_REL:towards(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+intersection_of: OBO_REL:towards NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)^OBO_REL:towards(NIF_Cell:sao1394521419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+intersection_of: OBO_REL:towards NIF_Cell:sao1394521419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Cell:sao1394521419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Cell:sao1394521419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Cell:sao789292116)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Cell:sao789292116
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)^OBO_REL:towards(NIF_Molecule:sao333741607)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+intersection_of: OBO_REL:towards NIF_Molecule:sao333741607
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_779)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_779
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_779)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090207)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_779
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090207
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_796)^OBO_REL:towards(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_796
+intersection_of: OBO_REL:towards NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_826)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_826
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905)^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_954)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_954
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_954)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_954
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_981)^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_981
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)^OBO_REL:towards(NIF_Cell:sao1394521419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+intersection_of: OBO_REL:towards NIF_Cell:sao1394521419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Subcellular:birnlex_846)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Subcellular:birnlex_846
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)^OBO_REL:towards(NIF_Subcellular:birnlex_879)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+intersection_of: OBO_REL:towards NIF_Subcellular:birnlex_879
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)^OBO_REL:towards(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao138219748)^OBO_REL:towards(NIF_Molecule:sao471310941)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao138219748
+intersection_of: OBO_REL:towards NIF_Molecule:sao471310941
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:birnlex_879)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:birnlex_879
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao221389602)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao221389602
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)^OBO_REL:towards(NIF_Subcellular:birnlex_846)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+intersection_of: OBO_REL:towards NIF_Subcellular:birnlex_846
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao250772229)^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: BIRN_PDStage:Braak_Stage_1^OBO_REL:inheres_in(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: BIRN_PDStage:Braak_Stage_1
+intersection_of: OBO_REL:inheres_in NDPO:Human_with_Parkinsons_Disease
+
+[Term]
+id: BIRN_PDStage:Braak_Stage_6^OBO_REL:inheres_in(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: BIRN_PDStage:Braak_Stage_6
+intersection_of: OBO_REL:inheres_in NDPO:Human_with_Parkinsons_Disease
+
+[Term]
+id: NIF_Molecule:sao2050279787^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: NIF_Molecule:sao2050279787
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: NIF_Molecule:sao5651809446^OBO_REL:inheres_in(PATO:0002002)
+intersection_of: NIF_Molecule:sao5651809446
+intersection_of: OBO_REL:inheres_in PATO:0002002
+
+[Term]
+id: NIF_Quality:nlx_qual_20090301^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)
+intersection_of: NIF_Quality:nlx_qual_20090301
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+
+[Term]
+id: NIF_Quality:nlx_qual_20090302^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090302)
+intersection_of: NIF_Quality:nlx_qual_20090302
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: NIF_Quality:nlx_qual_20090303^OBO_REL:inheres_in(NIF_Subcellular:sao333328131)
+intersection_of: NIF_Quality:nlx_qual_20090303
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao333328131
+
+[Term]
+id: NIF_Quality:sao1277586470^OBO_REL:inheres_in(NIF_Subcellular:sao1687101204)
+intersection_of: NIF_Quality:sao1277586470
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1687101204
+
+[Term]
+id: NIF_Quality:sao1475145503^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: NIF_Quality:sao1475145503
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: NIF_Quality:sao296309608^OBO_REL:inheres_in(NIF_Subcellular:birnlex_879)
+intersection_of: NIF_Quality:sao296309608
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:birnlex_879
+
+[Term]
+id: NIF_Quality:sao296309608^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517)
+intersection_of: NIF_Quality:sao296309608
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517
+
+[Term]
+id: NIF_Quality:sao3710738764^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: NIF_Quality:sao3710738764
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: NIF_Quality:sao4253573122^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: NIF_Quality:sao4253573122
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: NIF_Quality:sao4253573122^OBO_REL:inheres_in(NIF_Subcellular:sao2409833926)
+intersection_of: NIF_Quality:sao4253573122
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2409833926
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090203)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090203
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090302)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Molecule:sao471310941)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao471310941
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Molecule:sao941755985)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao941755985
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Subcellular:birnlex_846)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:birnlex_846
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517
+
+[Term]
+id: NIF_Quality:sao4531544124^OBO_REL:inheres_in(NIF_Subcellular:sao6603990120)
+intersection_of: NIF_Quality:sao4531544124
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao6603990120
+
+[Term]
+id: NIF_Quality:sao4985712724^OBO_REL:inheres_in(NIF_Subcellular:birnlex_846)
+intersection_of: NIF_Quality:sao4985712724
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:birnlex_846
+
+[Term]
+id: NIF_Quality:sao4985712724^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517)
+intersection_of: NIF_Quality:sao4985712724
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517
+
+[Term]
+id: NIF_Quality:sao5413665309^OBO_REL:inheres_in(NIF_Cell:sao1394521419)
+intersection_of: NIF_Quality:sao5413665309
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1394521419
+
+[Term]
+id: NIF_Quality:sao5413665309^OBO_REL:inheres_in(NIF_Cell:sao789292116)
+intersection_of: NIF_Quality:sao5413665309
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao789292116
+
+[Term]
+id: NIF_Quality:sao6363641087^OBO_REL:inheres_in(NIF_Cell:sao789292116)
+intersection_of: NIF_Quality:sao6363641087
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao789292116
+
+[Term]
+id: NIF_Quality:sao9291838256^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: NIF_Quality:sao9291838256
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0000051^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: PATO:0000051
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0000117^OBO_REL:inheres_in(PATO:0000395)
+intersection_of: PATO:0000117
+intersection_of: OBO_REL:inheres_in PATO:0000395
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Cell:sao2128417084)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000395^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000395
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000402^OBO_REL:inheres_in(NIF_Subcellular:sao-1828894864)
+intersection_of: PATO:0000402
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-1828894864
+
+[Term]
+id: PATO:0000460^OBO_REL:inheres_in(NIF_Cell:sao313023570)
+intersection_of: PATO:0000460
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao313023570
+
+[Term]
+id: PATO:0000460^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0000460
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0000460^OBO_REL:inheres_in(PATO:0000051)
+intersection_of: PATO:0000460
+intersection_of: OBO_REL:inheres_in PATO:0000051
+
+[Term]
+id: PATO:0000574^OBO_REL:inheres_in(NIF_Subcellular:sao-1828894864)
+intersection_of: PATO:0000574
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-1828894864
+
+[Term]
+id: PATO:0000586^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0000586
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0000586^OBO_REL:inheres_in(NIF_Subcellular:nlx_subcell_20090208)
+intersection_of: PATO:0000586
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:nlx_subcell_20090208
+
+[Term]
+id: PATO:0000586^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000586
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000586^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0000586
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao101633890)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0000591^OBO_REL:inheres_in(NIF_Subcellular:sao-1828894864)
+intersection_of: PATO:0000591
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-1828894864
+
+[Term]
+id: PATO:0000591^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0000591
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0000624^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0000624
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0000628^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020)
+intersection_of: PATO:0000628
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Cell:nifext_145)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Cell:sao313023570)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao313023570
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4107)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4107
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:nlx_subcell_20090209)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:nlx_subcell_20090209
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao205380252)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao205380252
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(PATO:0000051)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in PATO:0000051
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(PATO:0001555)
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in PATO:0001555
+
+[Term]
+id: PATO:0000937^OBO_REL:inheres_in(NIF_Subcellular:sao1279474730)
+intersection_of: PATO:0000937
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1279474730
+
+[Term]
+id: PATO:0000937^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0000937
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001162^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001162
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001163^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001163
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001163^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001163
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001164^OBO_REL:inheres_in(PATO:0001555)
+intersection_of: PATO:0001164
+intersection_of: OBO_REL:inheres_in PATO:0001555
+
+[Term]
+id: PATO:0001360^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001360
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001360^OBO_REL:inheres_in(NIF_Subcellular:sao3826089237)
+intersection_of: PATO:0001360
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao3826089237
+
+[Term]
+id: PATO:0001445^OBO_REL:inheres_in(NIF_Subcellular:sao333328131)
+intersection_of: PATO:0001445
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao333328131
+
+[Term]
+id: PATO:0001477^OBO_REL:inheres_in(NIF_Subcellular:sao250772229)
+intersection_of: PATO:0001477
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229
+
+[Term]
+id: PATO:0001513^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001513
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001513^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001513
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_145)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_158)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_158
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_17)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_17
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_31)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_31
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_36)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_36
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_49)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_49
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_50)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_50
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1233810115)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1233810115
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1460710779)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1460710779
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao2128417084)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao471801888)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao471801888
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao840814183)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao840814183
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao862606388)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao862606388
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1099)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1099
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1123)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1123
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1137)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1137
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1153)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1153
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1241)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1241
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1275)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1275
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1298)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1298
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1305)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1305
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1362)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1362
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1499)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1499
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1555)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1555
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1565)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1565
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1610)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1610
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1667)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1667
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4113)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4113
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4127)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4127
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_733)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_733
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_734)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_734
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_779)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_779
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_796)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_796
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_954)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_954
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_957)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_957
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_966)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_966
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090205)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090205
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090209)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090209
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao101633890)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao205380252)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao205380252
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(PATO:0001555)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in PATO:0001555
+
+[Term]
+id: PATO:0001557^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1137)
+intersection_of: PATO:0001557
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1137
+
+[Term]
+id: PATO:0001562^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_796)
+intersection_of: PATO:0001562
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_796
+
+[Term]
+id: PATO:0001566^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001566
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001571^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1356)
+intersection_of: PATO:0001571
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1356
+
+[Term]
+id: PATO:0001604^OBO_REL:inheres_in(NIF_Cell:sao313023570)
+intersection_of: PATO:0001604
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao313023570
+
+[Term]
+id: PATO:0001617^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020)
+intersection_of: PATO:0001617
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020
+
+[Term]
+id: PATO:0001623^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0001623
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0001623^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547)
+intersection_of: PATO:0001623
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547
+
+[Term]
+id: PATO:0001623^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)
+intersection_of: PATO:0001623
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+
+[Term]
+id: PATO:0001623^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001623
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001624^OBO_REL:inheres_in(NIF_Cell:sao313023570)
+intersection_of: PATO:0001624
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao313023570
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090203)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090203
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(PATO:0001555)
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in PATO:0001555
+
+[Term]
+id: PATO:0001667^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001667
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001671^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001671
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001671^OBO_REL:inheres_in(NIF_Subcellular:sao5051906853)
+intersection_of: PATO:0001671
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao5051906853
+
+[Term]
+id: PATO:0001672^OBO_REL:inheres_in(NIF_Subcellular:sao1615953555)
+intersection_of: PATO:0001672
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1615953555
+
+[Term]
+id: PATO:0001672^OBO_REL:inheres_in(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0001672
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0001759^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001759
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090203)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090203
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Subcellular:sao1663586795)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1663586795
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Subcellular:sao250772229)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(PATO:0001555)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in PATO:0001555
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Cell:sao1394521419)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1394521419
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Cell:sao789292116)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao789292116
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001772^OBO_REL:inheres_in(PATO:0001555)
+intersection_of: PATO:0001772
+intersection_of: OBO_REL:inheres_in PATO:0001555
+
+[Term]
+id: PATO:0001780^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0001780
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0001790^OBO_REL:inheres_in(NIF_Cell:sao1233810115)
+intersection_of: PATO:0001790
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1233810115
+
+[Term]
+id: PATO:0001792^OBO_REL:inheres_in(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0001792
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0001799^OBO_REL:inheres_in(NIF_Subcellular:sao1663586795)
+intersection_of: PATO:0001799
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1663586795
+
+[Term]
+id: PATO:0001818^OBO_REL:inheres_in(PATO:0002001)
+intersection_of: PATO:0001818
+intersection_of: OBO_REL:inheres_in PATO:0002001
+
+[Term]
+id: PATO:0001851^OBO_REL:inheres_in(NIF_Subcellular:sao1539965131)
+intersection_of: PATO:0001851
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1539965131
+
+[Term]
+id: PATO:0001851^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0001851
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0001851^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0001851
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0001865^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001865
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001865^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517)
+intersection_of: PATO:0001865
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517
+
+[Term]
+id: PATO:0001865^OBO_REL:inheres_in(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001865
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001905^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0001905
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0001905^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)
+intersection_of: PATO:0001905
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+
+[Term]
+id: PATO:0001961^OBO_REL:inheres_in(NIF_Molecule:nlx_mol_20090508)
+intersection_of: PATO:0001961
+intersection_of: OBO_REL:inheres_in NIF_Molecule:nlx_mol_20090508
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0001999^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)
+intersection_of: PATO:0001999
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao1736323572)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1736323572
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao471801888)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao471801888
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Subcellular:sao1074198261)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1074198261
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NDPO:Human_with_Parkinsons_Disease
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Cell:sao519252327)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao519252327
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1178)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1178
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1305)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1305
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1362)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1362
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4112)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4112
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090201)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090201
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:nlx_anat_20090209)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:nlx_anat_20090209
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao101633890)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_103)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_145)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao2128417084)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao313023570)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao313023570
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao840814183)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao840814183
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1160)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1160
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1178)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1178
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1197)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1197
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1204)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1204
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1241)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1241
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1482)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1482
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1489)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1489
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1508)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1508
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1537)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1537
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1562)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1562
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1565)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1565
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1568)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1568
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1572)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1572
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1672)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1672
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1704)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1704
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1709
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2668)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2668
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_721)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_721
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_779)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_779
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_796)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_796
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_826)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_826
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_954)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_954
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_981)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_981
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao138219748)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao138219748
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao250772229)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229
+
+[Term]
+id: PATO:0002037^OBO_REL:inheres_in(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002037
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002037^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1153)
+intersection_of: PATO:0002037
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1153
+
+[Term]
+id: PATO:0002037^OBO_REL:inheres_in(NIF_Subcellular:sao1687101204)
+intersection_of: PATO:0002037
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1687101204
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))^OBO_REL:towards(NIF_Subcellular:sao1702920020)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1702920020
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))^OBO_REL:towards(NIF_Subcellular:sao451912436)
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao451912436
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Subcellular:sao3826089237)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao3826089237
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1489))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1489)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1489))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1489)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1153))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1153)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1629))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1629)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))^OBO_REL:towards(NIF_Molecule:sao941755985)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+intersection_of: OBO_REL:towards NIF_Molecule:sao941755985
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1123^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1123^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1123^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1123^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1362^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1362^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_734^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_734^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_734^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_734^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_957^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_957^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_Cell:nifext_103))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_Cell:nifext_103)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Subcellular:sao1044911821))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Subcellular:sao1044911821)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_Cell:sao1417703748))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_Cell:sao1417703748)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao1417703748))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao1417703748)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Cell:sao1417703748))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Cell:sao1417703748)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Subcellular:sao1663586795^OBO_REL:part_of(NIF_Subcellular:sao914572699))^OBO_REL:towards(NIF_Subcellular:sao3826089237)
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1663586795^OBO_REL:part_of(NIF_Subcellular:sao914572699)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao3826089237
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Cell:sao1813327414)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Cell:sao1813327414
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Cell:sao1417703748)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Cell:sao1417703748
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748))^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090211)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748)
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090211
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_145^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))^OBO_REL:towards(NIF_Molecule:nlx_mol_20090302)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: OBO_REL:towards NIF_Molecule:nlx_mol_20090302
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721))^OBO_REL:towards(NIF_Molecule:sao1077731745)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721)
+intersection_of: OBO_REL:towards NIF_Molecule:sao1077731745
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201))^OBO_REL:towards(NIF_Subcellular:sao220861693)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao220861693
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))^OBO_REL:towards(NIF_Molecule:sao941755985)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+intersection_of: OBO_REL:towards NIF_Molecule:sao941755985
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))^OBO_REL:towards(NIF_Subcellular:sao6603990120)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao6603990120
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1160^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1160^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao120573470)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao120573470
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1508^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1508^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1537^OBO_REL:part_of(PKB:Class_1))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1537^OBO_REL:part_of(PKB:Class_1)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao601362597)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao601362597
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))^OBO_REL:towards(NIF_Subcellular:sao4933778419)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao4933778419
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666))^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666)
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_Cell:nifext_103))^OBO_REL:towards(NIF_Subcellular:birnlex_846)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_Cell:nifext_103)
+intersection_of: OBO_REL:towards NIF_Subcellular:birnlex_846
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666))^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666)
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))^OBO_REL:towards(NIF_Molecule:sao9074887086)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+intersection_of: OBO_REL:towards NIF_Molecule:sao9074887086
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))^OBO_REL:towards(NIF_Subcellular:sao1860313010)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao1860313010
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))^OBO_REL:towards(NIF_Subcellular:sao221389602)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao221389602
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))^OBO_REL:towards(NIF_Subcellular:sao8663416959)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+intersection_of: OBO_REL:towards NIF_Subcellular:sao8663416959
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_Subcellular:sao101633890))^OBO_REL:towards(NIF_Subcellular:nlx_subcell_20090205)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_Subcellular:sao101633890)
+intersection_of: OBO_REL:towards NIF_Subcellular:nlx_subcell_20090205
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Subcellular:sao1124888485))^OBO_REL:towards(NIF_Subcellular:birnlex_846)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Subcellular:sao1124888485)
+intersection_of: OBO_REL:towards NIF_Subcellular:birnlex_846
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao250772229^OBO_REL:part_of(NIF_Subcellular:sao1770195789))^OBO_REL:towards(NIF_Molecule:sao5651809446)
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229^OBO_REL:part_of(NIF_Subcellular:sao1770195789)
+intersection_of: OBO_REL:towards NIF_Molecule:sao5651809446
+
+[Term]
+id: NIF_Quality:sao1277586470^OBO_REL:inheres_in(NIF_Subcellular:sao1687101204^OBO_REL:part_of(NIF_Cell:nifext_103))
+intersection_of: NIF_Quality:sao1277586470
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1687101204^OBO_REL:part_of(NIF_Cell:nifext_103)
+
+[Term]
+id: NIF_Quality:sao1277586470^OBO_REL:inheres_in(NIF_Subcellular:sao1687101204^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: NIF_Quality:sao1277586470
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1687101204^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: NIF_Quality:sao1475145503^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201))
+intersection_of: NIF_Quality:sao1475145503
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201)
+
+[Term]
+id: NIF_Quality:sao296309608^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: NIF_Quality:sao296309608
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: NIF_Quality:sao5413665309^OBO_REL:inheres_in(NIF_Cell:sao789292116^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_990))
+intersection_of: NIF_Quality:sao5413665309
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao789292116^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_990)
+
+[Term]
+id: NIF_Quality:sao6363641087^OBO_REL:inheres_in(NIF_Cell:sao789292116^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1672))
+intersection_of: NIF_Quality:sao6363641087
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao789292116^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1672)
+
+[Term]
+id: PATO:0000374^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))
+intersection_of: PATO:0000374
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+
+[Term]
+id: PATO:0000402^OBO_REL:inheres_in(NIF_Subcellular:sao-1828894864^OBO_REL:part_of(NIF_Cell:sao789292116))
+intersection_of: PATO:0000402
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-1828894864^OBO_REL:part_of(NIF_Cell:sao789292116)
+
+[Term]
+id: PATO:0000574^OBO_REL:inheres_in(NIF_Subcellular:sao-1828894864^OBO_REL:part_of(NIF_Cell:sao313023570))
+intersection_of: PATO:0000574
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-1828894864^OBO_REL:part_of(NIF_Cell:sao313023570)
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao313023570))
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao313023570)
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Subcellular:sao1702920020))
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Subcellular:sao1702920020)
+
+[Term]
+id: PATO:0000587^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao2128417084))
+intersection_of: PATO:0000587
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao2128417084)
+
+[Term]
+id: PATO:0000591^OBO_REL:inheres_in(NIF_Subcellular:sao-1828894864^OBO_REL:part_of(NIF_Cell:sao789292116))
+intersection_of: PATO:0000591
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-1828894864^OBO_REL:part_of(NIF_Cell:sao789292116)
+
+[Term]
+id: PATO:0000628^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:nifext_103))
+intersection_of: PATO:0000628
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:nifext_103)
+
+[Term]
+id: PATO:0000628^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao1233810115))
+intersection_of: PATO:0000628
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao1233810115)
+
+[Term]
+id: PATO:0000628^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao2128417084))
+intersection_of: PATO:0000628
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao2128417084)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Cell:nifext_145^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_990))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_990)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_4107^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_4107^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_Cell:nifext_103))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_Cell:nifext_103)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_Cell:nifext_158))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_Cell:nifext_158)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(PATO:0002000))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(PATO:0002000)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1672))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1672)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao205380252^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1610))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao205380252^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1610)
+
+[Term]
+id: PATO:0000639^OBO_REL:inheres_in(NIF_Subcellular:sao205380252^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))
+intersection_of: PATO:0000639
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao205380252^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+
+[Term]
+id: PATO:0000937^OBO_REL:inheres_in(NIF_Subcellular:sao1316272517^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: PATO:0000937
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1316272517^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: PATO:0001360^OBO_REL:inheres_in(NIF_Subcellular:sao3826089237^OBO_REL:part_of(NIF_Subcellular:sao101633890))
+intersection_of: PATO:0001360
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao3826089237^OBO_REL:part_of(NIF_Subcellular:sao101633890)
+
+[Term]
+id: PATO:0001513^OBO_REL:inheres_in(NIF_Subcellular:sao120573470^OBO_REL:part_of(NIF_Subcellular:sao1044911821))
+intersection_of: PATO:0001513
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao120573470^OBO_REL:part_of(NIF_Subcellular:sao1044911821)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1489))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1489)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1153))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1153)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1629))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1813327414^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1629)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1123^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1123^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1362^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1362^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1494^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1494^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_734^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_734^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_957^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_957^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_Cell:nifext_103))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_Cell:nifext_103)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Subcellular:sao1044911821))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Subcellular:sao1044911821)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1211023249^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: PATO:0001555^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: PATO:0001555
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: PATO:0001617^OBO_REL:inheres_in(NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao2128417084))
+intersection_of: PATO:0001617
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1702920020^OBO_REL:part_of(NIF_Cell:sao2128417084)
+
+[Term]
+id: PATO:0001623^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: PATO:0001623
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: PATO:0001629^OBO_REL:inheres_in(NIF_Molecule:sao5651809446^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: PATO:0001629
+intersection_of: OBO_REL:inheres_in NIF_Molecule:sao5651809446^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: PATO:0001771^OBO_REL:inheres_in(NIF_Subcellular:sao1663586795^OBO_REL:part_of(NIF_Subcellular:sao914572699))
+intersection_of: PATO:0001771
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1663586795^OBO_REL:part_of(NIF_Subcellular:sao914572699)
+
+[Term]
+id: PATO:0001799^OBO_REL:inheres_in(NIF_Subcellular:sao1663586795^OBO_REL:part_of(NIF_Subcellular:sao914572699))
+intersection_of: PATO:0001799
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1663586795^OBO_REL:part_of(NIF_Subcellular:sao914572699)
+
+[Term]
+id: PATO:0001851^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: PATO:0001851
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: PATO:0002000^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))
+intersection_of: PATO:0002000
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_2547^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_2547^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_789^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_990^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748))
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao101633890^OBO_REL:part_of(NIF_Cell:sao1417703748)
+
+[Term]
+id: PATO:0002001^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))
+intersection_of: PATO:0002001
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_103^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:nifext_145^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:nifext_145^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1241)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1494)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1565)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_1709)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_721)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_789)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao1417703748^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090201)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Cell:sao2128417084^OBO_REL:part_of(NDPO:Human_with_Alzheimers_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1160^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1160^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1271^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1508^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1508^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1537^OBO_REL:part_of(PKB:Class_1))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1537^OBO_REL:part_of(PKB:Class_1)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_1560^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_GrossAnatomy:birnlex_905^OBO_REL:part_of(NDPO:Human_with_Parkinsons_Disease)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao-867568886^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_Cell:nifext_103))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_Cell:nifext_103)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2666)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1044911821^OBO_REL:part_of(NIF_GrossAnatomy:birnlex_2668)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1770195789^OBO_REL:part_of(NIF_GrossAnatomy:nlx_anat_20090209)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_Subcellular:sao101633890))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao1860313010^OBO_REL:part_of(NIF_Subcellular:sao101633890)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Subcellular:sao1124888485))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao2007137787^OBO_REL:part_of(NIF_Subcellular:sao1124888485)
+
+[Term]
+id: PATO:0002002^OBO_REL:inheres_in(NIF_Subcellular:sao250772229^OBO_REL:part_of(NIF_Subcellular:sao1770195789))
+intersection_of: PATO:0002002
+intersection_of: OBO_REL:inheres_in NIF_Subcellular:sao250772229^OBO_REL:part_of(NIF_Subcellular:sao1770195789)
+
