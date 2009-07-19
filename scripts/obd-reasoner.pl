@@ -42,6 +42,10 @@ while (@ARGV && $ARGV[0] =~ /^\-/) {
     elsif ($opt eq '-h' || $opt eq '--host') {
         $dbhost = shift @ARGV;
     }
+    elsif ($opt eq '-?' || $opt eq '--help') {
+        print usage();
+        exit 0;
+    }
     elsif ($opt eq '--split') {
         $split = shift @ARGV;
     }
@@ -70,6 +74,10 @@ while (@ARGV && $ARGV[0] =~ /^\-/) {
 if (!$d) {
     $d = shift @ARGV;
 }
+if (!$d) {
+    print usage();
+    exit(1);
+}
 if ($dbhost) {
     $d  = "$d\@$dbhost";
 }
@@ -79,6 +87,9 @@ my $time_started = time;
 my $dbh;
 if ($d =~ /^dbi:/) {
     $dbh = DBI->connect($d);
+}
+elsif ($d =~ /^jdbc:postgresql:\/\/(.*):(\d+)/) {
+    $dbh = DBI->connect("dbi:Pg:dbname=$d;host=$1;port=$2");
 }
 elsif ($d =~ /\@/) {
     require 'DBIx::DBStag';
@@ -110,7 +121,7 @@ my $instance_of = shift @instance_of_nodes;
 
 # TODO: use this below
 my @transitive_relation_node_ids = 
-  $dbh->selectrow_array("SELECT node_id FROM node WHERE is_transitive='t'");
+  $dbh->selectrow_array("SELECT node_id FROM relation_node WHERE is_transitive='t'");
 
 
 my $lj=qq[
@@ -134,10 +145,10 @@ my @views =
  FROM inheritable_link              AS x
   INNER JOIN inheritable_link       AS y 
         ON (x.object_id=y.node_id AND x.predicate_id=y.predicate_id)
-  INNER JOIN relation_node AS r 
+  INNER JOIN transitive_relation_node AS r 
         ON (x.predicate_id=r.node_id)
   $lj
- WHERE r.is_transitive='t'
+ WHERE true
   $lj_cond
 ],
    },
@@ -503,4 +514,43 @@ sub logmsg {
     my $msg = shift;
     my $t = time;
     print STDERR "LOG $t : $msg\n";
+}
+
+sub usage {
+
+    <<EOM;
+obd-reasoner.pl -d DBPATH [--view HORN-RULE-VIEW]* [--skip RULE-TO-SKIP] [--inst]
+
+Options:
+
+ -d DBPATH
+
+  Either a JDBC or DBI locator or DB name (if localhost)
+
+ --view HORN-RULE-VIEW
+
+  argument should be the name of an SQL view that can be used as a horn rule as part of the forard chaining.
+  E.g. for composition chains of length 2:
+
+       x R1 y, y R2 z -> x R z
+
+  Execute this SQL:
+
+  SELECT realize_relation('R1');
+  SELECT realize_relation('R2');
+  CREATE VIEW R_inf AS 
+   SELECT R1.node_id,
+          get_node_id('R'),
+          R2.object_id
+   FROM R1 JOIN R2 ON (R1.object_id=R2.node_id);
+
+   Then do this:
+
+    obd-reasoner -d mydb --view R_inf
+
+ --inst 
+
+   Reason over instances as well as classes (default is classes)
+
+EOM
 }
