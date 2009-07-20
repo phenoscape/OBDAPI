@@ -110,6 +110,17 @@ if (@is_a_nodes != 1) {
 }
 my $is_a = shift @is_a_nodes;
 
+if (!@inference_views) {
+    my $sql = "SELECT DISTINCT view FROM inference_rule";
+    eval {
+        @inference_views = $dbh->selectrow_array($sql);
+    };
+    if ($@) {
+        print STDERR "Warning: could not execute: $sql\n";
+        print STDERR "Consider upgrading your obd schema to include this table\n";
+    }
+}
+
 my @instance_of_nodes = 
   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:instance_of'");
 if (@instance_of_nodes != 1) {
