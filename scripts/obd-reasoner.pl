@@ -12,7 +12,7 @@ my $d;
 my $dbhost = '';
 my $use_reasoner = 1;
 my $dump;
-my $split;
+my %split;
 my $delete;
 my $limit = 50000;
 my $source;
@@ -47,7 +47,8 @@ while (@ARGV && $ARGV[0] =~ /^\-/) {
         exit 0;
     }
     elsif ($opt eq '--split') {
-        $split = shift @ARGV;
+        my $s = shift @ARGV;
+        $split{$s} = 1;
     }
     elsif ($opt eq '--test-intersection') {
         $test_intersection = shift @ARGV;
@@ -130,10 +131,13 @@ if (@instance_of_nodes != 1) {
 }
 my $instance_of = shift @instance_of_nodes;
 
-# TODO: use this below
+# used in split
 my @transitive_relation_node_ids = 
-  $dbh->selectrow_array("SELECT node_id FROM relation_node WHERE is_transitive='t'");
+    @{$dbh->selectcol_arrayref("SELECT node_id FROM relation_node WHERE is_transitive='t'")};
 
+# used in split
+my @inheritable_relation_node_ids = 
+    @{$dbh->selectcol_arrayref("SELECT DISTINCT predicate_id FROM inheritable_link")};
 
 my $lj=qq[
   LEFT JOIN  link AS existing_link
@@ -162,8 +166,8 @@ my @views =
  WHERE true
   $lj_cond
 ],
-   },
-   {id=>'isa1',
+  },
+{id=>'isa1',
     rule=>"A is_a B, B R C => A R C",
     sql=>qq[
  SELECT DISTINCT
@@ -180,7 +184,7 @@ my @views =
   $lj_cond
 ],
    },
-   {id=>'isa2',
+{id=>'isa2',
     rule=>"A R B, B is_a C => A R C",
     sql=>qq[
  SELECT DISTINCT
@@ -233,6 +237,80 @@ my @views =
 
 if (%ruleconf) {
     @views = grep {$ruleconf{$_->{id}}} @views;
+}
+if (%skip) {
+    @views = grep {!$skip{$_->{id}}} @views;
+}
+
+if ($split{transitivity}) {
+    @views = 
+        grep { $_->{id} ne 'transitivity'
+    } @views;
+    foreach my $rid (@transitive_relation_node_ids) {
+        push(@views,
+             {id=>"transitivity-$rid",
+              rule=>"R=$rid,transitive(R), A R B, B R C, => A R C",
+              sql=>"
+ SELECT DISTINCT
+  x.node_id             AS node_id,
+  x.predicate_id        AS predicate_id,
+  y.object_id           AS object_id
+ FROM inheritable_link              AS x
+  INNER JOIN inheritable_link       AS y 
+        ON (x.object_id=y.node_id)
+  INNER JOIN transitive_relation_node AS r 
+        ON (x.predicate_id=r.node_id)
+  $lj
+ WHERE x.predicate_id=$rid AND y.predicate_id=$rid
+  $lj_cond
+"
+             });
+    }
+
+}
+
+if ($split{isa}) {
+    @views = 
+        grep { $_->{id} ne 'isa1' && $_->{id} ne 'isa2'
+    } @views;
+
+    foreach my $rid (@inheritable_relation_node_ids) {
+        next if $rid == $is_a; # covered by transitivity
+
+        push(@views,
+             {id=>"isa1-$rid",
+    rule=>"R=$rid, A is_a B, B R C => A R C",
+    sql=>"
+ SELECT DISTINCT
+  x.node_id             AS node_id,
+  y.predicate_id        AS predicate_id,
+  y.object_id           AS object_id
+ FROM inheritable_link              AS x
+  INNER JOIN inheritable_link       AS y ON (x.object_id=y.node_id)
+  LEFT JOIN  link AS existing_link
+        ON (x.node_id=existing_link.node_id AND
+            y.predicate_id=existing_link.predicate_id AND
+            y.object_id=existing_link.object_id)
+ WHERE  x.predicate_id = $is_a AND y.predicate = $rid
+  $lj_cond
+"
+        },
+        {id=>"isa2-$rid",
+    rule=>"$=$rid, A R B, B is_a C => A R C",
+    sql=>"
+ SELECT DISTINCT
+  x.node_id             AS node_id,
+  x.predicate_id        AS predicate_id,
+  y.object_id           AS object_id
+ FROM inheritable_link              AS x
+  INNER JOIN inheritable_link       AS y ON (x.object_id=y.node_id)
+  $lj
+ WHERE y.predicate_id = $is_a AND x.predicate_id=$rid
+  $lj_cond
+"
+        }
+    );
+   }
 }
 
 unless ($skip{chain}) {
@@ -530,7 +608,7 @@ sub logmsg {
 sub usage {
 
     <<EOM;
-obd-reasoner.pl -d DBPATH [--view HORN-RULE-VIEW]* [--skip RULE-TO-SKIP] [--inst]
+obd-reasoner.pl -d DBPATH [--view HORN-RULE-VIEW]* [--skip RULE-TO-SKIP]* [-split {transitivity | isa} ]*  [--inst]
 
 Options:
 
@@ -561,7 +639,15 @@ Options:
 
  --inst 
 
-   Reason over instances as well as classes (default is classes)
+   Reason over instances as well as classes (default is just classes)
+
+--split RULE
+
+  some rules can be expensive to calculate for large databases. This breaks down the rule into smaller more manageable queries.
+  Currently the only valid values here are:
+
+     transitivity
+     isa
 
 EOM
 }
