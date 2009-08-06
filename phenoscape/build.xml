@@ -119,17 +119,10 @@ PGHOST sets the database server name.
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
-			<arg value="-h"/>
-			<arg value="${db-host}"/>
-			<arg value="-U"/>
-			<arg value="${db-user}"/>
-			<arg value="--pwd"/>
-			<arg value="${db-password}"/>
 		</exec>
 	</target>
 	
 	<target name="run-phenoscape-reasoner" description="runs the Phenoscape-specific reasoner on the database contents">
-<!-- TODO - this won't work properly until we remove standard reasoner stuff from Phenoscape reasoner script -->
 		<exec executable="perl">
 			<arg value="../scripts/phenoscape-obd-reasoner.pl"/>
 		    <arg value="--database"/>
@@ -203,7 +196,7 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts"/>
+	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
