@@ -314,7 +314,8 @@ root_id  INT;
 BEGIN
 SELECT DISTINCT object_id, node_uid(object_id) INTO slim_id, slim FROM link
 WHERE node_id = $1 AND predicate_id = (SELECT node_id FROM node WHERE uid = 'oboInOwl:inSubset')
-AND object_id IN (SELECT node_id FROM node WHERE uid IN ('value_slim', 'attribute_slim'));
+AND object_id IN (SELECT node_id FROM node WHERE uid IN ('value_slim', 'attribute_slim', 'character_slim')) 
+AND is_inferred = 'f';
 IF (slim IS NULL) THEN
 	SELECT object_id FROM link INTO super_id WHERE node_id = $1 AND predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND is_inferred = 'f';
 	IF (super_id IS NULL) THEN
@@ -328,7 +329,7 @@ IF (slim IS NULL) THEN
 	ELSE
 		RETURN getAttributeForQuality(super_id);
 	END IF;	
-ELSIF (slim = 'attribute_slim') THEN
+ELSIF (slim = 'character_slim') THEN
 RETURN $1; 
 ELSE
 SELECT object_id INTO attr_id FROM link
