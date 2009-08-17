@@ -1,17 +1,37 @@
 :- op(900,xfy,where).
 
-ce_template(Q and 'http://purl.org/obo/owl/obo#inheres_in' some E and 'http://purl.org/obo/owl/obo#towards' some E2)
+ce_template(Q and 'http://purl.org/obo/owl/obo#towards' some E2)
  where
   (   valid_class(Q),
-      valid_class(E2),
-      valid_class(E)).
+      valid_class(E2)).
 
 ce_template(Q and 'http://purl.org/obo/owl/obo#inheres_in' some E)
  where
   (   valid_class(Q),
       valid_class(E)).
 
+ce_template(Q and 'http://purl.org/obo/owl/obo#inheres_in' some E and 'http://purl.org/obo/owl/obo#towards' some (W and 'http://www.obofoundry.org/ro/ro.owl#has_part' some P))
+ where
+  (   valid_class(Q),
+      valid_class(W),
+      valid_class(P),
+      valid_class(E)).
 
+ce_template(Q and 'http://purl.org/obo/owl/obo#towards' some (W and 'http://www.obofoundry.org/ro/ro.owl#has_part' some P))
+ where
+  (   valid_class(Q),
+      valid_class(W),
+      valid_class(P)).
+
+
+ce_template(Q and 'http://purl.org/obo/owl/obo#inheres_in' some E and 'http://purl.org/obo/owl/obo#towards' some E2)
+ where
+  (   valid_class(Q),
+      valid_class(E2),
+      valid_class(E)).
+
+
+% TODO: left vs right associativity
 ce_template(Q and 'http://purl.org/obo/owl/obo#inheres_in' some (E and 'http://www.obofoundry.org/ro/ro.owl#part_of' some W) and 'http://purl.org/obo/owl/obo#towards' some E2)
  where
   (   valid_class(Q),

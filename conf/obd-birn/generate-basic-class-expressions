@@ -18,6 +18,7 @@ main :-
         append(_SytemArgs, [--|Files], Arguments), !,
         set_prolog_flag(verbose,normal),
         debug(owl2_bench),
+        format('default-namespace: pkb_xp_specific~n~n',[]),
         forall(member(File,Files),
                load_axioms(File,_,[])),
         forall(ce_template(CE) where Constr,
@@ -30,14 +31,32 @@ main :-
 
 write_filled_template(CE1,Constr) :-
         plsyn_owl(CE1,CE),
-        setof(CE,I^ece(CE,I,Constr),CEs),
-        maplist(write_stanza,CEs).
+        %setof(CE,I^ece(CE,I,Constr),CEs),
+        setof(I-CE,ece(CE,I,Constr),ICEs),
+        setof(CE,I^member(I-CE,ICEs),CEs),
+        setof(I,CE^member(I-CE,ICEs),Is),
+        maplist(write_stanza,CEs),
+        maplist(write_inst_stanza(ICEs),Is).
 
 write_filled_template_owlpl(CE1,Constr) :-
         plsyn_owl(CE1,CE),
         setof(CE,I^ece(CE,I,Constr),CEs),
         maplist(write_owlpl_ec,CEs).
 
+write_inst_stanza(ICEs,I) :-
+        setof(CE,member(I-CE,ICEs),CEs),
+        !,
+        ce_id(I,IX),
+        format('[Instance]~n'),
+        format('id: ~w~n',[IX]),
+        forall(member(CE,CEs),
+               (   ce_id(CE,CEX),
+                   format('instance_of: ~w~n',[CEX]))),
+        nl.
+write_inst_stanza(_,_).
+
+        
+        
 ece(C,I,Constr) :-
         ece(C,I),
         Constr.

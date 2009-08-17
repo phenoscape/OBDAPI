@@ -1,0 +1,17 @@
+[Typedef]
+id: OBO_REL:inheres_in
+name: inheres_in
+
+[Typedef]
+id: OBO_REL:towards
+name: towards
+
+[Typedef]
+id: OBO_REL:part_of
+name: part_of
+
+
+[Typedef]
+id: OBO_REL:has_part
+name: has_part
+

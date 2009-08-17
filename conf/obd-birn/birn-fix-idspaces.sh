@@ -42,6 +42,8 @@ obd-exec  -d $DB --rename-idspace file:/Users/cjm/Eclipse/workspace/OBDAPI/conf/
 
 obd-exec  -d $DB --rename-idspace NIF_core:sao1239937685 OBO_REL:regional_part_of
 
+obd-exec  -d $DB --rename-idspace nif_subcellular NIF_Subcellular
+
 
 # TODO:
 

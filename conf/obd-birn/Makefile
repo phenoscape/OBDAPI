@@ -27,6 +27,10 @@ ro.obo:
 ro.owl: ro.obo
 	go2owl $< > $@
 
+nif_backend.owl:
+	wget http://ontology.neuinfo.org/NIF/Backend/nif_backend.owl
+BIRNLex_annotation_properties.owl:
+	wget http://ontology.neuinfo.org/NIF/Backend/BIRNLex_annotation_properties.owl
 NIF-Dysfunction.owl:
 	wget http://ontology.neuinfo.org/NIF/Dysfunction/NIF-Dysfunction.owl
 NIF-GrossAnatomy.owl:
@@ -52,15 +56,19 @@ PDSO.owl:
 %.owl:
 	wget http://purl.org/obo/owl/$@ -O $@
 
+nif_backend.owlpl: nif_backend.owl remake-owlpl
+	thea-owl-to-prolog-i $< > nif_backend.owlpl.tmp && mv nif_backend.owlpl.tmp nif_backend.owlpl
+
 %.owlpl: %.owl remake-owlpl
 	thea-owl-to-prolog $< > $@.tmp && mv $@.tmp $@
 .PRECIOUS: %.owlpl
 
 #PKB_SRCS = PKB PATO NIF-Quality NIF-GrossAnatomy NIF-Organism BIRNLex-OBO-UBO NIF-Dysfunction NDPO NIF-Subcellular NIF-Cell NIF-Molecule PDSO
-PKB_SRCS = PKB PATO NIF-Quality NIF-GrossAnatomy NIF-Organism BIRNLex-OBO-UBO NIF-Dysfunction NDPO NIF-Subcellular NIF-Cell NIF-Molecule
+PKB_SRCS = PKB PATO NIF-Quality NIF-GrossAnatomy NIF-Organism BIRNLex-OBO-UBO NIF-Dysfunction NDPO NIF-Subcellular NIF-Cell NIF-Molecule BIRNLex_annotation_properties
 PKB_OBO = $(patsubst %, %.obo, $(PKB_SRCS))
 PKB_OBO_INC = $(patsubst %, -i %.obo,$(PKB_SRCS))
 PKB_OWLPL = $(patsubst %, %.owlpl, $(PKB_SRCS))
+PKB_OWLPL_INC = $(patsubst %, -i %.owlpl, $(PKB_SRCS))
 #PKB_OWLPL = PKB.owlpl PATO.owlpl NIF-GrossAnatomy.owlpl NIF-Organism.owlpl BIRNLex-OBO-UBO.owlpl NIF-Dysfunction.owlpl
 PKB_dlp.pl:  $(PKB_OWLPL)
 	thea-owlpl-to-dlp $(PKB_OWLPL) | ./filter-dlp.pl > $@
@@ -73,8 +81,8 @@ PKB_all.obo:  $(PKB_OBO)
 PKB-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl
 	./generate-basic-class-expressions  PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl > $@
 
-# todo - combine with NDPO
-PKB-subsumers-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl foo.owlpl NDPO.owlpl
+# todo - combine with NDPO - TODO - add more
+PKB-subsumers-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl foo.owlpl NDPO.owlpl NIF-GrossAnatomy.owlpl NIF-Cell.owlpl NIF-Subcellular.owlpl
 	./generate-subsuming-class-expressions foo.owlpl $(PKB_OWLPL) > $@.tmp && mv $@.tmp $@
 
 PKB-all-subsumers-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl foo.owlpl
@@ -84,6 +92,21 @@ PKB-all-subsumers-xp.obo: PKB.owlpl ro.owlpl BIRNLex-OBO-UBO.owlpl foo.owlpl
 	gobo-io-expand-xp.pl $< > $@
 %-syns.obo: %-exp.obo
 	obol-generate-synonyms -create_names -u obol_nif_phenotype_xp -i PKB-xp-rels.obo -r pato -r birnall -i $< > $@.tmp && mv $@.tmp $@
+
+PKB-pkb_db.pro:
+	blip -f owlpl $(PKB_OWLPL_INC) -u pkb_from_owl -u pkb_db io-convert -to pkb_db:pro -o $@
+
+pkb-web:
+	blip -debug phenotype -i PKB-pkb_db.pro -i pkb-all-by-all.phenotype_db:pro  $(PKB_OWLPL_INC) -u pkb_web -goal start_server
+
+pkb-all-by-all.txt:
+	blip  -i PKB-pkb_db.pro $(PKB_OWLPL_INC) -u pkb_to_phenotype -u phenoblast -u blipkit_phenotype phenotype-all-by-all > $@
+
+pkb-all-by-all.phenotype_db\:pro:
+	blip  -i PKB-pkb_db.pro $(PKB_OWLPL_INC) -u pkb_to_phenotype -u phenoblast -u blipkit_phenotype phenotype-all-by-all -to pro > $@.tmp && mv $@.tmp $@
+
+pkb-search-%.txt:
+	blip -debug phenoblast -i PKB-pkb_db.pro $(PKB_OWLPL_INC) -u pkb_to_phenotype -u blipkit_phenotype -table_pred owl2_basic_reasoner:entailed/1 phenotype-search 'http://ccdb.ucsd.edu/PKB/1.0/PKB.owl#$*' > $@
 
 PKB_modes.pl: $(PKB_OWLPL)
 	./birn-write-progol $(PKB_OWLPL) > $@
@@ -111,7 +134,7 @@ HumanDPO_xp.obo: HumanDPO_xp-basic.obo
 
 %_attsub.tbl:
 #	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM inferred_link WHERE node_id IN (SELECT object_id FROM reified_link)" > $@
-	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM inferred_link" > $@
+	psql -At $* -c "SELECT DISTINCT node_uid(node_id),node_uid(object_id) FROM link" > $@
 %_attsub.pro: %_attsub.tbl
 	$(T2P) attribute_subsumer $< > $@
 
