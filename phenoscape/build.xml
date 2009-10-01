@@ -10,6 +10,7 @@
 	<property name="build_date" value="${NOW}"/>
 	<property name="staging" value="staging"/>
 	<property name="nexml" value="${staging}/nexml"/>
+	<property name="nexml-extra" value="${staging}/nexml-extra"/>
 	<property name="ontologies" value="${staging}/ontologies"/>
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
@@ -98,6 +99,18 @@ PGHOST sets the database server name.
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
 			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
+	</target>
+	
+	<target name="load-nexml-extra" description="loads extra NeXML data files into the database (Sandrine's work)">
+			<java classname="org.phenoscape.bridge.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+				<arg value="${nexml-extra}"/>
+				<sysproperty key="db-user" value="${db-user}"/>
+				<sysproperty key="db-password" value="${db-password}"/>
+				<sysproperty key="db-host" value="${db-host}"/>
+				<sysproperty key="db-name" value="${db-name}"/>
+				<sysproperty key="ontology-dir" value="${ontologies}"/>
+				<sysproperty key="file-loc" value="${file-loc}"/>
+			</java>
 	</target>
 	
 	<target name="load-zfin" description="loads ZFIN data sources into the database">
@@ -208,6 +221,14 @@ PGHOST sets the database server name.
 			<arg value="checkout"/>
 			<arg value="${nexml-repo}"/>
 			<arg value="nexml"/>
+		</exec>
+	</target>
+
+	<target name="checkout-nexml-extra" depends="init" description="">
+		<exec executable="svn" dir="${staging}">
+			<arg value="checkout"/>
+			<arg value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/extra-phenex-files"/>
+			<arg value="nexml-extra"/>
 		</exec>
 	</target>
 	
