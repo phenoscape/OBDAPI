@@ -209,7 +209,7 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts"/>
+	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
@@ -262,6 +262,16 @@ PGHOST sets the database server name.
 			<sysproperty key="db-name" value="${db-name}"/>
 			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
+	</target>
+	
+	<target name="write-kb-refresh-timestamp" description="writes the timestamp when kb was refreshed">
+			<java classname="org.phenoscape.bridge.KbRefreshTimestamp" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+				<sysproperty key="db-user" value="${db-user}"/>
+				<sysproperty key="db-password" value="${db-password}"/>
+				<sysproperty key="db-host" value="${db-host}"/>
+				<sysproperty key="db-name" value="${db-name}"/>
+				<sysproperty key="file-loc" value="${file-loc}"/>
+			</java>
 	</target>
 	<target name="update-nexml" description="">
 		<exec executable="svn" dir="${nexml}">
