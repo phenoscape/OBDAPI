@@ -213,3 +213,77 @@ phenotype_inheres_in_part_of_entity table';
 
 COMMENT ON INDEX phenotype_nid_index_in_inheres_in_table IS 'An index on the "phenotype_nid" column in the 
 phenotype_inheres_in_part_of_entity table';
+
+CREATE TABLE dw_gene_table (
+gene_nid INTEGER PRIMARY KEY, 
+gene_uid VARCHAR, 
+gene_label VARCHAR
+);
+
+CREATE TABLE dw_genotype_table (
+genotype_nid INTEGER PRIMARY KEY, 
+genotype_uid VARCHAR, 
+genotype_label VARCHAR 
+);
+
+CREATE TABLE dw_gene_genotype_table (
+gene_nid INTEGER FOREIGN KEY REFERENCES dw_gene_table(gene_nid) ON DELETE CASCADE, 
+genotype_nid INTEGER FOREIGN KEY REFERENCES dw_genotype_table(genotype_nid) ON DELETE CASCADE
+);
+
+CREATE TABLE dw_phenotype_table (
+phenotype_nid INTEGER PRIMARY KEY, 
+phenotype_uid VARCHAR, 
+count_text VARCHAR, 
+inheres_in_entity_nid INTEGER FOREIGN KEY REFERENCES dw_entity_table(entity_nid), 
+towards_entity_nid INTEGER FOREIGN KEY REFERENCES dw_entity_table(entity_nid), 
+is_a_quality_nid INTEGER FOREIGN KEY REFERENCES dw_quality_table(quality_nid), 
+character_nid INTEGER FOREIGN KEY REFERENCES dw_quality_table(quality_nid)
+);
+
+CREATE TABLE dw_taxon_table (
+taxon_nid INTEGER PRIMARY KEY, 
+taxon_uid VARCHAR, 
+taxon_lable VARCHAR, 
+taxon_rank VARCHAR 
+);
+
+CREATE TABLE dw_genotype_phenotype_table(
+genotype_nid INTEGER FOREIGN KEY REFERENCES dw_genotype_table(genotype_nid) ON DELETE CASCADE, 
+phenotype_nid INTEGER FOREIGN KEY REFERENCES dw_phenotype_table(phenotype_nid) ON DELETE CASCADE
+);
+
+CREATE TABLE dw_taxon_phenotype_table(
+taxon_nid INTEGER FOREIGN KEY REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE, 
+phenotype_nid INTEGER FOREIGN KEY REFERENCES dw_phenotype_table(phenotype_nid) ON DELETE CASCADE,  
+reif_id INTEGER   
+);
+
+CREATE TABLE dw_entity_table (
+entity_nid INTEGER PRIMARY KEY, 
+entity_uid VARCHAR, 
+entity_label VARCHAR 
+);
+
+CREATE TABLE dw_quality_table (
+quality_nid INTEGER PRIMARY KEY, 
+quality_uid VARCHAR, 
+quality_label VARCHAR, 
+value_for_character_uid VARCHAR, 
+value_for_character_label VARCHAR 
+);
+
+CREATE TABLE dw_entity_part_of_entity_table (
+comp_entity_nid INTEGER, 
+aggr_entity_nid INTEGER 
+);
+
+CREATE TABLE dw_taxon_is_a_taxon_table (
+subtaxon_nid INTEGER, 
+supertaxon_nid INTEGER 
+);
+
+CREATE TABLE dw_entity_is_a_entity_table (
+subentity_nid INTEGER, 
+superentity_nid INTEGER 
+);

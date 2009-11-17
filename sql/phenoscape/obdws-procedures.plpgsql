@@ -1,3 +1,236 @@
+CREATE OR REPLACE FUNCTION populate_dw_gene_table() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_gene_table(
+gene_nid, gene_uid, gene_label    
+)
+SELECT DISTINCT 
+gene_node.node_id AS gene_nid, 
+gene_node.uid AS gene_uid, 
+gene_node.label AS gene_label
+FROM 
+node AS gene_node 
+JOIN link 
+ON (gene_node.node_id = link.node_id AND 
+	link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele') AND 
+	link.is_inferred = 'f'); 
+END 
+$$
+LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION populate_dw_genotype_table() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_genotype_table(
+genotype_nid, genotype_uid, genotype_label    
+)
+SELECT DISTINCT 
+genotype_node.node_id AS genotype_nid, 
+genotype_node.uid AS genotype_uid, 
+genotype_node.label AS genotype_label
+FROM 
+node AS genotype_node 
+JOIN link 
+ON (genotype_node.node_id = link.object_id AND 
+	link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele') AND 
+	link.is_inferred = 'f');
+END 
+$$
+LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION populate_dw_taxon_table() RETURNS VOID 
+AS 
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_taxon_table(
+taxon_nid, taxon_uid, taxon_label, taxon_rank   
+)
+SELECT DISTINCT 
+taxon_node.node_id AS taxon_nid, 
+taxon_node.uid AS taxon_uid,
+taxon_node.label AS taxon_label, 
+rank_node.label AS taxon_rank  
+FROM  
+node AS taxon_node 
+JOIN (link AS has_rank_link 
+JOIN node AS rank_node 
+ON (rank_node.node_id = has_rank_link.object_id AND 
+	has_rank_link.predicate_id = (SELECT Node_id FROM node WHERE uid = 'has_rank') AND 
+	has_rank_link.is_inferred = 'f')) 
+ON (taxon_node.node_id = has_rank_link.node_id) 	
+WHERE 
+taxon_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost-taxonomy'); 
+END 
+$$
+LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION populate_dw_entity_table() RETURNS VOID 
+AS 
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_entity_table(
+entity_nid, entity_uid, entity_label  
+)
+SELECT 
+node_id AS entity_nid, 
+uid AS entity_uid, 
+label AS entity_label 
+FROM 
+node 
+WHERE  
+source_id = (SELECT node_id FROM node WHERE uid = 'teleost_anatomy');  
+END 
+$$
+LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION populate_dw_entity_is_a_entity_table() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_entity_is_a_entity_table(
+subentity_nid, superentity_nid 
+)
+SELECT 
+sub_node.node_id, 
+sup_node.node_id 
+FROM 
+link AS is_a_link 
+JOIN node AS sub_node 
+ON (is_a_link.node_id = sub_node.node_id) 
+JOIN node AS sup_node 
+ON (is_a_link.object_id = sup_node.node_id) 
+WHERE 
+is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
+sub_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost_anatomy');  
+END 
+$$
+LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION populate_dw_taxon_is_a_taxon_table() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_taxon_is_a_taxon_table(
+subtaxon_nid, supertaxon_nid 
+)
+SELECT 
+sub_node.node_id, 
+sup_node.node_id 
+FROM 
+link AS is_a_link 
+JOIN node AS sub_node 
+ON (is_a_link.node_id = sub_node.node_id) 
+JOIN node AS sup_node 
+ON (is_a_link.object_id = sup_node.node_id) 
+WHERE 
+is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
+sub_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost-taxonomy');  
+END 
+$$
+LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION populate_dw_entity_part_of_entity_table() RETURNS VOID 
+AS 
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_entity_part_of_entity(
+comp_entity_nid, 
+aggr_entity_nid 
+)
+SELECT  
+comp_entity_node.node_id,
+aggr_entity_node.node_id 
+FROM 
+link AS part_of_link 
+JOIN node AS comp_entity_node 
+ON (part_of_link.node_id = comp_entity_node.node_id) 
+JOIN node AS aggr_entity_node 
+ON (part_of_link.object_id = aggr_entity_node.node_id) 
+WHERE 
+part_of_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:part_of') AND 
+comp_entity_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost_anatomy');
+END
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION populate_dw_phenotype_table() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN
+INSERT INTO dw_phenotype_table
+(
+phenotype_nid, 
+phenotype_uid, 
+count_text, 
+inheres_in_entity_nid, 
+towards_entity_nid, 
+is_a_quality_nid, 
+character_nid 
+)
+SELECT DISTINCT 
+phenotype_node.node_id AS phenotype_nid, 
+phenotype_node.uid AS phenotype_uid, 
+count_node.uid AS count_text, 
+entity_node1.node_id AS inheres_in_entity_nid, 
+entity_node2.node_id AS towards_entity_nid, 
+quality_node.node_id AS is_a_quality_nid, 
+character_node.node_id AS character_nid 
+FROM 
+node AS phenotype_node 
+JOIN link AS exhibits_link 
+ON (exhibits_link.object_id = phenotype_node.node_id AND 
+	exhibits_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:exhibits') AND 
+	exhibits_link.is_inferred = 'f') 
+LEFT OUTER JOIN (link AS count_link 
+JOIN node AS count_node 
+ON (count_node.node_id = count_link.object_id AND 
+	count_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_count') AND 
+	count_link.is_inferred = 'f')) 
+ON (count_link.node_id = phenotype_node.node_id)		
+JOIN (link AS inheres_in_link 
+JOIN node AS entity_node1 
+ON (entity_node1.node_id = inheres_in_link.object_id AND 
+	inheres_in_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in') AND 
+	inheres_in_link.is_inferred = 'f')) 
+ON (inheres_in_link.node_id = phenotype_node.node_id) 
+LEFT OUTER JOIN (link AS towards_link 
+JOIN node AS entity_node2 
+ON (entity_node2.node_id = towards_link.object_id AND 
+	towards_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:towards') AND 
+	towards_link.is_inferred = 'f')) 
+ON (towards_link.node_id = phenotype_node.node_id) 
+JOIN (link AS is_a_link 
+JOIN (node AS quality_node 
+JOIN (link AS value_for_link 
+JOIN node AS character_node 
+ON (character_node.node_id = value_for_link.object_id AND 
+	value_for_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:value_for'))) 
+ON (value_for_link.node_id = quality_node.node_id)) 
+ON (quality_node.node_id = is_a_link.object_id AND 
+	is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
+	is_a_link.is_inferred = 'f')) 
+ON (is_a_link.node_id = phenotype_node.node_id); 
+END
+$$LANGUAGE 'plpgsql';
+
 CREATE OR REPLACE FUNCTION populate_phenotype_inheres_in_part_of_entity() RETURNS VOID 
 AS
 $$
