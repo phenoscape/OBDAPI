@@ -180,14 +180,15 @@ BEGIN
 INSERT INTO dw_entity_table(
 entity_nid, entity_uid, entity_label  
 )
-SELECT 
-node_id AS entity_nid, 
-uid AS entity_uid, 
-label AS entity_label 
-FROM 
-node 
-WHERE  
-source_id = (SELECT node_id FROM node WHERE uid = 'teleost_anatomy');  
+SELECT DISTINCT 
+entity_node.node_id AS entity_nid, 
+entity_node.uid AS entity_uid, 
+entity_node.label AS entity_label 
+FROM node AS entity_node, link  
+WHERE 
+link.object_id = entity_node.node_id AND 
+link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in') AND 
+link.is_inferred = 'f';
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -203,16 +204,17 @@ subentity_nid, superentity_nid
 )
 SELECT 
 sub_node.node_id, 
-sup_node.node_id 
+super_node.node_id 
 FROM 
-link AS is_a_link 
-JOIN node AS sub_node 
-ON (is_a_link.node_id = sub_node.node_id) 
-JOIN node AS sup_node 
-ON (is_a_link.object_id = sup_node.node_id) 
+link AS is_a_link, 
+node AS sub_node, 
+node AS super_node 
 WHERE 
+is_a_link.node_id = sub_node.node_id AND 
+is_a_link.object_id = super_node.node_id AND 
 is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
-sub_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost_anatomy');  
+is_a_link.is_inferred = 'f' AND 
+sub_node.node_id IN (SELECT entity_nid FROM dw_entity_table); 
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -223,7 +225,7 @@ $$
 DECLARE 
 
 BEGIN 
-INSERT INTO dw_entity_part_of_entity(
+INSERT INTO dw_entity_part_of_entity_table(
 comp_entity_nid, 
 aggr_entity_nid 
 )
@@ -238,7 +240,37 @@ JOIN node AS aggr_entity_node
 ON (part_of_link.object_id = aggr_entity_node.node_id) 
 WHERE 
 part_of_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:part_of') AND 
-comp_entity_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost_anatomy');
+comp_entity_node.node_id IN (SELECT entity_nid FROM dw_entity_table) ;
+END
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION populate_dw_quality_table() RETURNS VOID 
+AS
+$$
+DECLARE 
+
+BEGIN 
+INSERT INTO dw_quality_table(
+quality_nid, 
+quality_uid, 
+quality_label 
+)
+SELECT DISTINCT 
+quality_node.node_id, 
+quality_node.uid, 
+quality_node.label 
+FROM 
+node AS quality_node, 
+link AS is_a_link, 
+link AS exhibits_link   
+WHERE 
+is_a_link.node_id = exhibits_link.object_id AND 
+is_a_link.object_id = quality_node.node_id AND 
+exhibits_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:exhibits') AND 
+is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
+is_a_link.is_inferred = 'f' AND 
+exhibits_link.is_inferred = 'f';
 END
 $$
 LANGUAGE 'plpgsql';
@@ -293,7 +325,7 @@ ON (entity_node2.node_id = towards_link.object_id AND
 ON (towards_link.node_id = phenotype_node.node_id) 
 JOIN (link AS is_a_link 
 JOIN (node AS quality_node 
-JOIN (link AS value_for_link 
+LEFT OUTER JOIN (link AS value_for_link 
 JOIN node AS character_node 
 ON (character_node.node_id = value_for_link.object_id AND 
 	value_for_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:value_for'))) 
@@ -357,7 +389,9 @@ JOIN node AS phenotype_node
 ON (phenotype_node.node_id = exhibits_link.object_id AND 
 	exhibits_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:exhibits') AND 
 	exhibits_link.is_inferred = 'f')) 
-ON (exhibits_link.node_id = taxon_node.node_id);
+ON (exhibits_link.node_id = taxon_node.node_id)
+WHERE 
+exhibits_link.reiflink_node_id IS NOT NULL;
 END
 $$LANGUAGE 'plpgsql';
 
@@ -367,7 +401,7 @@ $$
 DECLARE 
 
 BEGIN 
-INSERT INTO dw_taxon_phenotype_metadata_table  
+INSERT INTO taxon_phenotype_metadata  
 (
 reif_id, 
 phenotype_uid, 
