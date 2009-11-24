@@ -273,6 +273,10 @@ CREATE INDEX dw_taxon_label_index ON dw_taxon_table(taxon_label);
 CREATE TABLE dw_taxon_alias_table(
 taxon_nid INTEGER REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE, 
 alias VARCHAR 
+);
+
+COMMENT ON TABLE dw_taxon_alias_table IS 
+'Table to store aliases of taxa';
 
 CREATE TABLE phenotype_inheres_in_part_of_entity (
 phenotype_nid INTEGER, 
