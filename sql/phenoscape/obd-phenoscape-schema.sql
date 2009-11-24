@@ -276,7 +276,7 @@ alias VARCHAR
 );
 
 COMMENT ON TABLE dw_taxon_alias_table IS 
-'Table to store aliases of taxa';
+'A data warehouse table to store all the alternative names (synonyms) of evolutionary taxa';
 
 CREATE TABLE phenotype_inheres_in_part_of_entity (
 phenotype_nid INTEGER, 
@@ -284,9 +284,6 @@ entity_nid INTEGER,
 entity_uid VARCHAR, 
 entity_label VARCHAR
 );
-
-COMMENT ON TABLE dw_taxon_alias_table IS 
-'A data warehouse table to store all the alternative names (synonyms) of evolutionary taxa';
 
 COMMENT ON TABLE phenotype_inheres_in_part_of_entity IS 
 'A look up table that stores the tuples of the "one to many" relation 
@@ -299,13 +296,13 @@ COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_uid IS
 COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_label IS 
 'The actual label or name of the ANATOMICAL ENTITY. Eg: "basihyal cartilage"';
 
+CREATE INDEX entity_uid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(entity_uid);
+CREATE INDEX phenotype_nid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(phenotype_nid);
+
 CREATE TABLE dw_taxon_is_a_taxon_table (
 subtaxon_nid INTEGER REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE, 
 supertaxon_nid INTEGER REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE
 );
-
-CREATE INDEX entity_uid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(entity_uid);
-CREATE INDEX phenotype_nid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(phenotype_nid);
 
 COMMENT ON TABLE dw_taxon_is_a_taxon_table IS 
 'This table stores subsumption relationships between taxa';
