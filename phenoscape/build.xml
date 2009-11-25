@@ -15,6 +15,7 @@
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
 	<property name="file-loc" value="${staging}"/>
+	<property name="publication-loc" value="${staging}/publication_xml"/>
 	
 	<property environment="environment"/>
 <!-- Environment variables to set for database connections:
@@ -128,6 +129,16 @@ PGHOST sets the database server name.
 			<sysproperty key="pheno-environment-url" value="http://zfin.org/data_transfer/Downloads/pheno_environment.txt"/>
 		</java>
 	</target>
+	
+	<target name="load-publications" description="loads publication information into the database">
+			<java classname="org.phenoscape.bridge.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+				<sysproperty key="db-user" value="${db-user}"/>
+				<sysproperty key="db-password" value="${db-password}"/>
+				<sysproperty key="db-host" value="${db-host}"/>
+				<sysproperty key="db-name" value="${db-name}"/>
+				<sysproperty key="publication-dir" value="${publication-loc}"/>
+			</java>
+		</target>
 	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl">
