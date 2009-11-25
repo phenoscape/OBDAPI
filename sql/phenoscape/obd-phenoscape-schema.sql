@@ -299,6 +299,9 @@ COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_label IS
 CREATE INDEX entity_uid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(entity_uid);
 CREATE INDEX phenotype_nid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(phenotype_nid);
 
+COMMENT ON INDEX phenotype_nid_index_in_inheres_in_table IS 'An index on the "phenotype_nid" column in the 
+phenotype_inheres_in_part_of_entity table';
+
 CREATE TABLE dw_taxon_is_a_taxon_table (
 subtaxon_nid INTEGER REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE, 
 supertaxon_nid INTEGER REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE
@@ -446,5 +449,4 @@ COMMENT ON TABLE dw_publication_reif_id_table IS
 'Data warehouse table to store relation instances between publication and reif ids, or indirectly
 publications and taxon-phenotype assertions';
 
-COMMENT ON INDEX phenotype_nid_index_in_inheres_in_table IS 'An index on the "phenotype_nid" column in the 
-phenotype_inheres_in_part_of_entity table';
+CREATE INDEX dw_publication_index ON dw_publication_reif_id_table(publication);
