@@ -15,7 +15,7 @@
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
 	<property name="file-loc" value="${staging}"/>
-	<property name="publication-loc" value="${staging}/publication_xml"/>
+	<property name="publication-loc" value="${staging}/publication_xml/Phenoscape_pubs_A_papers.xml"/>
 	
 	<property environment="environment"/>
 <!-- Environment variables to set for database connections:
