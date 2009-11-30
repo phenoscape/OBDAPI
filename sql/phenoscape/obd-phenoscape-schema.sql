@@ -424,16 +424,15 @@ CREATE INDEX dw_tp_taxon_index ON dw_taxon_phenotype_table(taxon_nid);
 CREATE INDEX dw_tp_reifid_index ON dw_taxon_phenotype_table(reif_id);
 
 CREATE TABLE dw_publication_table(
-publication VARCHAR PRIMARY KEY, 
+publication TEXT PRIMARY KEY, 
 reference_type VARCHAR, 
-authors VARCHAR, 
-title VARCHAR, 
-secondary_title VARCHAR, 
+authors TEXT, 
+title TEXT, 
+secondary_title TEXT, 
 volume VARCHAR, 
 pages VARCHAR, 
-keywords VARCHAR, 
-year VARCHAR, 
-publication_date VARCHAR, 
+keywords TEXT, 
+publication_year VARCHAR, 
 abstract TEXT
 );
 
