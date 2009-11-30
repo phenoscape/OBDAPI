@@ -478,6 +478,20 @@ is_a_link.is_inferred = 'f';
 END
 $$LANGUAGE 'plpgsql'; 
 
+CREATE OR REPLACE FUNCTION populate_dw_publication_reif_id_table() RETURNS VOID AS
+$$
+DECLARE
+
+BEGIN 
+INSERT INTO dw_publication_reif_id_table 
+(
+publication, reif_id 
+) 
+SELECT publication, reif_id FROM taxon_phenotype_metadata;
+END
+$$LANGUAGE 'plpgsql'; 
+ 
+
 CREATE TABLE anatomyrow (search_id VARCHAR, phenotype_id INT, phenotype_label VARCHAR, entity_info VARCHAR, quality_info VARCHAR, 
 attribute_info VARCHAR, taxa_info VARCHAR);
 

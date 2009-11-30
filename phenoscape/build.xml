@@ -14,6 +14,7 @@
 	<property name="ontologies" value="${staging}/ontologies"/>
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
+	<property name="publication-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/publications/"/>
 	<property name="file-loc" value="${staging}"/>
 	<property name="publication-loc" value="${staging}/publication_xml/Phenoscape_pubs_A_papers.xml"/>
 	
@@ -138,7 +139,7 @@ PGHOST sets the database server name.
 				<sysproperty key="db-name" value="${db-name}"/>
 				<sysproperty key="publication-dir" value="${publication-loc}"/>
 			</java>
-		</target>
+	</target>
 	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl">
@@ -171,6 +172,8 @@ PGHOST sets the database server name.
 			TRUNCATE phenotype_by_entity_character; 
 			TRUNCATE taxon_phenotype_metadata;
 			TRUNCATE phenotype_inheres_in_part_of_entity; 
+			TRUNCATE dw_publication_reif_id_table;
+			TRUNCATE dw_publication_table CASCADE;
 			ALTER SEQUENCE node_node_id_seq RESTART WITH 1; 
 			ALTER SEQUENCE alias_alias_id_seq RESTART WITH 1;	
 			ALTER SEQUENCE description_description_id_seq RESTART WITH 1;	
@@ -191,6 +194,7 @@ PGHOST sets the database server name.
 			SELECT populate_phenotype_table();
 			SELECT populate_metadata_table();
 			SELECT populate_phenotype_inheres_in_part_of_entity();
+			SELECT populate_dw_publication_reif_id_table();
 		</sql>
 	</target>
 				
@@ -222,7 +226,7 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
+	<target name="refresh-all" depends="clear-db,checkout-publications,load-publications,load-obo,load-zfin,checkout-nexml,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
@@ -237,6 +241,14 @@ PGHOST sets the database server name.
 		</exec>
 	</target>
 
+	<target name="checkout-publications" depends="init" description="">
+			<exec executable="svn" dir="${staging}">
+				<arg value="checkout"/>
+				<arg value="${publication-repo}"/>
+				<arg value="publication_xml"/>
+			</exec>
+	</target>
+	
 	<target name="checkout-nexml-extra" depends="init" description="">
 		<exec executable="svn" dir="${staging}">
 			<arg value="checkout"/>
