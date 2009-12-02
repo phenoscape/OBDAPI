@@ -172,8 +172,21 @@ PGHOST sets the database server name.
 			TRUNCATE phenotype_by_entity_character; 
 			TRUNCATE taxon_phenotype_metadata;
 			TRUNCATE phenotype_inheres_in_part_of_entity; 
-			TRUNCATE dw_publication_reif_id_table;
+			TRUNCATE dw_gene_table CASCADE;
+			TRUNCATE dw_gene_alias_table;
+			TRUNCATE dw_genotype_table CASCADE;
+			TRUNCATE dw_taxon_table CASCADE;
+			TRUNCATE dw_taxon_alias_table CASCADE;
+			TRUNCATE dw_taxon_is_a_taxon_table CASCADE;
+			TRUNCATE dw_entity_table CASCADE;
+			TRUNCATE dw_entity_is_a_entity_table CASCADE;
+			TRUNCATE dw_entity_part_of_entity_table CASCADE;
+			TRUNCATE dw_quality_table CASCADE;
+			TRUNCATE dw_phenotype_table CASCADE;
+			TRUNCATE dw_gene_genotype_phenotype_table CASCADE;
+			TRUNCATE dw_taxon_phenotype_table CASCADE;
 			TRUNCATE dw_publication_table CASCADE;
+			TRUNCATE dw_publication_reif_id_table CASCADE;
 			ALTER SEQUENCE node_node_id_seq RESTART WITH 1; 
 			ALTER SEQUENCE alias_alias_id_seq RESTART WITH 1;	
 			ALTER SEQUENCE description_description_id_seq RESTART WITH 1;	
@@ -198,6 +211,30 @@ PGHOST sets the database server name.
 		</sql>
 	</target>
 				
+	<target name="populate-datawarehouse-tables" depends="init" description="populates the normalized data warehouse tables">
+		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
+	            userid="${db-user}" password="${db-password}" 
+	            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
+			SELECT populate_dw_gene_table();
+			SELECT populate_dw_gene_alias_table();
+			SELECT populate_dw_genotype_table();
+			SELECT populate_dw_taxon_table();
+			SELECT populate_dw_taxon_alias_table();
+			SELECT populate_dw_taxon_is_a_taxon_table();
+			SELECT populate_dw_taxon_is_a_taxon_table_with_identical_taxa();
+			SELECT populate_dw_entity_table();
+			SELECT populate_dw_entity_is_a_entity_table();
+			SELECT populate_dw_entity_part_of_entity_table();
+			SELECT populate_dw_quality_table();
+			SELECT populate_dw_phenotype_table();
+			SELECT populate_dw_gene_genotype_phenotype_table();
+			SELECT populate_dw_taxon_phenotype_table();
+			SELECT populate_dw_taxon_phenotype_metadata_table();
+			SELECT populate_dw_publication_reif_id_table();
+		</sql>
+	</target>
+
+	
 	<target name="select-db" depends="init" description="retrieves the refresh date from both databases">
 			<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/obdphenoscape" 
 			            userid="${db-user}" password="${db-password}" 
@@ -226,7 +263,7 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
 	
-	<target name="refresh-all" depends="clear-db,checkout-publications,load-publications,load-obo,load-zfin,checkout-nexml,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
+	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval

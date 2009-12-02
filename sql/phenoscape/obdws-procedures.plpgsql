@@ -17,6 +17,7 @@ JOIN link
 ON (gene_node.node_id = link.node_id AND 
 	link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele') AND 
 	link.is_inferred = 'f'); 
+RAISE NOTICE 'DW Gene table populated\n';	
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -42,6 +43,7 @@ gene_node.node_id = alias_node.node_id AND
 gene_node.node_id = link.node_id AND 
 link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele') AND 
 link.is_inferred = 'f';
+RAISE NOTICE 'DW Gene Alias table populated\n';	
 END
 $$
 LANGUAGE 'plpgsql';   
@@ -65,6 +67,7 @@ JOIN link
 ON (genotype_node.node_id = link.object_id AND 
 	link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele') AND 
 	link.is_inferred = 'f');
+RAISE NOTICE 'DW Genotype table populated\n';	
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -94,7 +97,8 @@ ON (taxon_node.node_id = has_rank_link.node_id)
 WHERE 
 taxon_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost-taxonomy') AND 
 taxon_node.is_obsolete = 'f' AND 
-taxon_node.uid ~* 'TTO:[0-9]+'; 
+taxon_node.uid ~* 'TTO:[0-9]+';
+RAISE NOTICE 'DW Taxon table populated\n';	 
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -119,6 +123,7 @@ taxon_node.node_id = alias_node.node_id AND
 taxon_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost-taxonomy') AND 
 taxon_node.is_obsolete = 'f' AND 
 taxon_node.uid ~* 'TTO:[0-9]+';
+RAISE NOTICE 'DW Taxon Alias table populated\n';
 END   
 $$
 LANGUAGE 'plpgsql'; 
@@ -148,7 +153,8 @@ sub_node.source_id = (SELECT node_id FROM node WHERE uid = 'teleost-taxonomy') A
 sub_node.is_obsolete = 'f' AND 
 sup_node.is_obsolete = 'f' AND 
 sub_node.uid ~* 'TTO:[0-9]+' AND 
-sup_node.uid ~* 'TTO:[0-9]+';  
+sup_node.uid ~* 'TTO:[0-9]+';
+RAISE NOTICE 'DW Taxon Is A Taxon table populated\n';  
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -167,6 +173,7 @@ BEGIN
 		INSERT INTO dw_taxon_is_a_taxon_table (subtaxon_nid, supertaxon_nid) 
 		VALUES (t_nid, t_nid);
 	END LOOP;
+	RAISE NOTICE 'DW Taxon Is A Taxon table populated with identical taxa\n';
 END
 $$
 LANGUAGE 'plpgsql';
@@ -189,6 +196,7 @@ WHERE
 link.object_id = entity_node.node_id AND 
 link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:inheres_in') AND 
 link.is_inferred = 'f';
+RAISE NOTICE 'DW Entity table populated\n';
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -215,6 +223,7 @@ is_a_link.object_id = super_node.node_id AND
 is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
 is_a_link.is_inferred = 'f' AND 
 sub_node.node_id IN (SELECT entity_nid FROM dw_entity_table); 
+RAISE NOTICE 'DW Entity Is A Entity table populated\n';
 END 
 $$
 LANGUAGE 'plpgsql'; 
@@ -241,6 +250,7 @@ ON (part_of_link.object_id = aggr_entity_node.node_id)
 WHERE 
 part_of_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:part_of') AND 
 comp_entity_node.node_id IN (SELECT entity_nid FROM dw_entity_table) ;
+RAISE NOTICE 'DW Entity Part Of Entity table populated\n';
 END
 $$
 LANGUAGE 'plpgsql';
@@ -271,6 +281,7 @@ exhibits_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:e
 is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
 is_a_link.is_inferred = 'f' AND 
 exhibits_link.is_inferred = 'f';
+RAISE NOTICE 'DW Quality table populated\n';
 END
 $$
 LANGUAGE 'plpgsql';
@@ -334,6 +345,7 @@ ON (quality_node.node_id = is_a_link.object_id AND
 	is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') AND 
 	is_a_link.is_inferred = 'f')) 
 ON (is_a_link.node_id = phenotype_node.node_id); 
+RAISE NOTICE 'DW Phenotype table populated\n';
 END
 $$LANGUAGE 'plpgsql';
 
@@ -365,6 +377,7 @@ ON (genotype_node.node_id = has_allele_link.object_id AND
 	has_allele_link.predicate_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_allele') AND 
 	has_allele_link.is_inferred = 'f')) 
 ON (has_allele_link.node_id = gene_node.node_id);
+RAISE NOTICE 'DW Gene Genotype Phenotype table populated\n';
 END
 $$LANGUAGE 'plpgsql';
  		
@@ -392,6 +405,7 @@ ON (phenotype_node.node_id = exhibits_link.object_id AND
 ON (exhibits_link.node_id = taxon_node.node_id)
 WHERE 
 exhibits_link.reiflink_node_id IS NOT NULL;
+RAISE NOTICE 'DW Taxon Phenotype table populated\n';
 END
 $$LANGUAGE 'plpgsql';
 
@@ -475,6 +489,7 @@ WHERE
 exhibits_link.is_inferred = 'f' AND 
 inheres_in_link.is_inferred = 'f' AND 
 is_a_link.is_inferred = 'f';
+RAISE NOTICE 'DW Taxon Phenotype Metadata table populated\n';
 END
 $$LANGUAGE 'plpgsql'; 
 
@@ -488,6 +503,7 @@ INSERT INTO dw_publication_reif_id_table
 publication, reif_id 
 ) 
 SELECT publication, reif_id FROM taxon_phenotype_metadata;
+RAISE NOTICE 'DW Publication Reif Id table populated\n';
 END
 $$LANGUAGE 'plpgsql'; 
  
