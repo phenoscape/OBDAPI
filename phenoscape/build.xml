@@ -207,7 +207,6 @@ PGHOST sets the database server name.
 			SELECT populate_phenotype_table();
 			SELECT populate_metadata_table();
 			SELECT populate_phenotype_inheres_in_part_of_entity();
-			SELECT populate_dw_publication_reif_id_table();
 		</sql>
 	</target>
 				
@@ -229,7 +228,6 @@ PGHOST sets the database server name.
 			SELECT populate_dw_phenotype_table();
 			SELECT populate_dw_gene_genotype_phenotype_table();
 			SELECT populate_dw_taxon_phenotype_table();
-			SELECT populate_dw_taxon_phenotype_metadata_table();
 			SELECT populate_dw_publication_reif_id_table();
 		</sql>
 	</target>
