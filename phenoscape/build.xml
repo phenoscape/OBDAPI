@@ -43,6 +43,7 @@ PGHOST sets the database server name.
 	<target name="init">
 		<mkdir dir="${staging}"/>
 		<mkdir dir="${staging}/ontologies"/>
+		<mkdir dir="${staging}/publication_xml"/>
 	</target>
 	
 	<target name="create-db" depends="init" description="instantiates the OBD database">
@@ -259,7 +260,7 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner"/>
+	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
 	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
