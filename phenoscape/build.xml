@@ -260,9 +260,9 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
+	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
-	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
+	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
@@ -341,11 +341,20 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="make-labels" description="creates labels for compositional descriptions and updates the corresponding rows">
-			<java classname="org.phenoscape.bridge.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
-				<sysproperty key="db-user" value="${db-user}"/>
-				<sysproperty key="db-password" value="${db-password}"/>
-				<sysproperty key="db-host" value="${db-host}"/>
-				<sysproperty key="db-name" value="${db-name}"/>
-			</java>
-		</target>
+		<java classname="org.phenoscape.bridge.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+		</java>
+	</target>
+	
+	<target name="make-labels-for-datawarehouse" description="creates labels for compositional descriptions and updates the corresponding rows in the data warehouse">
+		<java classname="org.phenoscape.bridge.LabelMakerForPostComposedEntitiesInDataWarehouse" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+		</java>
+	</target>
 </project>
