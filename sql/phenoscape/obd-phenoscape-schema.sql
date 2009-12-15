@@ -451,3 +451,5 @@ COMMENT ON TABLE dw_publication_reif_id_table IS
 publications and taxon-phenotype assertions';
 
 CREATE INDEX dw_publication_index ON dw_publication_reif_id_table(publication);
+
+CREATE INDEX dw_publication_reif_id_index ON dw_publication_reif_id_table(reif_id);
