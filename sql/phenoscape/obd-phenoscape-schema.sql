@@ -216,6 +216,9 @@ COMMENT ON COLUMN phenotype_inheres_in_part_of_entity.entity_label IS
 CREATE INDEX entity_uid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(entity_uid);
 CREATE INDEX phenotype_nid_index_in_inheres_in_table ON phenotype_inheres_in_part_of_entity(phenotype_nid);
 
+COMMENT ON INDEX entity_uid_index_in_inheres_in_table IS 'An index on the "entity_uid" column in the 
+phenotype_inheres_in_part_of_entity table';
+
 COMMENT ON INDEX phenotype_nid_index_in_inheres_in_table IS 'An index on the "phenotype_nid" column in the 
 phenotype_inheres_in_part_of_entity table';
 
@@ -312,14 +315,13 @@ supertaxon_nid INTEGER REFERENCES dw_taxon_table(taxon_nid) ON DELETE CASCADE
 COMMENT ON TABLE dw_taxon_is_a_taxon_table IS 
 'This table stores subsumption relationships between taxa';
 
+CREATE INDEX supertaxon_index ON dw_taxon_is_a_taxon_table(supertaxon_nid);
+
 CREATE TABLE dw_entity_table (
 entity_nid INTEGER PRIMARY KEY, 
 entity_uid VARCHAR, 
 entity_label VARCHAR 
 );
-
-COMMENT ON INDEX entity_uid_index_in_inheres_in_table IS 'An index on the "entity_uid" column in the 
-phenotype_inheres_in_part_of_entity table';
 
 COMMENT ON TABLE dw_entity_table IS 
 'A data warehouse table to store information about entities from the TAO';
@@ -341,6 +343,8 @@ superentity_nid INTEGER
 COMMENT ON TABLE dw_entity_is_a_entity_table IS 
 'Data warehouse table to hold subsumption relationships between entities';
 
+CREATE INDEX superentity_index ON dw_entity_is_a_entity_table(subentity_nid); 
+
 CREATE TABLE dw_entity_part_of_entity_table (
 comp_entity_nid INTEGER, 
 aggr_entity_nid INTEGER 
@@ -348,6 +352,8 @@ aggr_entity_nid INTEGER
 
 COMMENT ON TABLE dw_entity_part_of_entity_table IS 
 'A data warehouse table to store partonomy relationships between entities'; 
+
+CREATE INDEX aggr_entity_index ON dw_entity_part_of_entity_table(aggr_entity_nid);
 
 CREATE TABLE dw_quality_table (
 quality_nid INTEGER PRIMARY KEY, 
