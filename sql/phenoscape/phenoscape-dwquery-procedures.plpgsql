@@ -94,3 +94,83 @@ END LOOP;
 
 END
 $$LANGUAGE 'plpgsql'; 
+
+CREATE OR REPLACE FUNCTION get_phenotype_summary_for_gene(VARCHAR) RETURNS SETOF exhibits_row_from_sp AS
+$$
+DECLARE 
+	taxon_result				exhibits_row_from_sp%ROWTYPE; 
+	gene_result					exhibits_row_from_sp%ROWTYPE;
+	combined_result				exhibits_row_from_sp%ROWTYPE;
+	ec_record					RECORD; 
+BEGIN 
+FOR ec_record IN 
+	SELECT DISTINCT 
+	phenotype.inheres_in_entity_nid AS entity, phenotype.character_nid AS character
+	FROM 
+	dw_gene_table AS gene 
+	JOIN (dw_gene_genotype_phenotype_table AS ggp 
+	JOIN dw_phenotype_table AS phenotype 
+	ON (phenotype.phenotype_nid = ggp.phenotype_nid)) 
+	ON (ggp.gene_nid = gene.gene_nid) 
+	WHERE 
+	gene.gene_uid = $1
+	LOOP
+		FOR gene_result IN 
+			SELECT 
+			phenotype.phenotype_uid AS phenotype_uid, 
+			gene.gene_uid AS subject_uid, gene.gene_label AS subject_label, 
+			quality.quality_uid AS quality_uid, quality.quality_label AS quality_label, 
+			character_.quality_uid AS character_uid, character_.quality_label AS character_label, 
+			entity.entity_uid AS entity_uid, entity.entity_label AS entity_label, 
+			NULL AS reif_id, 
+			phenotype.count_text AS numerical_count, 
+			rel_entity.entity_uid AS rel_entity_uid, rel_entity.entity_label AS rel_entity_label, 
+			NULL AS publication 
+			FROM 
+			dw_phenotype_table AS phenotype 
+			JOIN (dw_gene_genotype_phenotype_table AS ggw 
+			JOIN dw_gene_table AS gene 
+			ON (gene.gene_nid = ggw.gene_nid)) 
+			ON (ggw.phenotype_nid = phenotype.phenotype_nid) 
+			JOIN dw_entity_table AS entity ON (phenotype.inheres_in_entity_nid = entity.entity_nid) 
+			JOIN dw_quality_table AS quality ON (phenotype.is_a_quality_nid = quality.quality_nid) 
+			JOIN dw_quality_table AS character_ ON (phenotype.character_nid = character_.quality_nid) 
+			LEFT OUTER JOIN dw_entity_table AS rel_entity ON (phenotype.towards_entity_nid = rel_entity.entity_nid) 
+			WHERE 
+			phenotype.inheres_in_entity_nid = ec_record.entity AND 
+			phenotype.character_nid = ec_record.character 
+		LOOP
+			RETURN NEXT gene_result;
+		END LOOP;	 
+		
+		FOR taxon_result IN 
+			SELECT 
+			phenotype.phenotype_uid AS phenotype_uid, 
+			taxon.taxon_uid AS subject_uid, taxon.taxon_label AS subject_label, 
+			quality.quality_uid AS quality_uid, quality.quality_label AS quality_label, 
+			character_.quality_uid AS character_uid, character_.quality_label AS character_label, 
+			entity.entity_uid AS entity_uid, entity.entity_label AS entity_label,  
+			taxon_phenotype.reif_id AS reif_id, 
+			phenotype.count_text AS numerical_count, 
+			rel_entity.entity_uid AS rel_entity_uid, rel_entity.entity_label AS rel_entity_label, 
+			publication_reif.publication AS publication 
+			FROM 
+			dw_phenotype_table AS phenotype 
+			JOIN (dw_taxon_phenotype_table AS taxon_phenotype 
+			JOIN dw_taxon_table AS taxon 
+			ON (taxon.taxon_nid = taxon_phenotype.taxon_nid)) 
+			ON (taxon_phenotype.phenotype_nid = phenotype.phenotype_nid) 
+			JOIN dw_entity_table AS entity ON (entity.entity_nid = phenotype.inheres_in_entity_nid) 
+			JOIN dw_quality_table AS quality ON (quality.quality_nid = phenotype.is_a_quality_nid) 
+			LEFT OUTER JOIN dw_entity_table AS rel_entity ON (rel_entity.entity_nid = phenotype.towards_entity_nid) 
+			JOIN dw_quality_table AS character_ ON (character_.quality_nid = phenotype.character_nid)  
+			JOIN dw_publication_reif_id_table AS publication_reif ON (publication_reif.reif_id = taxon_phenotype.reif_id)
+			WHERE 
+			phenotype.inheres_in_entity_nid = ec_record.entity AND 
+			phenotype.character_nid = ec_record.character 
+		LOOP
+			RETURN NEXT taxon_result; 
+		END LOOP; 						
+	END LOOP;
+END
+$$LANGUAGE 'plpgsql';
