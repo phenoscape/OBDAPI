@@ -1,0 +1,96 @@
+CREATE TABLE exhibits_row_from_sp(
+phenotype_uid VARCHAR, 
+subject_uid VARCHAR, subject_label VARCHAR, 
+quality_uid VARCHAR, quality_label VARCHAR, 
+character_uid VARCHAR, character_label VARCHAR, 
+entity_uid VARCHAR, entity_label VARCHAR, 
+reif_id VARCHAR, 
+numerical_count VARCHAR, 
+rel_entity_uid VARCHAR, rel_entity_label VARCHAR, 
+publication VARCHAR
+);
+
+CREATE OR REPLACE FUNCTION get_phenotype_summary_for_taxon(VARCHAR) RETURNS SETOF exhibits_row_from_sp AS
+$$
+DECLARE 
+	taxon_result				exhibits_row_from_sp%ROWTYPE; 
+	gene_result					exhibits_row_from_sp%ROWTYPE;
+	combined_result				exhibits_row_from_sp%ROWTYPE; 
+BEGIN 
+
+FOR taxon_result IN 
+	SELECT 
+	phenotype.phenotype_uid AS phenotype_uid, 
+	subtaxon.taxon_uid AS subject_uid, subtaxon.taxon_label AS subject_label, 
+	quality.quality_uid AS quality_uid, quality.quality_label AS quality_label, 
+	character_.quality_uid AS character_uid, character_.quality_label AS character_label, 
+	entity.entity_uid AS entity_uid, entity.entity_label AS entity_label,  
+	taxon_phenotype.reif_id AS reif_id, 
+	phenotype.count_text AS numerical_count, 
+	rel_entity.entity_uid AS rel_entity_uid, rel_entity.entity_label AS rel_entity_label, 
+	publication_reif.publication AS publication 
+	FROM 
+	dw_taxon_table AS search_taxon 
+	JOIN (dw_taxon_is_a_taxon_table AS is_a 
+	JOIN (dw_taxon_table AS subtaxon 
+	JOIN (dw_taxon_phenotype_table AS taxon_phenotype 
+	JOIN dw_phenotype_table AS phenotype 
+	ON (phenotype.phenotype_nid = taxon_phenotype.phenotype_nid)) 
+	ON (taxon_phenotype.taxon_nid = subtaxon.taxon_nid)) 
+	ON (subtaxon.taxon_nid = is_a.subtaxon_nid)) 
+	ON (is_a.supertaxon_nid = search_taxon.taxon_nid) 
+	JOIN dw_entity_table AS entity ON (entity.entity_nid = phenotype.inheres_in_entity_nid) 
+	JOIN dw_quality_table AS quality ON (quality.quality_nid = phenotype.is_a_quality_nid) 
+	LEFT OUTER JOIN dw_entity_table AS rel_entity ON (rel_entity.entity_nid = phenotype.towards_entity_nid) 
+	JOIN dw_quality_table AS character_ ON (character_.quality_nid = phenotype.character_nid)  
+	JOIN dw_publication_reif_id_table AS publication_reif ON (publication_reif.reif_id = taxon_phenotype.reif_id)
+	WHERE search_taxon.taxon_uid = $1
+LOOP
+	RETURN NEXT taxon_result; 
+END LOOP; 						
+FOR gene_result IN 
+	SELECT 
+	phenotype.phenotype_uid AS phenotype_uid, 
+	gene.gene_uid AS subject_uid, gene.gene_label AS subject_label, 
+	quality.quality_uid AS quality_uid, quality.quality_label AS quality_label, 
+	character_.quality_uid AS character_uid, character_.quality_label AS character_label, 
+	entity.entity_uid AS entity_uid, entity.entity_label AS entity_label, 
+	NULL AS reif_id, 
+	phenotype.count_text AS numerical_count, 
+	rel_entity.entity_uid AS rel_entity_uid, rel_entity.entity_label AS rel_entity_label, 
+	NULL AS publication 
+	FROM 
+	dw_phenotype_table AS phenotype 
+	JOIN (dw_gene_genotype_phenotype_table AS ggw 
+	JOIN dw_gene_table AS gene 
+	ON (gene.gene_nid = ggw.gene_nid)) 
+	ON (ggw.phenotype_nid = phenotype.phenotype_nid) 
+	JOIN dw_entity_table AS entity ON (phenotype.inheres_in_entity_nid = entity.entity_nid) 
+	JOIN dw_quality_table AS quality ON (phenotype.is_a_quality_nid = quality.quality_nid) 
+	JOIN dw_quality_table AS character_ ON (phenotype.character_nid = character_.quality_nid) 
+	LEFT OUTER JOIN dw_entity_table AS rel_entity ON (phenotype.towards_entity_nid = rel_entity.entity_nid) 
+	WHERE 
+	(phenotype.inheres_in_entity_nid, phenotype.character_nid) 
+	IN 
+	(
+	 SELECT DISTINCT 
+	 phenotype.inheres_in_entity_nid, phenotype.character_nid 
+	 FROM 
+	 dw_taxon_table AS search_taxon 
+	 JOIN (dw_taxon_is_a_taxon_table AS is_a 
+	 JOIN (dw_taxon_table AS sub_taxon 
+	 JOIN (dw_taxon_phenotype_table AS taxon_phenotype 
+	 JOIN dw_phenotype_table AS phenotype 
+	 ON (phenotype.phenotype_nid = taxon_phenotype.phenotype_nid)) 
+	 ON (taxon_phenotype.taxon_nid = sub_taxon.taxon_nid)) 
+	 ON (sub_taxon.taxon_nid = is_a.subtaxon_nid)) 
+	 ON (is_a.supertaxon_nid = search_taxon.taxon_nid) 
+	 WHERE 
+	 search_taxon.taxon_uid = $1
+	) 
+LOOP
+	RETURN NEXT gene_result; 
+END LOOP; 						
+
+END
+$$LANGUAGE 'plpgsql'; 
