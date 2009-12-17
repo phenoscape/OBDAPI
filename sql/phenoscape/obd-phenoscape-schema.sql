@@ -402,6 +402,8 @@ CREATE INDEX dw_phenotype_entity_index ON dw_phenotype_table(inheres_in_entity_n
 
 CREATE INDEX dw_phenotype_entity_character_index ON dw_phenotype_table(inheres_in_entity_nid, character_nid);
 
+CREATE INDEX dw_phenotype_nid_index ON dw_phenotype_table(phenotype_nid); 
+
 CREATE TABLE dw_gene_genotype_phenotype_table (
 gene_nid INTEGER REFERENCES dw_gene_table(gene_nid) ON DELETE CASCADE, 
 genotype_nid INTEGER REFERENCES dw_genotype_table(genotype_nid) ON DELETE CASCADE, 
