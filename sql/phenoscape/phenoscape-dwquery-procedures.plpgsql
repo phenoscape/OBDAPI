@@ -174,3 +174,54 @@ FOR ec_record IN
 	END LOOP;
 END
 $$LANGUAGE 'plpgsql';
+
+-- These are simple SQL queries. 
+
+SELECT 
+phenotype.phenotype_uid AS phenotype_uid, 
+subtaxon.taxon_uid AS subject_uid, subtaxon.taxon_label AS subject_label, 
+quality.quality_uid AS quality_uid, quality.quality_label AS quality_label, 
+character_.quality_uid AS character_uid, character_.quality_label AS character_label, 
+entity.entity_uid AS entity_uid, entity.entity_label AS entity_label,  
+taxon_phenotype.reif_id AS reif_id, 
+phenotype.count_text AS numerical_count, 
+rel_entity.entity_uid AS rel_entity_uid, rel_entity.entity_label AS rel_entity_label, 
+publication_reif.publication AS publication 
+FROM 
+dw_taxon_table AS search_taxon 
+JOIN (dw_taxon_is_a_taxon_table AS is_a 
+JOIN (dw_taxon_table AS subtaxon 
+JOIN (dw_taxon_phenotype_table AS taxon_phenotype 
+JOIN dw_phenotype_table AS phenotype 
+ON (phenotype.phenotype_nid = taxon_phenotype.phenotype_nid)) 
+ON (taxon_phenotype.taxon_nid = subtaxon.taxon_nid)) 
+ON (subtaxon.taxon_nid = is_a.subtaxon_nid)) 
+ON (is_a.supertaxon_nid = search_taxon.taxon_nid) 
+JOIN dw_entity_table AS entity ON (entity.entity_nid = phenotype.inheres_in_entity_nid) 
+JOIN dw_quality_table AS quality ON (quality.quality_nid = phenotype.is_a_quality_nid) 
+LEFT OUTER JOIN dw_entity_table AS rel_entity ON (rel_entity.entity_nid = phenotype.towards_entity_nid) 
+JOIN dw_quality_table AS character_ ON (character_.quality_nid = phenotype.character_nid)  
+JOIN dw_publication_reif_id_table AS publication_reif ON (publication_reif.reif_id = taxon_phenotype.reif_id)
+WHERE search_taxon.taxon_uid = 'TTO:1380'
+
+SELECT 
+phenotype.phenotype_uid AS phenotype_uid, 
+gene.gene_uid AS subject_uid, gene.gene_label AS subject_label, 
+quality.quality_uid AS quality_uid, quality.quality_label AS quality_label, 
+character_.quality_uid AS character_uid, character_.quality_label AS character_label, 
+entity.entity_uid AS entity_uid, entity.entity_label AS entity_label,  
+NULL AS reif_id, 
+phenotype.count_text AS numerical_count, 
+rel_entity.entity_uid AS rel_entity_uid, rel_entity.entity_label AS rel_entity_label, 
+NULL AS publication 
+FROM 
+dw_gene_table AS gene 
+JOIN (dw_gene_genotype_phenotype_table AS ggp  
+JOIN dw_phenotype_table AS phenotype 
+ON (phenotype.phenotype_nid = ggp.phenotype_nid)) 
+ON (ggp.gene_nid = gene.gene_nid) 
+JOIN dw_entity_table AS entity ON (entity.entity_nid = phenotype.inheres_in_entity_nid) 
+JOIN dw_quality_table AS quality ON (quality.quality_nid = phenotype.is_a_quality_nid) 
+LEFT OUTER JOIN dw_entity_table AS rel_entity ON (rel_entity.entity_nid = phenotype.towards_entity_nid) 
+JOIN dw_quality_table AS character_ ON (character_.quality_nid = phenotype.character_nid)  
+WHERE gene.gene_uid = 'ZFIN:ZDB-GENE-001103-1'
