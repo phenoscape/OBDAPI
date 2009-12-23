@@ -86,6 +86,7 @@ CREATE INDEX entity_character_index ON phenotype_by_entity_character(entity_nid,
 CREATE INDEX subject_index ON phenotype_by_entity_character(subject_nid);
 CREATE INDEX subject_uid_index ON phenotype_by_entity_character(subject_uid);
 CREATE INDEX entity_uid_index ON phenotype_by_entity_character(entity_uid);
+CREATE INDEX character_uid_index ON phenotype_by_entity_character(character_uid);
 CREATE INDEX entity_index ON phenotype_by_entity_character(entity_nid);
 CREATE INDEX phenotype_nid_index ON phenotype_by_entity_character(phenotype_nid);
 
