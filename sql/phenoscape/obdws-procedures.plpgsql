@@ -477,13 +477,13 @@ JOIN node AS quality_node
 ON (is_a_link.object_id = quality_node.node_id AND 
 	is_a_link.predicate_id = (SELECT node_id FROM node WHERE uid='OBO_REL:is_a'))) 
 ON (is_a_link.node_id = phenotype_node.node_id) 
-JOIN tagval AS curator_tag ON ((curator_tag.node_id = posited_by_link.object_id) 
+LEFT OUTER JOIN tagval AS curator_tag ON ((curator_tag.node_id = posited_by_link.object_id) 
 	AND (curator_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_curators')))
-JOIN tagval AS char_tag ON ((char_tag.node_id = character_node.node_id) 
+LEFT OUTER JOIN tagval AS char_tag ON ((char_tag.node_id = character_node.node_id) 
 	AND (char_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_comment')))	
-JOIN tagval AS state_tag ON ((state_tag.node_id = state_node.node_id) 
+LEFT OUTER JOIN tagval AS state_tag ON ((state_tag.node_id = state_node.node_id) 
 	AND (state_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_comment')))
-JOIN tagval AS char_num_tag ON ((char_num_tag.node_id = character_node.node_id) 
+LEFT OUTER JOIN tagval AS char_num_tag ON ((char_num_tag.node_id = character_node.node_id) 
 	AND (char_num_tag.tag_id = (SELECT node_id FROM node WHERE uid = 'PHENOSCAPE:has_number')))
 WHERE 
 exhibits_link.is_inferred = 'f' AND 
