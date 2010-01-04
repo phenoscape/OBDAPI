@@ -224,6 +224,7 @@ PGHOST sets the database server name.
 			SELECT populate_dw_taxon_is_a_taxon_table_with_identical_taxa();
 			SELECT populate_dw_entity_table();
 			SELECT populate_dw_entity_is_a_entity_table();
+			SELECT populate_dw_entity_is_a_entity_table_with_identical_entities();
 			SELECT populate_dw_entity_part_of_entity_table();
 			SELECT populate_dw_quality_table();
 			SELECT populate_dw_phenotype_table();

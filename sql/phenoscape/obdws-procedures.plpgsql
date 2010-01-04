@@ -228,6 +228,23 @@ END
 $$
 LANGUAGE 'plpgsql'; 
 
+CREATE OR REPLACE FUNCTION populate_dw_entity_is_a_entity_table_with_identical_entities() RETURNS VOID 
+AS
+$$
+DECLARE 
+	e_nid INT;
+BEGIN
+	FOR e_nid IN 
+	SELECT entity_nid FROM dw_entity_table 
+	LOOP
+		INSERT INTO dw_entity_is_a_entity_table (subentity_nid, superentity_nid) 
+		VALUES (e_nid, e_nid);
+	END LOOP;
+	RAISE NOTICE 'DW Entity Is A Entity table populated with identical entity\n';
+END
+$$
+LANGUAGE 'plpgsql';
+
 CREATE OR REPLACE FUNCTION populate_dw_entity_part_of_entity_table() RETURNS VOID 
 AS 
 $$
