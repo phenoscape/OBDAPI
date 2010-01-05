@@ -206,7 +206,7 @@ PGHOST sets the database server name.
 	            userid="${db-user}" password="${db-password}" 
 	            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
 			SELECT populate_phenotype_table();
-			SELECT populate_metadata_table();
+			SELECT populate_dw_taxon_phenotype_metadata_table();
 			SELECT populate_phenotype_inheres_in_part_of_entity();
 		</sql>
 	</target>
