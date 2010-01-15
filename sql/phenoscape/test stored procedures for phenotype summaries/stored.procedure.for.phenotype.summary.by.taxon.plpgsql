@@ -1,0 +1,279 @@
+CREATE TABLE phenotype_summary_from_sp (
+entity_id VARCHAR, 
+entity_label VARCHAR,
+character_id VARCHAR,  
+character_label VARCHAR,
+quality_count INTEGER,  
+quality_collection VARCHAR, 
+taxon_count INTEGER, 
+taxon_collection VARCHAR, 
+gene_count INTEGER, 
+gene_collection VARCHAR, 
+publication_count INTEGER, 
+publication_collection VARCHAR 
+); 
+
+/*Find ALL entity-character combinations for a given taxon */
+
+SELECT DISTINCT 
+phenotype.inheres_in_entity_nid AS entity, phenotype.character_nid AS _character 
+FROM 
+dw_taxon_table AS search_taxon 
+JOIN (dw_taxon_is_a_taxon_table AS is_a 
+JOIN (dw_taxon_table AS sub_taxon 
+JOIN (dw_taxon_phenotype_table AS taxon_phenotype 
+JOIN dw_phenotype_table AS phenotype 
+ON (phenotype.phenotype_nid = taxon_phenotype.phenotype_nid)) 
+ON (taxon_phenotype.taxon_nid = sub_taxon.taxon_nid)) 
+ON (sub_taxon.taxon_nid = is_a.subtaxon_nid)) 
+ON (is_a.supertaxon_nid = search_taxon.taxon_nid) 
+WHERE 
+search_taxon.taxon_uid = 'TTO:1' 
+
+/*FOR EACH combination of entity-character*/
+
+/*find count of taxa*/
+
+SELECT DISTINCT 
+p1.subject_uid AS taxon_id, p1.subject_label AS taxon_label   
+FROM 
+phenotype_by_entity_character AS p1 
+JOIN dw_entity_is_a_entity_table AS p2 
+ON (p1.entity_nid = p2.subentity_nid) 
+JOIN dw_taxon_is_a_taxon_table AS p3 
+ON (p3.subtaxon_nid = p1.subject_nid)
+WHERE 
+p2.superentity_nid = 3281 AND 
+p1.character_nid = 17 AND 
+p3.supertaxon_nid = (SELECT node_id FROM node WHERE uid = 'TTO:1') 
+
+/*find count of genes*/
+
+SELECT DISTINCT p1.subject_uid AS gene_id, p1.subject_label AS gene_label  
+FROM 
+phenotype_by_entity_character AS p1 
+JOIN dw_entity_is_a_entity_table AS p2 
+ON (p1.entity_nid = p2.subentity_nid) 
+WHERE 
+p2.superentity_nid = 3281  AND 
+p1.character_nid = 17 AND 
+p1.reif_id IS NULL
+
+/*find count of publications*/
+
+SELECT DISTINCT pub_reif.publication AS publication
+FROM 
+phenotype_by_entity_character AS p1 
+JOIN dw_entity_is_a_entity_table AS p2 
+ON (p1.entity_nid = p2.subentity_nid) 
+JOIN dw_publication_reif_id_table AS pub_reif 
+ON (pub_reif.reif_id = p1.reif_id) 
+JOIN dw_taxon_is_a_taxon_table AS p3 
+ON (p3.subtaxon_nid = p1.subject_nid) 
+WHERE 
+p2.superentity_nid = 3281 AND 
+p1.character_nid = 17 AND  
+p3.supertaxon_nid = (SELECT node_id FROM node WHERE uid = 'TTO:1')
+
+/*find all the different qualities under the character */
+
+SELECT DISTINCT 
+p1.quality_label, p1.related_entity_label, p1.count 
+FROM 
+phenotype_by_entity_character AS p1 
+JOIN dw_entity_is_a_entity_table AS p2 
+ON (p1.entity_nid = p2.subentity_nid) 
+JOIN dw_taxon_is_a_taxon_table AS p3 
+ON (p3.subtaxon_nid = p1.subject_nid) 
+WHERE 
+p2.superentity_nid = 3281 AND 
+p1.character_nid = 17 AND  
+p3.supertaxon_nid = (SELECT node_id FROM node WHERE uid = 'TTO:1')
+
+
+
+/* The stored procedure */
+CREATE OR REPLACE FUNCTION get_phenotype_summary_for_t(search_taxon_id VARCHAR) RETURNS 
+SETOF phenotype_summary_from_sp 
+AS 
+$$
+DECLARE
+  entity_nid			dw_phenotype_table.inheres_in_entity_nid%TYPE;
+  character_nid 		dw_phenotype_table.character_nid%TYPE;
+  entity_uid			dw_entity_table.entity_uid%TYPE;
+  entity_label			dw_entity_table.entity_label%TYPE;
+  character_uid			dw_quality_table.quality_uid%TYPE;
+  character_label		dw_quality_table.quality_label%TYPE;
+  summary_row_for_ec		phenotype_summary_from_sp%ROWTYPE;
+BEGIN
+  FOR entity_nid, character_nid, entity_uid, entity_label, 
+  character_uid, character_label IN 
+	SELECT DISTINCT 
+	phenotype.inheres_in_entity_nid, phenotype.character_nid, 
+	entity.entity_uid, entity.entity_label, 
+	_character.quality_uid, _character.quality_label  
+	FROM 
+	dw_taxon_table AS search_taxon 
+	JOIN (dw_taxon_is_a_taxon_table AS is_a 
+	JOIN (dw_taxon_table AS sub_taxon 
+	JOIN (dw_taxon_phenotype_table AS taxon_phenotype 
+	JOIN dw_phenotype_table AS phenotype 
+	ON (phenotype.phenotype_nid = taxon_phenotype.phenotype_nid)) 
+	ON (taxon_phenotype.taxon_nid = sub_taxon.taxon_nid)) 
+	ON (sub_taxon.taxon_nid = is_a.subtaxon_nid)) 
+	ON (is_a.supertaxon_nid = search_taxon.taxon_nid) 
+	JOIN dw_entity_table AS entity ON (phenotype.inheres_in_entity_nid = entity.entity_nid) 
+	JOIN dw_quality_table AS _character ON (phenotype.character_nid = _character.quality_nid)  
+	WHERE 
+	search_taxon.taxon_uid = search_taxon_id
+  LOOP 
+	BEGIN 
+	  SELECT entity_uid INTO summary_row_for_ec.entity_id;
+	  SELECT entity_label INTO summary_row_for_ec.entity_label;
+	  SELECT character_uid INTO summary_row_for_ec.character_id;
+	  SELECT character_label INTO summary_row_for_ec.character_label;	
+	END;
+
+	--RAISE NOTICE '%  || \t || %', entity_nid, character_nid;
+	-- Find count of taxa
+	DECLARE 
+	  taxon_id		phenotype_by_entity_character.subject_uid%TYPE;
+	  taxon_label		phenotype_by_entity_character.subject_label%TYPE;
+	  taxon_count		INTEGER;
+	  taxon_collection	VARCHAR;
+	BEGIN 
+	  taxon_collection = '';
+	  taxon_count := 0;
+	  FOR taxon_id, taxon_label IN 
+	  	SELECT DISTINCT 
+	  	p1.subject_uid, p1.subject_label 
+		FROM 
+		phenotype_by_entity_character AS p1 
+		JOIN dw_entity_is_a_entity_table AS p2 
+		ON (p1.entity_nid = p2.subentity_nid) 
+		JOIN dw_taxon_is_a_taxon_table AS p3 	
+		ON (p3.subtaxon_nid = p1.subject_nid)
+		WHERE 
+		p2.superentity_nid = entity_nid AND 
+		p1.character_nid = character_nid AND 	
+		p3.supertaxon_nid = (SELECT node_id FROM node WHERE uid = search_taxon_id) 
+	  LOOP
+		taxon_collection := taxon_collection || '(' || taxon_id || ',' || taxon_label || ') ';
+		taxon_count := taxon_count + 1;
+	  END LOOP;
+	  SELECT taxon_count INTO summary_row_for_ec.taxon_count; 
+	  SELECT taxon_collection INTO summary_row_for_ec.taxon_collection;
+	END;
+
+	-- Find count of genes
+	DECLARE 
+	  gene_id		phenotype_by_entity_character.subject_uid%TYPE;
+	  gene_label		phenotype_by_entity_character.subject_label%TYPE;
+	  gene_count		INTEGER;
+	  gene_collection	VARCHAR;
+	BEGIN 
+	  gene_collection = '';
+	  gene_count := 0;
+	  FOR gene_id, gene_label IN 
+		SELECT DISTINCT p1.subject_uid, p1.subject_label  
+		FROM 
+		phenotype_by_entity_character AS p1 
+		JOIN dw_entity_is_a_entity_table AS p2 
+		ON (p1.entity_nid = p2.subentity_nid) 
+		WHERE 
+		p2.superentity_nid = entity_nid AND 
+		p1.character_nid = character_nid AND 
+		p1.reif_id IS NULL
+	  LOOP
+		gene_collection := gene_collection || '(' || gene_id || ',' || gene_label || ') ';
+		gene_count := gene_count + 1;
+	  END LOOP;
+	  SELECT gene_count INTO summary_row_for_ec.gene_count; 
+	  SELECT gene_collection INTO summary_row_for_ec.gene_collection;
+	END;
+
+	-- Find publications 
+	DECLARE 
+	  publication_label		dw_publication_reif_id_table.publication%TYPE;
+	  publication_count		INTEGER;
+	  publication_collection	VARCHAR;
+	BEGIN 
+	  publication_collection = '';
+	  publication_count := 0;
+	  FOR publication_label IN 
+		SELECT DISTINCT pub_reif.publication 
+		FROM 
+		phenotype_by_entity_character AS p1 
+		JOIN dw_entity_is_a_entity_table AS p2 
+		ON (p1.entity_nid = p2.subentity_nid) 
+		JOIN dw_publication_reif_id_table AS pub_reif 	
+		ON (pub_reif.reif_id = p1.reif_id) 
+		JOIN dw_taxon_is_a_taxon_table AS p3 
+		ON (p3.subtaxon_nid = p1.subject_nid) 
+		WHERE 
+		p2.superentity_nid = entity_nid AND 
+		p1.character_nid = character_nid AND  
+		p3.supertaxon_nid = (SELECT node_id FROM node WHERE uid = search_taxon_id)
+	  LOOP
+		publication_collection := publication_collection || '(' || publication_label || ') ' ;
+		publication_count := publication_count + 1;
+	  END LOOP;
+	  SELECT publication_count INTO summary_row_for_ec.publication_count; 
+	  SELECT publication_collection INTO summary_row_for_ec.publication_collection;
+	END;
+
+	--gather all the qualities under the entity-character combination under the given taxon
+	DECLARE 
+	  quality_collection		VARCHAR;
+	  quality_count			INTEGER;
+	  quality_uid			phenotype_by_entity_character.quality_uid%TYPE;
+	  quality_label			phenotype_by_entity_character.quality_label%TYPE;
+	  related_entity_uid		phenotype_by_entity_character.related_entity_uid%TYPE;
+	  related_entity_label		phenotype_by_entity_character.related_entity_label%TYPE;
+	  count				phenotype_by_entity_character.count%TYPE;
+	  final_label			VARCHAR;
+	  final_uid			VARCHAR;
+	BEGIN
+	  quality_collection := '';
+	  quality_count := 0;
+	  FOR quality_label, quality_uid, related_entity_label, related_entity_uid, count IN 
+		SELECT DISTINCT 
+		p1.quality_label, p1.quality_uid, p1.related_entity_label, p1.related_entity_uid, p1.count 
+		FROM 		
+		phenotype_by_entity_character AS p1 
+		JOIN dw_entity_is_a_entity_table AS p2 
+		ON (p1.entity_nid = p2.subentity_nid) 
+		JOIN dw_taxon_is_a_taxon_table AS p3 
+		ON (p3.subtaxon_nid = p1.subject_nid) 
+		WHERE 
+		p2.superentity_nid = entity_nid AND 
+		p1.character_nid = character_nid AND  
+		p3.supertaxon_nid = (SELECT node_id FROM node WHERE uid = search_taxon_id)
+	  LOOP
+		final_uid := quality_uid;
+		final_label := quality_label;
+		IF related_entity_label IS NOT NULL THEN 
+			final_uid := final_uid || '^OBO_REL:towards(' || related_entity_uid || ')';
+			IF (quality_uid = 'PATO:0000642') THEN  
+				final_label := final_label || ' ' || related_entity_label;
+			ELSIF (quality_uid = 'PATO:0001632') THEN 
+				final_label := final_label || ' ' || related_entity_label;
+			ELSE 
+				final_label := final_label || ' towards ' || related_entity_label; 
+			END IF; 
+		END IF;
+		IF count IS NOT NULL THEN 
+			final_uid := final_uid || '^PHENOSCAPE:has_count(' || count || ')';
+			final_label := final_label || ' of ' || count;
+		END IF;
+		quality_collection := quality_collection || '(' || final_uid || ',' || final_label || ') ';
+		quality_count := quality_count + 1;
+	  END LOOP;
+	  SELECT quality_count INTO summary_row_for_ec.quality_count; 
+	  SELECT quality_collection INTO summary_row_for_ec.quality_collection;
+	END; 
+	RETURN NEXT summary_row_for_ec;
+  END LOOP;
+END;
+$$LANGUAGE 'plpgsql';
+
