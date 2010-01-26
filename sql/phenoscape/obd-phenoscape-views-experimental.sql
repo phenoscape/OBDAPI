@@ -1,6 +1,8 @@
 -- relies on relation realization
 
 SELECT realize_relation('OBO_REL:inheres_in');
+SELECT realize_relation('OBO_REL:is_a');
+SELECT realize_relation('OBO_REL:homologous_to');
 
 --
 
