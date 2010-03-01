@@ -148,12 +148,19 @@ push(@views,
 }
 {
 my @exhibits_nodes = $dbh->selectrow_array("SELECT node_id FROM node WHERE uid ='PHENOSCAPE:exhibits'");
+my @all_exhibit_nodes = $dbh->selectrow_array("SELECT node_id FROM node WHERE uid ='PHENOSCAPE:all_exhibit'");
+
+
+if(@all_exhibit_nodes != 1){
+	die "No all exhibit node found";
+}
 
 if(@exhibits_nodes != 1){
 	die "No exhibits node found";
 }
 
 my $exhibits = shift @exhibits_nodes;
+my $all_exhibit = shift @all_exhibit_nodes; 
 
 my @isa_nodes = $dbh->selectrow_array("SELECT node_id FROM node WHERE uid ='OBO_REL:is_a'");
 if(@isa_nodes != 1){
@@ -183,6 +190,29 @@ push(@views,
 	 rule => "is_a (A, B), exhibits (A, P) => exhibits(B, P)",
 	 sql => $exhibits_sql
 	 });	
+	 
+my $exhibits_top_down_sql = qq[
+	SELECT DISTINCT
+		subtaxon_node.node_id AS node_id, 
+		$all_exhibit AS predicate_id,
+		phenotype_node.node_id AS object_id
+	FROM 
+		node AS taxon_node 
+		JOIN link AS exhibits_link ON (exhibits_link.node_id = taxon_node.node_id) 
+		JOIN node AS phenotype_node ON (exhibits_link.object_id = phenotype_node.node_id)
+		JOIN link AS is_a_link ON (is_a_link.object_id = taxon_node.node_id)
+		JOIN node AS subtaxon_node ON (is_a_link.node_id = subtaxon_node.node_id)
+	WHERE
+		is_a_link.predicate_id = $isa AND
+		exhibits_link.predicate_id = $exhibits AND 
+		exhibits_link.is_inferred = 'f'
+	];	 
+	
+push(@views,
+	{id => 'Transitive over exhibits',
+	 rule => "is_a (A, B), exhibits (B, P) => all_exhibit(A, P)",
+	 sql => $exhibits_top_down_sql
+	 });		
 }
 
 my $sth_link = $dbh->prepare_cached("SELECT link_id FROM LINK WHERE node_id=? AND predicate_id=? AND object_id=?");
