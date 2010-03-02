@@ -291,7 +291,7 @@ PGHOST sets the database server name.
 	<target name="checkout-nexml-extra" depends="init" description="">
 		<exec executable="svn" dir="${staging}">
 			<arg value="checkout"/>
-			<arg value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/extra-phenex-files"/>
+			<arg value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/incomplete-files"/>
 			<arg value="nexml-extra"/>
 		</exec>
 	</target>
