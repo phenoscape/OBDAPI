@@ -522,19 +522,19 @@ COMMENT ON VIEW graph_leaf_node IS 'A node that has no links to it';
 CREATE OR REPLACE VIEW graph_leaf_class_node AS 
  SELECT * FROM graph_leaf_node WHERE metatype='C';
 
-COMMENT ON VIEW graph_lead_class_node IS 'A class_node that has no
+COMMENT ON VIEW graph_leaf_class_node IS 'A class_node that has no
 links to it';
 
 CREATE OR REPLACE VIEW graph_leaf_relation_node AS 
  SELECT * FROM graph_leaf_node WHERE metatype='R';
 
-COMMENT ON VIEW graph_lead_class_node IS 'A relation_node that has no
+COMMENT ON VIEW graph_leaf_class_node IS 'A relation_node that has no
 links to it';
 
 CREATE OR REPLACE VIEW graph_leaf_instance_node AS 
  SELECT * FROM graph_leaf_node WHERE metatype='I';
 
-COMMENT ON VIEW graph_lead_instance_node IS 'An instance_node that has no
+COMMENT ON VIEW graph_leaf_instance_node IS 'An instance_node that has no
 links to it';
 
 CREATE OR REPLACE VIEW graph_root_id_by_relation AS
@@ -793,7 +793,7 @@ CREATE OR REPLACE VIEW tagval_with_type AS
   type.label AS type_label
  FROM
   tagval
-  LEFT OUTER JOIN node AS type ON (tagval.type_id=type.node_id);
+  LEFT OUTER JOIN node AS type ON (tagval.datatype_id=type.node_id);
 
 CREATE OR REPLACE VIEW tagval_d AS
  SELECT a.*,
@@ -1354,10 +1354,10 @@ CREATE OR REPLACE VIEW subsumed_annotation_pair AS
   al1.node_id AS a1_node_id,
   al2.node_id AS a2_node_id,
   al1.predicate_id AS a1_predicate_id,
-  al2.predicate_id AS a2_predicate_id
+  al2.predicate_id AS a2_predicate_id,
   al1.object_id AS a1_object_id,
   al2.object_id AS a2_object_id,
-  al1.reiflink_node_id AS a1_reiflink_node_id
+  al1.reiflink_node_id AS a1_reiflink_node_id,
   al2.reiflink_node_id AS a2_reiflink_node_id
  FROM
   al1.predicate_id AS a1_predicate_id,
@@ -1654,8 +1654,6 @@ reified_link_count_by_node_source  | 80816  - note that this matches annotatuon_
 annotated_entity_count             | 11610 - nodes in the ZFIN IDspace that have annotations. genes + genotypes
 </pre>
 ';
-
-CREATE OR REPLACE VIEW 
  
 CREATE OR REPLACE VIEW node_count_by_document_source AS 
  SELECT source.uid,source.label, count(node.node_id) AS node_count
