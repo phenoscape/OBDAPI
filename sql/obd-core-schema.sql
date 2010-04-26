@@ -341,3 +341,6 @@ COMMENT ON COLUMN link_audit.link_id IS 'Link for which this applies';
 COMMENT ON COLUMN link_audit.infonode_id IS 'Reference to node representing transaction instance';
 COMMENT ON COLUMN link_audit.source_id IS 'A node representing an information resource from which the transaction derives';
 
+CREATE TABLE inference_rule (
+       view VARCHAR NOT NULL
+);
