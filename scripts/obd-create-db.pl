@@ -81,6 +81,7 @@ run("dropdb $args",
     sub { print STDERR "DID NOT DROP BECAUSE $db DID NOT EXIST\n" }) 
     if $drop;
 run("createdb $args");
+run("psql -c 'CREATE LANGUAGE plpgsql' $args", sub {print STDERR "Error creating language plpgsql: may not be fatal if language already exists\n";}); #don't exit
 run("psql $args < $sqldir/obd-core-schema.sql ");
 #run("psql $args < $sqldir/obd-core-views.sql ");
 useddl("$sqldir/obd-core-views.sql");
@@ -88,7 +89,6 @@ useddl("$sqldir/obd-simple-views.sql");
 useddl("$sqldir/obd-util-funcs.sql");
 useddl("$sqldir/obd-matview-funcs.sql");
 
-run("psql -c 'CREATE LANGUAGE plpgsql' $args", sub {print STDERR "Error creating language plpgsql: may not be fatal if language already exists\n";}); #don't exit
 run("psql -c 'INSERT INTO obd_schema_metadata (notes) VALUES(\"$notes\")' $args")
   if $notes;
 
