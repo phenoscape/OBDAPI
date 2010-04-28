@@ -1,4 +1,4 @@
-﻿-- Need to change is_extinct to boolean (it is text now)
+-- Need to change is_extinct to boolean (it is text now)
 CREATE OR REPLACE VIEW taxon AS 
 SELECT DISTINCT
   taxon.node_id AS node_id,
