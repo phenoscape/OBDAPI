@@ -8,6 +8,9 @@ SELECT
   rank.uid AS taxon_rank_uid,
   rank.label AS taxon_rank_label,
   taxon.is_extinct AS taxon_is_extinct,
+  annotation.phenotype_node_id,
+  phenotype.uid AS phenotype_uid,
+  phenotype.label AS phenotype_label,
   entity.node_id AS entity_node_id,
   entity.uid AS entity_uid,
   entity.label AS entity_label,
@@ -20,8 +23,10 @@ SELECT
   publication.node_id AS publication_node_id,
   publication.uid AS publication_uid,
   publication.label AS publication_label,
-  annotation.character_text,
-  annotation.state_text,
+  character.node_id AS character_node_id,
+  character.label AS character_label,
+  state.node_id AS state_node_id,
+  state.label AS state_label,
   annotation.is_inferred
 FROM
   annotation
@@ -32,4 +37,6 @@ FROM
   JOIN node quality ON (phenotype.quality_node_id = quality.node_id)
   LEFT OUTER JOIN node related_entity ON (phenotype.related_entity_node_id = related_entity.node_id)
   JOIN node publication ON (annotation.publication_node_id = publication.node_id)
-  ;
+  JOIN node character ON (annotation.character_node_id = character.node_id)
+  JOIN node state ON (annotation.state_node_id = state.node_id)
+;
