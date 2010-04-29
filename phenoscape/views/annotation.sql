@@ -1,6 +1,6 @@
 -- Some joins may need to be changed to left joins to support inferred annotations
 CREATE OR REPLACE VIEW annotation AS 
-SELECT DISTINCT
+SELECT
   exhibits_link.node_id AS subject_node_id,
   exhibits_link.object_id AS phenotype_node_id,
   exhibits_link.is_inferred,
@@ -22,6 +22,4 @@ FROM
   JOIN node has_datum ON (has_datum.uid = 'cdao:has_Datum')
   JOIN link has_datum_link ON (has_datum_link.predicate_id = has_datum.node_id AND has_datum_link.object_id = state_text.node_id)
   JOIN node character_text ON (character_text.node_id = has_datum_link.node_id)
-WHERE
-  exhibits_link.is_inferred = false
-  ;
+;
