@@ -30,7 +30,7 @@ SELECT
   annotation.is_inferred
 FROM
   annotation
-  JOIN taxon ON (annotation.subject_node_id = taxon.node_id)
+  JOIN taxon ON (annotation.taxon_node_id = taxon.node_id)
   LEFT OUTER JOIN node rank ON (rank.node_id = taxon.rank_node_id)
   JOIN phenotype ON (annotation.phenotype_node_id = phenotype.node_id)
   JOIN node entity ON (phenotype.entity_node_id = entity.node_id)

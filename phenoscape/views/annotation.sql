@@ -1,7 +1,7 @@
 -- Some joins may need to be changed to left joins to support inferred annotations
 CREATE OR REPLACE VIEW annotation AS 
 SELECT
-  exhibits_link.node_id AS subject_node_id,
+  exhibits_link.node_id AS taxon_node_id,
   exhibits_link.object_id AS phenotype_node_id,
   exhibits_link.is_inferred,
   has_datum_link.node_id AS character_node_id,
