@@ -127,11 +127,6 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 
 	HashMap<Integer, String> iid2nodeId = new HashMap<Integer, String>();
 
-	public OBDSQLShard() throws SQLException, ClassNotFoundException {
-	}
-
-
-
 	public String getID() {
 		return "OBD-Query-Service"; // TODO: introspect metadata
 	}

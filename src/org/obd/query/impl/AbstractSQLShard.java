@@ -5,33 +5,23 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
+import javax.sql.DataSource;
+
 import org.bbop.rdbms.RelationalQuery;
-import org.obd.model.CompositionalDescription;
-import org.obd.model.Graph;
 import org.obd.model.LinkStatement;
 import org.obd.model.LiteralStatement;
 import org.obd.model.Node;
-import org.obd.model.Statement;
-import org.obd.model.stats.ScoredNode;
-import org.obd.query.AnnotationLinkQueryTerm;
-import org.obd.query.ComparisonQueryTerm;
 import org.obd.query.LabelQueryTerm;
-import org.obd.query.LinkQueryTerm;
 import org.obd.query.QueryTerm;
 import org.obd.query.Shard;
-import org.obd.query.ComparisonQueryTerm.Operator;
 import org.obd.query.LabelQueryTerm.AliasType;
-import org.obd.query.QueryTerm.Aspect;
 import org.obo.dataadapter.OBDSQLDatabaseAdapter;
 import org.obo.dataadapter.OBDSQLDatabaseAdapter.OBDSQLDatabaseAdapterConfiguration;
 import org.obo.datamodel.IdentifiedObject;
-import org.obo.datamodel.Link;
 
 /**
  * Base class for Shard implementations that use a JDBC connection
@@ -57,6 +47,13 @@ public abstract class AbstractSQLShard extends AbstractShard implements Shard {
 		obd = new OBDSQLDatabaseAdapter();
 		obd.setConfiguration(obdconfig);
 		obd.connect();
+	}
+	
+	public void connect(DataSource dataSource) throws SQLException, ClassNotFoundException {
+	    this.obdconfig = new OBDSQLDatabaseAdapter.OBDSQLDatabaseAdapterConfiguration(dataSource);
+	    this.obd = new OBDSQLDatabaseAdapter();
+        this.obd.setConfiguration(this.obdconfig);
+        obd.connect();
 	}
 
 	public Connection getConnection() {
