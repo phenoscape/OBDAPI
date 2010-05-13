@@ -1,5 +1,8 @@
+-- These may need to use "select distinct" to handle duplicate equivalent assertions that are possible in the Knowledgebase - this has been a problem with some nodes in TTO.  Perhaps creation of equivalent link rows should be prevented in OBD?
+
+
 CREATE OR REPLACE VIEW phenotype AS 
-SELECT
+SELECT DISTINCT
   phenotype.node_id AS node_id,
   phenotype.uid, 
   phenotype.label, 
@@ -17,13 +20,15 @@ FROM
 ;
 SELECT create_matview('phenotype');
 CREATE INDEX phenotype_node_id_index ON phenotype(node_id);
+CREATE INDEX phenotype_uid_index ON phenotype(uid);
+CREATE INDEX phenotype_entity_node_id_index ON phenotype(entity_node_id);
 CREATE INDEX phenotype_quality_node_id_index ON phenotype(quality_node_id);
 CREATE INDEX phenotype_related_entity_node_id_index ON phenotype(related_entity_node_id);
 
 
 -- Need to implement a test to ensure that all is_extinct values can be cast to boolean
 CREATE OR REPLACE VIEW taxon AS 
-SELECT
+SELECT DISTINCT
   taxon.node_id AS node_id,
   taxon.uid AS uid,
   taxon.label AS label,
@@ -44,11 +49,12 @@ FROM
 SELECT create_matview('taxon');
 CREATE INDEX taxon_node_id_index ON taxon(node_id);
 CREATE INDEX taxon_uid_index ON taxon(uid);
+CREATE INDEX taxon_is_extinct_index ON taxon(label);
 
 
 -- Some joins may need to be changed to left joins to support inferred annotations
 CREATE OR REPLACE VIEW annotation AS 
-SELECT
+SELECT DISTINCT
   exhibits_link.node_id AS taxon_node_id,
   exhibits_link.object_id AS phenotype_node_id,
   exhibits_link.is_inferred,
@@ -124,12 +130,21 @@ FROM
 ;
 SELECT create_matview('queryable_annotation');
 CREATE INDEX queryable_annotation_taxon_node_id_index ON queryable_annotation(taxon_node_id);
+CREATE INDEX queryable_annotation_taxon_uid_index ON queryable_annotation(taxon_uid);
 CREATE INDEX queryable_annotation_taxon_label_index ON queryable_annotation(taxon_label);
 CREATE INDEX queryable_annotation_phenotype_node_id_index ON queryable_annotation(phenotype_node_id);
+CREATE INDEX queryable_annotation_entity_node_id_index ON queryable_annotation(entity_node_id);
+CREATE INDEX queryable_annotation_entity_uid_index ON queryable_annotation(entity_uid);
+CREATE INDEX queryable_annotation_entity_label_index ON queryable_annotation(entity_label);
+CREATE INDEX queryable_annotation_quality_node_id_index ON queryable_annotation(quality_node_id);
+CREATE INDEX queryable_annotation_quality_uid_index ON queryable_annotation(quality_uid);
+CREATE INDEX queryable_annotation_quality_label_index ON queryable_annotation(quality_label);
+CREATE INDEX queryable_annotation_related_entity_node_id_index ON queryable_annotation(related_entity_node_id);
+CREATE INDEX queryable_annotation_related_entity_uid_index ON queryable_annotation(related_entity_uid);
+CREATE INDEX queryable_annotation_related_entity_label_index ON queryable_annotation(related_entity_label);
 CREATE INDEX queryable_annotation_publication_node_id_index ON queryable_annotation(publication_node_id);
 CREATE INDEX queryable_annotation_publication_uid_index ON queryable_annotation(publication_uid);
 CREATE INDEX queryable_annotation_is_inferred_index ON queryable_annotation(is_inferred);
---add indexes for everything this will be sorted by
 
 
 CREATE OR REPLACE VIEW distinct_annotation AS 
@@ -157,6 +172,19 @@ FROM
   queryable_annotation
 ;
 SELECT create_matview('distinct_annotation');
+CREATE INDEX distinct_annotation_taxon_node_id_index ON distinct_annotation(taxon_node_id);
+CREATE INDEX distinct_annotation_taxon_uid_index ON distinct_annotation(taxon_uid);
+CREATE INDEX distinct_annotation_taxon_label_index ON distinct_annotation(taxon_label);
+CREATE INDEX distinct_annotation_phenotype_node_id_index ON distinct_annotation(phenotype_node_id);
+CREATE INDEX distinct_annotation_entity_node_id_index ON distinct_annotation(entity_node_id);
+CREATE INDEX distinct_annotation_entity_uid_index ON distinct_annotation(entity_uid);
+CREATE INDEX distinct_annotation_entity_label_index ON distinct_annotation(entity_label);
+CREATE INDEX distinct_annotation_quality_node_id_index ON distinct_annotation(quality_node_id);
+CREATE INDEX distinct_annotation_quality_uid_index ON distinct_annotation(quality_uid);
+CREATE INDEX distinct_annotation_quality_label_index ON distinct_annotation(quality_label);
+CREATE INDEX distinct_annotation_related_entity_node_id_index ON distinct_annotation(related_entity_node_id);
+CREATE INDEX distinct_annotation_related_entity_uid_index ON distinct_annotation(related_entity_uid);
+CREATE INDEX distinct_annotation_related_entity_label_index ON distinct_annotation(related_entity_label);
 
 
 CREATE OR REPLACE VIEW asserted_distinct_annotation AS 
@@ -169,7 +197,7 @@ SELECT DISTINCT
   queryable_annotation.taxon_rank_label,
   queryable_annotation.taxon_is_extinct,
   queryable_annotation.phenotype_node_id,
-  queryable_annotation.phenotype.uid,
+  queryable_annotation.phenotype_uid,
   queryable_annotation.phenotype_label,
   queryable_annotation.entity_node_id,
   queryable_annotation.entity_uid,
@@ -186,3 +214,16 @@ WHERE
   queryable_annotation.is_inferred = FALSE
 ;
 SELECT create_matview('asserted_distinct_annotation');
+CREATE INDEX asserted_distinct_annotation_taxon_node_id_index ON asserted_distinct_annotation(taxon_node_id);
+CREATE INDEX asserted_distinct_annotation_taxon_uid_index ON asserted_distinct_annotation(taxon_uid);
+CREATE INDEX asserted_distinct_annotation_taxon_label_index ON asserted_distinct_annotation(taxon_label);
+CREATE INDEX asserted_distinct_annotation_phenotype_node_id_index ON asserted_distinct_annotation(phenotype_node_id);
+CREATE INDEX asserted_distinct_annotation_entity_node_id_index ON asserted_distinct_annotation(entity_node_id);
+CREATE INDEX asserted_distinct_annotation_entity_uid_index ON asserted_distinct_annotation(entity_uid);
+CREATE INDEX asserted_distinct_annotation_entity_label_index ON asserted_distinct_annotation(entity_label);
+CREATE INDEX asserted_distinct_annotation_quality_node_id_index ON asserted_distinct_annotation(quality_node_id);
+CREATE INDEX asserted_distinct_annotation_quality_uid_index ON asserted_distinct_annotation(quality_uid);
+CREATE INDEX asserted_distinct_annotation_quality_label_index ON asserted_distinct_annotation(quality_label);
+CREATE INDEX asserted_distinct_annotation_related_entity_node_id_index ON asserted_distinct_annotation(related_entity_node_id);
+CREATE INDEX asserted_distinct_annotation_related_entity_uid_index ON asserted_distinct_annotation(related_entity_uid);
+CREATE INDEX asserted_distinct_annotation_related_entity_label_index ON asserted_distinct_annotation(related_entity_label);
