@@ -54,13 +54,19 @@ PGHOST sets the database server name.
 			<arg value="${db-name}"/>
 		</exec>
 	</target>
-	
+<!--	
 	<target name="create-db-phenoscape" description="adds additional Phenoscape ddl to the database">
-		<exec executable="psql" input="../sql/phenoscape/obdws-procedures.plpgsql">
+		   <exec executable="psql" input="../sql/phenoscape/obdws-procedures.plpgsql">
 			<env key="PGDATABASE" value="${db-name}"/>
 	    </exec>
 		<exec executable="psql" input="../sql/phenoscape/obd-phenoscape-schema.sql">
 			<env key="PGDATABASE" value="${db-name}"/>
+		</exec>    
+	</target>
+-->	
+	<target name="create-phenoscape-views" description="creates Phenoscape data model as materialized views over generic OBD triple model">
+		<exec executable="psql" input="views/materialized_views.sql">
+			  <!--  <env key="PGDATABASE" value="${db-name}"/> -->
 		</exec>
 	</target>
 	
@@ -150,20 +156,6 @@ PGHOST sets the database server name.
 		</exec>
 	</target>
 	
-	<target name="run-phenoscape-reasoner" description="runs the Phenoscape-specific reasoner on the database contents">
-		<exec executable="perl">
-			<arg value="../scripts/phenoscape-obd-reasoner.pl"/>
-		    <arg value="--database"/>
-		    <arg value="${db-name}"/>
-			<arg value="-h"/>
-			<arg value="${db-host}"/>
-			<arg value="-U"/>
-			<arg value="${db-user}"/>
-			<arg value="--pwd"/>
-			<arg value="${db-password}"/>
-		</exec>
-	</target>
-	
 	<target name="clear-db" depends="init" description="removes all data from the OBD database">
 		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
 		            userid="${db-user}" password="${db-password}" 
@@ -200,16 +192,6 @@ PGHOST sets the database server name.
 			ALTER SEQUENCE link_link_id_seq RESTART WITH 1;
 		</sql>
 	</target>
-	
-	<target name="populate-phenotype-table" depends="init" description="puts all the phenotype info into one table">
-		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
-	            userid="${db-user}" password="${db-password}" 
-	            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
-			SELECT populate_phenotype_table();
-			SELECT populate_dw_taxon_phenotype_metadata_table();
-			SELECT populate_phenotype_inheres_in_part_of_entity();
-		</sql>
-	</target>
 				
 	<target name="populate-datawarehouse-tables" depends="init" description="populates the normalized data warehouse tables">
 		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
@@ -233,20 +215,6 @@ PGHOST sets the database server name.
 			SELECT populate_dw_publication_reif_id_table();
 		</sql>
 	</target>
-
-	
-	<target name="select-db" depends="init" description="retrieves the refresh date from both databases">
-			<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/obdphenoscape" 
-			            userid="${db-user}" password="${db-password}" 
-			            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar" print="true"> 
-				SELECT 'obdphenoscape last refreshed on ' || notes AS refresh_date FROM obd_schema_metadata;
-			</sql>
-			<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/obdphenoscape_test" 
-					            userid="${db-user}" password="${db-password}" 
-					            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar" print="true"> 
-				SELECT 'obdphenoscape_test last refreshed on ' || notes AS refresh_date FROM obd_schema_metadata;
-			</sql>
-	</target>
 	
 	<target name="load-metadata" depends="init" description="Loads metadata into the database">
 		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
@@ -261,12 +229,13 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
-	
+	<target name="build-all" depends="clean,init,create-db,load-obo,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+	<target name="build-all-expt" depends="clean,init,create-db,load-obo,checkout-nexml,checkout-nexml-extra,checkout-publications,load-nexml,load-nexml-extra,load-publications,load-zfin,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+<!--	
 	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
 
  	<target name="refresh-all-expt" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-nexml-extra,checkout-publications,load-nexml,load-nexml-extra,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts,write-kb-refresh-timestamp"/>
-	
+--> 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
          from the obd-load-db-from-obo.pl script -->
