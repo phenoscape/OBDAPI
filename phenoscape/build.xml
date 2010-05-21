@@ -62,6 +62,9 @@ PGHOST sets the database server name.
 		<exec executable="psql" input="../sql/phenoscape/obd-phenoscape-schema.sql">
 			<env key="PGDATABASE" value="${db-name}"/>
 		</exec>
+		<exec executable="psql" input="../sql/phenoscape/phenoscape-dwquery-procedures.plpgsql">
+		    <env key="PGDATABASE" value="${db-name}"/>
+		</exec>
 	</target>
 	
 	<target name="load-obo" description="loads OBO ontologies into the database">
