@@ -145,6 +145,12 @@ PGHOST sets the database server name.
 			</java>
 	</target>
 	
+	<target name="create-phenoscape-views" description="creates Phenoscape data model as materialized views over generic OBD triple model">
+		<exec executable="psql" input="views/materialized_views.sql">
+			  <!--  <env key="PGDATABASE" value="${db-name}"/> -->
+		</exec>
+	</target>
+	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl">
 			<arg value="../scripts/obd-reasoner.pl"/>
@@ -254,7 +260,8 @@ PGHOST sets the database server name.
 	<target name="load-metadata" depends="init" description="Loads metadata into the database">
 		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
 		            userid="${db-user}" password="${db-password}" 
-		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
+		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar">
+		 	DELETE FROM obd_schema_metadata;
 			INSERT INTO obd_schema_metadata (schema_release,schema_revision,schema_version_date, notes) 
 			VALUES('1.1', 'Revision: 153', 'Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)', '${build_date}');			
 		</sql>
@@ -264,7 +271,7 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts"/>
+	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,create-phenoscape-views,load-metadata,load-annotation-counts"/>
 	
 	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts"/>
 
