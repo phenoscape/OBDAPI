@@ -273,6 +273,8 @@ PGHOST sets the database server name.
 	
 	<target name="build-all" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-publications,load-nexml,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,create-phenoscape-views,load-metadata,load-annotation-counts"/>
 	
+	<target name="build-all-extra" depends="clean,init,create-db,create-db-phenoscape,load-obo,checkout-nexml,checkout-nexml-extra,checkout-publications,load-nexml,load-nexml-extra,load-zfin,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,create-phenoscape-views,load-metadata,load-annotation-counts"/>
+	
 	<target name="refresh-all" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-publications,load-nexml,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts"/>
 
  	<target name="refresh-all-expt" depends="clear-db,load-obo,load-zfin,checkout-nexml,checkout-nexml-extra,checkout-publications,load-nexml,load-nexml-extra,run-obd-reasoner,run-phenoscape-reasoner,populate-phenotype-table,make-labels,load-homology,load-publications,populate-datawarehouse-tables,make-labels-for-datawarehouse,load-metadata,load-annotation-counts"/>
