@@ -52,7 +52,7 @@ FROM
 SELECT create_matview('taxon');
 CREATE INDEX taxon_node_id_index ON taxon(node_id);
 CREATE INDEX taxon_uid_index ON taxon(uid);
-CREATE INDEX taxon_is_extinct_index ON taxon(label);
+CREATE INDEX taxon_is_extinct_index ON taxon(is_extinct);
 
 
 -- Some joins may need to be changed to left joins to support inferred annotations
@@ -229,3 +229,110 @@ CREATE INDEX asserted_distinct_taxon_annotation_quality_label_index ON asserted_
 CREATE INDEX asserted_distinct_taxon_annotation_related_entity_node_id_index ON asserted_distinct_taxon_annotation(related_entity_node_id);
 CREATE INDEX asserted_distinct_taxon_annotation_related_entity_uid_index ON asserted_distinct_taxon_annotation(related_entity_uid);
 CREATE INDEX asserted_distinct_taxon_annotation_related_entity_label_index ON asserted_distinct_taxon_annotation(related_entity_label);
+
+
+CREATE OR REPLACE VIEW gene AS 
+SELECT DISTINCT
+  gene.node_id AS node_id,
+  gene.uid AS uid,
+  gene.label AS label
+FROM
+  node gene
+  JOIN node instance_of_rel ON (instance_of_rel.uid = 'OBO_REL:instance_of')
+  JOIN node gene_type ON (gene_type.uid = 'SO:0000704')
+  JOIN link instance_of_link ON (instance_of_link.node_id = gene.node_id AND instance_of_link.predicate_id = instance_of_rel.node_id AND instance_of_link.object_id = gene_type.node_id)
+;
+SELECT create_matview('gene');
+CREATE INDEX gene_node_id_index ON gene(node_id);
+CREATE INDEX gene_uid_index ON gene(uid);
+
+
+CREATE OR REPLACE VIEW gene_annotation AS 
+SELECT DISTINCT
+  influences_link.node_id AS gene_node_id,
+  influences_link.object_id AS phenotype_node_id,
+FROM
+  link influences_link
+  JOIN node influences ON (influences.uid = 'OBO_REL:influences' AND influences_link.predicate_id = influences.node_id)
+  JOIN gene ON (gene.node_id = influences_link.node_id)
+;
+SELECT create_matview('gene_annotation');
+CREATE INDEX gene_annotation_gene_node_id_index ON gene_annotation(gene_node_id);
+CREATE INDEX gene_annotation_phenotype_node_id_index ON gene_annotation(phenotype_node_id);
+
+
+CREATE OR REPLACE VIEW queryable_gene_annotation AS 
+SELECT
+  gene.node_id AS gene_node_id,
+  gene.uid AS gene_uid,
+  gene.label AS gene_label,
+  gene_annotation.phenotype_node_id,
+  phenotype.uid AS phenotype_uid,
+  phenotype.label AS phenotype_label,
+  entity.node_id AS entity_node_id,
+  entity.uid AS entity_uid,
+  entity.label AS entity_label,
+  quality.node_id AS quality_node_id,
+  quality.uid AS quality_uid,
+  quality.label AS quality_label,
+  related_entity.node_id AS related_entity_node_id,
+  related_entity.uid AS related_entity_uid,
+  related_entity.label AS related_entity_label,
+FROM
+  gene_annotation
+  JOIN gene ON (gene_annotation.gene_node_id = gene.node_id)
+  JOIN phenotype ON (gene_annotation.phenotype_node_id = phenotype.node_id)
+  JOIN node entity ON (phenotype.entity_node_id = entity.node_id)
+  JOIN node quality ON (phenotype.quality_node_id = quality.node_id)
+  LEFT OUTER JOIN node related_entity ON (phenotype.related_entity_node_id = related_entity.node_id)
+;
+SELECT create_matview('queryable_gene_annotation');
+CREATE INDEX queryable_gene_annotation_gene_node_id_index ON queryable_gene_annotation(gene_node_id);
+CREATE INDEX queryable_gene_annotation_gene_uid_index ON queryable_gene_annotation(gene_uid);
+CREATE INDEX queryable_gene_annotation_gene_label_index ON queryable_gene_annotation(gene_label);
+CREATE INDEX queryable_gene_annotation_phenotype_node_id_index ON queryable_gene_annotation(phenotype_node_id);
+CREATE INDEX queryable_gene_annotation_entity_node_id_index ON queryable_gene_annotation(entity_node_id);
+CREATE INDEX queryable_gene_annotation_entity_uid_index ON queryable_gene_annotation(entity_uid);
+CREATE INDEX queryable_gene_annotation_entity_label_index ON queryable_gene_annotation(entity_label);
+CREATE INDEX queryable_gene_annotation_quality_node_id_index ON queryable_gene_annotation(quality_node_id);
+CREATE INDEX queryable_gene_annotation_quality_uid_index ON queryable_gene_annotation(quality_uid);
+CREATE INDEX queryable_gene_annotation_quality_label_index ON queryable_gene_annotation(quality_label);
+CREATE INDEX queryable_gene_annotation_related_entity_node_id_index ON queryable_gene_annotation(related_entity_node_id);
+CREATE INDEX queryable_gene_annotation_related_entity_uid_index ON queryable_gene_annotation(related_entity_uid);
+CREATE INDEX queryable_gene_annotation_related_entity_label_index ON queryable_gene_annotation(related_entity_label);
+
+
+CREATE OR REPLACE VIEW distinct_gene_annotation AS 
+SELECT DISTINCT
+  queryable_gene_annotation.gene_node_id,
+  queryable_gene_annotation.gene_uid,
+  queryable_gene_annotation.gene_label,
+  queryable_gene_annotation.phenotype_node_id,
+  queryable_gene_annotation.phenotype_uid,
+  queryable_gene_annotation.phenotype_label,
+  queryable_gene_annotation.entity_node_id,
+  queryable_gene_annotation.entity_uid,
+  queryable_gene_annotation.entity_label,
+  queryable_gene_annotation.quality_node_id,
+  queryable_gene_annotation.quality_uid,
+  queryable_gene_annotation.quality_label,
+  queryable_gene_annotation.related_entity_node_id,
+  queryable_gene_annotation.related_entity_uid,
+  queryable_gene_annotation.related_entity_label
+FROM
+  queryable_gene_annotation
+;
+SELECT create_matview('distinct_gene_annotation');
+CREATE INDEX distinct_gene_annotation_gene_node_id_index ON distinct_gene_annotation(gene_node_id);
+CREATE INDEX distinct_gene_annotation_gene_uid_index ON distinct_gene_annotation(gene_uid);
+CREATE INDEX distinct_gene_annotation_gene_label_index ON distinct_gene_annotation(gene_label);
+CREATE INDEX distinct_gene_annotation_phenotype_node_id_index ON distinct_gene_annotation(phenotype_node_id);
+CREATE INDEX distinct_gene_annotation_entity_node_id_index ON distinct_gene_annotation(entity_node_id);
+CREATE INDEX distinct_gene_annotation_entity_uid_index ON distinct_gene_annotation(entity_uid);
+CREATE INDEX distinct_gene_annotation_entity_label_index ON distinct_gene_annotation(entity_label);
+CREATE INDEX distinct_gene_annotation_quality_node_id_index ON distinct_gene_annotation(quality_node_id);
+CREATE INDEX distinct_gene_annotation_quality_uid_index ON distinct_gene_annotation(quality_uid);
+CREATE INDEX distinct_gene_annotation_quality_label_index ON distinct_gene_annotation(quality_label);
+CREATE INDEX distinct_gene_annotation_related_entity_node_id_index ON distinct_gene_annotation(related_entity_node_id);
+CREATE INDEX distinct_gene_annotation_related_entity_uid_index ON distinct_gene_annotation(related_entity_uid);
+CREATE INDEX distinct_gene_annotation_related_entity_label_index ON distinct_gene_annotation(related_entity_label);
