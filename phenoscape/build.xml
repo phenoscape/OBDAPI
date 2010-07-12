@@ -88,7 +88,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-homology" description="loads the homology file into the database">
-		<java classname="org.phenoscape.obd.HomologyObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.HomologyObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -99,7 +99,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-nexml" description="loads NeXML data files into the database">
-		<java classname="org.phenoscape.obd.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<arg value="${nexml}"/>
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
@@ -111,7 +111,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-nexml-extra" description="loads extra NeXML data files into the database (Sandrine's work)">
-			<java classname="org.phenoscape.obd.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 				<arg value="${nexml-extra}"/>
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
@@ -123,7 +123,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-zfin" description="loads ZFIN data sources into the database">
-		<java classname="org.phenoscape.obd.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -139,7 +139,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-publications" description="loads publication information into the database">
-			<java classname="org.phenoscape.obd.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
 				<sysproperty key="db-host" value="${db-host}"/>
@@ -263,7 +263,7 @@ PGHOST sets the database server name.
 	<target name="load-annotation-counts" depends="load-anatomy-annotation-counts,load-gene-annotation-counts,load-taxon-annotation-counts"/>
 	
 	<target name="load-anatomy-annotation-counts" description="extracts annotation counts for each entity">
-		<java classname="org.phenoscape.obd.AnatomicalEntityAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.AnatomicalEntityAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -273,7 +273,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-gene-annotation-counts" description="extracts annotation counts for each gene">
-		<java classname="org.phenoscape.obd.GeneAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.GeneAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -283,7 +283,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-taxon-annotation-counts" description="extracts annotation counts for each taxon">
-		<java classname="org.phenoscape.obd.TaxonAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.TaxonAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -293,7 +293,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="write-kb-refresh-timestamp" description="writes the timestamp when kb was refreshed">
-			<java classname="org.phenoscape.obd.KbRefreshTimestamp" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<java classname="org.phenoscape.obd.loader.KbRefreshTimestamp" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
 				<sysproperty key="db-host" value="${db-host}"/>
@@ -308,7 +308,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="make-labels" description="creates labels for compositional descriptions and updates the corresponding rows">
-		<java classname="org.phenoscape.obd.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
