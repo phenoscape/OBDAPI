@@ -250,7 +250,7 @@ CREATE INDEX gene_uid_index ON gene(uid);
 CREATE OR REPLACE VIEW gene_annotation AS 
 SELECT DISTINCT
   influences_link.node_id AS gene_node_id,
-  influences_link.object_id AS phenotype_node_id,
+  influences_link.object_id AS phenotype_node_id
 FROM
   link influences_link
   JOIN node influences ON (influences.uid = 'OBO_REL:influences' AND influences_link.predicate_id = influences.node_id)
@@ -277,7 +277,7 @@ SELECT
   quality.label AS quality_label,
   related_entity.node_id AS related_entity_node_id,
   related_entity.uid AS related_entity_uid,
-  related_entity.label AS related_entity_label,
+  related_entity.label AS related_entity_label
 FROM
   gene_annotation
   JOIN gene ON (gene_annotation.gene_node_id = gene.node_id)
