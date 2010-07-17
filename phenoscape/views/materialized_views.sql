@@ -55,7 +55,6 @@ CREATE INDEX taxon_uid_index ON taxon(uid);
 CREATE INDEX taxon_is_extinct_index ON taxon(is_extinct);
 
 
--- Some joins may need to be changed to left joins to support inferred annotations
 CREATE OR REPLACE VIEW taxon_annotation AS 
 SELECT DISTINCT
   exhibits_link.node_id AS taxon_node_id,
@@ -66,17 +65,14 @@ SELECT DISTINCT
   has_publication_link.object_id AS publication_node_id
 FROM
   link exhibits_link
-  JOIN node exhibits ON (exhibits.uid = 'PHENOSCAPE:exhibits' AND exhibits_link.predicate_id = exhibits.node_id)
-  JOIN node reiflink ON (reiflink.node_id = exhibits_link.reiflink_node_id)
-  JOIN node posited_by ON (posited_by.uid = 'posited_by')
-  JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = posited_by.node_id)
-  JOIN node has_publication ON (has_publication.uid = 'PHENOSCAPE:has_publication')
-  JOIN link has_publication_link ON (has_publication_link.node_id = posited_by_link.object_id AND has_publication_link.predicate_id = has_publication.node_id)
-  JOIN node has_state ON (has_state.uid = 'cdao:has_State')
-  JOIN link has_state_link_to_datum ON (has_state_link_to_datum.node_id = reiflink.node_id AND has_state_link_to_datum.predicate_id = has_state.node_id)
-  JOIN link has_state_link_to_state ON (has_state_link_to_state.node_id = has_state_link_to_datum.object_id AND has_state_link_to_state.predicate_id = has_state.node_id)
-  JOIN node has_datum ON (has_datum.uid = 'cdao:has_Datum')
-  JOIN link has_datum_link ON (has_datum_link.predicate_id = has_datum.node_id AND has_datum_link.object_id = has_state_link_to_state.object_id)
+  LEFT JOIN node reiflink ON (reiflink.node_id = exhibits_link.reiflink_node_id)
+  LEFT JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='posited_by'))
+  LEFT JOIN link has_publication_link ON (has_publication_link.node_id = posited_by_link.object_id AND has_publication_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:has_publication'))
+  LEFT JOIN link has_state_link_to_datum ON (has_state_link_to_datum.node_id = reiflink.node_id AND has_state_link_to_datum.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State'))
+  LEFT JOIN link has_state_link_to_state ON (has_state_link_to_state.node_id = has_state_link_to_datum.object_id AND has_state_link_to_state.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State'))
+  LEFT JOIN link has_datum_link ON (has_datum_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_Datum') AND has_datum_link.object_id = has_state_link_to_state.object_id)
+WHERE
+  exhibits_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:exhibits')
 ;
 SELECT create_matview('taxon_annotation');
 CREATE INDEX taxon_annotation_taxon_node_id_index ON taxon_annotation(taxon_node_id);
@@ -85,7 +81,6 @@ CREATE INDEX taxon_annotation_publication_node_id_index ON taxon_annotation(publ
 CREATE INDEX taxon_annotation_is_inferred_index ON taxon_annotation(is_inferred);
 
 
--- Some joins may need to be changed to left joins to support inferred annotations
 CREATE OR REPLACE VIEW queryable_taxon_annotation AS 
 SELECT
   taxon.node_id AS taxon_node_id,
@@ -119,16 +114,15 @@ SELECT
 FROM
   taxon_annotation
   JOIN taxon ON (taxon_annotation.taxon_node_id = taxon.node_id)
-  LEFT OUTER JOIN node rank ON (rank.node_id = taxon.rank_node_id)
+  LEFT JOIN node rank ON (rank.node_id = taxon.rank_node_id)
   JOIN phenotype ON (taxon_annotation.phenotype_node_id = phenotype.node_id)
   JOIN node entity ON (phenotype.entity_node_id = entity.node_id)
   JOIN node quality ON (phenotype.quality_node_id = quality.node_id)
-  LEFT OUTER JOIN node related_entity ON (phenotype.related_entity_node_id = related_entity.node_id)
-  JOIN node publication ON (taxon_annotation.publication_node_id = publication.node_id)
-  JOIN node character ON (taxon_annotation.character_node_id = character.node_id)
-  JOIN node state ON (taxon_annotation.state_node_id = state.node_id)
-  JOIN node has_number_rel ON (has_number_rel.uid = 'PHENOSCAPE:has_number')
-  JOIN tagval has_number_link ON (has_number_link.tag_id = has_number_rel.node_id AND has_number_link.node_id = taxon_annotation.character_node_id)
+  LEFT JOIN node related_entity ON (phenotype.related_entity_node_id = related_entity.node_id)
+  LEFT JOIN node publication ON (taxon_annotation.publication_node_id = publication.node_id)
+  LEFT JOIN node character ON (taxon_annotation.character_node_id = character.node_id)
+  LEFT JOIN node state ON (taxon_annotation.state_node_id = state.node_id)
+  LEFT JOIN tagval has_number_link ON (has_number_link.tag_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:has_number') AND has_number_link.node_id = taxon_annotation.character_node_id)
 ;
 SELECT create_matview('queryable_taxon_annotation');
 CREATE INDEX queryable_taxon_annotation_taxon_node_id_index ON queryable_taxon_annotation(taxon_node_id);
@@ -238,9 +232,7 @@ SELECT DISTINCT
   gene.label AS label
 FROM
   node gene
-  JOIN node instance_of_rel ON (instance_of_rel.uid = 'OBO_REL:instance_of')
-  JOIN node gene_type ON (gene_type.uid = 'SO:0000704')
-  JOIN link instance_of_link ON (instance_of_link.node_id = gene.node_id AND instance_of_link.predicate_id = instance_of_rel.node_id AND instance_of_link.object_id = gene_type.node_id)
+  JOIN link instance_of_link ON (instance_of_link.node_id = gene.node_id AND instance_of_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:instance_of') AND instance_of_link.object_id = (SELECT node.node_id FROM node WHERE node.uid='SO:0000704'))
 ;
 SELECT create_matview('gene');
 CREATE INDEX gene_node_id_index ON gene(node_id);
@@ -249,20 +241,34 @@ CREATE INDEX gene_uid_index ON gene(uid);
 
 CREATE OR REPLACE VIEW gene_annotation AS 
 SELECT DISTINCT
-  influences_link.node_id AS gene_node_id,
-  influences_link.object_id AS phenotype_node_id
+  influences_link.node_id AS genotype_node_id,
+  type_link.object_id AS type_node_id,
+  gene_link.object_id AS gene_node_id,
+  influences_link.object_id AS phenotype_node_id,
+  posited_by_link.object_id AS publication_node_id
 FROM
   link influences_link
-  JOIN node influences ON (influences.uid = 'OBO_REL:influences' AND influences_link.predicate_id = influences.node_id)
-  JOIN gene ON (gene.node_id = influences_link.node_id)
+  JOIN link type_link ON (type_link.node_id = influences_link.node_id AND type_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:instance_of'))
+  JOIN link gene_link ON (gene_link.node_id = influences_link.node_id AND gene_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:variant_of'))
+  JOIN node reiflink ON (reiflink.node_id = influences_link.reiflink_node_id)
+  JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='posited_by'))
+WHERE
+  influences_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:influences')
 ;
 SELECT create_matview('gene_annotation');
+CREATE INDEX gene_annotation_genotype_node_id_index ON gene_annotation(genotype_node_id);
+CREATE INDEX gene_annotation_type_node_id_index ON gene_annotation(type_node_id);
 CREATE INDEX gene_annotation_gene_node_id_index ON gene_annotation(gene_node_id);
 CREATE INDEX gene_annotation_phenotype_node_id_index ON gene_annotation(phenotype_node_id);
+CREATE INDEX gene_annotation_publication_node_id_index ON gene_annotation(publication_node_id);
 
 
 CREATE OR REPLACE VIEW queryable_gene_annotation AS 
 SELECT
+  genotype.node_id AS genotype_node_id,
+  genotype.uid AS genotype_uid,
+  type.node_id AS type_node_id,
+  type.uid AS type_uid,
   gene.node_id AS gene_node_id,
   gene.uid AS gene_uid,
   gene.label AS gene_label,
@@ -277,16 +283,26 @@ SELECT
   quality.label AS quality_label,
   related_entity.node_id AS related_entity_node_id,
   related_entity.uid AS related_entity_uid,
-  related_entity.label AS related_entity_label
+  related_entity.label AS related_entity_label,
+  publication.node_id AS publication_node_id,
+  publication.uid AS publication_uid,
+  publication.label AS publication_label
 FROM
   gene_annotation
+  JOIN node genotype ON (gene_annotation.genotype_node_id = genotype.node_id)
+  JOIN node type ON (gene_annotation.type_node_id = type.node_id)
   JOIN gene ON (gene_annotation.gene_node_id = gene.node_id)
   JOIN phenotype ON (gene_annotation.phenotype_node_id = phenotype.node_id)
   JOIN node entity ON (phenotype.entity_node_id = entity.node_id)
   JOIN node quality ON (phenotype.quality_node_id = quality.node_id)
   LEFT OUTER JOIN node related_entity ON (phenotype.related_entity_node_id = related_entity.node_id)
+  JOIN node publication ON (gene_annotation.publication_node_id = publication.node_id)
 ;
 SELECT create_matview('queryable_gene_annotation');
+CREATE INDEX queryable_gene_annotation_genotype_node_id_index ON queryable_gene_annotation(genotype_node_id);
+CREATE INDEX queryable_gene_annotation_genotype_uid_index ON queryable_gene_annotation(genotype_uid);
+CREATE INDEX queryable_gene_annotation_type_node_id_index ON queryable_gene_annotation(type_node_id);
+CREATE INDEX queryable_gene_annotation_type_uid_index ON queryable_gene_annotation(type_uid);
 CREATE INDEX queryable_gene_annotation_gene_node_id_index ON queryable_gene_annotation(gene_node_id);
 CREATE INDEX queryable_gene_annotation_gene_uid_index ON queryable_gene_annotation(gene_uid);
 CREATE INDEX queryable_gene_annotation_gene_label_index ON queryable_gene_annotation(gene_label);
@@ -300,6 +316,9 @@ CREATE INDEX queryable_gene_annotation_quality_label_index ON queryable_gene_ann
 CREATE INDEX queryable_gene_annotation_related_entity_node_id_index ON queryable_gene_annotation(related_entity_node_id);
 CREATE INDEX queryable_gene_annotation_related_entity_uid_index ON queryable_gene_annotation(related_entity_uid);
 CREATE INDEX queryable_gene_annotation_related_entity_label_index ON queryable_gene_annotation(related_entity_label);
+CREATE INDEX queryable_gene_annotation_publication_node_id_index ON queryable_gene_annotation(publication_node_id);
+CREATE INDEX queryable_gene_annotation_publication_uid_index ON queryable_gene_annotation(publication_uid);
+CREATE INDEX queryable_gene_annotation_publication_label_index ON queryable_gene_annotation(publication_label);
 
 
 CREATE OR REPLACE VIEW distinct_gene_annotation AS 
