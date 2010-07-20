@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.bbop.rdbms.RelationalQuery;
 import org.obd.model.LinkStatement;
 import org.obd.model.LiteralStatement;
@@ -145,8 +146,7 @@ public abstract class AbstractSQLShard extends AbstractShard implements Shard {
 		for (Object ob : args) {
 			logger.fine("arg: " + ob);
 		}
-		CallableStatement stmt = obd.getConnection()
-		.prepareCall(sql.toString());
+		CallableStatement stmt = obd.getConnection().prepareCall(sql.toString());
 		stmt.registerOutParameter(1, Types.INTEGER);
 		// System.out.println("stmt="+stmt);
 		for (int i = 0; i < args.length; i++) {
@@ -158,7 +158,7 @@ public abstract class AbstractSQLShard extends AbstractShard implements Shard {
 			} else if (arg instanceof IdentifiedObject) {
 				stmt.setString(i + 2, ((IdentifiedObject) arg).getID());
 			} else {
-				stmt.setString(i + 2, (String) arg);
+				stmt.setString(i + 2, ObjectUtils.toString(arg));
 			}
 		}
 
