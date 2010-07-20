@@ -15,7 +15,6 @@
 	<property name="ontology-sources" value="../conf/obd-phenoscape.conf"/>
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
 	<property name="publication-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/publications/"/>
-	<property name="file-loc" value="${staging}"/>
 	<property name="publication-loc" value="${staging}/publication_xml/Phenoscape_pubs_A_papers.xml"/>
 	
 	<property environment="environment"/>
@@ -47,33 +46,23 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="create-db" depends="init" description="instantiates the OBD database">
-		<exec executable="perl" dir="../scripts">
+		<exec executable="perl" dir="../scripts" failonerror="true">
 			<env key="USER" value="${db-user}"/>
 			<arg value="obd-create-db.pl"/>
 			<arg value="-d"/>
 			<arg value="${db-name}"/>
 		</exec>
 	</target>
-<!--	
-	<target name="create-db-phenoscape" description="adds additional Phenoscape ddl to the database">
-		   <exec executable="psql" input="../sql/phenoscape/obdws-procedures.plpgsql">
-			<env key="PGDATABASE" value="${db-name}"/>
-	    </exec>
-		<exec executable="psql" input="../sql/phenoscape/obd-phenoscape-schema.sql">
-			<env key="PGDATABASE" value="${db-name}"/>
-		</exec>    
-	</target>
--->	
+
 	<target name="create-phenoscape-views" description="creates Phenoscape data model as materialized views over generic OBD triple model">
-		<exec executable="psql" input="views/materialized_views.sql">
-			  <!--  <env key="PGDATABASE" value="${db-name}"/> -->
+		<exec executable="psql" input="views/materialized_views.sql" failonerror="true">
 		</exec>
 	</target>
 	
 	<target name="load-obo" description="loads OBO ontologies into the database">
 		<property name="existing-path" value="${environment.PATH}"/>
 		<echo message="${existing-path}"/>
-		<exec executable="perl" dir="${ontologies}">
+		<exec executable="perl" dir="${ontologies}" failonerror="true">
 			<env key="PATH" value="../../../launch_scripts:${existing-path}"/>
 			<arg value="../../../scripts/obd-load-db-from-obo.pl"/>
 			<arg value="--database"/>
@@ -88,7 +77,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-homology" description="loads the homology file into the database">
-		<java classname="org.phenoscape.obd.loader.HomologyObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.HomologyObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -99,31 +88,29 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-nexml" description="loads NeXML data files into the database">
-		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<arg value="${nexml}"/>
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
 			<sysproperty key="db-name" value="${db-name}"/>
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
-			<sysproperty key="file-loc" value="${file-loc}"/>
 		</java>
 	</target>
 	
 	<target name="load-nexml-extra" description="loads extra NeXML data files into the database (Sandrine's work)">
-			<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 				<arg value="${nexml-extra}"/>
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
 				<sysproperty key="db-host" value="${db-host}"/>
 				<sysproperty key="db-name" value="${db-name}"/>
 				<sysproperty key="ontology-dir" value="${ontologies}"/>
-				<sysproperty key="file-loc" value="${file-loc}"/>
 			</java>
 	</target>
 	
 	<target name="load-zfin" description="loads ZFIN data sources into the database">
-		<java classname="org.phenoscape.obd.loader.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
@@ -139,7 +126,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-publications" description="loads publication information into the database">
-			<java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+			<java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
 				<sysproperty key="db-host" value="${db-host}"/>
@@ -149,71 +136,11 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
-		<exec executable="perl">
+		<exec executable="perl" failonerror="true">
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
 		</exec>
-	</target>
-	
-	<target name="clear-db" depends="init" description="removes all data from the OBD database">
-		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
-		            userid="${db-user}" password="${db-password}" 
-		            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
-			TRUNCATE node CASCADE;
-			TRUNCATE obd_schema_metadata;
-			TRUNCATE phenotype_by_entity_character; 
-			TRUNCATE taxon_phenotype_metadata;
-			TRUNCATE phenotype_inheres_in_part_of_entity; 
-			TRUNCATE dw_gene_table CASCADE;
-			TRUNCATE dw_gene_alias_table;
-			TRUNCATE dw_genotype_table CASCADE;
-			TRUNCATE dw_taxon_table CASCADE;
-			TRUNCATE dw_taxon_alias_table CASCADE;
-			TRUNCATE dw_taxon_is_a_taxon_table CASCADE;
-			TRUNCATE dw_entity_table CASCADE;
-			TRUNCATE dw_entity_is_a_entity_table CASCADE;
-			TRUNCATE dw_entity_part_of_entity_table CASCADE;
-			TRUNCATE dw_quality_table CASCADE;
-			TRUNCATE dw_phenotype_table CASCADE;
-			TRUNCATE dw_gene_genotype_phenotype_table CASCADE;
-			TRUNCATE dw_taxon_phenotype_table CASCADE;
-			TRUNCATE dw_publication_table CASCADE;
-			TRUNCATE dw_publication_reif_id_table CASCADE;
-			ALTER SEQUENCE node_node_id_seq RESTART WITH 1; 
-			ALTER SEQUENCE alias_alias_id_seq RESTART WITH 1;	
-			ALTER SEQUENCE description_description_id_seq RESTART WITH 1;	
-			ALTER SEQUENCE inference_evidence_inference_evidence_id_seq RESTART WITH 1;					
-			ALTER SEQUENCE inference_evidence_support_inference_evidence_support_id_seq RESTART WITH 1;
-			ALTER SEQUENCE link_argument_link_argument_id_seq RESTART WITH 1;								
-			ALTER SEQUENCE node_node_uid_seq RESTART WITH 1;
-			ALTER SEQUENCE tagval_tagval_id_seq RESTART WITH 1;												
-			ALTER SEQUENCE sameas_sameas_id_seq RESTART WITH 1;												
-			ALTER SEQUENCE link_link_id_seq RESTART WITH 1;
-		</sql>
-	</target>
-				
-	<target name="populate-datawarehouse-tables" depends="init" description="populates the normalized data warehouse tables">
-		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
-	            userid="${db-user}" password="${db-password}" 
-	            classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
-			SELECT populate_dw_gene_table();
-			SELECT populate_dw_gene_alias_table();
-			SELECT populate_dw_genotype_table();
-			SELECT populate_dw_taxon_table();
-			SELECT populate_dw_taxon_alias_table();
-			SELECT populate_dw_taxon_is_a_taxon_table();
-			SELECT populate_dw_taxon_is_a_taxon_table_with_identical_taxa();
-			SELECT populate_dw_entity_table();
-			SELECT populate_dw_entity_is_a_entity_table();
-			SELECT populate_dw_entity_is_a_entity_table_with_identical_entities();
-			SELECT populate_dw_entity_part_of_entity_table();
-			SELECT populate_dw_quality_table();
-			SELECT populate_dw_phenotype_table();
-			SELECT populate_dw_gene_genotype_phenotype_table();
-			SELECT populate_dw_taxon_phenotype_table();
-			SELECT populate_dw_publication_reif_id_table();
-		</sql>
 	</target>
 	
 	<target name="load-metadata" depends="init" description="Loads metadata into the database">
@@ -237,7 +164,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="checkout-nexml" depends="init" description="">
-		<exec executable="svn" dir="${staging}">
+		<exec executable="svn" dir="${staging}" failonerror="true">
 			<arg value="checkout"/>
 			<arg value="${nexml-repo}"/>
 			<arg value="nexml"/>
@@ -245,7 +172,7 @@ PGHOST sets the database server name.
 	</target>
 
 	<target name="checkout-publications" depends="init" description="">
-			<exec executable="svn" dir="${staging}">
+			<exec executable="svn" dir="${staging}" failonerror="true">
 				<arg value="checkout"/>
 				<arg value="${publication-repo}"/>
 				<arg value="publication_xml"/>
@@ -253,62 +180,21 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="checkout-nexml-extra" depends="init" description="">
-		<exec executable="svn" dir="${staging}">
+		<exec executable="svn" dir="${staging}" failonerror="true">
 			<arg value="checkout"/>
 			<arg value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/incomplete-files"/>
 			<arg value="nexml-extra"/>
 		</exec>
 	</target>
-	
-	<target name="load-annotation-counts" depends="load-anatomy-annotation-counts,load-gene-annotation-counts,load-taxon-annotation-counts"/>
-	
-	<target name="load-anatomy-annotation-counts" description="extracts annotation counts for each entity">
-		<java classname="org.phenoscape.obd.loader.AnatomicalEntityAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
-			<sysproperty key="db-user" value="${db-user}"/>
-			<sysproperty key="db-password" value="${db-password}"/>
-			<sysproperty key="db-host" value="${db-host}"/>
-			<sysproperty key="db-name" value="${db-name}"/>
-			<sysproperty key="file-loc" value="${file-loc}"/>
-		</java>
-	</target>
-	
-	<target name="load-gene-annotation-counts" description="extracts annotation counts for each gene">
-		<java classname="org.phenoscape.obd.loader.GeneAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
-			<sysproperty key="db-user" value="${db-user}"/>
-			<sysproperty key="db-password" value="${db-password}"/>
-			<sysproperty key="db-host" value="${db-host}"/>
-			<sysproperty key="db-name" value="${db-name}"/>
-			<sysproperty key="file-loc" value="${file-loc}"/>
-		</java>
-	</target>
-	
-	<target name="load-taxon-annotation-counts" description="extracts annotation counts for each taxon">
-		<java classname="org.phenoscape.obd.loader.TaxonAnnotationCounter" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
-			<sysproperty key="db-user" value="${db-user}"/>
-			<sysproperty key="db-password" value="${db-password}"/>
-			<sysproperty key="db-host" value="${db-host}"/>
-			<sysproperty key="db-name" value="${db-name}"/>
-			<sysproperty key="file-loc" value="${file-loc}"/>
-		</java>
-	</target>
-	
-	<target name="write-kb-refresh-timestamp" description="writes the timestamp when kb was refreshed">
-			<java classname="org.phenoscape.obd.loader.KbRefreshTimestamp" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
-				<sysproperty key="db-user" value="${db-user}"/>
-				<sysproperty key="db-password" value="${db-password}"/>
-				<sysproperty key="db-host" value="${db-host}"/>
-				<sysproperty key="db-name" value="${db-name}"/>
-				<sysproperty key="file-loc" value="${file-loc}"/>
-			</java>
-	</target>
+
 	<target name="update-nexml" description="">
-		<exec executable="svn" dir="${nexml}">
+		<exec executable="svn" dir="${nexml}" failonerror="true">
 			<arg value="update"/>
 		</exec>      
 	</target>
 	
 	<target name="make-labels" description="creates labels for compositional descriptions and updates the corresponding rows">
-		<java classname="org.phenoscape.obd.loader.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m">
+		<java classname="org.phenoscape.obd.loader.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
 			<sysproperty key="db-host" value="${db-host}"/>
