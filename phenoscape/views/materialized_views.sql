@@ -36,18 +36,18 @@ SELECT DISTINCT
   rank.uid AS rank_uid,
   rank.label AS rank_label,
   CAST (tagval.val AS BOOLEAN) AS is_extinct,
-  parent_link.object_id AS parent_node_id
+  parent_link.object_id AS parent_node_id,
+  family_link.object_id AS family_node_id,
+  order_taxon_link.object_id AS order_node_id
 FROM
   node taxon
-  -- this is sufficient only if there are only taxon nodes in the TTO
   JOIN node taxonomy ON (taxonomy.uid = 'teleost-taxonomy' AND taxon.source_id = taxonomy.node_id)
-  JOIN node has_rank_rel ON (has_rank_rel.uid = 'has_rank')
-  LEFT OUTER JOIN link has_rank_link ON (has_rank_link.node_id = taxon.node_id AND has_rank_link.predicate_id = has_rank_rel.node_id AND has_rank_link.is_inferred = FALSE)
-  LEFT OUTER JOIN node rank ON (rank.node_id = has_rank_link.object_id)
-  JOIN node is_extinct_rel ON (is_extinct_rel.uid = 'is_extinct')
-  LEFT OUTER JOIN tagval ON (tagval.node_id = taxon.node_id AND tagval.tag_id = is_extinct_rel.node_id)
-  JOIN node is_a_rel ON (is_a_rel.uid = 'OBO_REL:is_a')
-  LEFT OUTER JOIN link parent_link ON (parent_link.node_id = taxon.node_id AND parent_link.is_inferred = FALSE AND parent_link.predicate_id = is_a_rel.node_id)
+  LEFT JOIN link has_rank_link ON (has_rank_link.node_id = taxon.node_id AND has_rank_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='has_rank') AND has_rank_link.is_inferred = FALSE)
+  LEFT JOIN node rank ON (rank.node_id = has_rank_link.object_id)
+  LEFT JOIN tagval ON (tagval.node_id = taxon.node_id AND tagval.tag_id = (SELECT node.node_id FROM node WHERE node.uid='is_extinct'))
+  LEFT JOIN link parent_link ON (parent_link.node_id = taxon.node_id AND parent_link.is_inferred = FALSE AND parent_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:is_a'))
+  LEFT JOIN link family_link ON (family_link.node_id = taxon.node_id AND family_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:is_a') AND family_link.object_id IN (SELECT family.node_id FROM node family JOIN link family_has_rank_link ON (family_has_rank_link.node_id = family.node_id AND family_has_rank_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='has_rank') AND family_has_rank_link.is_inferred = FALSE AND family_has_rank_link.object_id = (SELECT node.node_id FROM node WHERE node.uid='TAXRANK:0000004'))))
+  LEFT JOIN link order_taxon_link ON (order_taxon_link.node_id = taxon.node_id AND order_taxon_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:is_a') AND order_taxon_link.object_id IN (SELECT order_taxon.node_id FROM node order_taxon JOIN link order_taxon_has_rank_link ON (order_taxon_has_rank_link.node_id = order_taxon.node_id AND order_taxon_has_rank_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='has_rank') AND order_taxon_has_rank_link.is_inferred = FALSE AND order_taxon_has_rank_link.object_id = (SELECT node.node_id FROM node WHERE node.uid='TAXRANK:0000003'))))
 ;
 SELECT create_matview('taxon');
 CREATE INDEX taxon_node_id_index ON taxon(node_id);
@@ -62,11 +62,13 @@ SELECT DISTINCT
   exhibits_link.is_inferred,
   has_datum_link.node_id AS character_node_id,
   has_state_link_to_state.object_id AS state_node_id,
-  has_publication_link.object_id AS publication_node_id
+  has_publication_link.object_id AS publication_node_id,
+  has_otu_link.object_id AS otu_node_id
 FROM
   link exhibits_link
   LEFT JOIN node reiflink ON (reiflink.node_id = exhibits_link.reiflink_node_id)
   LEFT JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='posited_by'))
+  LEFT JOIN link has_otu_link ON (has_otu_link.node_id = reiflink.node_id AND has_otu_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:asserted_for_otu') AND has_otu_link.is_inferred = false)
   LEFT JOIN link has_publication_link ON (has_publication_link.node_id = posited_by_link.object_id AND has_publication_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:has_publication'))
   LEFT JOIN link has_state_link_to_datum ON (has_state_link_to_datum.node_id = reiflink.node_id AND has_state_link_to_datum.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State'))
   LEFT JOIN link has_state_link_to_state ON (has_state_link_to_state.node_id = has_state_link_to_datum.object_id AND has_state_link_to_state.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State'))
@@ -90,6 +92,8 @@ SELECT
   rank.uid AS taxon_rank_uid,
   rank.label AS taxon_rank_label,
   taxon.is_extinct AS taxon_is_extinct,
+  taxon.family_node_id AS taxon_family_node_id,
+  taxon.order_node_id AS taxon_order_node_id,
   taxon_annotation.phenotype_node_id,
   phenotype.uid AS phenotype_uid,
   phenotype.label AS phenotype_label,
@@ -110,6 +114,9 @@ SELECT
   character.label AS character_label,
   state.node_id AS state_node_id,
   state.label AS state_label,
+  otu.node_id AS otu_node_id,
+  otu.uid AS otu_uid,
+  otu.label AS otu_label,
   taxon_annotation.is_inferred
 FROM
   taxon_annotation
@@ -123,6 +130,7 @@ FROM
   LEFT JOIN node character ON (taxon_annotation.character_node_id = character.node_id)
   LEFT JOIN node state ON (taxon_annotation.state_node_id = state.node_id)
   LEFT JOIN tagval has_number_link ON (has_number_link.tag_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:has_number') AND has_number_link.node_id = taxon_annotation.character_node_id)
+  LEFT JOIN node otu ON (taxon_annotation.otu_node_id = otu.node_id)
 ;
 SELECT create_matview('queryable_taxon_annotation');
 CREATE INDEX queryable_taxon_annotation_taxon_node_id_index ON queryable_taxon_annotation(taxon_node_id);
