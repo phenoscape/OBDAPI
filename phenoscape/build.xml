@@ -16,6 +16,7 @@
 	<property name="nexml-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/phenex-files"/>
 	<property name="publication-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/publications/"/>
 	<property name="publication-loc" value="${staging}/publication_xml/Phenoscape_pubs_A_papers.xml"/>
+	<property name="zfin-publications-url" value="http://zfin.org/data_transfer/Downloads/zfinpubs.txt"/>
 	
 	<property environment="environment"/>
 <!-- Environment variables to set for database connections:
@@ -126,14 +127,24 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-publications" description="loads publication information into the database">
-			<java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<java classname="org.phenoscape.obd.loader.ZFINPublicationsLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
 				<sysproperty key="db-host" value="${db-host}"/>
 				<sysproperty key="db-name" value="${db-name}"/>
-				<sysproperty key="publication-dir" value="${publication-loc}"/>
+				<sysproperty key="publications-url" value="${zfin-publications-url}"/>
 			</java>
 	</target>
+	
+	<target name="load-zfin-publications" description="loads ZFIN publication information into the database">
+	            <java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+	                <sysproperty key="db-user" value="${db-user}"/>
+	                <sysproperty key="db-password" value="${db-password}"/>
+	                <sysproperty key="db-host" value="${db-host}"/>
+	                <sysproperty key="db-name" value="${db-name}"/>
+	                <sysproperty key="publication-dir" value="${publication-loc}"/>
+	            </java>
+	    </target>
 	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl" failonerror="true">
@@ -156,7 +167,7 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,load-obo,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+	<target name="build-all" depends="clean,init,create-db,load-obo,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,load-zfin-publications,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
