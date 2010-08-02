@@ -237,10 +237,12 @@ CREATE OR REPLACE VIEW gene AS
 SELECT DISTINCT
   gene.node_id AS node_id,
   gene.uid AS uid,
-  gene.label AS label
+  gene.label AS label,
+  alias.label AS full_name
 FROM
   node gene
   JOIN link instance_of_link ON (instance_of_link.node_id = gene.node_id AND instance_of_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:instance_of') AND instance_of_link.object_id = (SELECT node.node_id FROM node WHERE node.uid='SO:0000704'))
+  LEFT JOIN alias ON (gene.node_id = alias.node_id AND alias.type_id = (SELECT node.node_id FROM node WHERE node.uid='FULLNAME'))
 ;
 SELECT create_matview('gene');
 CREATE INDEX gene_node_id_index ON gene(node_id);
@@ -280,6 +282,7 @@ SELECT
   gene.node_id AS gene_node_id,
   gene.uid AS gene_uid,
   gene.label AS gene_label,
+  gene.full_name AS gene_full_name,
   gene_annotation.phenotype_node_id,
   phenotype.uid AS phenotype_uid,
   phenotype.label AS phenotype_label,
@@ -334,6 +337,7 @@ SELECT DISTINCT
   queryable_gene_annotation.gene_node_id,
   queryable_gene_annotation.gene_uid,
   queryable_gene_annotation.gene_label,
+  queryable_gene_annotation.gene_full_name,
   queryable_gene_annotation.phenotype_node_id,
   queryable_gene_annotation.phenotype_uid,
   queryable_gene_annotation.phenotype_label,
