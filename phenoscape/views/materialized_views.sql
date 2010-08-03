@@ -242,7 +242,9 @@ SELECT DISTINCT
 FROM
   node gene
   JOIN link instance_of_link ON (instance_of_link.node_id = gene.node_id AND instance_of_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:instance_of') AND instance_of_link.object_id = (SELECT node.node_id FROM node WHERE node.uid='SO:0000704'))
-  LEFT JOIN alias ON (gene.node_id = alias.node_id AND alias.type_id = (SELECT node.node_id FROM node WHERE node.uid='FULLNAME'))
+  -- synonym types are not properly loaded by OBD at the moment
+  --LEFT JOIN alias ON (gene.node_id = alias.node_id AND alias.type_id = (SELECT node.node_id FROM node WHERE node.uid='FULLNAME'))
+  LEFT JOIN alias ON (gene.node_id = alias.node_id)
 ;
 SELECT create_matview('gene');
 CREATE INDEX gene_node_id_index ON gene(node_id);
