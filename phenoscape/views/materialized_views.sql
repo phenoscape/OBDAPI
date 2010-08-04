@@ -1,5 +1,3 @@
--- These may need to use "select distinct" to handle duplicate equivalent assertions that are possible in the Knowledgebase - this has been a problem with some nodes in TTO.  Perhaps creation of equivalent link rows should be prevented in OBD?
-
 
 CREATE OR REPLACE VIEW phenotype AS 
 SELECT DISTINCT
@@ -260,7 +258,7 @@ SELECT DISTINCT
   posited_by_link.object_id AS publication_node_id
 FROM
   link influences_link
-  JOIN link type_link ON (type_link.node_id = influences_link.node_id AND type_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:instance_of'))
+  JOIN link type_link ON (type_link.node_id = influences_link.node_id AND type_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:instance_of') AND type_link.is_inferred = false)
   JOIN link gene_link ON (gene_link.node_id = influences_link.node_id AND gene_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='OBO_REL:variant_of'))
   JOIN node reiflink ON (reiflink.node_id = influences_link.reiflink_node_id)
   JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='posited_by'))
@@ -279,8 +277,10 @@ CREATE OR REPLACE VIEW queryable_gene_annotation AS
 SELECT
   genotype.node_id AS genotype_node_id,
   genotype.uid AS genotype_uid,
+  genotype.label AS genotype_label,
   type.node_id AS type_node_id,
   type.uid AS type_uid,
+  type.label AS type_label,
   gene.node_id AS gene_node_id,
   gene.uid AS gene_uid,
   gene.label AS gene_label,
