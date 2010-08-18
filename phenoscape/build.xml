@@ -167,7 +167,7 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,load-obo,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,load-zfin-publications,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+	<target name="build-all" depends="clean,init,create-db,load-obo,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval

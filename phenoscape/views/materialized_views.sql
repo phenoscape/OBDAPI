@@ -65,12 +65,12 @@ SELECT DISTINCT
 FROM
   link exhibits_link
   LEFT JOIN node reiflink ON (reiflink.node_id = exhibits_link.reiflink_node_id)
-  LEFT JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='posited_by'))
+  LEFT JOIN link posited_by_link ON (posited_by_link.node_id = reiflink.node_id AND posited_by_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='posited_by') AND posited_by_link.is_inferred = false)
   LEFT JOIN link has_otu_link ON (has_otu_link.node_id = reiflink.node_id AND has_otu_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:asserted_for_otu') AND has_otu_link.is_inferred = false)
-  LEFT JOIN link has_publication_link ON (has_publication_link.node_id = posited_by_link.object_id AND has_publication_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:has_publication'))
-  LEFT JOIN link has_state_link_to_datum ON (has_state_link_to_datum.node_id = reiflink.node_id AND has_state_link_to_datum.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State'))
-  LEFT JOIN link has_state_link_to_state ON (has_state_link_to_state.node_id = has_state_link_to_datum.object_id AND has_state_link_to_state.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State'))
-  LEFT JOIN link has_datum_link ON (has_datum_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_Datum') AND has_datum_link.object_id = has_state_link_to_state.object_id)
+  LEFT JOIN link has_publication_link ON (has_publication_link.node_id = posited_by_link.object_id AND has_publication_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:has_publication') AND has_publication_link.is_inferred = false)
+  LEFT JOIN link has_state_link_to_datum ON (has_state_link_to_datum.node_id = reiflink.node_id AND has_state_link_to_datum.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State') AND has_state_link_to_datum.is_inferred = false)
+  LEFT JOIN link has_state_link_to_state ON (has_state_link_to_state.node_id = has_state_link_to_datum.object_id AND has_state_link_to_state.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_State') AND has_state_link_to_state.is_inferred = false)
+  LEFT JOIN link has_datum_link ON (has_datum_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='cdao:has_Datum') AND has_datum_link.object_id = has_state_link_to_state.object_id) AND has_datum_link.is_inferred = false
 WHERE
   exhibits_link.predicate_id = (SELECT node.node_id FROM node WHERE node.uid='PHENOSCAPE:exhibits')
 ;
