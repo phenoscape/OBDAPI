@@ -56,7 +56,7 @@ PGHOST sets the database server name.
 	</target>
 
 	<target name="create-phenoscape-views" description="creates Phenoscape data model as materialized views over generic OBD triple model">
-		<exec executable="psql" input="views/materialized_views.sql" failonerror="true">
+		<exec executable="psql" input="views/phenoscape_model.sql" failonerror="true">
 		</exec>
 	</target>
 	
