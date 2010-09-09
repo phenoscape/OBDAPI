@@ -144,7 +144,16 @@ PGHOST sets the database server name.
 	                <sysproperty key="db-name" value="${db-name}"/>
 	                <sysproperty key="publication-dir" value="${publication-loc}"/>
 	            </java>
-	    </target>
+	</target>
+	
+	<target name="modify-anatomy-xrefs" description="links TAO terms to ZFIN anatomy database IDs">
+	            <java classname="org.phenoscape.obd.loader.AnatomyXrefModifier" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+	                <sysproperty key="db-user" value="${db-user}"/>
+	                <sysproperty key="db-password" value="${db-password}"/>
+	                <sysproperty key="db-host" value="${db-host}"/>
+	                <sysproperty key="db-name" value="${db-name}"/>
+	            </java>
+	</target>
 	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl" failonerror="true">
@@ -167,7 +176,7 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,load-obo,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+	<target name="build-all" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
@@ -202,15 +211,6 @@ PGHOST sets the database server name.
 		<exec executable="svn" dir="${nexml}" failonerror="true">
 			<arg value="update"/>
 		</exec>      
-	</target>
-	
-	<target name="make-labels" description="creates labels for compositional descriptions and updates the corresponding rows">
-		<java classname="org.phenoscape.obd.loader.Labelmaker" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-			<sysproperty key="db-user" value="${db-user}"/>
-			<sysproperty key="db-password" value="${db-password}"/>
-			<sysproperty key="db-host" value="${db-host}"/>
-			<sysproperty key="db-name" value="${db-name}"/>
-		</java>
 	</target>
 	
 </project>
