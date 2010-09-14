@@ -173,7 +173,7 @@ public class OBOBridge {
         if (link instanceof OBORestriction) {
             OBORestriction rlink = (OBORestriction)link;
             s.setAppliesToAllInstancesOf(true);
-            if (rlink.completes()) {
+            if (rlink.getCompletes()) {
                 s.setIntersectionSemantics(true);
             }
         }
