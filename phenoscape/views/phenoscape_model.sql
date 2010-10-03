@@ -1,3 +1,14 @@
+CREATE TABLE quality_to_attribute AS
+SELECT
+  quality.node_id AS quality_node_id,
+  attribute.node_id AS attribute_node_id
+FROM
+  node quality
+  JOIN link attribute_to_slim ON (attribute_to_slim.predicate_id = (SELECT node_id from node where uid = 'oboInOwl:inSubset') AND attribute_to_slim.object_id = (SELECT node_id from node where uid = 'character_slim') AND is_inferred = false)
+  JOIN link quality_is_a ON (quality_is_a.predicate_id = (SELECT node_id from node where uid = 'OBO_REL:is_a') AND quality_is_a.node_id = quality.node_id)
+  JOIN node attribute ON (attribute.node_id = attribute_to_slim.node_id AND attribute.node_id = quality_is_a.object_id)
+;
+
 CREATE TABLE phenotype AS 
 SELECT DISTINCT
   phenotype.node_id AS node_id,

@@ -172,11 +172,20 @@ PGHOST sets the database server name.
 		</sql>
 	</target>
 	
+	<target name="metatype-bug-workaround" depends="init" description="Reverts metatype for taxa to 'C' to work around loader bug which switches metatype to 'I'">
+		<!-- This is only a temporary fix for this problem. -->
+	        <sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
+	                    userid="${db-user}" password="${db-password}" 
+	                    classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
+	        	UPDATE node SET metatype = 'C' WHERE node_id IN (SELECT node_id FROM node where source_id = (SELECT node_id from node where uid = 'teleost-taxonomy')) and metatype = 'I';
+	        </sql>
+	    </target>
+	
 	<target name="clean" description="removes cached files">
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+	<target name="build-all" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,metatype-bug-workaround,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
