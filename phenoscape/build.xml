@@ -89,7 +89,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-nexml" description="loads NeXML data files into the database">
-		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
 			<arg value="${nexml}"/>
 			<sysproperty key="db-user" value="${db-user}"/>
 			<sysproperty key="db-password" value="${db-password}"/>
