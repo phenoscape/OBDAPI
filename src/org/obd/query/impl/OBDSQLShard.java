@@ -81,42 +81,42 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 	Logger logger = Logger.getLogger("org.obd.shard.OBDSQLShard");
 
 	// TODO - enums/constants for DDL
-	protected String NODE_TABLE = "node";
-	protected String LINK_TABLE = "link";
-	protected String LITERAL_TABLE = "node_literal_with_pred";
-	protected String NODE_INTERNAL_ID_COLUMN = "node_id";
-	protected String NODE_EXPOSED_ID_COLUMN = "uid";
-	protected String NODE_SOURCE_INTERNAL_ID_COLUMN = "source_id";
-	protected String NODE_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
+	protected final static String NODE_TABLE = "node";
+	protected final static String LINK_TABLE = "link";
+	protected final static String LITERAL_TABLE = "node_literal_with_pred";
+	protected final static String NODE_INTERNAL_ID_COLUMN = "node_id";
+	protected final static String NODE_EXPOSED_ID_COLUMN = "uid";
+	protected final static String NODE_SOURCE_INTERNAL_ID_COLUMN = "source_id";
+	protected final static String NODE_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
 
-	protected String LITERAL_VALUE_COLUMN = "val";
+	protected final static String LITERAL_VALUE_COLUMN = "val";
 
-	protected String LINK_NODE_EXPOSED_ID_COLUMN = "node_uid";
-	protected String LINK_TARGET_EXPOSED_ID_COLUMN = "object_uid";
-	protected String LINK_RELATION_EXPOSED_ID_COLUMN = "pred_uid";
-	protected String LINK_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
-	protected String LINK_REIF_EXPOSED_ID_COLUMN = "reiflink_node_uid";
+	protected final static String LINK_NODE_EXPOSED_ID_COLUMN = "node_uid";
+	protected final static String LINK_TARGET_EXPOSED_ID_COLUMN = "object_uid";
+	protected final static String LINK_RELATION_EXPOSED_ID_COLUMN = "pred_uid";
+	protected final static String LINK_SOURCE_EXPOSED_ID_COLUMN = "source_uid";
+	protected final static String LINK_REIF_EXPOSED_ID_COLUMN = "reiflink_node_uid";
 
-	protected String LINK_NODE_INTERNAL_ID_COLUMN = "node_id";
-	protected String LINK_TARGET_INTERNAL_ID_COLUMN = "object_id";
-	protected String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
-	protected String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
-	protected String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
+	protected final static String LINK_NODE_INTERNAL_ID_COLUMN = "node_id";
+	protected final static String LINK_TARGET_INTERNAL_ID_COLUMN = "object_id";
+	protected final static String LINK_RELATION_INTERNAL_ID_COLUMN = "predicate_id";
+	protected final static String LINK_SOURCE_INTERNAL_ID_COLUMN = "source_id";
+	protected final static String LINK_REIF_INTERNAL_ID_COLUMN = "reiflink_node_id";
 
 	//added to address a discrepancy between column names (pred_uid and predicate_uid)
 	// this must be addressed in the DDL statements creating the tables and views: Cartik
-	protected String LINK_RELATION_EXPOSED_ID_COLUMN_FULL = "predicate_uid";
+	protected final static String LINK_RELATION_EXPOSED_ID_COLUMN_FULL = "predicate_uid";
 
-	protected String IS_A_LINK_TABLE = "is_a_link";
-	protected String REIFIED_LINK_TABLE = "reified_link";
+	protected final static String IS_A_LINK_TABLE = "is_a_link";
+	protected final static String REIFIED_LINK_TABLE = "reified_link";
 
-	protected String APPLIES_TO_ALL = "applies_to_all";
-	protected String SUBJECT_NODE_ALIAS = "snode";
-	protected String TARGET_NODE_ALIAS = "tnode";
-	protected String RELATION_NODE_ALIAS = "rnode";
-	protected String REIF_NODE_ALIAS = "anode";
-	protected String SOURCE_NODE_ALIAS = "srcnode";
-	protected String IMPLIED_ANNOTATION_LINK_ALIAS = "implied_annotation_link";
+	protected final static String APPLIES_TO_ALL = "applies_to_all";
+	protected final static String SUBJECT_NODE_ALIAS = "snode";
+	protected final static String TARGET_NODE_ALIAS = "tnode";
+	protected final static String RELATION_NODE_ALIAS = "rnode";
+	protected final static String REIF_NODE_ALIAS = "anode";
+	protected final static String SOURCE_NODE_ALIAS = "srcnode";
+	protected final static String IMPLIED_ANNOTATION_LINK_ALIAS = "implied_annotation_link";
 
 	private RelationVocabulary rvocab = new RelationVocabulary();
 	private TermVocabulary tvocab = new TermVocabulary();
@@ -140,7 +140,8 @@ public class OBDSQLShard extends AbstractSQLShard implements Shard {
 				return rs.getInt(NODE_INTERNAL_ID_COLUMN);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+                    logger.error(e);
+                    throw(e);
 		}
 		return null;
 
