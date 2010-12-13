@@ -1,0 +1,90 @@
+CREATE TABLE postcomp_relations_map (
+    uid VARCHAR PRIMARY KEY,
+    label VARCHAR NOT NULL
+);
+INSERT INTO postcomp_relations_map (uid, label) VALUES 
+('OBO_REL:connected_to', 'on'),
+('connected_to', 'on'),
+('anterior_to', 'anterior to'),
+('BSPO:0000096', 'anterior to'),
+('posterior_to', 'posterior to'),
+('BSPO:0000099', 'posterior to'),
+('adjacent_to', 'adjacent to'),
+('OBO_REL:adjacent_to', 'adjacent to'),
+('increased_in_magnitude_relative_to', 'increased in magnitude relative to'),
+('decreased_in_magnitude_relative_to', 'decreased in magnitude relative to'),
+('similar_in_magnitude_relative_to', 'similar in magnitude relative to'),
+('PHENOSCAPE:complement_of', 'not');
+
+
+-- simple_label(node_id)
+CREATE FUNCTION simple_label (v_node_id INT) RETURNS VARCHAR AS $$ 
+DECLARE
+    v_label VARCHAR;
+    differentia link%ROWTYPE;
+    genus VARCHAR;
+    differentia_buffer VARCHAR;
+    differentiae VARCHAR[];
+    relation_substitute VARCHAR;
+BEGIN
+    SELECT INTO v_label label FROM node WHERE node_id = v_node_id;
+    IF v_label IS NULL THEN
+        FOR differentia in (SELECT * FROM link WHERE node_id = v_node_id AND link.combinator = 'I' AND link.is_inferred = false)
+        LOOP
+            IF differentia.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') THEN
+                genus := (SELECT simple_label(differentia.object_id));
+            ELSE
+                relation_substitute := COALESCE ((SELECT label FROM postcomp_relations_map WHERE uid = (SELECT uid FROM node WHERE node_id = differentia.predicate_id)), 'of');
+                differentia_buffer := ' ';
+                differentia_buffer := differentia_buffer || relation_substitute;
+                differentia_buffer := differentia_buffer || ' ';
+                differentia_buffer := differentia_buffer || (SELECT simple_label(differentia.object_id));
+                differentiae := differentiae || differentia_buffer;
+            END IF;
+        END LOOP;
+        IF genus IS NULL THEN
+            RETURN (SELECT uid FROM node WHERE node.node_id = v_node_id);
+        ELSE
+            RETURN genus || array_to_string(differentiae, ', ');
+        END IF;
+    ELSE
+        RETURN v_label;
+    END IF;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+-- semantic_label(node_id)
+CREATE FUNCTION semantic_label (v_node_id INT) RETURNS VARCHAR AS $$ 
+DECLARE
+    v_label VARCHAR;
+    differentia link%ROWTYPE;
+    genus VARCHAR;
+    differentia_buffer VARCHAR;
+    differentiae VARCHAR[];
+BEGIN
+    SELECT INTO v_label label FROM node WHERE node_id = v_node_id;
+    IF v_label IS NULL THEN
+        FOR differentia in (SELECT * FROM link WHERE node_id = v_node_id AND link.combinator = 'I' AND link.is_inferred = false)
+        LOOP
+            IF differentia.predicate_id = (SELECT node_id FROM node WHERE uid = 'OBO_REL:is_a') THEN
+                genus := (SELECT semantic_label(differentia.object_id));
+            ELSE
+                differentia_buffer := '';
+                differentia_buffer := differentia_buffer || (SELECT semantic_label(differentia.predicate_id));
+                differentia_buffer := differentia_buffer || '(';
+                differentia_buffer := differentia_buffer || (SELECT semantic_label(differentia.object_id));
+                differentia_buffer := differentia_buffer || ')';
+                differentiae := differentiae || differentia_buffer;
+            END IF;
+        END LOOP;
+        IF genus IS NULL THEN
+            RETURN (SELECT uid FROM node WHERE node.node_id = v_node_id);
+        ELSE
+            RETURN genus || '(' || array_to_string(differentiae, ', ') || ')';
+        END IF;
+    ELSE
+        RETURN v_label;
+    END IF;
+END;
+$$ LANGUAGE 'plpgsql';

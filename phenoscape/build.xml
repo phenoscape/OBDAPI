@@ -54,6 +54,11 @@ PGHOST sets the database server name.
 			<arg value="${db-name}"/>
 		</exec>
 	</target>
+	
+	<target name="load-phenoscape-functions" description="loads Phenoscape functions">
+        <exec executable="psql" input="views/phenoscape_functions.sql" failonerror="true">
+        </exec>
+	</target>
 
 	<target name="create-phenoscape-views" description="creates Phenoscape data model as materialized views over generic OBD triple model">
 		<exec executable="psql" input="views/phenoscape_model.sql" failonerror="true">
@@ -185,7 +190,7 @@ PGHOST sets the database server name.
 	      <delete dir="${staging}"/>
 	</target>
 	
-	<target name="build-all" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,metatype-bug-workaround,run-obd-reasoner,load-homology,create-phenoscape-views,load-metadata"/>
+	<target name="build-all" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,load-zfin,load-zfin-publications,metatype-bug-workaround,run-obd-reasoner,load-homology,load-phenoscape-functions,create-phenoscape-views,load-metadata"/>
 	
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
 <!-- TODO this should be implemented to separate the ontology retrieval
