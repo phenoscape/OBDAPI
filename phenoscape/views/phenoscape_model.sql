@@ -1,3 +1,17 @@
+CREATE TABLE smart_node_label AS
+SELECT
+    node_id,
+    uid,
+    simple_label(node_id) AS simple_label,
+    semantic_label(node_id) AS semantic_label
+FROM
+    node
+;
+CREATE INDEX smart_node_label_node_id_index ON smart_node_label(node_id);
+CREATE INDEX smart_node_label_uid_index ON smart_node_label(uid);
+CREATE INDEX smart_node_label_simple_label_index ON smart_node_label(simple_label);
+CREATE INDEX smart_node_label_semantic_label_index ON smart_node_label(semantic_label);
+
 CREATE TABLE quality_to_attribute AS
 SELECT
   quality.node_id AS quality_node_id,
