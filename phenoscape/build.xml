@@ -56,7 +56,7 @@ PGHOST sets the database server name.
 	</target>
 	
 	<target name="load-phenoscape-functions" description="loads Phenoscape functions">
-        <exec executable="psql" input="views/phenoscape_functions.sql" failonerror="true">
+        <exec executable="psql" input="views/phenoscape_functions.plpgsql" failonerror="true">
         </exec>
 	</target>
 
