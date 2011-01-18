@@ -160,6 +160,16 @@ PGHOST sets the database server name.
 	            </java>
 	</target>
 	
+   <target name="create-attribute-phenotypes" description="creates phenotype compositions for every TAO and attribute combination">
+        <java classname="org.phenoscape.obd.loader.AttributePhenotypesLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
+            <sysproperty key="db-user" value="${db-user}"/>
+            <sysproperty key="db-password" value="${db-password}"/>
+            <sysproperty key="db-host" value="${db-host}"/>
+            <sysproperty key="db-name" value="${db-name}"/>
+            <sysproperty key="ontology-dir" value="${ontologies}"/>
+        </java>
+    </target>
+	
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl" failonerror="true">
 			<arg value="../scripts/obd-reasoner.pl"/>
