@@ -123,7 +123,7 @@ COMMENT ON VIEW standard_link IS 'A link without union or intersection condition
 
 --CREATE OR REPLACE VIEW inheritable_link AS SELECT * FROM link WHERE combinator!='U' AND is_metadata='f'; -- AND is_negated='f';
 CREATE OR REPLACE VIEW inheritable_link AS SELECT link.* FROM link WHERE 
-link.combinator!='U' AND link.is_metadata='f' AND link.is_negated='f';
+link.combinator!='U' AND link.is_metadata='f' AND link.object_quantifier_some='t' AND link.is_negated='f';
 
 CREATE OR REPLACE VIEW reified_link AS SELECT * FROM link WHERE reiflink_node_id IS NOT NULL;
 COMMENT ON VIEW reified_link IS 'A link that has a link pointing to it';
@@ -142,6 +142,14 @@ CREATE OR REPLACE VIEW instance_of_link AS
  SELECT link.*
  FROM link INNER JOIN instance_of_relation ON (predicate_id=instance_of_relation.node_id)
  WHERE combinator='';
+
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('instance_of_link');
+-- CREATE INDEX instance_of_link_idx_node ON instance_of_link(node_id);
+-- CREATE INDEX instance_of_link_idx_object ON instance_of_link(object_id);
+-- CREATE INDEX instance_of_link_idx_no ON instance_of_link(node_id,object_id);
+-- END MATERIALIZE
+
 
 CREATE OR REPLACE VIEW asserted_instance_of_link AS
  SELECT link.*
@@ -167,6 +175,11 @@ CREATE OR REPLACE VIEW is_a_link AS
  FROM link INNER JOIN is_a_relation ON (predicate_id=is_a_relation.node_id);
 
 COMMENT ON VIEW is_a_link IS 'A link of type "is_a"';
+
+CREATE OR REPLACE VIEW proper_is_a_link AS
+ SELECT link.*
+ FROM link INNER JOIN is_a_relation ON (predicate_id=is_a_relation.node_id)
+ WHERE link.node_id != link.object_id;
 
 -- BEGIN MATERIALIZE
 -- SELECT create_matview('is_a_link');
@@ -289,6 +302,8 @@ parent. Good genus-differentia definitions have a single genus and 1
 or more differentia, although if an intersection consists of >1 is_a
 link then all will be treated as genus';
 
+
+
 CREATE OR REPLACE VIEW differentium_link AS
  SELECT link.*
  FROM link
@@ -306,7 +321,15 @@ CREATE OR REPLACE VIEW uniq_differentium_link AS
   object_id
  FROM differentium_link;
 
-
+CREATE OR REPLACE VIEW genus_differentium AS
+ SELECT
+  genus_link.node_id,
+  genus_link.object_id AS genus_id,
+  differentium_link.predicate_id,
+  differentium_link.object_id
+ FROM
+  genus_link
+  INNER JOIN differentium_link USING (node_id);
 
 CREATE OR REPLACE VIEW genus_link_to_node AS
  SELECT genus_link.*,
@@ -596,7 +619,99 @@ CREATE OR REPLACE VIEW asserted_ancestor_link_nr AS
   asserted_ancestor_link_minus AS aal
   LEFT JOIN link AS rl ON (rl.node_id=aal.node_id AND rl.predicate_id=aal.predicate_id AND rl.object_id=aal.ext_node_id AND rl.object_id!=aal.object_id)
  WHERE rl.link_id IS NULL;
+
+CREATE OR REPLACE VIEW common_ancestor AS
+ SELECT
+  l1.object_id AS ancestor_id,
+  l1.node_id AS node1_id,
+  l2.node_id AS node2_id
+ FROM
+  is_a_link AS l1,
+  is_a_link AS l2
+ WHERE
+  l1.object_id=l2.object_id;
+
+CREATE OR REPLACE VIEW least_common_ancestor AS
+ SELECT
+  ca.*
+ FROM
+  common_ancestor AS ca
+ WHERE
+  NOT EXISTS (
+    SELECT *
+    FROM
+      common_ancestor AS nrca,
+      is_a_link AS rl
+    WHERE 
+      ca.node1_id=nrca.node1_id AND
+      ca.node2_id=nrca.node2_id AND
+      nrca.ancestor_id=rl.node_id AND
+      ca.ancestor_id=rl.object_id);
+
+CREATE OR REPLACE VIEW is_least_common_ancestor AS
+ SELECT DISTINCT
+  ancestor_id AS node_id
+ FROM
+  least_common_ancestor;
+
   
+CREATE OR REPLACE VIEW xp_ancestor AS
+ SELECT
+  gi.object_id AS genus_id,
+  gd.predicate_id,
+  di.object_id AS object_id
+ FROM
+  genus_differentium AS gd,
+  is_a_link AS gi,
+  is_a_link AS di
+ WHERE
+  gd.node_id=gi.node_id AND
+  gd.object_id=di.node_id;
+  
+-- e.g. find CA of X and Y where LCA is not a named
+-- class but an intersection class expression (xp).
+-- if both X and Y are is_a G, and
+-- <X,R,D> and <Y,R,D> then choose G^R(D).
+CREATE OR REPLACE VIEW xp_common_ancestor AS
+ SELECT
+  gx.object_id AS genus_id,
+  dx.predicate_id,
+  dx.object_id,
+  gx.node_id AS node1_id,
+  gy.node_id AS node2_id
+ FROM
+  is_a_link AS gx,
+  is_a_link AS gy,
+  link AS dx,
+  link AS dy
+ WHERE
+  gx.object_id=gy.object_id AND
+  dx.object_id=dy.object_id AND
+  dx.predicate_id=dy.predicate_id AND
+  gx.node_id=dx.node_id AND
+  gy.node_id=dy.node_id AND
+  -- exclude is_a, disjoint_from etc as differentia
+  dx.predicate_id IN (SELECT predicate_id FROM differentium_link);
+
+CREATE OR REPLACE VIEW xp_least_common_ancestor AS
+ SELECT
+  *
+ FROM 
+  xp_common_ancestor AS xca
+ WHERE
+  NOT EXISTS (
+    SELECT *
+    FROM
+      xp_common_ancestor AS nrxca,
+      link AS rl,
+      link AS rl2
+    WHERE xca.node1_id = nrxca.node1_id AND   -- same instance
+      xca.node2_id = nrxca.node2_id AND   -- same instance
+      nrxca.genus_id = rl.node_id AND    -- X redundant with X'
+      xca.genus_id = rl.object_id AND -- Y redundant with Y'
+      nrxca.object_id = rl2.node_id AND
+      xca.object_id = rl2.object_id AND
+      (xca.genus_id != nrxca.genus_id OR xca.object_id != nrxca.object_id)); -- not equal
 
 
 -- ************************************************************
@@ -2624,6 +2739,7 @@ CREATE OR REPLACE VIEW nr_link AS
                clp.via_node_id != clp.next_object_id);
 
 -- todo: test for equivalencies
+
 CREATE OR REPLACE VIEW nr_instance_of_link AS
  SELECT
   *
@@ -2631,15 +2747,20 @@ CREATE OR REPLACE VIEW nr_instance_of_link AS
   instance_of_link AS link
  WHERE
   NOT EXISTS 
-   (SELECT *
-            FROM consecutive_link_pair AS clp
+   (SELECT io1.node_id
+            FROM instance_of_link AS io1
+                 INNER JOIN is_a_link AS isa1 ON (io1.object_id=isa1.node_id)
             WHERE
-               link.node_id=clp.node_id AND
-               link.predicate_id=clp.predicate_id AND
-               link.object_id=clp.next_object_id AND
-               clp.via_node_id != clp.node_id AND
-	       clp.next_predicate_id IN (SELECT node_id FROM is_a_relation) AND
-               clp.via_node_id != clp.next_object_id);
+               link.node_id=io1.node_id AND
+               link.object_id=isa1.object_id AND
+               isa1.object_id != link.object_id);
+
+-- BEGIN MATERIALIZE
+-- SELECT create_matview('nr_instance_of_link');
+-- CREATE INDEX nr_instance_of_link_idx_node ON nr_instance_of_link(node_id);
+-- CREATE INDEX nr_instance_of_link_idx_object ON nr_instance_of_link(object_id);
+-- CREATE INDEX nr_instance_of_link_idx_no ON nr_instance_of_link(node_id,object_id);
+-- END MATERIALIZE
 
 CREATE OR REPLACE VIEW redundant_anonymous_node AS
  SELECT * 
