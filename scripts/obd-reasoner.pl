@@ -191,6 +191,7 @@ my @views =
             y.predicate_id=existing_link.predicate_id AND
             y.object_id=existing_link.object_id)
  WHERE  x.predicate_id = $is_a
+  AND y.object_quantifier_some='t'
   $lj_cond
 ],
    },
@@ -205,6 +206,7 @@ my @views =
   INNER JOIN inheritable_link       AS y ON (x.object_id=y.node_id)
   $lj
  WHERE y.predicate_id = $is_a
+  AND y.object_quantifier_some='t'
   $lj_cond
 ],
    },
