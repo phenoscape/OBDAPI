@@ -104,12 +104,17 @@ if ($delete) {
     delete_inferred_links();
 }
 
+logmsg("ensuring link type is consistent with relation type");
+$dbh->do("UPDATE link SET object_quantifier_some='f', is_metadata='t' WHERE predicate_id IN (SELECT node_id FROM node WHERE node.is_metadata='t')");
+
+logmsg("getting is_a id");
 my @is_a_nodes = 
   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:is_a'");
 if (@is_a_nodes != 1) {
     die "@is_a_nodes";
 }
 my $is_a = shift @is_a_nodes;
+logmsg("is_a[node_id]=$is_a");
 
 if (!@inference_views) {
     my $sql = "SELECT DISTINCT view FROM inference_rule";
@@ -122,6 +127,7 @@ if (!@inference_views) {
     }
 }
 
+logmsg("getting instance_of id");
 my @instance_of_nodes = 
   $dbh->selectrow_array("SELECT node_id FROM node WHERE uid='OBO_REL:instance_of'");
 if (@instance_of_nodes != 1) {
@@ -130,14 +136,18 @@ if (@instance_of_nodes != 1) {
     }
 }
 my $instance_of = shift @instance_of_nodes;
+logmsg("instance_of[node_id]=$instance_of");
 
 # used in split
+logmsg("getting transitive rels");
 my @transitive_relation_node_ids = 
     @{$dbh->selectcol_arrayref("SELECT node_id FROM relation_node WHERE is_transitive='t'")};
 
 # used in split
+logmsg("getting inheritable rels");
 my @inheritable_relation_node_ids = 
     @{$dbh->selectcol_arrayref("SELECT DISTINCT predicate_id FROM inheritable_link")};
+logmsg("got inheritable rels = @inheritable_relation_node_ids");
 
 my $lj=qq[
   LEFT JOIN  link AS existing_link
@@ -274,6 +284,7 @@ if ($split{isa}) {
         grep { $_->{id} ne 'isa1' && $_->{id} ne 'isa2'
     } @views;
 
+    # TODO: use all-some quantifier
     foreach my $rid (@inheritable_relation_node_ids) {
         next if $rid == $is_a; # covered by transitivity
 
@@ -377,6 +388,7 @@ foreach my $view (@inference_views) {
         sql=>$sql});
 }
 
+logmsg("preparing stmts");
 my $sth_link = $dbh->prepare_cached("SELECT link_id FROM LINK WHERE node_id=? AND predicate_id=? AND object_id=?");
 my $sth_store = $dbh->prepare_cached("INSERT INTO link (node_id,predicate_id,object_id,is_inferred) VALUES (?,?,?,'t')");
 
@@ -618,7 +630,7 @@ Options:
 
  --view HORN-RULE-VIEW
 
-  argument should be the name of an SQL view that can be used as a horn rule as part of the forard chaining.
+  argument should be the name of an SQL view that can be used as a horn rule as part of the forward chaining.
   E.g. for composition chains of length 2:
 
        x R1 y, y R2 z -> x R z
@@ -641,7 +653,7 @@ Options:
 
    Reason over instances as well as classes (default is just classes)
 
---split RULE
+ --split RULE
 
   some rules can be expensive to calculate for large databases. This breaks down the rule into smaller more manageable queries.
   Currently the only valid values here are:
