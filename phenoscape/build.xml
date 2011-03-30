@@ -17,6 +17,7 @@
 	<property name="publication-repo" value="https://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/publications/"/>
 	<property name="publication-loc" value="${staging}/publication_xml/Phenoscape_pubs_A_papers.xml"/>
 	<property name="zfin-publications-url" value="http://zfin.org/data_transfer/Downloads/zfinpubs.txt"/>
+	<property name="zfin-go-annotations-url" value="http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.zfin.gz?rev=HEAD"/>
 	
 	<property environment="environment"/>
 <!-- Environment variables to set for database connections:
@@ -131,7 +132,17 @@ PGHOST sets the database server name.
 		</java>
 	</target>
 	
-	<target name="load-publications" description="loads publication information into the database">
+	<target name="load-zfin-go-annotations" description="loads ZFIN GO annotations into the database">
+		<java classname="org.phenoscape.obd.loader.ZFINGOAnnotationsLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="go-annotations-url" value="${zfin-go-annotations-url}"/>
+		</java>
+	</target>
+	
+	<target name="load-zfin-publications" description="loads ZFIN publication information into the database">
 			<java classname="org.phenoscape.obd.loader.ZFINPublicationsLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 				<sysproperty key="db-user" value="${db-user}"/>
 				<sysproperty key="db-password" value="${db-password}"/>
@@ -141,7 +152,7 @@ PGHOST sets the database server name.
 			</java>
 	</target>
 	
-	<target name="load-zfin-publications" description="loads ZFIN publication information into the database">
+	<target name="load-publications" description="loads Phenoscape publication information into the database">
 	            <java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 	                <sysproperty key="db-user" value="${db-user}"/>
 	                <sysproperty key="db-password" value="${db-password}"/>
