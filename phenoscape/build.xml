@@ -190,6 +190,8 @@ PGHOST sets the database server name.
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
+			<arg value="--view"/>
+			<arg value="absent_over_develops_from"/>
 		</exec>
 	</target>
 	
