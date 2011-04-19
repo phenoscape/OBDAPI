@@ -152,7 +152,7 @@ PGHOST sets the database server name.
 				<sysproperty key="db-password" value="${db-password}"/>
 				<sysproperty key="db-host" value="${db-host}"/>
 				<sysproperty key="db-name" value="${db-name}"/>
-				<sysproperty key="publications-url" value="${zfin-publications-url}"/>
+				<sysproperty key="zfin-publications-url" value="${zfin-publications-url}"/>
 			</java>
 	</target>
 	
