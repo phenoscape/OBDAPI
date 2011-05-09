@@ -18,9 +18,10 @@
 	<property name="publication-loc" value="${staging}/publication_xml/Phenoscape_pubs_A_papers.xml"/>
 	<property name="zfin-publications-url" value="http://zfin.org/data_transfer/Downloads/zfinpubs.txt"/>
 	<property name="zfin-go-annotations-url" value="http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.zfin.gz?rev=HEAD"/>
-	
+	<property name="solr-url" value="http://kb-dev.phenoscape.org:8080/solr"/>
+
 	<property environment="environment"/>
-<!-- Environment variables to set for database connections:
+	<!-- Environment variables to set for database connections:
 PGDATABASE sets the name of the database
 PGUSER sets the user name used to connect to the database.
 PGPASSWORD sets the password used if the server demands password authentication. Use of this environment variable is not recommended for security reasons (some operating systems allow non-root users to see process environment variables via ps); instead consider using the ~/.pgpass file.
@@ -30,7 +31,7 @@ PGHOST sets the database server name.
 	<property name="db-user" value="${environment.PGUSER}"/>
 	<property name="db-password" value="${environment.PGPASSWORD}"/>
 	<property name="db-host" value="${environment.PGHOST}"/>
-	
+
 	<path id="jarsclasspath">
 		<fileset dir="../lib/buildlibs">
 			<include name="*"/>
@@ -39,14 +40,14 @@ PGHOST sets the database server name.
 			<include name="*"/>
 		</fileset>
 	</path>
-	
-<!-- The init target makes sure that the prerequisite directories exist. -->
+
+	<!-- The init target makes sure that the prerequisite directories exist. -->
 	<target name="init">
 		<mkdir dir="${staging}"/>
 		<mkdir dir="${staging}/ontologies"/>
 		<mkdir dir="${staging}/publication_xml"/>
 	</target>
-	
+
 	<target name="create-db" depends="init" description="instantiates the OBD database">
 		<exec executable="perl" dir="../scripts" failonerror="true">
 			<env key="USER" value="${db-user}"/>
@@ -55,12 +56,12 @@ PGHOST sets the database server name.
 			<arg value="${db-name}"/>
 		</exec>
 	</target>
-	
+
 	<target name="load-phenoscape-functions" description="loads Phenoscape functions">
-        <exec executable="psql" input="views/phenoscape_functions.plpgsql" failonerror="true">
-        </exec>
+		<exec executable="psql" input="views/phenoscape_functions.plpgsql" failonerror="true">
+		</exec>
 	</target>
-	
+
 	<target name="install-reasoner-rules" description="loads views representing custom reasoner rules">
 		<exec executable="psql" input="views/phenoscape_rules.sql" failonerror="true"/>
 	</target>
@@ -69,7 +70,7 @@ PGHOST sets the database server name.
 		<exec executable="psql" input="views/phenoscape_model.sql" failonerror="true">
 		</exec>
 	</target>
-	
+
 	<target name="load-obo" description="loads OBO ontologies into the database">
 		<property name="existing-path" value="${environment.PATH}"/>
 		<echo message="${existing-path}"/>
@@ -86,7 +87,7 @@ PGHOST sets the database server name.
 			<arg value="--keepdownloads"/>
 		</exec>
 	</target>
-	
+
 	<target name="load-homology" description="loads the homology file into the database">
 		<java classname="org.phenoscape.obd.loader.HomologyObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
@@ -97,7 +98,7 @@ PGHOST sets the database server name.
 			<sysproperty key="homology-url" value="http://phenoscape.svn.sourceforge.net/svnroot/phenoscape/trunk/data/homology-tables/Weberian-app-homology"/>
 		</java>
 	</target>
-	
+
 	<target name="load-nexml" description="loads NeXML data files into the database">
 		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
 			<arg value="${nexml}"/>
@@ -108,18 +109,18 @@ PGHOST sets the database server name.
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
 		</java>
 	</target>
-	
+
 	<target name="load-nexml-extra" description="loads extra NeXML data files into the database (Sandrine's work)">
-			<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-				<arg value="${nexml-extra}"/>
-				<sysproperty key="db-user" value="${db-user}"/>
-				<sysproperty key="db-password" value="${db-password}"/>
-				<sysproperty key="db-host" value="${db-host}"/>
-				<sysproperty key="db-name" value="${db-name}"/>
-				<sysproperty key="ontology-dir" value="${ontologies}"/>
-			</java>
+		<java classname="org.phenoscape.obd.loader.PhenoscapeDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<arg value="${nexml-extra}"/>
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="ontology-dir" value="${ontologies}"/>
+		</java>
 	</target>
-	
+
 	<target name="load-zfin" description="loads ZFIN data sources into the database">
 		<java classname="org.phenoscape.obd.loader.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
@@ -129,13 +130,13 @@ PGHOST sets the database server name.
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
 			<sysproperty key="phenotype-url" value="http://zfin.org/data_transfer/Downloads/pheno_obo.txt"/>
 			<sysproperty key="missing-markers-url" value="http://zfin.org/data_transfer/Downloads/genotype_features_missing_markers.txt"/>
-		    <sysproperty key="genotype-url" value="http://zfin.org/data_transfer/Downloads/genotype_features.txt"/>
+			<sysproperty key="genotype-url" value="http://zfin.org/data_transfer/Downloads/genotype_features.txt"/>
 			<sysproperty key="gene-name-url" value="http://zfin.org/data_transfer/Downloads/genetic_markers.txt"/>
 			<sysproperty key="morpholino-url" value="http://zfin.org/data_transfer/Downloads/Morpholinos.txt"/>
 			<sysproperty key="pheno-environment-url" value="http://zfin.org/data_transfer/Downloads/pheno_environment.txt"/>
 		</java>
 	</target>
-	
+
 	<target name="load-zfin-go-annotations" description="loads ZFIN GO annotations into the database">
 		<java classname="org.phenoscape.obd.loader.ZFINGOAnnotationsLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
@@ -145,56 +146,56 @@ PGHOST sets the database server name.
 			<sysproperty key="go-annotations-url" value="${zfin-go-annotations-url}"/>
 		</java>
 	</target>
-	
+
 	<target name="load-zfin-publications" description="loads ZFIN publication information into the database">
-			<java classname="org.phenoscape.obd.loader.ZFINPublicationsLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-				<sysproperty key="db-user" value="${db-user}"/>
-				<sysproperty key="db-password" value="${db-password}"/>
-				<sysproperty key="db-host" value="${db-host}"/>
-				<sysproperty key="db-name" value="${db-name}"/>
-				<sysproperty key="zfin-publications-url" value="${zfin-publications-url}"/>
-			</java>
+		<java classname="org.phenoscape.obd.loader.ZFINPublicationsLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="zfin-publications-url" value="${zfin-publications-url}"/>
+		</java>
 	</target>
-	
+
 	<target name="load-publications" description="loads Phenoscape publication information into the database">
-	            <java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-	                <sysproperty key="db-user" value="${db-user}"/>
-	                <sysproperty key="db-password" value="${db-password}"/>
-	                <sysproperty key="db-host" value="${db-host}"/>
-	                <sysproperty key="db-name" value="${db-name}"/>
-	                <sysproperty key="publication-dir" value="${publication-loc}"/>
-	            </java>
+		<java classname="org.phenoscape.obd.loader.PublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="publication-dir" value="${publication-loc}"/>
+		</java>
 	</target>
-	
+
 	<target name="modify-anatomy-xrefs" description="links TAO terms to ZFIN anatomy database IDs">
-	            <java classname="org.phenoscape.obd.loader.AnatomyXrefModifier" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-	                <sysproperty key="db-user" value="${db-user}"/>
-	                <sysproperty key="db-password" value="${db-password}"/>
-	                <sysproperty key="db-host" value="${db-host}"/>
-	                <sysproperty key="db-name" value="${db-name}"/>
-	            </java>
+		<java classname="org.phenoscape.obd.loader.AnatomyXrefModifier" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+		</java>
 	</target>
-	
-   <target name="create-attribute-phenotypes" description="creates phenotype compositions for every TAO and attribute combination">
-        <java classname="org.phenoscape.obd.loader.AttributePhenotypesLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="ontology-dir" value="${ontologies}"/>
-        </java>
-    </target>
-	
+
+	<target name="create-attribute-phenotypes" description="creates phenotype compositions for every TAO and attribute combination">
+		<java classname="org.phenoscape.obd.loader.AttributePhenotypesLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="ontology-dir" value="${ontologies}"/>
+		</java>
+	</target>
+
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl" failonerror="true">
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
-			<arg value="--view"/>
-			<arg value="absent_over_develops_from"/>
+			<!-- <arg value="-      DELETE_IF_UNCOMMENTED         -view"/>  -->
+			<!-- <arg value="absent_over_develops_from"/> -->
 		</exec>
 	</target>
-	
+
 	<target name="load-metadata" depends="init" description="Loads metadata into the database">
 		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
 		            userid="${db-user}" password="${db-password}" 
@@ -203,29 +204,40 @@ PGHOST sets the database server name.
 			VALUES('1.1', 'Revision: 153', 'Date: 2008-06-04 13:00:34 -0700 (Wed, 04 Jun 2008)', '${build_date}');			
 		</sql>
 	</target>
-	
+
 	<target name="metatype-bug-workaround" depends="init" description="Reverts metatype for taxa to 'C' to work around loader bug which switches metatype to 'I'">
 		<!-- This is only a temporary fix for this problem. -->
-	        <sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
+		<sql driver="org.postgresql.Driver" url="jdbc:postgresql://${db-host}/${db-name}" 
 	                    userid="${db-user}" password="${db-password}" 
 	                    classpath="../lib/runlibs/postgresql-8.2-504.jdbc3.jar"> 
 	        	UPDATE node SET metatype = 'C' WHERE node_id IN (SELECT node_id FROM node where source_id = (SELECT node_id from node where uid = 'teleost-taxonomy')) and metatype = 'I';
 	        </sql>
-	    </target>
-	
-	<target name="clean" description="removes cached files">
-	      <delete dir="${staging}"/>
 	</target>
-	
+
+	<!-- JBoss must be running before this task runs -->
+	<target name="create-solr-phenotype-index" description="generates Solr index for phenotype data">
+		<java classname="org.phenoscape.obd.loader.SolrPhenotypeLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
+
+	<target name="clean" description="removes cached files">
+		<delete dir="${staging}"/>
+	</target>
+
 	<target name="build-all" depends="clean,init,create-db,install-reasoner-rules,load-obo,modify-anatomy-xrefs,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,load-zfin-go-annotations,load-zfin-publications,metatype-bug-workaround,run-obd-reasoner,load-homology,load-phenoscape-functions,create-phenoscape-views,load-metadata"/>
-	
+
 	<target name="build-ic-tests" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,metatype-bug-workaround,run-obd-reasoner,load-homology,load-phenoscape-functions,create-phenoscape-views,load-metadata"/>
-	
+
 	<target name="download-ontologies" depends="init" description="download ontologies to staging folder">
-<!-- TODO this should be implemented to separate the ontology retrieval
+		<!-- TODO this should be implemented to separate the ontology retrieval
          from the obd-load-db-from-obo.pl script -->
 	</target>
-	
+
 	<target name="checkout-nexml" depends="init" description="">
 		<exec executable="svn" dir="${staging}" failonerror="true">
 			<arg value="checkout"/>
@@ -235,13 +247,13 @@ PGHOST sets the database server name.
 	</target>
 
 	<target name="checkout-publications" depends="init" description="">
-			<exec executable="svn" dir="${staging}" failonerror="true">
-				<arg value="checkout"/>
-				<arg value="${publication-repo}"/>
-				<arg value="publication_xml"/>
-			</exec>
+		<exec executable="svn" dir="${staging}" failonerror="true">
+			<arg value="checkout"/>
+			<arg value="${publication-repo}"/>
+			<arg value="publication_xml"/>
+		</exec>
 	</target>
-	
+
 	<target name="checkout-nexml-extra" depends="init" description="">
 		<exec executable="svn" dir="${staging}" failonerror="true">
 			<arg value="checkout"/>
@@ -253,7 +265,7 @@ PGHOST sets the database server name.
 	<target name="update-nexml" description="">
 		<exec executable="svn" dir="${nexml}" failonerror="true">
 			<arg value="update"/>
-		</exec>      
+		</exec>
 	</target>
-	
+
 </project>
