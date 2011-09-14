@@ -1,3 +1,5 @@
+-- rule: ?pa is_a absent; ?pb is_a absent; ?pa inheres_in ?a; ?pb inheres_in ?b; ?b develops_from ?a -> ?pa is_a ?pb
+
 CREATE OR REPLACE VIEW absent_over_develops_from AS
 SELECT 
     phenotypeA.node_id,
