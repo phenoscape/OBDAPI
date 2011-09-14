@@ -185,14 +185,24 @@ PGHOST sets the database server name.
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
 		</java>
 	</target>
+	
+	<target name="create-absence-phenotypes" description="creates absence phenotype compositions for every TAO term">
+        <java classname="org.phenoscape.obd.loader.AbsentPhenotypesLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
+            <sysproperty key="db-user" value="${db-user}"/>
+            <sysproperty key="db-password" value="${db-password}"/>
+            <sysproperty key="db-host" value="${db-host}"/>
+            <sysproperty key="db-name" value="${db-name}"/>
+            <sysproperty key="ontology-dir" value="${ontologies}"/>
+        </java>
+	</target>
 
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
 		<exec executable="perl" failonerror="true">
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
-			<!-- <arg value="-      DELETE_IF_UNCOMMENTED         -view"/>  -->
-			<!-- <arg value="absent_over_develops_from"/> -->
+			<arg value="--view"/>
+			<arg value="absent_over_develops_from"/>
 		</exec>
 	</target>
 
@@ -229,7 +239,7 @@ PGHOST sets the database server name.
 		<delete dir="${staging}"/>
 	</target>
 
-	<target name="build-all" depends="clean,init,create-db,install-reasoner-rules,load-obo,modify-anatomy-xrefs,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,load-zfin-go-annotations,load-zfin-publications,metatype-bug-workaround,run-obd-reasoner,load-homology,load-phenoscape-functions,create-phenoscape-views,load-metadata"/>
+	<target name="build-all" depends="clean,init,create-db,install-reasoner-rules,load-obo,modify-anatomy-xrefs,checkout-nexml,checkout-publications,load-nexml,load-publications,load-zfin,load-zfin-go-annotations,load-zfin-publications,create-absence-phenotypes,metatype-bug-workaround,run-obd-reasoner,load-homology,load-phenoscape-functions,create-phenoscape-views,load-metadata"/>
 
 	<target name="build-ic-tests" depends="clean,init,create-db,load-obo,modify-anatomy-xrefs,load-publications,checkout-nexml,checkout-publications,load-nexml,metatype-bug-workaround,run-obd-reasoner,load-homology,load-phenoscape-functions,create-phenoscape-views,load-metadata"/>
 
