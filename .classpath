@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="lib/runlibs/javax.servlet.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/org.simpleframework.jar"/>
 	<classpathentry kind="lib" path="lib/runlibs/com.noelios.restlet.ext.simple_3.1.jar"/>
-	<classpathentry kind="lib" path="lib/buildlibs/commons-lang-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/json.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/owlapi-util.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/owlapi-rdfxmlrenderer.jar"/>
@@ -40,7 +39,6 @@
 	<classpathentry kind="lib" path="lib/runlibs/stringtemplate-3.1b1.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/buildlibs/wstx-asl-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/stax-api-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/lucene-core-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/log4j-1.2.12.jar"/>
@@ -54,5 +52,13 @@
 	<classpathentry kind="lib" path="lib/buildlibs/arq-extra.jar"/>
 	<classpathentry kind="lib" path="lib/buildlibs/arq.jar" sourcepath="/jena"/>
 	<classpathentry kind="lib" path="lib/buildlibs/antlr-2.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/apache-solr-core-4.0-2011-09-16_08-37-32.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/apache-solr-solrj-4.0-2011-09-16_08-37-32.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/buildlibs/wstx-asl-3.2.7.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
