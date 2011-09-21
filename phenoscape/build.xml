@@ -234,6 +234,24 @@ PGHOST sets the database server name.
 			<sysproperty key="solr-url" value="${solr-url}"/>
 		</java>
 	</target>
+	
+	<!-- JBoss must be running before this task runs -->
+    <target name="create-solr-taxon-phenotype-annotations-index" description="generates Solr index for taxon annotations data">
+        <java classname="org.phenoscape.obd.loader.SolrPhenotypeAnnotationLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
+            <sysproperty key="db-user" value="${db-user}"/>
+            <sysproperty key="db-password" value="${db-password}"/>
+            <sysproperty key="db-host" value="${db-host}"/>
+            <sysproperty key="db-name" value="${db-name}"/>
+            <sysproperty key="solr-url" value="${solr-url}"/>
+        </java>
+    </target>
+	
+	<!-- JBoss must be running before this task runs -->
+    <target name="clear-solr-index" description="clears Solr index">
+        <java classname="org.phenoscape.obd.loader.SolrClearer" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+            <sysproperty key="solr-url" value="${solr-url}"/>
+        </java>
+    </target>
 
 	<target name="clean" description="removes cached files">
 		<delete dir="${staging}"/>
