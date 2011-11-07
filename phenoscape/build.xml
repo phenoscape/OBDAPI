@@ -134,6 +134,7 @@ PGHOST sets the database server name.
 			<sysproperty key="gene-name-url" value="http://zfin.org/data_transfer/Downloads/genetic_markers.txt"/>
 			<sysproperty key="morpholino-url" value="http://zfin.org/data_transfer/Downloads/Morpholinos.txt"/>
 			<sysproperty key="pheno-environment-url" value="http://zfin.org/data_transfer/Downloads/pheno_environment.txt"/>
+			<sysproperty key="wildtype-lines-url" value="http://zfin.org/data_transfer/Downloads/wildtypes.txt"/>
 		</java>
 	</target>
 
