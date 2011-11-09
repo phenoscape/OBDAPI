@@ -223,6 +223,21 @@ CREATE INDEX asserted_taxon_annotation_taxon_node_id_index ON asserted_taxon_ann
 CREATE INDEX asserted_taxon_annotation_phenotype_node_id_index ON asserted_taxon_annotation(phenotype_node_id);
 
 
+CREATE TABLE filtered_taxon_annotation AS
+SELECT DISTINCT
+  taxon_annotation.taxon_node_id,
+  taxon_annotation.phenotype_node_id,
+  taxon_annotation.annotation_id
+FROM
+  taxon_annotation
+JOIN asserted_taxon_annotation ON (asserted_taxon_annotation.phenotype_node_id = taxon_annotation.phenotype_node_id)
+JOIN link taxon_is_a ON (taxon_is_a.predicate_id = (SELECT node_id FROM node where uid = 'OBO_REL:is_a') AND taxon_is_a.node_id = taxon_annotation.taxon_node_id AND taxon_is_a.object_id = asserted_taxon_annotation.taxon_node_id)
+;
+CREATE INDEX filtered_taxon_annotation_id_index ON filtered_taxon_annotation(annotation_id);
+CREATE INDEX filtered_taxon_annotation_taxon_node_id_index ON filtered_taxon_annotation(taxon_node_id);
+CREATE INDEX filtered_taxon_annotation_phenotype_node_id_index ON filtered_taxon_annotation(phenotype_node_id);
+
+
 CREATE OR REPLACE VIEW gene AS 
 SELECT DISTINCT
   gene.node_id AS node_id,
