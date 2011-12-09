@@ -1,0 +1,160 @@
+@prefix : <http://www.geneontology.org/owl#> .
+@prefix map: <file:///stdout#> .
+@prefix db: <> .
+@prefix vocab: <vocab/> .
+@prefix oban: <http://www.berkeleybop.org/ontologies/oban/alpha#> .
+@prefix genomics: <http://www.berkeleybop.org/ontologies/genomics/alpha#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix insitu: <http://www.fruitfly.org/insituimages/insitu_images/thumbnails> .
+@prefix digitalmedia: <http://www.mindswap.org/2005/owl/digital-media#> .
+@prefix oborel: <http://www.obofoundry.org/ro/ro.owl#> .
+@prefix obo: <http://purl.org/obo/owl> .
+@prefix go: <http://purl.org/obo/owl/GO#> .
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "org.postgresql.Driver";
+	d2rq:jdbcDSN "jdbc:postgresql://localhost/obd_phenotype_full?user=cjm";
+	.
+
+
+# ========================================
+# Class: Node
+# ========================================
+map:Node a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://purl.org/obo/owl#@@node.uid@@" ;
+        .
+	
+map:Node_label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property rdfs:label;
+	d2rq:pattern "@@node.label@@";
+	.
+
+#map:Node_auto_label a d2rq:PropertyBridge;
+#	d2rq:belongsToClassMap map:Node;
+#	d2rq:property rdfs:label;
+#        d2rq:join "node.node_id = node_to_auto_label.node_id" ;
+#	d2rq:pattern "@@node_to_auto_label.auto_label@@";
+#        d2rq:condition "node.metatype='C'" ;
+#        d2rq:condition "node.is_anonymous='t'" ;
+#	.
+
+map:Node_uid a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property dc:identifier;
+	d2rq:pattern "@@node.uid@@";
+	.
+
+map:Node_uri a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property owl:equivalentClass;
+	d2rq:uriPattern "@@node.uri@@";
+	.
+
+map:Node_type_class a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property rdf:type;
+	d2rq:uriPattern "http://www.w3.org/2002/07/owl#Class" ;
+        d2rq:condition "node.metatype='C'" ;
+	.
+
+map:Node_type_inst a d2rq:PropertyBridge;
+      d2rq:property rdf:type ;
+      d2rq:uriPattern "http://purl.org/obo/owl#@@parent.uid@@" ;
+      d2rq:join "node.node_id = instance_of_link.node_id" ;
+      d2rq:join "instance_of_link.object_id = parent.node_id" ;
+      d2rq:alias "node AS parent" ;
+      d2rq:belongsToClassMap map:Node
+	.
+map:Node_xref a d2rq:PropertyBridge;
+      d2rq:property rdfs:seeAlso ;
+      d2rq:uriPattern "http://purl.org/obo/owl#@@parent.uid@@" ;
+      d2rq:join "node.node_id = xref_link.node_id" ;
+      d2rq:join "xref_link.xref_id = parent.node_id" ;
+      d2rq:alias "node AS parent" ;
+      d2rq:belongsToClassMap map:Node
+	.
+
+map:ANode_subject a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property rdf:subject;
+        d2rq:uriPattern "http://purl.org/obo/owl#@@subject.uid@@" ;
+        d2rq:join "node.node_id = link.reiflink_node_id" ;
+        d2rq:join "link.node_id = subject.node_id" ;
+        d2rq:alias "node AS subject" ;
+	.
+
+map:ANode_object a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property rdf:object;
+        d2rq:uriPattern "http://purl.org/obo/owl#@@object.uid@@" ;
+        d2rq:join "node.node_id = link.reiflink_node_id" ;
+        d2rq:join "link.object_id = object.node_id" ;
+        d2rq:alias "node AS object" ;
+	.
+
+map:ANode_predicate a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:Node;
+	d2rq:property rdf:predicate;
+        d2rq:uriPattern "http://purl.org/obo/owl#@@pred.uid@@" ;
+        d2rq:join "node.node_id = link.reiflink_node_id" ;
+        d2rq:join "link.predicate_id = pred.node_id" ;
+        d2rq:alias "node AS pred" ;
+	.
+
+map:Node_named_subClass a d2rq:PropertyBridge ;
+      d2rq:property rdfs:subClassOf ;
+      d2rq:uriPattern "http://purl.org/obo/owl#@@parent.uid@@" ;
+      d2rq:join "node.node_id = is_a_link.node_id" ;
+      d2rq:join "is_a_link.object_id = parent.node_id" ;
+      d2rq:alias "node AS parent" ;
+      d2rq:belongsToClassMap map:Node .
+
+map:Node_restr_subClass a d2rq:PropertyBridge ;
+      d2rq:property rdfs:subClassOf ;
+#      d2rq:uriPattern "restriction/@@link.link_id@@" ;
+      d2rq:uriPattern "restriction/@@non_is_a_basic_link.link_id@@" ;
+#      d2rq:uriPattern "restriction/@@non_is_a_basic_class_link.link_id@@" ;
+      d2rq:join "node.node_id = non_is_a_basic_link.node_id" ;
+      d2rq:belongsToClassMap map:Node .
+
+map:RLink a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "restriction/@@link.link_id@@" ;
+        .
+
+map:RLink_type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:RLink;
+	d2rq:property rdf:type;
+	d2rq:uriPattern "http://www.w3.org/2002/07/owl#Restriction"
+	.
+map:RLink_onprop a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:RLink;
+	d2rq:property owl:onProperty;
+        d2rq:uriPattern "http://purl.org/obo/owl#@@node.uid@@" ;
+        d2rq:join "link.predicate_id = node.node_id" ;
+	.
+
+map:RLink_existential a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:RLink;
+	d2rq:property owl:someValuesFrom;
+        d2rq:uriPattern "http://purl.org/obo/owl#@@node.uid@@" ;
+        d2rq:join "link.object_id = node.node_id" ;
+#        d2rq:condition "link.object_quantifier_some='t'" ;
+	.
+
+map:RLink_universal a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:RLink;
+	d2rq:property owl:someValuesFrom;
+        d2rq:uriPattern "http://purl.org/obo/owl#@@node.uid@@" ;
+        d2rq:join "link.object_id = node.node_id" ;
+        d2rq:condition "link.object_quantifier_only='f'" ;
+	.
+

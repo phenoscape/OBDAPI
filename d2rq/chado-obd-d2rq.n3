@@ -1,0 +1,87 @@
+@prefix map: <file:///stdout#> .
+@prefix db: <> .
+@prefix vocab: <vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "org.postgresql.Driver";
+#	d2rq:jdbcDSN "jdbc:postgresql://localhost/chado?user=cjm";
+	d2rq:jdbcDSN "jdbc:postgresql://localhost/chacrm?user=cjm";
+#	d2rq:jdbcDSN "jdbc:postgresql://reaper.lbl.gov:5432/chacrm_4_2?user=cjm";
+        .
+
+map:feature a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+        d2rq:join "feature.dbxref_id = dbxref.dbxref_id" ;
+        d2rq:join "dbxref.db_id = db.db_id" ;
+#        d2rq:uriPattern "feature/@@db.name@@:@@feature.feature_id@@";
+        d2rq:uriPattern "dbxref/@@dbxref.accession@@";
+	.
+
+map:feature__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:feature;
+	d2rq:property rdfs:label;
+	d2rq:pattern "@@feature.name@@";
+	.
+map:FeatureType a d2rq:PropertyBridge ;
+      d2rq:property rdf:type ;
+      d2rq:uriPattern "cvterm/@@db.name@@_@@dbxref.accession@@" ;
+      d2rq:join "feature.type_id = cvterm.cvterm_id" ;
+      d2rq:join "feature.dbxref_id = dbxref.dbxref_id" ;
+      d2rq:join "dbxref.db_id = db.db_id" ;
+      d2rq:belongsToClassMap map:feature .
+
+map:FeatureProp a d2rq:PropertyBridge ;
+      d2rq:property vocab:prop ;
+      d2rq:pattern "@@featureprop.value@@" ;
+      d2rq:join "featureprop.feature_id = feature.feature_id" ;
+      d2rq:belongsToClassMap map:feature .
+
+map:FeaureFeatureLoc a d2rq:PropertyBridge ;
+      d2rq:property vocab:has_location ;
+      d2rq:uriPattern "featureloc/@@featureloc.featureloc_id@@" ;
+      d2rq:join "feature.feature_id = featureloc.feature_id" ;
+      d2rq:belongsToClassMap map:feature .
+
+map:FeatureLoc a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+        d2rq:uriPattern "featureloc/@@featureloc.featureloc_id@@";
+        d2rq:class vocab:RelativeDiscreteLocation	
+        .
+map:FeatureLocBeg a d2rq:PropertyBridge ;
+      d2rq:property vocab:minCoord ;
+      d2rq:column "featureloc.fmin" ;
+      d2rq:datatype xsd:integer ;
+      d2rq:belongsToClassMap map:FeatureLoc .
+
+map:FeatureLocEnd a d2rq:PropertyBridge ;
+      d2rq:property vocab:maxCoord ;
+      d2rq:column "featureloc.fmax" ;
+      d2rq:datatype xsd:integer ;
+      d2rq:belongsToClassMap map:FeatureLoc .
+
+map:FeatureLocDir a d2rq:PropertyBridge ;
+      d2rq:property vocab:direction ;
+      d2rq:column "featureloc.strand" ;
+      d2rq:datatype xsd:integer ;
+      d2rq:belongsToClassMap map:FeatureLoc .
+
+map:FeatureLocSrc a d2rq:PropertyBridge ;
+      d2rq:property vocab:relativeTo ;
+      d2rq:uriPattern "feature/@@feature.feature_id@@";
+      d2rq:join "feature.feature_id = featureloc.srcfeature_id" ;
+      d2rq:belongsToClassMap map:FeatureLoc .
+
+# ignore type for now
+map:FeatureRelationship a d2rq:PropertyBridge ;
+      d2rq:property vocab:part_of ;
+      d2rq:pattern "feature/@@feature_relationship.object_id@@" ;
+      d2rq:join "feature.feature_id = feature_relationship.subject_id" ;
+      d2rq:belongsToClassMap map:feature .
+
+# synonyms
+
+        
