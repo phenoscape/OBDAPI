@@ -121,6 +121,17 @@ PGHOST sets the database server name.
 		</java>
 	</target>
 
+	<target name="load-rcn-annotations" description="loads example annotations for Phenotype RCN workshop">
+		<java classname="org.phenoscape.obd.loader.RCNDataLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<arg value="rcn/andy.txt"/>
+			<arg value="rcn/paula.txt"/>
+		</java>
+	</target>
+
 	<target name="load-zfin" description="loads ZFIN data sources into the database">
 		<java classname="org.phenoscape.obd.loader.ZfinObdBridge" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
 			<sysproperty key="db-user" value="${db-user}"/>
@@ -186,15 +197,15 @@ PGHOST sets the database server name.
 			<sysproperty key="ontology-dir" value="${ontologies}"/>
 		</java>
 	</target>
-	
+
 	<target name="create-absence-phenotypes" description="creates absence phenotype compositions for every TAO term">
-        <java classname="org.phenoscape.obd.loader.AbsentPhenotypesLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="ontology-dir" value="${ontologies}"/>
-        </java>
+		<java classname="org.phenoscape.obd.loader.AbsentPhenotypesLoader" classpathref="jarsclasspath" fork="true" maxmemory="2048m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="ontology-dir" value="${ontologies}"/>
+		</java>
 	</target>
 
 	<target name="run-obd-reasoner" description="runs the OBD reasoner on the database contents">
@@ -202,7 +213,7 @@ PGHOST sets the database server name.
 			<arg value="../scripts/obd-reasoner.pl"/>
 			<arg value="--database"/>
 			<arg value="${db-name}"/>
-		<!--	<arg value="-       -view"/>
+			<!--	<arg value="-       -view"/>
 			<arg value="absent_over_develops_from"/>  -->
 		</exec>
 	</target>
@@ -235,68 +246,68 @@ PGHOST sets the database server name.
 			<sysproperty key="solr-url" value="${solr-url}"/>
 		</java>
 	</target>
-	
+
 	<!-- JBoss must be running before this task runs -->
-    <target name="create-solr-taxon-phenotype-annotations-index" description="generates Solr index for taxon annotations data">
-        <java classname="org.phenoscape.obd.loader.SolrPhenotypeAnnotationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="solr-url" value="${solr-url}"/>
-        </java>
-    </target>
-	
+	<target name="create-solr-taxon-phenotype-annotations-index" description="generates Solr index for taxon annotations data">
+		<java classname="org.phenoscape.obd.loader.SolrPhenotypeAnnotationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
+
 	<!-- JBoss must be running before this task runs -->
-    <target name="create-solr-taxon-index" description="generates Solr index for taxon data">
-        <java classname="org.phenoscape.obd.loader.SolrTaxonLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="solr-url" value="${solr-url}"/>
-        </java>
-    </target>
-	
+	<target name="create-solr-taxon-index" description="generates Solr index for taxon data">
+		<java classname="org.phenoscape.obd.loader.SolrTaxonLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
+
 	<!-- JBoss must be running before this task runs -->
-    <target name="create-solr-publication-index" description="generates Solr index for taxon data">
-        <java classname="org.phenoscape.obd.loader.SolrPublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="solr-url" value="${solr-url}"/>
-        </java>
-    </target>
-	
+	<target name="create-solr-publication-index" description="generates Solr index for taxon data">
+		<java classname="org.phenoscape.obd.loader.SolrPublicationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
+
 	<!-- JBoss must be running before this task runs -->
-    <target name="create-solr-gene-index" description="generates Solr index for annotated genes">
-        <java classname="org.phenoscape.obd.loader.SolrGeneLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="solr-url" value="${solr-url}"/>
-        </java>
-    </target>
-	
+	<target name="create-solr-gene-index" description="generates Solr index for annotated genes">
+		<java classname="org.phenoscape.obd.loader.SolrGeneLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
+
 	<!-- JBoss must be running before this task runs -->
-    <target name="create-solr-gene-annotations-index" description="generates Solr index for gene annotations">
-        <java classname="org.phenoscape.obd.loader.SolrGeneAnnotationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-            <sysproperty key="db-user" value="${db-user}"/>
-            <sysproperty key="db-password" value="${db-password}"/>
-            <sysproperty key="db-host" value="${db-host}"/>
-            <sysproperty key="db-name" value="${db-name}"/>
-            <sysproperty key="solr-url" value="${solr-url}"/>
-        </java>
-    </target>
-	
+	<target name="create-solr-gene-annotations-index" description="generates Solr index for gene annotations">
+		<java classname="org.phenoscape.obd.loader.SolrGeneAnnotationLoader" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="db-user" value="${db-user}"/>
+			<sysproperty key="db-password" value="${db-password}"/>
+			<sysproperty key="db-host" value="${db-host}"/>
+			<sysproperty key="db-name" value="${db-name}"/>
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
+
 	<!-- JBoss must be running before this task runs -->
-    <target name="clear-solr-index" description="clears Solr index">
-        <java classname="org.phenoscape.obd.loader.SolrClearer" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
-            <sysproperty key="solr-url" value="${solr-url}"/>
-        </java>
-    </target>
+	<target name="clear-solr-index" description="clears Solr index">
+		<java classname="org.phenoscape.obd.loader.SolrClearer" classpathref="jarsclasspath" fork="true" maxmemory="1024m" failonerror="true">
+			<sysproperty key="solr-url" value="${solr-url}"/>
+		</java>
+	</target>
 
 	<target name="clean" description="removes cached files">
 		<delete dir="${staging}"/>
