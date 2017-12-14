@@ -90,7 +90,7 @@ CREATE TABLE link (
 COMMENT ON TABLE link IS 'An element of a graph. Edges link nodes. Edges have labels (predicates). The semantics of the link are dependent on the values of particular columns. ';
 COMMENT ON COLUMN link.reiflink_node_id IS 'A reference to a node that represents a statement or other narrative entity asserting this link. If this reference is NULL then the reification context is considered to be the whole database. All Annotations (sensu biomedical curation) are narrative entities positing links. RDF: if this is non-NULL, there is an implicit SPO reification quad';
 COMMENT ON COLUMN link.node_id IS 'The entity for which the link directly applies. Can refer to a C, R or I. RDF: subject';
-COMMENT ON COLUMN link.node_id IS 'The relation that holds between the node and the object. Must refer to a R node. RDF: predicate';
+COMMENT ON COLUMN link.predicate_id IS 'The relation that holds between the node and the object. Must refer to a R node. RDF: predicate';
 COMMENT ON COLUMN link.object_id IS 'The entity for which the node stands in some relation R to (where R is the predicate_id). Any node metatype. RDF: object';
 COMMENT ON COLUMN link.when_id IS 'some relations are time-indexed; this points to a time point or interval instance for when the link statement holds. Note this is real time, not database time. RDF: does not correpond. If this column is non-null, special transforms must be applied to turn the OBD graph into an RDF graph';
 COMMENT ON COLUMN link.is_metadata IS 'True if the link is for node metadata. Metadata applies to the node itself and not the entity represented by the node. Equivalent to annotation properties in OWL';
@@ -230,7 +230,7 @@ COMMENT ON TABLE tagval IS 'Atomic attribute of an entity represented in a node.
 COMMENT ON COLUMN tagval.node_id IS 'Node to which this tagval applies';
 COMMENT ON COLUMN tagval.tag_id IS 'Relation that holds between node and literal value. This should always point to a relation_node';
 COMMENT ON COLUMN tagval.datatype_id IS 'Literal datatype. This should always point to a node corresponding to an XMLSchema datatype. Examples: xsd:string, xsd:integer';
-COMMENT ON COLUMN tagval.val IS 'Literal value. Always cast as TEXT. Implementation notes: A view layer utlising SQL types could be hidden underneath this for efficiency of querying';
+COMMENT ON COLUMN tagval.val IS 'Literal value. Always cast as TEXT. Implementation notes: A view layer utilising SQL types could be hidden underneath this for efficiency of querying';
 COMMENT ON COLUMN tagval.source_id IS 'A node representing an information resource in which the tagval was originally asserted. Equivalent to OBO-Namespace. TODO: formalize relationship to RDF named graphs';
 
 CREATE INDEX tagval_nt_index ON tagval(node_id, tag_id);
